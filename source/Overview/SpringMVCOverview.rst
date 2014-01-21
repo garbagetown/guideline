@@ -27,13 +27,13 @@ Overview of Spring MVC Processing Sequence
    :width: 80%
 
 1. \ ``DispatcherServlet``\ が、リクエストを受け取る。
-2. \ ``DispatcherServlet``\ は、リクエスト処理を行う\ ``Controller``\ の選択を、\ ``HandlerMapping``\ に委譲する。\ ``HandlerMapping``\ は、リクエストURLにマッピングされている\ ``Controller``\ を選定し、\ ``（Choose Handler）``\ , \ ``Controller``\ を\ ``DispatcherServlet``\ へ返却する。
-3. \ ``DispatcherServlet`` は、\ ``HandlerAdapter``\ に対して、\ ``Controller``\ のビジネスロジック処理の実行を委譲する。
+2. \ ``DispatcherServlet``\ は、リクエスト処理を行う\ ``Controller``\ の選択を\ ``HandlerMapping``\ に委譲する。\ ``HandlerMapping``\ は、リクエストURLにマッピングされている\ ``Controller``\ を選定し\ ``（Choose Handler）``\ 、 \ ``Controller``\ を\ ``DispatcherServlet``\ へ返却する。
+3. \ ``DispatcherServlet`` は、\ ``Controller``\ のビジネスロジック処理の実行を\ ``HandlerAdapter``\ に委譲する。
 4. \ ``HandlerAdapter`` は、\ ``Controller``\ のビジネスロジック処理を呼び出す。
 5. \ ``Controller``\ は、ビジネスロジックを実行し、処理結果を\ ``Model``\ に設定し、ビューの論理名を\ ``HandlerAdapter``\ に返却する。
 6. \ ``DispatcherServlet``\ は、ビュー名に対応する\ ``View``\ の解決を、\ ``ViewResolver``\ に委譲する。\ ``ViewResolver``\ は、ビュー名にマッピングされている\ ``View``\ を返却する。
-7. \ ``DispatcherServlet``\ は、返却された\ ``View``\ に、レンダリング処理を委譲する。
-8. \ ``View``\ は、\ ``Model``\ が持つ情報をレンダリングして、レスポンスを返却する。
+7. \ ``DispatcherServlet``\ は、返却された\ ``View``\ にレンダリング処理を委譲する。
+8. \ ``View``\ は、\ ``Model``\ の持つ情報をレンダリングしてレスポンスを返却する。
 
 Implementations of each component
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -49,9 +49,9 @@ Springから提供されている\ ``HandlerMapping``\ のクラス階層を、�
    :alt: HandlerMapping Hierarchy
 
 
-| 通常使用するのは、\ ``org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping``\ であり、
-| このクラスはBean定義されている\ ``Contorller``\ から、\ ``@RequestMapping``\ アノテーションを読み取り、
-| URLと合致する\ ``Controller``\ のメソッドを、Handlerクラスとして扱うクラスである。
+| 通常使用するのは、\ ``org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping``\ である。
+| このクラスは、Bean定義されている\ ``Contorller``\ から\ ``@RequestMapping``\ アノテーションを読み取り、
+| URLと合致する\ ``Controller``\ のメソッドをHandlerクラスとして扱うクラスである。
 
 | Spring3.1からは、\ ``RequestMappingHandlerMapping``\ は、\ ``DispatcherServlet``\ が読み込むBean定義ファイルに、
 | \ ``<mvc:annotation-driven>``\ の設定がある場合、デフォルトで設定される。
@@ -67,8 +67,9 @@ Springから提供されている\ ``HandlerAdapter``\ のクラス階層を、�
    :alt: HandlerAdapter Hierarchy
 
 | 通常使用するのは、\ ``org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter``\ である。
-| こちらもSpring3.1からは、\ ``<mvc:annotation-driven>``\ の設定がある場合、デフォルトで設定される。
-| \ ``RequestMappingHandlerAdapter``\ は、\ ``HandlerMapping``\ によって、選択されたハンドラークラス (\ ``Controller``\ ) のメソッドを呼び出すクラスである。
+| このクラスは、\ ``HandlerMapping``\ によって選択されたHandlerクラス(\ ``Controller``\ )のメソッドを呼び出すクラスである。
+
+| このクラスもSpring3.1からは、\ ``<mvc:annotation-driven>``\ の設定がある場合、デフォルトで設定される。
 
 Implementaion of ViewResolver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -81,20 +82,22 @@ Springおよび依存ライブラリから提供されている\ ``ViewResolver`
 通常(JSPを使う場合)は、
 
 *  \ ``org.springframework.web.servlet.view.InternalResourceViewResolver``\ を使用するが、
+
 テンプレートエンジンTilesを使う場合は、
 
 * \ ``org.springframework.web.servlet.view.tiles2.TilesViewResolver``\
+
 ファイルダウンロード用にストリームを返す場合は
 
 * ``org.springframework.web.servlet.view.BeanNameViewResolver``
 
-のように、返す\ ``View``\ によって、使い分ける必要がある。
+のように、返す\ ``View``\ によって使い分ける必要がある。
 
-| 複数の種類の\ ``View``\ を扱う場合は、\ ``ViewResolver``\ の定義が、複数必要となるケースがある。
-| 複数の\ ``ViewResolver``\ を使う代表的な例としては、ファイルのダウンロード処理が存在する画面アプリケーションである。
-| 画面(JSP)は、\ ``InternalResourceViewResolver``\ で、\ ``View``\ を解決し、
-| ファイルダウンロードは、\ ``BeanNameViewResolver``\ などを使って、\ ``View``\ を解決する。
-| 詳細は、\ :doc:`../ArchitectureInDetail/FileDownload`\ を参照されたい。
+| 複数の種類の\ ``View``\ を扱う場合、\ ``ViewResolver``\ の定義が複数必要となるケースがある。
+| 複数の\ ``ViewResolver``\ を使う代表的な例として、ファイルのダウンロード処理が存在する画面アプリケーションが挙げられる。
+| 画面(JSP)は、\ ``InternalResourceViewResolver``\ で\ ``View``\ を解決し、
+| ファイルダウンロードは、\ ``BeanNameViewResolver``\ などを使って\ ``View``\ を解決する。
+| 詳細は\ :doc:`../ArchitectureInDetail/FileDownload`\ を参照されたい。
 
 
 Implementaion of View
@@ -106,7 +109,7 @@ Springおよび依存ライブラリから提供されている\ ``View``\ の�
    :alt: View Hierarchy
 
 | \ ``View``\ は、返したいレスポンスの種類によって変わる。
-| JSPを返す場合は、\ ``org.springframework.web.servlet.view.JstlView``\ が使用される。
+| JSPを返す場合、\ ``org.springframework.web.servlet.view.JstlView``\ が使用される。
 
-| Springおよび依存ライブラリから提供されていない\ ``View``\ を扱いたい場合は、\ ``View``\ インタフェースを実装したクラスを、拡張実装する必要がある。
-| 詳細は、\ :doc:`../ArchitectureInDetail/FileDownload`\ を参照されたい。
+| Springおよび依存ライブラリから提供されていない\ ``View``\ を扱いたい場合、\ ``View``\ インタフェースを実装したクラスを拡張する必要がある。
+| 詳細は\ :doc:`../ArchitectureInDetail/FileDownload`\ を参照されたい。

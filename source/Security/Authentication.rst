@@ -1060,15 +1060,13 @@ spring-security.xml
   :emphasize-lines: 7-9
 
   <form method="post"
-    action="${pageContext.request.contextPath}/authentication"
-    class="form-horizontal">
+    action="${pageContext.request.contextPath}/authentication">
       <!-- omitted -->
-      <label class="control-label"
-        for="_spring_security_remember_me">Remember Me : </label>
+      <label for="_spring_security_remember_me">Remember Me : </label>
       <input name="_spring_security_remember_me"
         id="_spring_security_remember_me" type="checkbox"
         checked="checked"> <!-- (1) -->
-      <input type="submit" class="btn btn-primary" value="LOGIN">
+      <input type="submit" value="LOGIN">
       <!-- omitted -->
   </form>
 
@@ -1145,7 +1143,7 @@ How to extend
 
 .. note::
 
-  \ ``User``\ クラスを継承するだけでは、業務用件を実現できない場合、\ ``UserDetails``\ インタフェースを実装すればよい。
+  \ ``User``\ クラスを継承するだけでは、業務要件を実現できない場合、\ ``UserDetails``\ インタフェースを実装すればよい。
 
 独自\ ``UserDetailsService``\ の実装
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1223,7 +1221,7 @@ How to extend
   .. code-block:: java
 
     @RequestMapping(method = RequestMethod.GET)
-    public String view(rincipal principal, Model model) {
+    public String view(Principal principal, Model model) {
         // get Authentication 
         Authentication authentication = (Authentication) principal;
         // get UserDetails
@@ -1571,7 +1569,7 @@ How to extend
 Appendix
 --------------------------------------------------------------------------------
 | Spring Securityを使用した認証では、認証に成功した場合設定ファイルに記述したパスに遷移する。
-| 「続きを読むにはログインする必要がある」のような業務用件がある場合、
+| 「続きを読むにはログインする必要がある」のような業務要件がある場合、
 | ログイン後の遷移先を動的に変更したい場合がある。
 
 .. figure:: ./images/Authentication_Appendix_ScreenFlow.png

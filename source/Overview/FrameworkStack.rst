@@ -8,7 +8,7 @@ TERASOLUNA Global Frameworkのスタック
 TERASOLUNA Global FrameworkのSoftware Framework概要
 --------------------------------------------------------------------------------
 
-TERASOLUNA Global Frameworkで使用するSoftware Frameworkは独自のフレームワークではなく、Spring Frameworkを中心としてOSSの組み合わせである。
+TERASOLUNA Global Frameworkで使用するSoftware Frameworkは独自のフレームワークではなく、Spring Frameworkを中心としたOSSの組み合わせである。
 
 .. figure:: images/introduction-software-framework.png
    :width: 80%
@@ -59,7 +59,7 @@ O/R Mapper
 .. warning::
 
   どんなプロジェクトでもJPAを採用できるわけではない。"テーブルがほとんど正規化されいない"、"テーブルのカラム数が多すぎる"というテーブル設計がされている場合に、JPAの利用は難しい。
-  
+
   また、本ガイドラインではJPAの基本的な説明は行っておらず、JPA利用経験者がチーム内にいることが前提である。
 
 View
@@ -100,12 +100,12 @@ JSPをTiles化する場合は、
 
 * ロガーのAPIは\ `SLF4J <www.slf4j.org>`_\ を使用する。
 
-  * ロガーの実装は、\ `Logback <logback.qos.ch/>`_\ を利用する。
+  * ロガーの実装は、\ `Logback <http://logback.qos.ch/>`_\ を利用する。
 
 
 共通ライブラリ
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-* \ `https://github.com/terasolunaorg/terasoluna-gfw <https://github.com/terasolunaorg/terasoluna-gfw>`_\ 
+* \ `https://github.com/terasolunaorg/terasoluna-gfw <https://github.com/terasolunaorg/terasoluna-gfw>`_\
 * 詳細は\ :ref:`frameworkstack_common_library`\ を参照されたい。
 
 利用するOSSのバージョン

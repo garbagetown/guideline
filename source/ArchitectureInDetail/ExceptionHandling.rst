@@ -120,11 +120,11 @@ Overview
   優先順は、以下の並び順の通りとなる。
 
   .. _ExceptionHandling-annotation-driven:
-  
+
     .. list-table::
        :header-rows: 1
        :widths: 10 30 55
-    
+
        * - 項番
          - クラス(優先順位)
          - 役割
@@ -1225,7 +1225,7 @@ Spring MVCの、デフォルトの例外ハンドリング機能によって行�
   Spring MVC管理外で発生する例外を、個別にハンドリングする必要がある場合は、例外毎の定義を追加する。
 
     .. code-block:: xml
-  
+
       <error-page>
           <!-- (4) -->
           <exception-type>java.io.IOException</exception-type>
@@ -1236,7 +1236,7 @@ Spring MVCの、デフォルトの例外ハンドリング機能によって行�
     .. list-table::
       :header-rows: 1
       :widths: 10 90
-  
+
       * - 項番
         - 説明
       * - | (4)
@@ -1244,7 +1244,7 @@ Spring MVCの、デフォルトの例外ハンドリング機能によって行�
       * - | (5)
         - | 遷移するファイル名を指定する。Webアプリケーションルートからのパスで指定する。上記の設定では、"${WebAppRoot}/WEB-INF/views/common/error/systemError.jsp"が遷移先のファイルとなる。
           | **【プロジェクト毎にカスタマイズする箇所】**
-  
+
 
 .. _exception-handling-how-to-use-codingpoint-service-label:
 
@@ -1320,7 +1320,7 @@ Spring MVCの、デフォルトの例外ハンドリング機能によって行�
   上記の ``xxxService.java`` は説明用に(2)-(4)に分けて処理をしているが、1ステップで実装することができる。
 
     .. code-block:: java
-  
+
       throw new BusinessException(ResultMessages.error().add(
              "e.ad.od.5001", stockQuantity));
 
@@ -2235,7 +2235,7 @@ DefaultHandlerExceptionResolverでハンドリングされるフレームワー�
      - | 400
    * - | (6)
      - | org.springframework.web.bind.ServletRequestBindingException
-     - | 404
+     - | 400
    * - | (7)
      - | org.springframework.beans.ConversionNotSupportedException
      - | 500

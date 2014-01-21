@@ -5,7 +5,7 @@ TERASOLUNA Global Framework Development Guideline
 
   本ガイドラインはPublic Review版であり、今後構成や内容が変わる可能性がある点に注意してください。
   
-  内容の誤りやコメントは\ `GithubのIssues <https://github.com/terasolunaorg/guideline/issues>`_\ にお願いします。
+  内容の誤りやコメントは\ `GithubのIssues <https://github.com/terasolunaorg/guideline/issues>`_\ にご登録お願いします。
 
 .. toctree::
    :maxdepth: 2

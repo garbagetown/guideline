@@ -12,7 +12,7 @@ Overview
 --------------------------------------------------------------------------------
 本節では、Spring Securityで提供している認証機能を説明する。
 
-Spring Securityでは、設定ファイルの記述のみで、ユーザ認証を実装することができる。
+Spring Securityでは、設定ファイルの記述のみで、ユーザ認証を実現することができる。
 Spring Securityで提供している認証方式として、DB認証、LDAP認証、CAS認証、JAAS認証、X509認証、Basic認証がサポートされているが、本ガイドラインでは、DB認証についてのみ説明する。
 
 .. tip::
@@ -34,17 +34,33 @@ Spring Securityによるログイン処理の流れを以下に示す。
    :width: 80%
    :align: center
 
-#. 認証処理を指定したリクエストを受信すると、認証フィルタが起動する。
-#. 認証フィルタは、リクエストからユーザ、パスワードを抽出し、認証情報を生成する。
-   生成した認証情報をパラメータとし、認証マネージャの認証処理を実行する。
-#. 認証マネージャは、指定された認証プロバイダの認証処理を実行する。
-   認証プロバイダは、データソース（DBやLDAP）からユーザ情報を取得し、パスワード照合等のユーザ認証を行う。
-   認証成功時には、認証済みの情報を保持する認証情報を作成し、
-   認証マネージャに返す。認証失敗の場合は、認証失敗例外を送出する。
-#. 認証マネージャは、受け取った認証情報を認証フィルタに返す。
-#. 認証フィルタは、受け取った認証情報（認証済み）をセッションに格納する。
-#. 認証成功時は、認証前のセッション情報を初期化し、新たにセッション情報を作成する。
-#. 指定された認証成功/失敗時のパスへリダイレクトする。セッションIDをクライアントに返却する。
+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 90
+
+   * - 項番
+     - 説明
+   * - | (1)
+     - | 認証処理を指定したリクエストを受信すると、認証フィルタが起動する。
+   * - | (2)
+     - | 認証フィルタは、リクエストからユーザ、パスワードを抽出し、認証情報を生成する。
+       | 生成した認証情報をパラメータとし、認証マネージャの認証処理を実行する。
+   * - | (3)
+     - | 認証マネージャは、指定された認証プロバイダの認証処理を実行する。
+       | 認証プロバイダは、データソース（DBやLDAP）からユーザ情報を取得し、パスワード照合等のユーザ認証を行う。
+       | 認証成功時には、認証済みの情報を保持する認証情報を作成し、認証マネージャに返す。
+       | 認証失敗の場合は、認証失敗例外を送出する。
+   * - | (4)
+     - | 認証マネージャは、受け取った認証情報を認証フィルタに返す。
+   * - | (5)
+     - | 認証フィルタは、受け取った認証情報（認証済み）をセッションに格納する。
+   * - | (6)
+     - | 認証成功時は、認証前のセッション情報を初期化し、新たにセッション情報を作成する。
+   * - | (7)
+     - | 指定された認証成功/失敗時のパスへリダイレクトする。セッションIDをクライアントに返却する。
+       | 指定された認証成功/失敗時のパスへリダイレクトする。セッションIDをクライアントに返却する。
+
 
 Logout
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -57,13 +73,23 @@ Spring Securityによるログアウト処理の流れを以下に示す。
    :align: center
 
 
-#. 指定されたログアウト処理へのリクエストを受信すると、ログアウトフィルタが起動する。
-#. ログアウトフィルタはセッション情報を破棄する。
-   また、クライアントのクッキー（図中のCookie）を破棄するようなレスポンスを設定する。
-#. 指定されたログアウト時のパスへ、リダイレクトする。
+.. list-table::
+   :header-rows: 1
+   :widths: 10 90
 
-\
- .. note::
+   * - 項番
+     - 説明
+   * - | (1)
+     - | 指定されたログアウト処理へのリクエストを受信すると、ログアウトフィルタが起動する。
+   * - | (2)
+     - | ログアウトフィルタはセッション情報を破棄する。
+       | また、クライアントのクッキー（図中のCookie）を破棄するようなレスポンスを設定する。
+   * - | (3)
+     - | 指定されたログアウト時のパスへ、リダイレクトする。
+
+
+.. note::
+
   ログアウト後、残存するセッション情報が第三者に利用されることによるなりすましを防ぐため、
   セッション情報は、ログアウト時に\ ``org.springframework.security.web.session.ConcurrentSessionFilter``\ で破棄される。
 
@@ -77,7 +103,7 @@ How to use
 \ ``<sec:http>``\ 要素の設定
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 | 以下の設定例のように、spring-security.xmlの\ ``<http>``\ 要素の\ ``auto-config``\ 属性を\ ``true``\ とすることで、
-| Spring Securityの認証機能の基本的な設定を、省略することができる。
+| Spring Securityの認証機能の基本的な設定、すなわち、認証機能で必要となるコンポーネントが自動的に登録される。
 
 .. code-block:: xml
 
@@ -116,15 +142,15 @@ How to use
 
        * - 要素名
          - 説明
-       * - | \ ``<form-login>``\ 
+       * - | \ ``<form-login>``\
          - | \ ``org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter``\ が有効になる。
            | UsernamePasswordAuthenticationFilterは、ユーザ名、パスワードをPOST時に、リクエストから取り出し、認証を行うFilterである。
            | 詳細は、\ :ref:`form-login`\ を参照されたい。
-       * - | \ ``<http-basic>``\ 
+       * - | \ ``<http-basic>``\
          - | \ ``org.springframework.security.web.authentication.www.BasicAuthenticationFilter``\ が有効になる。
            | BasicAuthenticationFilterは、Basic認証の処理を実施するFilterであり、RFC1945に準拠して実装されている。
            | 詳細な利用方法は、\ `BasicAuthenticationFilter JavaDoc <http://docs.spring.io/spring-security/site/docs/3.1.x/apidocs/org/springframework/security/web/authentication/www/BasicAuthenticationFilter.html>`_\ を参照されたい。
-       * - | \ ``<logout>``\ 
+       * - | \ ``<logout>``\
          - | \ ``org.springframework.security.web.authentication.logout.LogoutFilter``\ ,
            | \ ``org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler``\ が有効になる。
            | LogoutFilterは、ログアウト時に呼ばれるFilterであり、
@@ -188,14 +214,14 @@ spring-security.xml
      - | \ ``authentication-failure-url``\ に認証失敗時の遷移先を設定する。
        | \ ``authentication-failure-handler-ref``\ 属性の指定がない場合、認証エラーの種別を問わず、一律、本設定の遷移先に遷移する。
    * - | (6)
-     - | \ ``default-target-url``\ 属性に認証失敗時に呼ばれる、ハンドラクラスを指定する。
+     - | \ ``authentication-failure-handler-ref``\ 属性に、認証失敗時に呼ばれるハンドラクラスを指定する。
        | 詳細は、\ :ref:`authentication-failure-handler-ref`\ を参照されたい。
    * - | (7)
-     - | \ ``default-target-url``\ 属性に認証成功時に呼ばれる、ハンドラクラスを指定する。
+     - | \ ``authentication-success-handler-ref``\ 属性に認証成功時に呼ばれる、ハンドラクラスを指定する。
 
 上記以外の属性については、\ `Spring Securityのマニュアル <http://docs.spring.io/spring-security/site/docs/3.1.x/reference/appendix-namespace.html#nsa-form-login>`_\ を参照されたい。
 
-.. warning:: **Spring Security のデフォルト値「j_spring_security_check」の使用を推奨しない理由**
+.. warning:: **login-processing-urlのデフォルト値「j_spring_security_check」の使用を推奨しない理由**
 
   デフォルト値を使用している場合、そのアプリケーションが、Spring Securityを使用していることについて、露見してしまう。
   そのため、Spring Securityの脆弱性が発見された場合、脆弱性をついた攻撃を受けるリスクが高くなる。
@@ -214,7 +240,7 @@ spring-security.xml
       <form:form action="${pageContext.request.contextPath}/authentication" method="post"><!-- (1) -->
           <!-- omitted -->
           <input type="text" id="username" name="j_username"><!-- (2) -->
-          <input type="password" id="password" name="j_password"><!-- (5) -->
+          <input type="password" id="password" name="j_password"><!-- (3) -->
           <input type="submit" value="Login">
       </form:form>
 
@@ -229,10 +255,10 @@ spring-security.xml
          | 遷移先のパスはlogin-processing-url属性で指定した、/authentication を指定すること。
          | ${pageContext.request.contextPath}/authenticationにアクセスすることで認証処理が実行される。
          | HTTPメソッドは、「POST」を指定すること。
-     * - | (4)
+     * - | (2)
        - | 認証処理において、「ユーザID」として扱われる要素。
          | name属性には、Spring Securityのデフォルト値である「j_username」を指定すること。
-     * - | (5)
+     * - | (3)
        - | 認証処理において、「パスワード」として扱われる要素。
          | name属性には、Spring Securityのデフォルト値である「j_password」を指定すること。
 
@@ -240,9 +266,9 @@ spring-security.xml
 
   .. code-block:: jsp
 
-      <c:if test="${param.error}"><!-- (1) -->
+      <c:if test="${param.error}"><!-- (4) -->
           <t:messagesPanel
-              messagesAttributeName="SPRING_SECURITY_LAST_EXCEPTION"/><!-- (2) -->
+              messagesAttributeName="SPRING_SECURITY_LAST_EXCEPTION"/><!-- (5) -->
       </c:if>
 
   .. list-table::
@@ -251,12 +277,12 @@ spring-security.xml
 
      * - 項番
        - 説明
-     * - | (1)
+     * - | (4)
        - | リクエストパラメータに設定されたエラーメッセージの判定を行う。
          | form-login要素のauthentication-failure-url属性に設定された値や、
          | 認証エラーハンドラの"defaultFailureUrl"に設定された値によって、判定処理を変更する必要があるので注意すること。
          | 本例では、authentication-failure-url="/login?error=true"のような設定がある場合の、例を示している。
-     * - | (2)
+     * - | (5)
        - | 認証エラー時に出力させる例外メッセージを出力する。
          | 共通ライブラリで提供している\ ``org.terasoluna.gfw.web.message.MessagesPanelTag``\ を指定して出力させることを推奨する。
          | 「\ ``<t:messagesPanel>``\ 」タグの使用方法は、\ :doc:`../ArchitectureInDetail/MessageManagement`\ を参照されたい。
@@ -269,7 +295,7 @@ spring-security.xml
   .. code-block:: xml
 
     <mvc:view-controller path="/login" view-name="login" /><!-- (1) -->
-  
+
   .. list-table::
      :header-rows: 1
      :widths: 10 90
@@ -279,18 +305,18 @@ spring-security.xml
      * - | (1)
        - | "/login"にアクセスされたら、view名として"login"を返却するだけのControllerを定義する。\ ``InternalResourceViewResolver``\ によってsrc/main/webapp/WEB-INF/views/login.jspが出力される。
          | この単純なコントローラはJavaによる実装が不要である。
-         
-   
+
+
   .. note::
-   
+
       上記の設定は次のControllerと同義である。
-      
+
         .. code-block:: java
-        
+
           @Controller
           @RequestMapping("/login")
           public class LoginController {
-          
+
               @RequestMapping
               public String index() {
                   return "login";
@@ -298,10 +324,10 @@ spring-security.xml
           }
 
       単純にview名を返すだけのメソッドが一つだけあるControllerが必要であれば、\ ``<mvc:view-controller>``\ を使用すればよい。
-      
+
       ログインフォームをController経由で表示するメリットは、CSRFトークンを自動で埋め込める点にある。Controllerを経由しない場合は、
       \ :doc:`Tutorial`\ で実施したようにjspに直接CSRFトークンを埋め込む必要がある。
-      
+
       チュートリアルではController作成の説明を省くために、ログインフォームの表示はControllerを経由していない。CSRF対策の詳細は\ :doc:`CSRF`\ を参照されたい。
 
 
@@ -331,13 +357,14 @@ spring-security.xml
      * - 項番
        - 説明
      * - | (1)
-       - | \ ``username-parameter``\ 属性で\ ``username``\ の入力フィールドの\ ``name``\ 属性を、「username」に変更している。
+       - | \ ``username-parameter``\ 属性に、認証処理で使用する「ユーザID」を送信するためのリクエストパラメータ名を指定する。
+         | 上記例では、デフォルト値「j_username」から「username」に変更している。
      * - | (2)
        - |  \ ``password-parameter``\ 属性で\ ``password``\ の入力フィールドの\ ``name``\ 属性を、「password」に変更している。
 
 認証処理の設定
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Spring Securityにおける認証処理の設定は\ ``AuthenticationProvider``\ と\ ``UserDetailsService``\ の設定が
+Spring Securityにおける認証処理の設定は\ ``AuthenticationProvider``\ と\ ``UserDetailsService``\ の設定が必要となる。
 
 \ ``AuthenticationProvider``\ は、次の役割を担う。
 
@@ -430,7 +457,7 @@ Spring Securityにおける認証処理の設定は\ ``AuthenticationProvider``\
 
   | \ :ref:`form-login-JSP`\ で前述した、「ユーザID」がクエリのパラメータに指定される。
 
-* \ `ユーザ権限取得クエリ <http://docs.spring.io/spring-security/site/docs/3.1.x/apidocs/constant-values.html#org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl.DEF_AUTHORITIES_BY_USERNAME_QUERY>`_\ 
+* \ `ユーザ権限取得クエリ <http://docs.spring.io/spring-security/site/docs/3.1.x/apidocs/constant-values.html#org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl.DEF_AUTHORITIES_BY_USERNAME_QUERY>`_\
 
   | ユーザに対する認可情報を取得するクエリである。
 
@@ -566,7 +593,7 @@ Javaクラスで\ ``UserDetails``\ オブジェクトを利用する
 
   @RequestMapping(method = RequestMethod.GET)
   public String view(Principal principal, Model model) {
-      // get Authentication 
+      // get Authentication
       Authentication authentication = (Authentication) principal; // (1)
       // get UserDetails
       UserDetails userDetails = (UserDetails) authentication.getPrincipal(); // (2)
@@ -645,7 +672,7 @@ JSPで\ ``UserDetails``\ にアクセスする
 
 
 .. note::
-  
+
   :ref:`userDetailsService`\ で説明した\ ``JdbcDaoImpl``\ が生成する\ ``UserDetails``\ は「ユーザーID」や「権限」といった最低限の情報しか保持していない。
   画面の表示項目として「ユーザー姓名」など他のユーザー情報が必要な場合は\ ``UserDetails``\ と \ ``UserDetailsService``\ を拡張する必要がある。
   拡張方法については、\ :ref:`extendsuserdetailsservice`\ を参照されたい。
@@ -954,22 +981,22 @@ Spring Securityがスローする代表的な例外を、以下に記述する�
      - エラーの種類
      - 説明
    * - | (3)
-     - \ ``BadCredentialsException``\ 
+     - \ ``BadCredentialsException``\
      - パスワード照合失敗による認証エラー時にスローされる。
    * - | (4)
-     - \ ``UsernameNotFoundException``\ 
+     - \ ``UsernameNotFoundException``\
      - | 不正ユーザID（存在しないユーザID）による認証エラー時にスローされる。
        | \ ``org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider``\ を継承したクラスを認証プロバイダに指定している場合、
        | \ ``hideUserNotFoundExceptions``\ を\ ``false``\ に変更しないと上記例外は、\ ``BadCredentialsException``\ に変更される。
    * - | (5)
-     - \ ``DisabledException``\ 
+     - \ ``DisabledException``\
      - 無効ユーザIDによる認証エラー時に、スローされる。
    * - | (6)
-     - \ ``ProviderNotFoundException``\ 
+     - \ ``ProviderNotFoundException``\
      - | 認証プロバイダクラス未検出エラー時にスローされる。
        | 設定誤り等の理由から、認証プロバイダクラスが不正な場合に発生する。
    * - | (7)
-     - \ ``AuthenticationServiceException``\ 
+     - \ ``AuthenticationServiceException``\
      - | 認証サービスエラー時にスローされる。
        | DB接続エラー等、認証サービス内で何らかのエラーが発生した際に発生する。
 
@@ -1089,8 +1116,8 @@ How to extend
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 | 認証時にユーザID、パスワード以外の情報も取得したい場合、
 
-* \ ``org.springframework.security.core.userdetails.UserDetails``\ 
-* \ ``org.springframework.security.core.userdetails.userDetailsService``\ 
+* \ ``org.springframework.security.core.userdetails.UserDetails``\
+* \ ``org.springframework.security.core.userdetails.userDetailsService``\
 
 を実装する必要がある。
 
@@ -1222,7 +1249,7 @@ How to extend
 
     @RequestMapping(method = RequestMethod.GET)
     public String view(Principal principal, Model model) {
-        // get Authentication 
+        // get Authentication
         Authentication authentication = (Authentication) principal;
         // get UserDetails
         ReservationUserDetails userDetails = (ReservationUserDetails) authentication.getPrincipal();
@@ -1244,7 +1271,7 @@ How to extend
 .. note::
 
   顧客情報が変更された場合、一度ログアウトしないと\ ``ReservationUserDetails``\ がもつ\ ``Customer``\ オブジェクトは変更されない。
-  
+
   頻繁に変更されうる情報や、ログインユーザー以外のユーザー(管理者など)によって変更される情報は保持しない方がよい。
 
 
@@ -1263,8 +1290,8 @@ How to extend
 
 | ここでは認証時に、ユーザ名、パスワード以外にも認証情報が必要な場合を考える。\ ``AuthenticationProvider``\ でこの値にアクセスするために、
 
-* \ ``org.springframework.security.authentication.UsernamePasswordAuthenticationToken``\ 
-* \ ``org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter``\ 
+* \ ``org.springframework.security.authentication.UsernamePasswordAuthenticationToken``\
+* \ ``org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter``\
 
 を継承したクラスを作成する必要がある。
 
@@ -1343,13 +1370,13 @@ How to extend
             String username = authenticationToken.getName();
             String password = authenticationToken.getCredentials().toString();
             String companyId = authenticationToken.getCompanyId();
-            
+
             // Obtain user (and grants if needed) from database or other system
             // UserDetails userDetails = ...
-            
+
             // Business logic
             // ...
-            
+
             return new UsernamePasswordAuthenticationToken(userDetails, authentication.getCredentials(),
                     Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))); // (2)
         }
@@ -1417,7 +1444,7 @@ How to extend
             }
 
             // validate password, companyId
-            
+
             // omitted other process
 
             CompanyIdUsernamePasswordAuthenticationToken authRequest =

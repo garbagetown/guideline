@@ -8,7 +8,7 @@
 Spring MVCの、詳細な使い方の解説に入る前に、実際にSpring MVCに触れることで、
 Spring MVCを用いたWebアプリケーションの開発に対するイメージをつかむ。
 
-本節は、全体イメージをつかむことを目的としており、\ **次章以降で説明する推奨方式に従っていない部分もあることに注意する。**
+本節は、全体イメージをつかむことを目的としており、 **次章以降で説明する推奨方式に従っていないことに注意する。**
 
 検証環境
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -21,11 +21,9 @@ Spring MVCを用いたWebアプリケーションの開発に対するイメー�
 
    * - Product
      - Version
-   * - Windows
-     - 7
    * - JDK
      - 1.6.0\_33
-   * - Spring Tool Suite (STS)
+   * - SpringSource Tool Suite (STS)
      - 3.2.0
    * - VMware vFabric tc Server Developer Edition
      - 2.8
@@ -41,15 +39,15 @@ Spring MVCを用いたWebアプリケーションの開発に対するイメー�
 .. warning::
 
   この節で使用するSpring Tool Suiteの「Spring Template Project」はSpiring Tool Suite 3.4から廃止されたため、この節の内容はSpiring Tool Suite 3.3以前でしか確認できない。
-
+  
   Spiring Tool Suite 3.4を使用する場合は\ :doc:`../Appendix/CreateProjectFromBlank`\ を参照されたい。
-
+  
   今後、検証環境を更新する予定である。
 
 新規プロジェクト作成
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Spring Tool Suiteのメニューから、[File] -> [New] -> [Spring Template Project] -> [Spring MVC Project] -> [Next]を選択し、
+SpringSource Tool Suiteのメニューから、[File] -> [New] -> [Spring Template Project] -> [Spring MVC Project] -> [Next]を選択し、
 Spring MVCプロジェクトを作成する。
 
 .. note::
@@ -74,7 +72,7 @@ Package Explorerに、次のようなプロジェクトが生成される( **要
 .. figure:: images/HelloWorldWorkspace.png
    :alt: workspace
 
-Spring MVCの設定方法を理解するために、生成されたSpring MVCの設定ファイル(src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml)について、簡単に説明する。
+Spring MVCの設定方法を理解するために、生成されたSpring MVCの設定ファイル(src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml)を、以下に転記し、簡単に説明する。
 
 .. literalinclude:: ../../resources/helloworld/src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml
    :language: xml
@@ -316,7 +314,6 @@ Bean Validationを利用するために、pom.xmlのdependenciesの中に、以�
 
 | 以上で、入力チェックの実装は完了である。
 | 実際に、次のような場合、エラーメッセージが表示される。
-
 * 名前を空にして送信した場合
 * 5文字より大きいサイズで送信した場合
 

@@ -8,9 +8,9 @@
 Overview
 --------------------------------------------------------------------------------
 
-| 本節では、Spring MVCの仕組みを用いて、ファイル(または業務データ)をダウンロードする方法について説明する。
+| 本節では、Springでクライアントにサーバからファイルをダウンロードする機能について説明する。
 | Spring MVCのViewで、ファイルのレンダリングを行うことを推奨する。
-
+\
     .. note::
         コントローラクラスで、ファイルレンダリングのロジックを持たせることは推奨しない。
 
@@ -32,20 +32,18 @@ Overview
 |
 | **PDFファイルの場合**
 | Springから提供されている\ ``org.springframework.web.servlet.view.document.AbstractPdfView``\
-| クラスは、modelの情報を用いてPDFファイルをレンダリングするときに使用する抽象クラスである。
-| PDF形式でファイルをレンダリングする際には、本クラスのサブクラスViewクラスを作成する。
+| クラスは、modelの情報を用いてPDFファイルをレンダリングするときに、サブクラスとして利用するクラスである。
 |
 | **Excelファイルの場合**
 | Springから提供されている\ ``org.springframework.web.servlet.view.document.AbstractExcelView``\
-| クラスは、modelの情報を用いてPDFファイルをレンダリングするときに使用する抽象クラスである。
-| PDF形式でファイルをレンダリングする際には、本クラスのサブクラスViewクラスを作成する。
+| クラスは、modelの情報を用いてExcelファイルをレンダリングするときに、サブクラスとして利用するクラスである。
 |
 | Spring では上記以外にも、いろいろなViewの実装を提供している。
 | Viewの技術詳細は、\ `Spring Reference View technologies <http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/view.html>`_\ を参照されたい。
 
 | 共通ライブラリから提供している、\ ``org.terasoluna.gfw.web.download.AbstractFileDownloadView``\ は、
 | 任意のファイルをダウンロードするために使用する抽象クラスである。
-| PDFやExcel形式以外のファイルをレンダリングする際には、本クラスのサブクラスとしてViewクラスを作成する。
+| PDFやExcel形式以外のファイルをレンダリングする際に、本クラスをサブクラスに定義する。
 
 |
 
@@ -128,7 +126,7 @@ PDFファイルのダウンロード
           </exclusions>
      </dependency>
   </dependencies>
-
+  
   <properties>
       <!-- omitted -->
       <com.lowagie.itext.version>4.2.1</com.lowagie.itext.version>
@@ -143,9 +141,9 @@ PDFファイルのダウンロード
 
 ViewResolverの定義
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-| \ ``org.springframework.web.servlet.view.BeanNameViewResolver``\ とは、Controllerから返却されたView名でApplicationContext(Spring FrameworkのDIコンテナ)に登録されているbeanをViewクラスとして選択する。
+| \ ``org.springframework.web.servlet.view.BeanNameViewResolver``\ とは、Springのコンテキストで管理された、bean名を用いて実行するViewを選択するクラスである。
 | BeanNameViewResolverを使用する際は、\ ``order``\ プロパティを設定して、通常使用する\ ``InternalResourceViewResolver``\ より先に呼ばれるようにする必要がある。
-
+\
     .. note::
 
         Spring はさまざまなView Resolverを提供している。複数のResolverをチェーンすることができるため、特定の状況では、意図しないViewが選択されてしまうことがある。
@@ -278,12 +276,12 @@ Excelファイルのダウンロード
           <version>${org.apache.poi.poi.version}</version>
       </dependency>
   </dependencies>
-
+  
   <properties>
       <!-- omitted -->
       <org.apache.poi.poi.version>3.9</org.apache.poi.poi.version>
   </properties>
-
+        
 
 ViewResolverの定義
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

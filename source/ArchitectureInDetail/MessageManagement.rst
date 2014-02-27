@@ -1169,7 +1169,7 @@ Appendix
 
 .. list-table:: \ ``<t:messagesPanel>``\ タグ 属性一覧
    :header-rows: 1
-   :widths: 25 50 25
+   :widths: 25 55 20
 
    * - オプション
      - 内容
@@ -1192,6 +1192,14 @@ Appendix
    * - innerElement
      - 結果メッセージ一覧を構成するHTMLの内側のタグ
      - li
+   * - disableHtmlEscape
+     - | HTMLエスケープ処理を無効化するためのフラグ。
+       | \ ``true``\ を指定する事で、出力するメッセージに対してHTMLエスケープ処理が行われなくなる。
+       | この属性は、出力するメッセージにHTMLを埋め込むことで、メッセージの装飾などができるようにするために用意している。
+       | **trueを指定する場合は、XSS対策が必要な文字がメッセージ内に含まれない事が保証されていること。**
+       |
+       | TERASOLUNA Global Framework 1.0.1 より追加された属性である。
+     - ``false``
 
 
 例えば、CSSフレームワーク"\ `BlueTrip <http://www.bluetrip.org/>`_\ "では以下のようなCSSが用意されている。
@@ -1286,6 +1294,37 @@ Appendix
 
 .. figure:: ./images_MessageManagement/message-management-messagespanel-span.jpg
     :width: 60%
+
+
+| disableHtmlEscape属性を\ ``true``\にした場合、以下のような出力イメージにする事ができる。
+| 下記の例では、メッセージの一部のフォントを「16pxの赤字」に装飾している。 
+
+- jsp
+
+ .. code-block:: jsp
+    :emphasize-lines: 4
+
+    <spring:message var="informationMessage" code="i.ex.od.0001" />
+    <t:messagesPanel messagesAttributeName="informationMessage"
+        messagesType="alert alert-info"
+        disableHtmlEscape="true" />
+
+- properties
+
+ .. code-block:: properties
+
+    i.ex.od.0001 = Please confirm order content. <font style="color: red; font-size: 16px;">If this orders submitted, cannot cancel.</font>
+
+- 出力イメージ
+
+ .. figure:: ./images_MessageManagement/message-management-disableHtmlEscape-true.png
+    :width: 100%
+    
+ disableHtmlEscape属性が\ ``false``\(デフォルト)の場合は、HTMLエスケープされて以下のような出力となる。
+
+ .. figure:: ./images_MessageManagement/message-management-disableHtmlEscape-false.png
+    :width: 100%
+
 
 ResultMessagesを使用しない結果メッセージの表示
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

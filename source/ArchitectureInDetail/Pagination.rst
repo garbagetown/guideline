@@ -108,25 +108,25 @@ Spring Dataより提供されているページ検索用の機能は、以下の
              | 項目名は ``","`` 区切りで複数指定することが可能である。
              | 例えば、クエリ文字列として ``"sort=lastModifiedDate,id,DESC&sort=subId"`` を指定した場合、 ``"ORDER BY lastModifiedDate DESC, id DESC, subId ASC"`` というOrder By句がQueryに追加される。
 
- .. warning:: **TERASOLUNA Global Framework 1.0.0における「size=0」指定時の動作について**
+ .. warning:: **spring-data-commons 1.6.1.RELEASEにおける「size=0」指定時の動作について**
 
-    TERASOLUNA Global Framework 1.0.0で内包しているSpring Data Commons(1.6.1)では、``"size=0"`` を指定すると条件に一致するレコードを全件取得するという不具合がある。
+    terasoluna-gfw-common 1.0.0.RELEASEが依存するspring-data-commons 1.6.1.RELEASEでは、``"size=0"`` を指定すると条件に一致するレコードを全件取得するという不具合がある。
     そのため、大量のレコードが取得対象となる可能性がある場合は、``java.lang.OutOfMemoryError`` が発生する可能性が高くなる。
 
-    この問題はSpring Data CommonsのJIRA「`DATACMNS-377 <https://jira.springsource.org/browse/DATACMNS-377>`_」で対応され、Spring Data Commons(1.6.3)で解消されている。
+    この問題はSpring Data CommonsのJIRA「`DATACMNS-377 <https://jira.springsource.org/browse/DATACMNS-377>`_」で対応され、spring-data-commons 1.6.3.RELEASEで解消されている。
     改修後の動作としては、``"size<=0"`` を指定した場合は、 sizeパラメータ省略時のデフォルト値が適用される。
     
-    TERASOLUNA Global Framework 1.0.0を使用している場合は、TERASOLUNA Global Framework 1.0.1以上へバージョンアップする必要がある。
+    terasoluna-gfw-common 1.0.0.RELEASEを使用している場合は、terasoluna-gfw-common 1.0.1.RELEASE以上へバージョンアップする必要がある。
 
- .. warning:: **TERASOLUNA Global Framework 1.0.0におけるリクエストパラメータに不正な値を指定した際の動作について**
+ .. warning:: **spring-data-commons 1.6.1.RELEASEにおけるリクエストパラメータに不正な値を指定した際の動作について**
 
-    TERASOLUNA Global Framework 1.0.0で内包しているSpring Data Commons(1.6.1)では、ページ検索用のリクエストパラメータ(page, size, sort)に不正な値を指定した場合、
+    terasoluna-gfw-common 1.0.0.RELEASEが依存するspring-data-commons 1.6.1.RELEASEでは、ページ検索用のリクエストパラメータ(page, size, sort)に不正な値を指定した場合、
     ``java.lang.IllegalArgumentException`` 又は ``java.lang.ArrayIndexOutOfBoundsException`` が発生し、SpringMVCのデフォルトの設定だとシステムエラー(HTTPステータスコード=500)となってしまうという不具合がある。
 
-    この問題はSpring Data CommonsのJIRA「`DATACMNS-379 <https://jira.springsource.org/browse/DATACMNS-379>`_」と「`DATACMNS-408 <https://jira.springsource.org/browse/DATACMNS-408>`_」で対応され、Spring Data Commons(1.6.3)で解消されている。
+    この問題はSpring Data CommonsのJIRA「`DATACMNS-379 <https://jira.springsource.org/browse/DATACMNS-379>`_」と「`DATACMNS-408 <https://jira.springsource.org/browse/DATACMNS-408>`_」で対応され、spring-data-commons 1.6.3.RELEASEで解消されている。
     改修後の動作としては、不正な値を指定した場合は、 パラメータ省略時のデフォルト値が適用される。
 
-    TERASOLUNA Global Framework 1.0.0を使用している場合は、TERASOLUNA Global Framework 1.0.1以上へバージョンアップする必要がある。
+    terasoluna-gfw-common 1.0.0.RELEASEを使用している場合は、terasoluna-gfw-common 1.0.1.RELEASE以上へバージョンアップする必要がある。
 
 |
 

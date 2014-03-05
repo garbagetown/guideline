@@ -737,6 +737,7 @@ Controllerで\ ``ResultMessages``\ を生成して画面に渡し、JSPで\ ``<t
         メッセージの本文をハードコードすることもできるが、保守性を高めるため、メッセージキーを使用して\ ``ResultMessage``\ オブジェクトを作成し、
         メッセージ本文はプロパティファイルから取得することを推奨する。
 
+|
 
 メッセージのプレースホルダに値を埋める場合は、次のように\ ``add``\ メソッドの第二引数以降に設定すればよい。
 
@@ -755,20 +756,27 @@ Controllerで\ ``ResultMessages``\ を生成して画面に渡し、JSPで\ ``<t
       </ul>
     </div>
 
+\
+
+ .. warning:: **terasoluna-gfw-web 1.0.0.RELEASEを使用してプレースホルダに値を埋める場合の注意点**
+
+    terasoluna-gfw-web 1.0.0.RELEASEを使用している場合、\ **プレースホルダにユーザの入力値を埋め込むとXSS脆弱性の危険がある。**\
+    ユーザの入力値にXSS対策が必要な文字が含まれる可能性がある場合は、プレースホルダに値を埋め込まないようにすること。
+    
+    terasoluna-gfw-web 1.0.1.RELEASE以上を使用している場合は、ユーザの入力値をプレースホルダに埋め込んでもXSS脆弱性は発生しない。
+
+ .. note::
+
+    \ ``ResourceBundleMessageSource``\ はメッセージを生成する際に\ ``java.text.MessageFormat``\ が使用するため、\ ``1024``\ は
+    カンマ区切りで\ ``1,024``\ と表示される。カンマが不要な場合は、プロパティファイルには以下のように設定する。
+
+        .. code-block:: properties
+
+            e.ex.an.8001=Cannot upload, Because the file size must be less than {0,number,#}MB.
+
+    詳細は、\ `Javadoc <http://docs.oracle.com/javase/7/docs/api/java/text/MessageFormat.html>`_\ を参照されたい。
+
 |
-
-    .. note::
-
-        \ ``ResourceBundleMessageSource``\ はメッセージを生成する際に\ ``java.text.MessageFormat``\ が使用するため、\ ``1024``\ は
-        カンマ区切りで\ ``1,024``\ と表示される。カンマが不要な場合は、プロパティファイルには以下のように設定する。
-
-            .. code-block:: properties
-
-                e.ex.an.8001=Cannot upload, Because the file size must be less than {0,number,#}MB.
-
-        詳細は、\ `Javadoc <http://docs.oracle.com/javase/7/docs/api/java/text/MessageFormat.html>`_\ を参照されたい。
-
-
 
 以下のように、複数の結果メッセージを設定することもできる。
 
@@ -1198,7 +1206,7 @@ Appendix
        | この属性は、出力するメッセージにHTMLを埋め込むことで、メッセージの装飾などができるようにするために用意している。
        | **trueを指定する場合は、XSS対策が必要な文字がメッセージ内に含まれない事が保証されていること。**
        |
-       | TERASOLUNA Global Framework 1.0.1 より追加された属性である。
+       | terasoluna-gfw-web 1.0.1.RELEASE以上で利用可能な属性である。
      - ``false``
 
 

@@ -737,6 +737,7 @@ Controllerで\ ``ResultMessages``\ を生成して画面に渡し、JSPで\ ``<t
         メッセージの本文をハードコードすることもできるが、保守性を高めるため、メッセージキーを使用して\ ``ResultMessage``\ オブジェクトを作成し、
         メッセージ本文はプロパティファイルから取得することを推奨する。
 
+|
 
 メッセージのプレースホルダに値を埋める場合は、次のように\ ``add``\ メソッドの第二引数以降に設定すればよい。
 
@@ -755,20 +756,27 @@ Controllerで\ ``ResultMessages``\ を生成して画面に渡し、JSPで\ ``<t
       </ul>
     </div>
 
+\
+
+ .. warning:: **terasoluna-gfw-web 1.0.0.RELEASEを使用してプレースホルダに値を埋める場合の注意点**
+
+    terasoluna-gfw-web 1.0.0.RELEASEを使用している場合、\ **プレースホルダにユーザの入力値を埋め込むとXSS脆弱性の危険がある。**\
+    ユーザの入力値にXSS対策が必要な文字が含まれる可能性がある場合は、プレースホルダに値を埋め込まないようにすること。
+    
+    terasoluna-gfw-web 1.0.1.RELEASE以上を使用している場合は、ユーザの入力値をプレースホルダに埋め込んでもXSS脆弱性は発生しない。
+
+ .. note::
+
+    \ ``ResourceBundleMessageSource``\ はメッセージを生成する際に\ ``java.text.MessageFormat``\ が使用するため、\ ``1024``\ は
+    カンマ区切りで\ ``1,024``\ と表示される。カンマが不要な場合は、プロパティファイルには以下のように設定する。
+
+        .. code-block:: properties
+
+            e.ex.an.8001=Cannot upload, Because the file size must be less than {0,number,#}MB.
+
+    詳細は、\ `Javadoc <http://docs.oracle.com/javase/7/docs/api/java/text/MessageFormat.html>`_\ を参照されたい。
+
 |
-
-    .. note::
-
-        \ ``ResourceBundleMessageSource``\ はメッセージを生成する際に\ ``java.text.MessageFormat``\ が使用するため、\ ``1024``\ は
-        カンマ区切りで\ ``1,024``\ と表示される。カンマが不要な場合は、プロパティファイルには以下のように設定する。
-
-            .. code-block:: properties
-
-                e.ex.an.8001=Cannot upload, Because the file size must be less than {0,number,#}MB.
-
-        詳細は、\ `Javadoc <http://docs.oracle.com/javase/7/docs/api/java/text/MessageFormat.html>`_\ を参照されたい。
-
-
 
 以下のように、複数の結果メッセージを設定することもできる。
 
@@ -1169,7 +1177,7 @@ Appendix
 
 .. list-table:: \ ``<t:messagesPanel>``\ タグ 属性一覧
    :header-rows: 1
-   :widths: 25 50 25
+   :widths: 25 55 20
 
    * - オプション
      - 内容
@@ -1192,6 +1200,14 @@ Appendix
    * - innerElement
      - 結果メッセージ一覧を構成するHTMLの内側のタグ
      - li
+   * - disableHtmlEscape
+     - | HTMLエスケープ処理を無効化するためのフラグ。
+       | \ ``true``\ を指定する事で、出力するメッセージに対してHTMLエスケープ処理が行われなくなる。
+       | この属性は、出力するメッセージにHTMLを埋め込むことで、メッセージの装飾などができるようにするために用意している。
+       | **trueを指定する場合は、XSS対策が必要な文字がメッセージ内に含まれない事が保証されていること。**
+       |
+       | terasoluna-gfw-web 1.0.1.RELEASE以上で利用可能な属性である。
+     - ``false``
 
 
 例えば、CSSフレームワーク"\ `BlueTrip <http://www.bluetrip.org/>`_\ "では以下のようなCSSが用意されている。
@@ -1286,6 +1302,37 @@ Appendix
 
 .. figure:: ./images_MessageManagement/message-management-messagespanel-span.jpg
     :width: 60%
+
+
+| disableHtmlEscape属性を\ ``true``\にした場合、以下のような出力イメージにする事ができる。
+| 下記の例では、メッセージの一部のフォントを「16pxの赤字」に装飾している。 
+
+- jsp
+
+ .. code-block:: jsp
+    :emphasize-lines: 4
+
+    <spring:message var="informationMessage" code="i.ex.od.0001" />
+    <t:messagesPanel messagesAttributeName="informationMessage"
+        messagesType="alert alert-info"
+        disableHtmlEscape="true" />
+
+- properties
+
+ .. code-block:: properties
+
+    i.ex.od.0001 = Please confirm order content. <font style="color: red; font-size: 16px;">If this orders submitted, cannot cancel.</font>
+
+- 出力イメージ
+
+ .. figure:: ./images_MessageManagement/message-management-disableHtmlEscape-true.png
+    :width: 100%
+    
+ disableHtmlEscape属性が\ ``false``\(デフォルト)の場合は、HTMLエスケープされて以下のような出力となる。
+
+ .. figure:: ./images_MessageManagement/message-management-disableHtmlEscape-false.png
+    :width: 100%
+
 
 ResultMessagesを使用しない結果メッセージの表示
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

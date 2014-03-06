@@ -108,33 +108,25 @@ Spring Dataより提供されているページ検索用の機能は、以下の
              | 項目名は ``","`` 区切りで複数指定することが可能である。
              | 例えば、クエリ文字列として ``"sort=lastModifiedDate,id,DESC&sort=subId"`` を指定した場合、 ``"ORDER BY lastModifiedDate DESC, id DESC, subId ASC"`` というOrder By句がQueryに追加される。
 
- .. warning:: **size=0 指定時の動作について**
+ .. warning:: **spring-data-commons 1.6.1.RELEASEにおける「size=0」指定時の動作について**
 
-    現在使用しているSpring Data Commonsのバージョン(1.6.x)だと、``"size=0"`` とすると条件に一致するレコードを全件取得してしまう。
-    大量のレコードが取得対象となる可能性がある場合は、``java.lang.OutOfMemoryError`` が発生する可能性が高くなるため、
-    ``PageableHandlerMethodArgumentResolver`` を拡張し ``"size=0"`` の場合に全件取得されないように制御する必要がある。
+    terasoluna-gfw-common 1.0.0.RELEASEが依存するspring-data-commons 1.6.1.RELEASEでは、``"size=0"`` を指定すると条件に一致するレコードを全件取得するという不具合がある。
+    そのため、大量のレコードが取得対象となる可能性がある場合は、``java.lang.OutOfMemoryError`` が発生する可能性が高くなる。
 
-    この問題は `Spring Data CommonsのJIRA(DATACMNS-377) <https://jira.springsource.org/browse/DATACMNS-377>`_ で対応されているため、次版(1.7.x)のリリースで解消される。
-    対応後は ``"size<=0"`` 場合は、 sizeパラメータ省略時のデフォルト値が使用されるように改修されている。
+    この問題はSpring Data CommonsのJIRA「`DATACMNS-377 <https://jira.springsource.org/browse/DATACMNS-377>`_」で対応され、spring-data-commons 1.6.3.RELEASEで解消されている。
+    改修後の動作としては、``"size<=0"`` を指定した場合は、 sizeパラメータ省略時のデフォルト値が適用される。
+    
+    terasoluna-gfw-common 1.0.0.RELEASEを使用している場合は、terasoluna-gfw-common 1.0.1.RELEASE以上へバージョンアップする必要がある。
 
- .. warning:: **リクエストパラメータに不正な値を指定した際の動作について**
+ .. warning:: **spring-data-commons 1.6.1.RELEASEにおけるリクエストパラメータに不正な値を指定した際の動作について**
 
-    Spring Dataより提供されているページ検索用のリクエストパラメータ(page, size, sort)に不正な値を指定した場合、
-    ``java.lang.IllegalArgumentException`` 又は ``java.lang.ArrayIndexOutOfBoundsException`` が発生し、
-    SpringMVCのデフォルトの設定だとシステムエラー(HTTPステータスコード=500)となってしまう。
-    ``IllegalArgumentException`` 及び ``ArrayIndexOutOfBoundsException`` は、バグが原因で発生する可能性もあるため、
-    アプリケーション全体の例外ハンドリングでリクエストエラー(HTTPステータスコード=400)にすることは推奨できない。
+    terasoluna-gfw-common 1.0.0.RELEASEが依存するspring-data-commons 1.6.1.RELEASEでは、ページ検索用のリクエストパラメータ(page, size, sort)に不正な値を指定した場合、
+    ``java.lang.IllegalArgumentException`` 又は ``java.lang.ArrayIndexOutOfBoundsException`` が発生し、SpringMVCのデフォルトの設定だとシステムエラー(HTTPステータスコード=500)となってしまうという不具合がある。
 
-    そのため、システムエラーではなくリクエストエラーにする必要がある場合は、 ``PageableHandlerMethodArgumentResolver`` を拡張し、
-    リクエストエラーとなるように制御する必要がある。
+    この問題はSpring Data CommonsのJIRA「`DATACMNS-379 <https://jira.springsource.org/browse/DATACMNS-379>`_」と「`DATACMNS-408 <https://jira.springsource.org/browse/DATACMNS-408>`_」で対応され、spring-data-commons 1.6.3.RELEASEで解消されている。
+    改修後の動作としては、不正な値を指定した場合は、 パラメータ省略時のデフォルト値が適用される。
 
- .. todo::
-
-    リクエストパラメータに不正な値を指定した際に、 ``IllegalArgumentException`` 及び ``ArrayIndexOutOfBoundsException`` が発生する事象については、
-    Spring Data Commons プロジェクトに改修依頼中であり、現在以下の状況である。
-
-    * ``ArrayIndexOutOfBoundsException`` が発生するケースは明らかに Spring Data Commons のバグなので、 `Spring Data CommonsのJIRA(DATACMNS-379) <https://jira.springsource.org/browse/DATACMNS-379>`_ を発行し対応待ちの状態である。
-    * ``IllegalArgumentException`` が発生するケースについては、改善版の取り込み依頼(`Spring Data CommonsへのPull Request(#48) <https://github.com/spring-projects/spring-data-commons/pull/48>`_ を送って対応待ちの状態である。
+    terasoluna-gfw-common 1.0.0.RELEASEを使用している場合は、terasoluna-gfw-common 1.0.1.RELEASE以上へバージョンアップする必要がある。
 
 |
 

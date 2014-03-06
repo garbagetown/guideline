@@ -447,17 +447,35 @@ JSPタグライブラリのパラメータに値を指定することで、デ�
         | 例) \javascript:void(0);\
     * - 2.
       - pathTmpl
-      - | 「Page Link URL」のリクエストパスを指定する。
+      - | 「Page Link URL」に設定するリクエストパスのテンプレートを指定する。
         | ページ表示時のリクエストパスとページ移動するためのリクエストパスが異なる場合は、このパラメータにページ移動用のリクエストパスを指定する必要がある。
-        | 指定するリクエストパスには、ページ位置(page)や取得件数(size)などをパス変数(プレースホルダ)として指定することができる。
+        | 指定するリクエストパスのテンプレートには、ページ位置(page)や取得件数(size)などをパス変数(プレースホルダ)として指定することができる。
         | 指定した値はUTF-8でURLエンコーディングされる。
     * - 3.
       - queryTmpl
-      - | 「Page Link URL」のクエリ文字列を指定する。
-        | ページ移動する際に必要となるクエリ文字列(リクエストパラメータ)を指定する。
+      - | 「Page Link URL」のクエリ文字列のテンプレートを指定する。
+        | ページ移動する際に必要となるページネーション用のクエリ文字列(page,size,sortパラメータ)を生成するためのテンプレートを指定する。
         | ページ位置や取得件数のリクエストパラメータ名をデフォルト以外の値にする場合は、このパラメータにクエリ文字列を指定する必要がある。
-        | 指定するクエリ文字列には、ページ位置(page)や取得件数(size)などをパス変数(プレースホルダ)として指定することができる。
+        | 指定するクエリ文字列のテンプレートには、ページ位置(page)や取得件数(size)などをパス変数(プレースホルダ)として指定することができる。
         | 指定した値はUTF-8でURLエンコーディングされる。
+        |
+        | この属性は、ページネーション用のクエリ文字列(page,size,sortパラメータ)を生成するための属性であるため、検索条件を引き継ぐためのクエリ文字列はcriteriaQuery属性に指定すること。
+    * - 4.
+      - criteriaQuery
+      - | 「Page Link URL」に追加する検索条件用のクエリ文字列を指定する。
+        | **「Page Link URL」に検索条件を引き継ぐ場合は、このパラメータに検索条件用のクエリ文字列を指定すること。**
+        | **指定した値はURLエンコーディングされないため、URLエンコーディング済みのクエリ文字列を指定する必要がある。**
+        |
+        | フォームオブジェクトに格納されている検索条件をURLエンコーディング済みのクエリ文字列に変換する場合は、共通ライブラリから提供しているELファクション(\ ``f:query(Object)``\)を使用すると、簡単に条件を引き継ぐことができる。
+        |
+        | terasoluna-gfw-web 1.0.1.RELEASE以上で利用可能なパラメータである。
+    * - 5.
+      - disableHtmlEscapeOfCriteriaQuery
+      - | \ ``criteriaQuery``\パラメータに指定された値に対するHTMLエスケープ処理を無効化するためのフラグ。
+        | \ ``true``\ を指定する事で、\ ``criteriaQuery``\パラメータに指定された値に対してHTMLエスケープ処理が行われなくなる。(デフォルト値は\ ``false``\)
+        | **trueを指定する場合は、XSS対策が必要な文字がクエリ文字列内に含まれない事が保証されていること。**
+        |
+        | terasoluna-gfw-web 1.0.1.RELEASE以上で利用可能なパラメータである。
 
  .. note:: **disabledHrefの設定値について**
 
@@ -468,25 +486,25 @@ JSPタグライブラリのパラメータに値を指定することで、デ�
 
     ``pathTmpl`` 及び ``queryTmpl`` に指定できるパス変数は、以下の通り。
 
-    .. list-table::
-        :header-rows: 1
-        :widths: 10 25 75
-
-        * - 項番
-          - パス変数名
-          - 説明
-        * - 1.
-          - page
-          - ページ位置を埋め込むためのパス変数。
-        * - 2.
-          - size
-          - 取得件数を埋め込むためのパス変数。
-        * - 3.
-          - sortOrderProperty
-          - ソート条件のソート項目を埋め込むためのパス変数。
-        * - 4.
-          - sortOrderDirection
-          - ソート条件のソート順を埋め込むためのパス変数。
+        .. list-table::
+            :header-rows: 1
+            :widths: 10 25 75
+    
+            * - 項番
+              - パス変数名
+              - 説明
+            * - 1.
+              - page
+              - ページ位置を埋め込むためのパス変数。
+            * - 2.
+              - size
+              - 取得件数を埋め込むためのパス変数。
+            * - 3.
+              - sortOrderProperty
+              - ソート条件のソート項目を埋め込むためのパス変数。
+            * - 4.
+              - sortOrderDirection
+              - ソート条件のソート順を埋め込むためのパス変数。
 
     パス変数は、``"{パス変数名}"`` の形式で指定する。
 
@@ -508,7 +526,8 @@ JSPタグライブラリのパラメータに値を指定することで、デ�
     <t:pagination page="${page}"
         disabledHref="javascript:void(0);"
         pathTmpl="${pageContext.request.contextPath}/article/list/{page}/{size}"
-        queryTmpl="sort={sortOrderProperty},{sortOrderDirection}" />
+        queryTmpl="sort={sortOrderProperty},{sortOrderDirection}"
+        criteriaQuery="${f:query(articleSearchCriteriaForm)}" />
 
  - 出力されるHTML
 
@@ -1297,7 +1316,7 @@ JSPの実装(基本編)
 
     <t:pagination page="${page}"
         outerElementClass="pagination"
-        queryTmpl="page={page}&size={size}&${f:query(articleSearchCriteriaForm)}" /> <%-- (2) --%>
+        criteriaQuery="${f:query(articleSearchCriteriaForm)}" /> <%-- (2) --%>
 
  .. list-table::
     :header-rows: 1
@@ -1309,10 +1328,11 @@ JSPの実装(基本編)
       - | 検索条件を指定するフォーム。
         | 検索条件として ``word`` が存在する。
     * - | (2)
-      - | ページ移動時のリクエストに検索条件を引き継ぐ場合は、 ``queryTmpl`` を指定し、クエリ文字列に検索条件を追加する。
+      - | ページ移動時のリクエストに検索条件を引き継ぐ場合は、 \ ``criteriaQuery``\属性に\ **URLエンコーディング済みのクエリ文字列**\を指定する。
         | 検索条件をフォームオブジェクトに格納する場合は、共通ライブラリから提供しているELファクション( ``f:query(Object)`` ) を使用すると、簡単に条件を引き継ぐことができる。
-        | 上記例の場合、 ``"?page=ページ位置&size=6&word=入力値"`` がクエリ文字列となる。
-
+        | 上記例の場合、 \ ``"?page=ページ位置&size=取得件数&word=入力値"``\という形式のクエリ文字列が生成される。
+        |
+        | \ ``criteriaQuery``\属性は、terasoluna-gfw-web 1.0.1.RELEASE以上で利用可能な属性である。
 
  .. note:: **f:query(Object) の仕様について**
 
@@ -1320,35 +1340,12 @@ JSPの実装(基本編)
     JavaBeanの場合はプロパティ名がリクエストパラメータ名となり、 ``Map`` オブジェクトの場合はマップのキー名がリクエストパラメータとなる。
     生成されるクエリ文字列は、UTF-8のURLエンコーディングが行われる。
 
+ .. warning:: **f:queryを使用して生成したクエリ文字列をqueryTmpl属性に指定した際の動作について**
 
- .. warning:: **f:queryとqueryTmplの組み合わせについて**
-
-    f:queryとqueryTmpl を組み合わせると、URLエンコーディングが重複してしまい、特殊文字の引き継ぎができないことが判明している。
-
-    1.0.1版としてライブラリを改修(機能追加)を行い対応する予定である。
-
-|
-
-検索条件をフォームオブジェクトに格納しない場合の実装例を以下に示す。
-
-- JSP
-
- .. code-block:: jsp
-
-    <t:pagination page="${page}"
-        outerElementClass="pagination"
-        queryTmpl="page={page}&size={size}&word=${param.word}" />  <%-- (3) --%>
-
- .. list-table::
-    :header-rows: 1
-    :widths: 10 90
-
-    * - 項番
-      - 説明
-    * - | (3)
-      - | 検索条件をフォームオブジェクトに格納しない場合は、リクエストパラメータを保持する暗黙オブジェクト ``param`` からリクエストパラメータの値を取得し、クエリ文字列に追加する。
-        | 上記例の場合、 ``"?page=0&size=20&word=入力値"`` がクエリ文字列となる。
-
+    \ ``f:query``\を使用して生成したクエリ文字列をqueryTmpl属性に指定すると、URLエンコーディングが重複してしまい、特殊文字の引き継ぎが正しく行われないことが判明している。
+    
+    URLエンコーディングが重複してしまう事象については、terasoluna-gfw-web 1.0.1.RELEASE以上で利用可能な\ ``criteriaCuery``\属性を使用することで回避する事が出来る。
+    
 |
 
 ページリンクでソート条件を引き継ぐ

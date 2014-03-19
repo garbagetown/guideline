@@ -569,7 +569,7 @@ Detail
   **図-リクエスト単位でControllerクラスがハンドリングする場合の基本フロー**
 
 4. Serviceクラスにて、 BusinessExceptionを生成し、スローする。
-#. ResultMessagesLoggingInterceptorは、 ExceptionLoggerを呼び出し、warnレベルのログ(監視ログと、アプリケーションログ)を出力する。
+#. ResultMessagesLoggingInterceptorは、 ExceptionLoggerを呼び出し、warnレベルのログ(監視ログとアプリケーションログ)を出力する。
    ResultMessagesLoggingInterceptorはResultMessagesNotificationExceptionのサブ例外(BusinessException/ResourceNotFoundException)が発生した場合のみ、ログを出力するクラスである。
 #. **Controllerクラスは、 BusinessExceptionを捕捉し、 BusinessExceptionに設定されているメッセージ情報(ResultMessage)を画面表示用にModelに設定する(6')。**
 #. **Controllerクラスは、遷移先のView名を返却する。**
@@ -701,7 +701,7 @@ Detail
 #. DispatcherServletは、SystemExceptionを捕捉し、SystemExceptionResolverを呼び出す。
 #. SystemExceptionResolverは、SystemExceptionから例外コードを取得し、画面表示用にHttpServletRequestに設定する(6')。
 #. SystemExceptionResolverは、SystemException発生時の遷移先のView名を返却する。
-#. HandlerExceptionResolverLoggingInterceptorは、ExceptionLoggerを呼び出し、例外コードに対応するレベル(info, warn, error)のログ(監視ログと、アプリケーションログ)を出力する。
+#. HandlerExceptionResolverLoggingInterceptorは、ExceptionLoggerを呼び出し、例外コードに対応するレベル(info, warn, error)のログ(監視ログとアプリケーションログ)を出力する。
 #. HandlerExceptionResolverLoggingInterceptorは、SystemExceptionResolverより返却されたView名を返却する。
 #. DispatcherServletは、返却されたView名に対応するJSPを呼び出す。
 #. **JSPは、HttpServletRequestより例外コードを取得し、メッセージ表示用のHTMLコードに埋め込む。**
@@ -713,7 +713,7 @@ Detail
 Webアプリケーション単位でサーブレットコンテナがハンドリングする場合の基本フロー
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 | 例外をWebアプリケーション単位でハンドリングする場合、サーブレットコンテナで捕捉し、例外処理を行う。
-| 致命的なエラーとフレームワークで、ハンドリング対象となっていない例外(JSP内で発生した例外など)をハンドリングする。
+| 致命的なエラー、フレームワークでハンドリング対象となっていない例外(JSP内で発生した例外など)、Filterで発生した例外をハンドリングする。
 | 基本フローは以下の通りである。
 | 下記フローは、java.lang.Exceptionを、"error page"でハンドリングする場合のフローである。
 | ログ出力は、ハンドリングされていない例外が発生したことを記録するサーブレットフィルタ(\ ``org.terasoluna.gfw.web.exception.ExceptionLoggingFilter``\ )を使用して、出力する。
@@ -725,10 +725,8 @@ Webアプリケーション単位でサーブレットコンテナがハンド�
 
   **図-Webアプリケーション単位でサーブレットコンテナがハンドリングする場合の基本フロー**
 
-4. DispatcherServletは、XxxErrorを捕捉し、ServletExceptionにラップする。
-#. DispatcherServletは、ServletExceptionをスローする。
-#. ExceptionLoggingFilterは、ServletExceptionを捕捉し、ExceptionLoggerを呼び出す。ExceptionLoggerは、errorレベルのログ(監視ログと、アプリケーションログ)を出力する。
-#. ExceptionLoggingFilterは、ServletExceptionを再スローする。
+4. DispatcherServletは、XxxErrorを捕捉し、ServletExceptionにラップしてスローする。
+#. ExceptionLoggingFilterは、ServletExceptionを捕捉し、ExceptionLoggerを呼び出す。ExceptionLoggerは、errorレベルのログ(監視ログとアプリケーションログ)を出力する。ExceptionLoggingFilterは、ServletExceptionを再スローする。
 #. ServletContainerは、ServletExceptionを捕捉し、サーバログにログを出力する。ログのレベルは、アプリケーションサーバによって異なる。
 #. ServletContainerは、``web.xml`` に定義されている遷移先(HTMLなど)を呼び出す。
 #. 呼び出された遷移先で生成されたレスポンスが表示される。

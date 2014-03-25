@@ -208,7 +208,7 @@ Spring Data JPAを使ってデータベースにアクセスする際の基本�
       - | Repositoryインタフェースを動的に実装したProxyクラスは、\ ``org.springframework.data.jpa.repository.support.SimpleJpaRepository``\ や、 カスタムRepositoryクラスに処理を委譲する。
         | Serviceから指定されたパラメータが渡される。
     * - | (3)
-      - | Repositoryの実装クラスは、 JAPのAPIを呼び出す。
+      - | Repositoryの実装クラスは、JPAのAPIを呼び出す。
         | Serviceから指定されたパラメータや、Repositoryの実装クラスで生成したパラメータなどが渡される。
     * - | (4)
       - | HibernateのJPA参照実装は、 HibernateのコアAPIの処理を呼び出す。

@@ -89,7 +89,7 @@ JSPをTiles化する場合は、
 
   * 実装は、\ `Hibernate Validator 4.3 <http://docs.jboss.org/hibernate/validator/4.3/reference/en-US/html/>`_\ を利用する。
 
-* 相関チェック\ `BeanValidation <http://download.oracle.com/otn-pub/jcp/bean_validation-1.0-fr-oth-JSpec/bean_validation-1_0-final-spec.pdf>`_\ 、もしくは\ `Spring Validation <http://docs.spring.io/spring/docs/3.2.x/spring-framework-reference/html/validation.html>`_
+* 相関チェックには\ `BeanValidation <http://download.oracle.com/otn-pub/jcp/bean_validation-1.0-fr-oth-JSpec/bean_validation-1_0-final-spec.pdf>`_\ 、もしくは\ `Spring Validation <http://docs.spring.io/spring/docs/3.2.x/spring-framework-reference/html/validation.html>`_\ を利用する。
 
   * 使い分けについては\ :doc:`../ArchitectureInDetail/Validation`\ を参照されたい。
 
@@ -98,7 +98,7 @@ JSPをTiles化する場合は、
 ロギング
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* ロガーのAPIは\ `SLF4J <www.slf4j.org>`_\ を使用する。
+* ロガーのAPIは\ `SLF4J <http://www.slf4j.org>`_\ を使用する。
 
   * ロガーの実装は、\ `Logback <http://logback.qos.ch/>`_\ を利用する。
 

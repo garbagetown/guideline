@@ -72,7 +72,7 @@ Package Explorerに、次のようなプロジェクトが生成される( **要
 .. figure:: images/HelloWorldWorkspace.png
    :alt: workspace
 
-Spring MVCの設定方法を理解するために、生成されたSpring MVCの設定ファイル(src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml)を、以下に転記し、簡単に説明する。
+Spring MVCの設定方法を理解するために、生成されたSpring MVCの設定ファイル(src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml)について、簡単に説明する。
 
 .. literalinclude:: ../../resources/helloworld/src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml
    :language: xml
@@ -85,7 +85,7 @@ Spring MVCの設定方法を理解するために、生成されたSpring MVCの
    * - 項番
      - 説明
    * - | (1)
-     - <annotation-driven /> を定義することにより、Spring MVCのデフォルト設定が行われる。デフォルトの設定については、 Springの公式ページである `Enabling the MVC Java Config or the MVC XML Namespace <http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/mvc.html#mvc-config-enable/>`_ を参照されたい。
+     - <annotation-driven /> を定義することにより、Spring MVCのデフォルト設定が行われる。デフォルトの設定については、 Springの公式ページである `Enabling the MVC Java Config or the MVC XML Namespace <http://docs.spring.io/spring/docs/3.2.x/spring-framework-reference/html/mvc.html#mvc-config-enable>`_ を参照されたい。
    * - | (2)
      - ViewのResolverを指定し、Viewの配置場所を定義する。
    * - | (3)
@@ -208,7 +208,7 @@ JSPの作成
      - 説明
    * - | (1)
      - | タグライブラリを利用し、HTMLフォームを構築している。 ``modelAttribute`` 属性に、Controllerで用意したフォームオブジェクトの名前を指定する。
-       | タグライブラリは `こちら <http://static.springsource.org/spring/docs/3.1.x/spring-framework-reference/html/view.html#view-jsp-formtaglib-formtag>`_\を参照されたい。
+       | タグライブラリは `こちら <http://docs.spring.io/spring/docs/3.2.x/spring-framework-reference/html/view.html#view-jsp-formtaglib-formtag>`_\を参照されたい。
 
 出力されるHTMLは、
 

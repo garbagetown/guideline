@@ -26,7 +26,7 @@ The processing flow of Spring MVC from receiving the request till the response i
    :width: 80%
 
 1. ``DispatcherServlet`` receives the request.
-2. ``DispatcherServlet`` dispatches the task of selecting selecting an appropriate ``controller`` to ``HandlerMapping``. ``HandlerMapping`` selects the controller which is mapped to the incoming request URL and returns the ``(selected Handler)`` and ``Controller`` to ``DispatcherServlet``.
+2. ``DispatcherServlet`` dispatches the task of selecting an appropriate ``controller`` to ``HandlerMapping``. ``HandlerMapping`` selects the controller which is mapped to the incoming request URL and returns the ``(selected Handler)`` and ``Controller`` to ``DispatcherServlet``.
 3. ``DispatcherServlet`` dispatches the task of executing of business logic of ``Controller`` to ``HandlerAdapter``.
 4. ``HandlerAdapter`` calls the business logic process of ``Controller``.
 5. ``Controller`` executes the business logic, sets the processing result in ``Model`` and returns the logical name of view to ``HandlerAdapter``.
@@ -92,7 +92,7 @@ Thereby, it is required to use different viewResolver based on the type of the V
 | When ``View`` of multiple types is to be handled, multiple definitions of ``ViewResolver`` are required.
 | A typical example of using multiple ``ViewResolver`` is the screen application for which file download process exists.
 | For screen (JSP), ``View`` is resolved using  ``InternalResourceViewResolver`` and for File download ``View`` is resolved using ``BeanNameViewResolver``.
-| For details, refer :doc:`../online-processing/File-Download`.
+| For details, refer :doc:`../ArchitectureInDetail/FileDownload`.
 
 
 Implementation of View

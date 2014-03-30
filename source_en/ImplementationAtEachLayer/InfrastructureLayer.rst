@@ -144,7 +144,7 @@ Implementing Repository using MyBatis2
           @Transactional(readOnly = true) // (5)
           public boolean exists(String id) { // (6)
               Long count = queryDAO.executeForObject("todo.exists", todoId,
-                  Todo.class);
+                  Long.class);
               return 0 < count.longValue();
           }
 
@@ -224,7 +224,8 @@ Implementing Repository using MyBatis2
           }
 
           public long countByFinished(boolean finished) { // (8)
-              return queryDAO.executeForObject("todo.countByFinished", finished, Todo.class);
+              Long count = queryDAO.executeForObject("todo.countByFinished", finished, Long.class);
+              return count.longValue();
           }
 
       }
@@ -237,21 +238,21 @@ Implementing Repository using MyBatis2
       - Description
 
     * - | (1)
-      - Assign @Repository as class annotation. By assigning annotation, it becomes target of component-scan and bean definition in the configuration file is not required.
+      - Assign \ ``@Repository``\  as class annotation. By assigning annotation, it becomes target of component-scan and bean definition in the configuration file is not required.
     * - | (2)
-      - Assign @Transactional as class annotation. Transaction boundary is controlled by Service, but this annotation should also be assigned to Repository as well.
+      - Assign \ ``@Transactional``\  as class annotation. Transaction boundary is controlled by Service, but this annotation should also be assigned to Repository as well.
     * - | (3)
       - Inject ``jp.terasoluna.fw.dao.QueryDAO`` for executing query processing.
     * - | (4)
       - Inject  ``jp.terasoluna.fw.dao.UpdateDAO`` for executing update processing.
     * - | (5)
-      - Assign @Transactional(readOnly = true) to query method.
+      - Assign \ ``@Transactional(readOnly = true)``\  to query method.
     * - | (6)
-      - The method defined in CrudRepository is implemented.
+      - The method defined in \ ``CrudRepository``\  is implemented.
     * - | (7)
-      - The method defined in PagingAndSortingRepository is implemented.
+      - The method defined in \ ``PagingAndSortingRepository``\  is implemented.
     * - | (8)
-      - The method added in TodoRepository is implemented.
+      - The method added in \ ``TodoRepository``\  is implemented.
 
 - sqlMap.xml
 
@@ -306,7 +307,7 @@ Implementing Repository using MyBatis2
              <!-- ... -->
          </delete>
 
-         <select id="countByFinished" parameterClass="java.lang.Boolean" resultMap="java.lang.Long">
+         <select id="countByFinished" parameterClass="java.lang.Boolean" resultClass="java.lang.Long">
              <!-- ... -->
          </select>
 

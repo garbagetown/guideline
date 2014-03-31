@@ -38,6 +38,7 @@
    * - A5
      - `Security Misconfiguration <https://www.owasp.org/index.php/Top_10_2013-A5-Security_Misconfiguration>`_
      - * \ :doc:`../ArchitectureInDetail/Logging`\ (ログのメッセージ内容に言及)
+       * \ :ref:`exception-handling-how-to-use-codingpoint-jsp-exceptioncode-label`\ (システム例外時に出力するメッセージ内容に言及)
    * - A6
      - `Sensitive Data Exposure <https://www.owasp.org/index.php/Top_10_2013-A6-Sensitive_Data_Exposure>`_
      - * \ :doc:`../ArchitectureInDetail/PropertyManagement`\ 

@@ -134,14 +134,14 @@ Problems
 
 ただし、不正な画面操作を行った後でも更新処理が実行できてしまうと、以下のような問題が発生する。
 
+ .. figure:: ./images/duplicate-allow-malicious-request.png
+    :alt: duplicate allow a malicious request
+    :width: 100%
+
  .. warning::
 
     上記のケースのように、不正な画面操作を行った後でも更新処理が実行できてしまうと、悪意のある攻撃者によって、正規のルート経由せずに直接更新処理が実行される危険度が高まる。
     
-        .. figure:: ./images/duplicate-allow-malicious-request.png
-           :alt: duplicate allow a malicious request
-           :width: 100%
-
         .. list-table::
            :header-rows: 1
            :widths: 10 90

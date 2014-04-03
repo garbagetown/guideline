@@ -765,7 +765,7 @@ How to use
 共通設定
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-① 例外のログ出力を行うロガークラス（\ ``ExceptionLogger``\ ）を、bean定義に追加する。
+１． 例外のログ出力を行うロガークラス（\ ``ExceptionLogger``\ ）を、bean定義に追加する。
 
 - **applicationContext.xml**
 
@@ -827,7 +827,7 @@ How to use
       - | \ ``ExceptionCodeResolver``\ をDIする。
 
 
-② ログ定義を追加する。
+２． ログ定義を追加する。
 
 - **logback.xml**
 

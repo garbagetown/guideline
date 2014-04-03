@@ -1118,7 +1118,7 @@ JSPの実装(基本編)
 
 - 画面イメージ
 
- .. figure:: ./images/pagination-how_to_use_jsp_applied_bootstrap_v3.0.0_css.png
+ .. figure:: ./images/pagination-how_to_use_jsp_applied_bootstrap_v3_0_0_css.png
    :alt: Screen image that v3.0.0 of bootstrap is applied.
    :width: 520px
    :height: 70px

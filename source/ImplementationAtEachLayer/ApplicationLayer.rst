@@ -2581,6 +2581,17 @@ JSPの実装
      - JSTL
      - - `<http://download.oracle.com/otndocs/jcp/jstl-1.2-mrel2-eval-oth-JSpec/>`_\
 
+ .. warning::
+
+    terasoluna-gfw-web 1.0.0.RELEASEを使用している場合は、Spring's form tag libraryから提供されている\ ``<form:form>``\タグを使う際は、必ず\ ``action``\属性を指定すること。
+    
+    terasoluna-gfw-web 1.0.0.RELEASEが依存しているSpring MVC(3.2.4.RELEASE)では、\ ``<form:form>``\タグの\ ``action``\属性を省略した場合、XSS(Cross-site scripting)の脆弱性が存在する。
+    脆弱性に関する情報については、\ `National Vulnerability Database (NVD)のCVE-2014-1904 <http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2014-1904>`_\を参照されたい。
+
+    尚、terasoluna-gfw-web 1.0.1.RELEASE以上では、XSS対策が行われているSpring MVC(3.2.8.RELEASE以上)に依存しているため、本脆弱性は存在しない。
+    
+
+
 |
 
 .. _view_jsp_include-label:

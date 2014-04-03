@@ -314,7 +314,7 @@ Roles of Repository
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Repository has following 2 roles.
 
-1. | ** To provide to Service, the operations necessary to control Entity lifecycle (Repository interface).**
+1. | **To provide to Service, the operations necessary to control Entity lifecycle (Repository interface).**
    | The operations for controlling Entity lifecycle are CRUD operations.
 
  .. figure:: images/repository_responsibility_1.png
@@ -442,7 +442,7 @@ Entity class used in the explanation of \ :ref:`domainlayer_entity_example`\ is 
 
 
 | Repository is created for the main Entity class.
-| Refer to \ :ref:`application-layering_project-structure`\ for the recommended package structure.
+| Refer to \ :ref:`application-layering_project-structure`\  for the recommended package structure.
 
 
 .. _repository-interface-label:
@@ -950,7 +950,7 @@ Image of Application development - Creating Service for each use case
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 Following is the iamge of application development when creating a Service(BLogic) for each event.
 
- .. figure:: images/service_unit_business-logic.png
+ .. figure:: images/service_unit_business-ligic.png
    :alt: constitution image of business logic unit
    :width: 100%
    :align: center

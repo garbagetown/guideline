@@ -10,7 +10,7 @@ Summary of Software Framework of TERASOLUNA Global Framework
 
 Software Framework being used in TERASOLUNA Global Framework is not a proprietory Framework but a combination of various OSS technologies around Spring Framework.
 
-.. figure:: images\introduction-software-framework.png
+.. figure:: images/introduction-software-framework.png
    :width: 80%
 
 
@@ -18,7 +18,7 @@ Main Structural Elements of Software Framework
 --------------------------------------------------------------------------------
 Libraries which constitute TERASOLUNA Global Framework are as follows:
 
-.. figure:: images\introduction-software-stack.png
+.. figure:: images/introduction-software-stack.png
    :width: 80%
 
 DI Container

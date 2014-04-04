@@ -2663,6 +2663,17 @@ In this chapter, usage of main JSP tag libraries are described. However, refer t
      - JSTL
      - - `<http://download.oracle.com/otndocs/jcp/jstl-1.2-mrel2-eval-oth-JSpec/>`_\
 
+ .. warning::
+
+    If terasoluna-gfw-web 1.0.0.RELEASE is being used, \ ``action``\ tag must be always be specified while using \ ``<form:form>``\ tag of Spring's form tag library。
+    
+    terasoluna-gfw-web 1.0.0.RELEASE has a dependency on Spring MVC(3.2.4.RELEASE). In this version of Spring MVC, if \ ``action``\ attribute of \ ``<form:form>``\ tag is not specified, it will
+    expose a vulnerability of XSS(Cross-site scripting).
+    For further details regarding the vulnerability, refer to \ `National Vulnerability Database (NVD)のCVE-2014-1904 <http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2014-1904>`_\ .
+
+    Also, terasoluna-gfw-web 1.0.1.RELEASE have been upgraded to Spring MVC(3.2.8.RELEASE and above); hence this vulnerability is not present.
+
+
 |
 
 .. _view_jsp_include-label:

@@ -110,7 +110,7 @@ Common Library
 OSS Versions
 --------------------------------------------------------------------------------
 
-List of OSS being used in version 1.0.0.RELEASE.
+List of OSS being used in version 1.0.1.RELEASE.
 
 .. list-table::
     :header-rows: 1
@@ -125,67 +125,67 @@ List of OSS being used in version 1.0.0.RELEASE.
     * - Spring
       - org.springframework
       - spring-aop
-      - 3.2.4.RELEASE
+      - 3.2.8.RELEASE
       -
     * - Spring
       - org.springframework
       - spring-aspects
-      - 3.2.4.RELEASE
+      - 3.2.8.RELEASE
       -
     * - Spring
       - org.springframework
       - spring-beans
-      - 3.2.4.RELEASE
+      - 3.2.8.RELEASE
       -
     * - Spring
       - org.springframework
       - spring-context
-      - 3.2.4.RELEASE
+      - 3.2.8.RELEASE
       -
     * - Spring
       - org.springframework
       - spring-context-support
-      - 3.2.4.RELEASE
+      - 3.2.8.RELEASE
       -
     * - Spring
       - org.springframework
       - spring-core
-      - 3.2.4.RELEASE
+      - 3.2.8.RELEASE
       -
     * - Spring
       - org.springframework
       - spring-expression
-      - 3.2.4.RELEASE
+      - 3.2.8.RELEASE
       -
     * - Spring
       - org.springframework
       - spring-jdbc
-      - 3.2.4.RELEASE
+      - 3.2.8.RELEASE
       -
     * - Spring
       - org.springframework
       - spring-orm
-      - 3.2.4.RELEASE
+      - 3.2.8.RELEASE
       -
     * - Spring
       - org.springframework
       - spring-tx
-      - 3.2.4.RELEASE
+      - 3.2.8.RELEASE
       -
     * - Spring
       - org.springframework
       - spring-web
-      - 3.2.4.RELEASE
+      - 3.2.8.RELEASE
       -
     * - Spring
       - org.springframework
       - spring-webmvc
-      - 3.2.4.RELEASE
+      - 3.2.8.RELEASE
       -
     * - Spring
       - org.springframework.data
       - spring-data-commons
-      - 1.6.1.RELEASE
+      - 1.6.4.RELEASE
       -
     * - Spring
       - org.springframework.security
@@ -221,11 +221,6 @@ List of OSS being used in version 1.0.0.RELEASE.
       - dom4j
       - dom4j
       - 1.6.1
-      - \*1
-    * - JPA(Hibernate)
-      - javax.transaction
-      - jta
-      - 1.1
       - \*1
     * - JPA(Hibernate)
       - org.hibernate
@@ -265,7 +260,7 @@ List of OSS being used in version 1.0.0.RELEASE.
     * - JPA(Hibernate)
       - org.springframework.data
       - spring-data-jpa
-      - 1.4.1.RELEASE
+      - 1.4.3.RELEASE
       - \*1
     * - MyBatis2
       - jp.terasoluna.fw

@@ -124,7 +124,7 @@ Method of creating Entity class
 
     * | Creating an appropriate Entity class may often not be possible because of increased difficulty in creating entities if the tables are not normalized.
       | In addition, efforts to create an Entity classes also increases.
-      | Two viewpoints must be taken into consideration here. Firstly "Can we assign an engineer who can do normalization properly?" and secondly "Is it worth 
+      | Two viewpoints must be taken into consideration here. Firstly "Can we assign an engineer who can perform normalization properly?" and secondly "Is it worth 
       | taking efforts for creating normalized Entity classes?".
     * | If the tables are not normalized, the logic to fill the gap of differences between the Entity class and structure of table is required in data access.
       | Here the viewpoint to be considered is, "Is it worth taking efforts to fill the gap of differences between the Entity class and structure of table ?".
@@ -327,7 +327,7 @@ Repository has following 2 roles.
    | Entity object should persist irrespective of the lifecycle (start and stop of server) of application.
    | Mostly relational database is the permanent destination of Entity. However, NoSQL database, cache server, external system and file (shared disk) can also be the permanent destination.
    | The actual persistence processing is done using O/R Mapper API.
-   | This role is implemented in the RepositoryImpl of the infrastructure layer. Refer to \ :doc:`repository`\ for the details.
+   | This role is implemented in the RepositoryImpl of the infrastructure layer. Refer to \ :doc:`InfrastructureLayer`\ for the details.
 
  .. figure:: images/repository_responsibility_2.png
     :alt: persist entity
@@ -364,7 +364,7 @@ Repository consists of Repository interface and RepositoryImpl and performs the 
      - | Implements the methods defined in Repository interface.
      - | Implements CRUD operations of the Entity and is dependent on persistence layer. Performs actual CRUD processes using API that performs persistence provided by Spring Framework, O/R Mapper and middleware.
        | RepositoryImpl belongs to infrastructure layer since it plays the role of implementing the operations defined in Repository interface.
-       | Refer to \ :doc:`repository`\ for the implementation of RepositoryImpl.
+       | Refer to \ :doc:`InfrastructureLayer`\ for the implementation of RepositoryImpl.
 
 
 | In case of multiple destinations in persistence layer, the resulting configuration as follows.
@@ -643,7 +643,7 @@ Method definition of Repository interface
 
 Creation of RepositoryImpl
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-Refer to \ :doc:`repository`\ for the implementation of RepositoryImpl.
+Refer to \ :doc:`InfrastructureLayer`\ for the implementation of RepositoryImpl.
 
 
 .. _service-label:

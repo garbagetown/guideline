@@ -214,6 +214,13 @@ Project as shown below is created.
 
 |
 
+.. note::
+
+  For better visibility, Package Presentation must be changed to Hierarchical.
+
+  .. figure:: ./images/presentation-hierarchical.png
+     :width: 80%
+
 Maven settings
 --------------------------------------------------------------------------------
 
@@ -3789,7 +3796,7 @@ In this tutorial, following contents have been learnt
 
 The following improvement can be done in the TODO management application.
 
-* To externalize the property → :doc:`../ArchitectureInDetail/Property`
+* To externalize the property → :doc:`../ArchitectureInDetail/PropertyManagement`
 * To externalize the messages → :doc:`../ArchitectureInDetail/MessageManagement`
 * To add paging → :doc:`../ArchitectureInDetail/Pagination`
 * To add exception handling → :doc:`../ArchitectureInDetail/ExceptionHandling`

@@ -562,7 +562,6 @@ Mapping request and processing method
 - :ref:`controller-mapping-policy-sampleapp-create-impl-label`
 - :ref:`controller-mapping-policy-sampleapp-complete-impl-label`
 - :ref:`controller-mapping-policy-sampleapp-multi-impl-label`
-- :ref:`controller-mapping-policy-sampleapp-other-impl-label`
 
 |
 
@@ -972,84 +971,6 @@ the following code is required in HTML form.
      - In input confirmation screen ( ``"abc/createConfirm.jsp"`` ), specify \ ``name="redo"``\ parameter for Back button.
 
 For the operations when Back button is clicked, refer to :ref:`controller-mapping-policy-sampleapp-redo-impl-label`.
-
-|
-
-.. _controller-mapping-policy-sampleapp-other-impl-label:
-
-Implementating call to processing methods of other Controllers
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-| It is recommended to call the processing method of other controller by first receiving the request in current controller and then redirecting  it to another controller.
-| This pattern is not implemented in sample application. However, this method can be used when requests to multiple controllers are must while implementing a series of screen transitions.
-
-.. figure:: images/ControllerRedirectToEfg.png 
-   :alt: Switch(Redirect) other controller
-   :width: 80%
-   :align: center
-
-   **Picture - Switch(Redirect) other controller**
-
-|
-
-First, implement the processing method to receive request in current controller.
-
- .. code-block:: java
-
-    @RequestMapping(params = "redirectToEfg") // (1)
-    public String redirectToEfg() {
-        return "redirect:/efg/hello"; // (2)
-    }
-
- .. code-block:: jsp
-
-    <input type="submit" name="redirectToEfg" value="Go to Efg" /> <!-- (3) -->
-
- .. list-table:: 
-   :header-rows: 1
-   :widths: 10 90
-
-   * - Sr.No.
-     - Description
-   * - | (1)
-     - | Add processing method that receives request which will be redirected to other controller. Specify ``redirectToEfg`` in ``params`` attribute of ``@RequestMapping`` as HTTP parameter to identify "Go to Efg" button.
-       | This method is executed when ``redirectToEfg`` is included in HTTP parameter.
-   * - | (2)
-     - | Specify URL for calling processing method (``hello()`` of EfgController) of other controller where the request is redirected.
-   * - | (3)
-     - | To call ``redirectToEfg()`` of AbcController, specify ``redirectToEfg`` as HTTP parameter to be sent along with the request when "Go to Efg" button is clicked.
-
-Example of implementation of redirecting to another controller is given below.
-
- .. code-block:: java
-
-    @Controller
-    @RequestMapping("efg")
-    public class EfgController {
-
-        @RequestMapping(value = "hello")
-        public String hello(Model model) { // (1)
-            // ommited
-            return "efg/hello"; // (2)
-        }
-        
-        // omitted
-
-    }
-
- .. list-table:: 
-   :header-rows: 1
-   :widths: 10 90
-
-   * - Sr.No.
-     - Description
-   * - | (1)
-     - Processing method executed when ``"/efg/hello"`` URL is accessed.
-   * - | (2)
-     - Return view name of JSP to render a screen. For example, ``"efg/hello"`` is returned as view name.
-
-.. todo::
-    Why is it recommended to redirect received request and why not direct request...
-    Requires verification + requires validation. If parameters are inherited between functions (between Controllers), it becomes invalid if it is not executed using this pattern.
 
 |
 

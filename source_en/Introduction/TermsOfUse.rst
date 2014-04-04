@@ -1,17 +1,18 @@
 Terms of Use
 ================================================================================
 
-本ドキュメントを使用するにあたり、以下の規約に同意していただく必要があります。同意いただけない場合は、本ドキュメント及びその複製物の全てを直ちに消去又は破棄してください。
+In order to use this document, you are required to agree to abide by the following terms. If you do not agree with the terms, you must immediately delete or destroy this document and all its duplicate copies.
 
-#. 本ドキュメントの著作権及びその他一切の権利は、NTTデータあるいはNTTデータに権利を許諾する第三者に帰属します。
-#. 本ドキュメントの一部または全部を、自らが使用する目的において、複製、翻訳、翻案することができます。ただし本ページの規約全文、およびNTTデータの著作権表示を削除することはできません。
-#. 本ドキュメントの一部または全部を、自らが使用する目的において改変したり、本ドキュメントを用いた二次的著作物を作成することができます。ただし、「参考文献：TERASOLUNA Global Framework Development Guideline」あるいは同等の表現を、作成したドキュメント及びその複製物に記載するものとします。
-#. 前2項によって作成したドキュメント及びその複製物を、無償の場合に限り、第三者へ提供することができます。
-#. NTTデータの書面による承諾を得ることなく、本規約に定められる条件を超えて、本ドキュメント及びその複製物を使用したり、本規約上の権利の全部又は一部を第三者に譲渡したりすることはできません。
-#. NTTデータは、本ドキュメントの内容の正確性、使用目的への適合性の保証、使用結果についての的確性や信頼性の保証、及び瑕疵担保義務も含め、直接、間接に被ったいかなる損害に対しても一切の責任を負いません。
-#. NTTデータは、本ドキュメントが第三者の著作権、その他如何なる権利も侵害しないことを保証しません。また、著作権、その他の権利侵害を直接又は間接の原因としてなされる如何なる請求（第三者との間の紛争を理由になされる請求を含む。）に関しても、NTTデータは一切の責任を負いません。
+#. Copyrights and all other rights of this document shall belong to NTT DATA or third party possessing such rights.
+#. This document may be reproduced, translated or adapted, in whole or in part for personal use. However, deletion of the terms given on this page and copyright notice of NTT DATA is prohibited.
+#. This document may be changed, in whole or in part for personal use. Creation of secondary work using this document is allowed. However, “Reference document: TERASOLUNA Global Framework Development Guideline” or equivalent documents may be mentioned in created document and its duplicate copies.
+#. Document and its duplicate copies created according to Clause 2 may be provided to third party only if these are free of cost.
+#. Use of this document and its duplicate copies, and transfer of rights of this contract to a third party, in whole or in part, beyond the conditions specified in this contract, are prohibited without the written consent of NTT Data.
+#. NTT DATA shall not bear any responsibility regarding correctness of contents of this document, warranty of fitness for usage purpose, assurance for accuracy and reliability of usage result, liability for defect warranty, and any damage incurred directly or indirectly.
+#. NTT DATA does not guarantee the infringement of copyrights and any other rights of third party through this document. In addition to this, NTT DATA shall not bear any responsibility regarding any claim (Including the claims occurred due to dispute with third party) occurred directly or indirectly due to infringement of copyright and other rights.
 
-本ドキュメントで使用されている各社の会社名及びサービス名、商品名に関する登録商標および商標は、以下の通りです。
+Registered trademarks or trademarks of company name and service name, and product name of their respective companies used in
+this document are as follows.
 
-* TERASOLUNA は、株式会社NTTデータの登録商標です。
-* その他の会社名、製品名は、各社の登録商標または商標です。
+* TERASOLUNA is a registered trademark of NTT DATA Corporation.
+* All other company names and product names are the registered trademarks or trademarks of their respective companies.

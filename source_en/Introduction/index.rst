@@ -8,4 +8,5 @@ In the Beginning
 
    TermsOfUse
    Introduction
+   CriteriaBasedMapping
    ChangeLog

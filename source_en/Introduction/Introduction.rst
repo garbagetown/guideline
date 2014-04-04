@@ -39,6 +39,8 @@ Structure of this document
     Method to implement the functions required for general application development using TERASOLUNA Global Framework or features of each function is explained.
 * \ :doc:`../Security/index`\  
     Security measures are explained focusing on Spring Security.
+* \ :doc:`../Appendix/index`\
+    Describing the additional information when TERASOLUNA Global Framework is being used.
 
 Reading this document
 ================================================================================

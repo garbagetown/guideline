@@ -176,8 +176,8 @@ htmlhelp_basename = 'TERASOLUNAGlobalFrameworkDevelopmentGuidelinedoc'
 # -- Options for LaTeX output --------------------------------------------------
 
 #latex_docclass = {'manual': 'jsarticle'}
-latex_docclass = {'manual': 'jreport'}
-#latex_docclass = {'manual': 'jsbook'}
+#latex_docclass = {'manual': 'jreport'}
+latex_docclass = {'manual': 'jsbook'}
 
 latex_elements = {
 # The paper size ('letterpaper' or 'a4paper').

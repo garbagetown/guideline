@@ -1,9 +1,11 @@
 ロギング
 ================================================================================
 
-.. contents::
-   :depth: 3
-   :local:
+.. only:: html
+
+ .. contents::
+    :depth: 3
+    :local:
 
 .. note::
 
@@ -32,6 +34,7 @@ Overview
 
 | アプリケーション開発時における代表的なログを、以下に示す。
 
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.15\linewidth}|p{0.35\linewidth}|p{0.40\linewidth}|
 .. list-table::
    :header-rows: 1
    :widths: 10 15 35 40
@@ -136,6 +139,7 @@ Overview
 ログの出力ポイント
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+.. tabularcolumns:: |p{0.15\linewidth}|p{0.85\linewidth}|
 .. list-table::
    :header-rows: 1
    :widths: 15 85
@@ -280,6 +284,7 @@ Logbackの設定
 
   </configuration>
 
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
 .. list-table::
    :header-rows: 1
    :widths: 10 90
@@ -322,6 +327,7 @@ Logbackの設定
 
 logback.xmlで設定するものは、次の3つになる。
 
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.50\linewidth}|
 .. list-table::
    :header-rows: 1
    :widths: 10 50
@@ -340,6 +346,7 @@ appenderを定義しただけではログ出力の際に使用されず、
 <logger>要素や<root>要素に参照されると、初めて使用される。
 属性は、nameとclassの2つで、共に必須である。
 
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.50\linewidth}|
 .. list-table::
    :header-rows: 1
    :widths: 10 50
@@ -353,6 +360,7 @@ appenderを定義しただけではログ出力の際に使用されず、
 
 提供されている主なappenderを、以下に示す
 
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.50\linewidth}|
 .. list-table::
    :header-rows: 1
    :widths: 10 50
@@ -405,6 +413,7 @@ SLF4Jのロガー(\ ``org.slf4j.Logger``\ )の各ログレベルに応じたメ�
 
     }
 
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
 .. list-table::
    :header-rows: 1
    :widths: 10 90
@@ -694,6 +703,7 @@ web.xmlのfilter定義にMDCFilterの定義を追加する。
     <!-- omitted -->
 
 
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
 .. list-table::
    :header-rows: 1
    :widths: 10 90
@@ -769,6 +779,7 @@ logback.xmlの\ ``<pattern>``\ に\ ``%X{X-Track}``\ および、\ ``%X{USER}``\
              </bean>
 
 
+         .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
          .. list-table::
              :header-rows: 1
              :widths: 10 90
@@ -888,3 +899,8 @@ ExceptionLogger
 例外発生時のロガーとして、\ ``org.terasoluna.gfw.common.exception.ExceptionLogger``\ が提供されている。
 
 使用方法は、"\ :doc:`ExceptionHandling`\ "の"\ :ref:`exception-handling-how-to-use-label`\ "を参照されたい。
+
+.. raw:: latex
+
+   \newpage
+

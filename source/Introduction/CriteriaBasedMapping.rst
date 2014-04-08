@@ -9,6 +9,7 @@
 セキュリティに関連する機能の説明へのリンクを記載する。
 
 
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.40\linewidth}|p{0.50\linewidth}|
 .. list-table::
    :header-rows: 1
    :widths: 10 40 50
@@ -55,3 +56,8 @@
    * - A10
      - `Unvalidated Redirects and Forwards <https://www.owasp.org/index.php/Top_10_2013-A10-Unvalidated_Redirects_and_Forwards>`_
      - * \ :doc:`../Security/Authentication`\ (オープンリダイレクタ脆弱性対策について言及)
+
+.. raw:: latex
+
+   \newpage
+

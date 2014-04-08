@@ -10,3 +10,8 @@
    Introduction
    CriteriaBasedMapping
    ChangeLog
+
+.. raw:: latex
+
+   \newpage
+

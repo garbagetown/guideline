@@ -3,3 +3,7 @@ RESTfull Web Service (追加予定)
 
 次版以降で執筆予定。
 
+.. raw:: latex
+
+   \newpage
+

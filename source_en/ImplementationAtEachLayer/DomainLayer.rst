@@ -52,8 +52,8 @@ Flow of development of domain layer
     :align: center
 
  .. list-table::
-    :header-rows: 1
-    :widths: 10 20 80
+   :header-rows: 1
+   :widths: 10 20 80
 
    * - S.No.
      - Team in-charge
@@ -74,7 +74,7 @@ Flow of development of domain layer
      - | Business application development team takes charge of the implementation of Repository interface.
    * - | (5)
      - | Business application development team
-     - | Business application development team develoops Service interface and Service class using the Entity class and Repository provided by 
+     - | Business application development team develops Service interface and Service class using the Entity class and Repository provided by 
        | the common development team and the Repository implementation class created by the team itself.
 
  .. warning::
@@ -89,7 +89,7 @@ Flow of development of domain layer
 Implementation of Entity
 --------------------------------------------------------------------------------
 
-Method of creating Entity class
+Policy of creating Entity class
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 | Create an Entity using the following method.
 | Specific creation method is shown in \ :ref:`domainlayer_entity_example`\.
@@ -104,8 +104,8 @@ Method of creating Entity class
    * - | 1.
      - | Create Entity class for each table.
      - | However, Entity class is not required for mapping tables which represent the the relationship between the tables.
-       | Further, when the tables are not normalized, Entity class for each table rule may not be applible. Refer to the \ :ref:`Warning as well as Note outside this 
-       | table <domainlayer_entity_policy_warning_note>`\  for the approach related to not-normalized tables.
+       | Further, when the tables are not normalized, Entity class for each table rule may not be applible. Refer to the \ :ref:`Warning as well as Note outside this table <domainlayer_entity_policy_warning_note>`\  
+       | for the approach related to not-normalized tables.
    * - | 2.
      - | When there is a FK (Foreign Key) in the table, the Entity class of FK destination table must be defined as one of the properties of this Entity.
      - | When there is 1:N relationship with FK destination table, use either \ ``java.util.List<E>``\  or \ ``java.util.Set<E>``\.
@@ -120,12 +120,11 @@ Method of creating Entity class
  .. warning::
 
     When table is not normalized, **check whether to use the method of creating the Entity classes and Repository** by considering the following points.
-    Since the unnormalized tables do not have good compatiblity with JPA, it is better not to use JPA.
+    Since the unnormalized tables do not have good compatibility with JPA, it is better not to use JPA.
 
     * | Creating an appropriate Entity class may often not be possible because of increased difficulty in creating entities if the tables are not normalized.
       | In addition, efforts to create an Entity classes also increases.
-      | Two viewpoints must be taken into consideration here. Firstly "Can we assign an engineer who can perform normalization properly?" and secondly "Is it worth 
-      | taking efforts for creating normalized Entity classes?".
+      | Two viewpoints must be taken into consideration here. Firstly "Can we assign an engineer who can perform normalization properly?" and secondly "Is it worth taking efforts for creating normalized Entity classes?".
     * | If the tables are not normalized, the logic to fill the gap of differences between the Entity class and structure of table is required in data access.
       | Here the viewpoint to be considered is, "Is it worth taking efforts to fill the gap of differences between the Entity class and structure of table ?".
 
@@ -375,7 +374,7 @@ Repository consists of Repository interface and RepositoryImpl and performs the 
    :width: 100%
    :align: center
 
- .. note:: **Is it possible to hide 100% of persistence platform dependent logic from the Service class ?Ÿ**
+ .. note:: **Is it possible to hide 100% of persistence platform dependent logic from the Service class ?**
 
     In some cases it cannot be hidden completely due to constraints of persistence platform and the libraries used to access the platform.
     As much as possible, platform dependent logic should be implemented in RepositoryImpl instead of Service class.
@@ -458,7 +457,7 @@ An example of creating Repository interface is introduced below.
 - :file:`SimpleCrudRepository.java`
 
  | This interface provides only simple CRUD operations.
- | Method signature is created by referring to \ ``CrudRepository``\ interface and \  ``PagingAndSortingRepository``\ provided by Spring Data.
+ | Method signature is created by referring to \ ``CrudRepository``\ interface and \ ``PagingAndSortingRepository``\ provided by Spring Data.
 
  .. code-block:: java
 
@@ -522,7 +521,7 @@ An example of creating Repository interface is introduced below.
       - Description
 
     * - | (1)
-      - | ToDoRepository interface is created by specifying Todo entity in the generic type parameter "T" and
+      - | TodoRepository interface is created by specifying Todo entity in the generic type parameter "T" and
         | String class in the generic type parameter "ID".
     * - | (2)
       - | Methods not provided by \ ``SimpleCrudRepository``\ interface are added in this interface.
@@ -533,7 +532,7 @@ Method definition of Repository interface
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 | It is recommended to have the same signature as \ ``CrudRepository``\ and \ ``PagingAndSortingRepository``\ provided by Spring Data for the methods performing general CRUD operations.
-| However, in case of returning collection, (\ ``java.util.Collection``\ or \``java.util.List``\ ) interfaces which can be handled in a better way in logic are better than \ ``java.lang.Iterable``\.
+| However, in case of returning collection, (\ ``java.util.Collection``\ or \ ``java.util.List``\ ) interfaces which can be handled in a better way in logic are better than \ ``java.lang.Iterable``\.
 | In real development environment, it is difficult to develop an application using only general CRUD operations. Hence additional methods are required.
 | It is recommended to add the methods as per the following rules.
 
@@ -547,37 +546,31 @@ Method definition of Repository interface
     * - 1.
       - Method for searching a single record
       - #. Method name beginning with \ **findOneBy**\ to indicate that this method fetches a single record that matches with the condition.
-        #. In the method name after "findOneBy", physical or logical name of the field used as search condition must be specified. Hence, the method name must
-        #  be such that it becomes possible to estimate "the kind of entity that can be fetched using this method".
+        #. In the method name after "findOneBy", physical or logical name of the field used as search condition must be specified. Hence, the method name must be such that it becomes possible to estimate "the kind of entity that can be fetched using this method".
         #. There must be an argument for each search condition. However, when there are many conditions, DTO containing all search conditions can be provided.
         #. Return value must be Entity class.
     * - 2.
       - Method for searching multiple records
-      - #. Method name beginning with \ **findOneBy**\ to indicate that this method fetches all the records that matches with the condition.
-        #. In the method name after "findAllBy", physical or logical name of the field used as search condition must be specified. Hence, the method name must
-        #  be such that it becomes possible to estimate "the kind of entity that can be fetched using this method".
+      - #. Method name beginning with \ **findAllBy**\ to indicate that this method fetches all the records that matches with the condition.
+        #. In the method name after "findAllBy", physical or logical name of the field used as search condition must be specified. Hence, the method name must be such that it becomes possible to estimate "the kind of entity that can be fetched using this method".
         #. There must be an argument for each search condition. However, when there are many conditions, DTO containing all search conditions can be provided.
         #. Return value must be collection of Entity class.
     * - 3.
       - Method for searching multiple records with pagination
       - #. Method name beginning with \ **findPageBy**\ to indicate that this method fetches pages that matches with the condition.
-        #. In the method name after "findPageBy", physical or logical name of the field used as search condition must be specified. Hence, the method name must
-        #  be such that it becomes possible to estimate "the kind of entity that can be fetched using this method".
-        #. There must be an argument for each search condition. However, when there are many conditions, DTO containing all search conditions can be provided.
-        #  ``Pageable`` provided by Spring Data should be the interface for pagination information (start position, record count, sort information).
+        #. In the method name after "findPageBy", physical or logical name of the field used as search condition must be specified. Hence, the method name must be such that it becomes possible to estimate "the kind of entity that can be fetched using this method".
+        #. There must be an argument for each search condition. However, when there are many conditions, DTO containing all search conditions can be provided. ``Pageable`` provided by Spring Data should be the interface for pagination information (start position, record count, sort information).
         #. Return value should be ``Page`` interface provided by Spring Data.
     * - 4.
       - Count related method
       - #. Method name beginning with **countBy** to indicate that this method fetches count of Entities which matches with the condition.
         #. Return value must be long type.
-        #. In the method name after "countBy", physical or logical name of the field used as search condition must be specified. Hence, the method name must
-        #  be such that it becomes possible to estimate "the kind of entity that can be fetched using this method".
+        #. In the method name after "countBy", physical or logical name of the field used as search condition must be specified. Hence, the method name must be such that it becomes possible to estimate "the kind of entity that can be fetched using this method".
         #. There must be an argument for each search condition. However, when there are many conditions, DTO containing all search conditions can be provided.
     * - 5.
       - Method for existence check
       - #. Method name beginning with **existsBy** to indicate that this method checks the existence of Entity which matches with the condition.
-        #. In the method name after "existsBy"physical or logical name of the field used as search condition must be specified. Hence, the method name must
-        #  be such that it becomes possible to estimate "the kind of entity that can be fetched using this method".
+        #. In the method name after "existsBy"physical or logical name of the field used as search condition must be specified. Hence, the method name must be such that it becomes possible to estimate "the kind of entity that can be fetched using this method".
         #. There must be an argument for each search condition. However, when there are many conditions, DTO containing all search conditions can be provided.
         #. Return value must be boolean type.
 
@@ -657,17 +650,17 @@ Service plays the following 2 roles.
 
 1. | **Provides business logic to Controller.**
    | Business logic consists of create, update, consistency check etc of business data as well as all the processes related to business logic.
-   | Create and update process of business data should be delegated to Repository(or O/R Mapper) and \ ** service should be limited to implementation of business rules.**\
+   | Create and update process of business data should be delegated to Repository(or O/R Mapper) and \ **service should be limited to implementation of business rules.**\
 
  .. note:: **Regarding distribution of logic between Controller and Service**
 
-    In this guideline. the logic to be implemented by Controller and Service should be as per the rules given below.
+    In this guideline, the logic to be implemented by Controller and Service should be as per the rules given below.
 
     1. For the data requested from the client, single item check and correlated item check is to be performed in Controller (Bean Validation or Spring Validator).
 
     2. Conversion processes (Bean conversion, Type conversion and Format conversion) for the data to be passed to Service, must be performed in Controller instead of Service.
 
-    3. \ **Business rules should be implemented in Service. **\ Access to business data is to be delegated to Repository or O/R Mapper.
+    3. \ **Business rules should be implemented in Service.**\ Access to business data is to be delegated to Repository or O/R Mapper.
 
     4. Conversion processes (Type conversion and Format conversion) for the data received from Service (data to respond to the client), must be performed in Controller (View class etc).
 
@@ -715,15 +708,12 @@ Structure of Service class
      - | **Provides business logic to the specific Controller.**
        | Service class methods **must not implement logic that need to be reused.**\
      - #. \ **It is prohibited to call a method of Service class from another Service class method (Figure 1-1).**\ For shared logic, create SharedService class.
-       #. Method of Service class can be called from multiple Controllers (Figure 1-2). However, \ **it must be created for each controller when processing is to be 
-       #  branched based on the calling controller.**\ In such a scenario, create a method in SharedService class and call that method from the individual Service class methods.
+       #. Method of Service class can be called from multiple Controllers (Figure 1-2). However, \ **it must be created for each controller when processing is to be branched based on the calling controller.**\ In such a scenario, create a method in SharedService class and call that method from the individual Service class methods.
    * - 2
      - SharedService class
      - | \ **Provides shared (reusable) logic**\ for multiple Controllers and Service classes.
-     - #. Methods of other SharedService classes can be called from a SharedService (Figure 2-1). However, **Calling hierarchy should not become complicated.** 
-       #  If calling hierarchy becomes complicated, there is a risk of reduction in maintainability.
-       #. Methods of SharedService classes can be called from Controller (Figure 2-2). However, \ **it can be only be done if there is no problem from transaction management perspective.**\ 
-       #  If there is a problem from transaction management perspective, first create a method in Service class and implement transaction management in this method.
+     - #. Methods of other SharedService classes can be called from a SharedService (Figure 2-1). However, **Calling hierarchy should not become complicated.** If calling hierarchy becomes complicated, there is a risk of reduction in maintainability.
+       #. Methods of SharedService classes can be called from Controller (Figure 2-2). However, \ **it can be only be done if there is no problem from transaction management perspective.**\ If there is a problem from transaction management perspective, first create a method in Service class and implement transaction management in this method.
        #. \ **It is prohibited to call methods of Service class from SharedService (Figure 2-3).**\
 
 
@@ -757,8 +747,7 @@ Reason for prohibiting the calling of other Service classes from Service class
      - Situations that can occur
    * - 1.
      - | The logic that must be implemented in the calling service class, gets implemented in the called service class for reasons like "having the logic at a single location" etc.
-       | As a result, \ **arguments for identifying the caller, get added to the method easily; Ultimately, the logic is incorrectly abstracted out as shared logic (like utilities). 
-       | It results into a modular structure without much insight.**\
+       | As a result, \ **arguments for identifying the caller, get added to the method easily; Ultimately, the logic is incorrectly abstracted out as shared logic (like utilities). It results into a modular structure without much insight.**\
    * - 2.
      - | If the stack patterns or stack of services calling each other is large in number, \ **understanding the impact of modifications in source-code due to change in specifications or bug fixes, becomes difficult.**\
 
@@ -800,8 +789,7 @@ There are mainly 3 patterns for creating Service.
    * - 1.
      - | For each Entity
      - | Create Service paired with the main Entity.
-     - | Main Entity is in other words, business data. **If the application is to be designed and implemented with focus on business data, 
-       | then Service classes should be created in this way.**
+     - | Main Entity is in other words, business data. **If the application is to be designed and implemented with focus on business data, then Service classes should be created in this way.**
        |
        | If service is created in this way, business logic will also be created for each entity and it will become to extract shared logic.
        | However, if Service is created using this pattern, its affinity is not so good with the type of application which has to be developed 
@@ -822,8 +810,8 @@ There are mainly 3 patterns for creating Service.
    * - 3
      - | For each event
      - | Create Service paired with the events generated from screen.
-     - | **If the application is to be designed and implemented with focus on events on the screen and BLogic class is auto-generated using TERASOLUNA ViSC,
-       | Service should be created in this way. In this guideline, the Service class created using this pattern is called \ ``BLogic``\.
+     - | **If the application is to be designed and implemented with focus on events on the screen and BLogic class is auto-generated using TERASOLUNA ViSC, Service should be created in this way.** 
+       | In this guideline, the Service class created using this pattern is called \ ``BLogic``\.
        |
        | The characteristics of the application if creating Service using this pattern are basically same as those when creating Service for each use case.
        | 
@@ -946,7 +934,7 @@ Image of Application development - Creating Service for each use case
 
 |
 
-Image of Application development - Creating Service for each use case
+Image of Application development - Creating Service for each use event
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 Following is the iamge of application development when creating a Service(BLogic) for each event.
 
@@ -1037,7 +1025,7 @@ Below are the points to be taken care of while creating Service class.
     #. If interface is there, When using AOP, Dynamic proxies functionality of standard JDK is used.
        In case of no interface, CGLIB included in Spring Framework is used. In case of CGLIB there are certain restrictions like "Advice can not be applied on final methods" etc.
        Refer to \ `Spring Reference Document <http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/aop.html#aop-proxying>`_\ for details.
-    #. It becomes easier to create a stub of business logic. When application layer and domain layer are developed in parrallel using different development teams, stubs of Service
+    #. It becomes easier to create a stub of business logic. When application layer and domain layer are developed in parallel using different development teams, stubs of Service
        are required. When there is a need to create stubs, it is recommended to have interface .
 
 - Creation of Service class
@@ -1084,7 +1072,7 @@ Below are the points to be taken care of while creating Service class.
     Transaction boundary is required only for the business logic that updates the database. However, it is recommended to apply the annotation at class level to prevent bugs due to skipped annotation.
     However, defining \ ``@Transactional``\ annotation only at required places (methods which update the database) is also fine.
 
- .. note:: **Reason to prohibit non-singleton scopes **
+ .. note:: **Reason to prohibit non-singleton scopes**
 
     #. prototype, request, session are the scopes for registering bean that maintains state. Hence they must not be used in Service class.
     #. When scope is set to request or prototype, performance is affected as the bean generation frequency is high in DI container.
@@ -1150,7 +1138,7 @@ Below are the points to be taken care of while writing methods of Service class.
 
  .. warning:: **Regarding transaction definition of business logic that just reads the database and does not update values**
 
-    Transaction management for reference queries can be applied by through \``@Transactional(readOnly = true)``\ .
+    Transaction management for reference queries can be applied by through \ ``@Transactional(readOnly = true)``\ .
     However, for JPA, there is no need to specify "readOnly = true".
     Refer to "Listing 7. Using read-only with REQUIRED propagation mode - JPA" of
     \ `IBM DeveloperWorks article <http://www.ibm.com/developerworks/java/library/j-ts1/index.html>`_\ for details.
@@ -1190,16 +1178,14 @@ The below points must be considered for arguments and return values of methods o
 
 **Values that are forbidden as arguments and return values are as follows.**
 
- * Objects (``javax.servlet.http.HttpServletRequest`` , ``javax.servlet.http.HttpServletResponse`` , ``javax.servlet.http.HttpSession`` , 
- ``org.springframework.http.server.ServletServerHttpRequest``) which are dependent on implementation architecture of application layer (Servlet API or web layer API of Spring).
+ * Objects (``javax.servlet.http.HttpServletRequest`` , ``javax.servlet.http.HttpServletResponse`` , ``javax.servlet.http.HttpSession`` , ``org.springframework.http.server.ServletServerHttpRequest``) which are dependent on implementation architecture of application layer (Servlet API or web layer API of Spring).
  * Model(Form, DTO) classes of application layer
  * Implementation classes of ``java.util.Map``
 
  .. note:: **Reason for prohibition**
 
     #. If objects depending on implementation architecture of application layer are allowed, then application layer and domain layer get tightly coupled.
-    #. \ ``java.util.Map``\ is too generalized. Using it for method arguments and return values makes it
-       difficult to understand what type of object is stored inside it. Further, since the values are managed using keys, the following problems may occur.
+    #. \ ``java.util.Map``\ is too generalized. Using it for method arguments and return values makes it difficult to understand what type of object is stored inside it. Further, since the values are managed using keys, the following problems may occur.
      * Values are mapped to a unique key and hence cannot be retrieved by specifying a key name which is different from the one specified at the time of inserting the value.
      * When key name has to be changed, it becomes difficult to determine the impacted area.
 
@@ -1382,7 +1368,7 @@ Notifying business error
 
    Since business exceptions need to be handled in controller class, they can be configured as checked exception.
    However in this guideline, it is recommended that business exception be subclass of unchecked exception (``java.lang.RuntimeException``). By default, 
-   if there is a RuntimeException, transaction will be rollbacked. Hence, doing this will prevent leaving a bug in the source-code due to skipped handling of exception in controller. 
+   if there is a RuntimeException, transaction will be rollbacked. Hence, doing this will prevent leaving a bug in the source-code due to inadequate settings. 
    Obviously, if settings are changed such that transaction rollbacks even in case checked exceptions, business exception can be configured as subclass of checked exceptions.
 
 | Example of throwing business exception.
@@ -1495,7 +1481,7 @@ Declarative transaction management
 In "Declarative transaction management", the information required for transaction management can be declared by the following 2 methods.
 
 * Declaration in XML(bean definition file).
-* **Declaration using annotation (@Transactional) (Recommended).‰**
+* **Declaration using annotation (@Transactional) (Recommended).**
 
 Refer to \ `Spring Reference Document <http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/transaction.html#transaction-declarative>`_\ for 
 the details of "Declarative type transaction management" provided by Spring Framework.
@@ -1557,7 +1543,7 @@ Information required for "Declarative transaction management"
         | Isolates transactions completely.
         |
         | Isolation level of transaction is considered as the parameter related to exclusion control.
-        | Refer to \ :doc:`./../ArchitectureInDetail/ExclusionControl`\ for exclusion control.
+        | Refer to \ :doc:`./../ArchitectureInDetail/ExclusionControl`\  for exclusion control.
     * - 3
       - timeout
       - | Specify timeout of transaction (seconds).
@@ -1639,9 +1625,9 @@ Propagation of transaction
 
 .. note:: **Reason for occurrence of org.springframework.transaction.UnexpectedRollbackException**
 
-  When propagation method of transaction is set to "REQUIRED", though there is only one physical transaction, internal transaction boundary is provided in Spring Framework.
-  In case of above example, when a method of SharedService is called, a new TransactionInterceptor instance is started which internally provides transaction control boundary at SharedService level.
-  Therefore, when exception which is set for target for rollback occurs in \ ``SharedService``\ method, status of transaction is set to rollback (rollback-only) by \ ``TransactionInterceptor``\.
+  When propagation method of transaction is set to "REQUIRED", though there is only one physical transaction, internally Spring Framework creates transaction boundaries.
+  In case of above example, when a method of SharedService is called, a TransactionInterceptor is started which internally provides transaction control boundary at SharedService level.
+  Therefore, when an exception (which is set as target of rollback) occurs in \ ``SharedService``\ method, status of transaction is set to rollback (rollback-only) by \ ``TransactionInterceptor``\.
   This transaction now cannot be committed.
   Going further, if the Service method tries to commit this transaction due to conflicting settings of rollback target exception between Service method and SharedShared method,
   \ ``UnexpectedRollbackException``\ is generated by Spring Framework notifying that there is inconsistency in transaction control settings. When UnexpectedRollbackException is generated, it should be checked that there is no inconsistency in rollbackFor and noRollbackFor settings.

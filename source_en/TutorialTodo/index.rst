@@ -72,12 +72,13 @@ Business requirements of application
     * - B01
       - Only up to 5 incomplete TODO records can be registered
     * - B02
-      - Completed TODO cannot be registered
+      - For TODOs which are already completed, "TODO Complete" processing cannot be done.
 
 |
-    .. note::
 
-        This application is for learning purpose only. It is not suitable as a real todo management application.
+.. note::
+
+  This application is for learning purpose only. It is not suitable as a real todo management application.
 
 |
 
@@ -138,7 +139,7 @@ Create TODO
 Finish TODO
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Make TODO corresponding to todoId sent from the form as ``completed``
+* For the TODOs corresponding to todoId which is received from the form object, change the status to ``completed``.
 * When :ref:`app-requirement` B02 is not fulfilled, business exception with error code E002 is thrown
 * When the corresponding TODO does not exist, business exception with error code E404 is thrown
 
@@ -425,11 +426,11 @@ Since above will be created in order, there is no need to provide prepare the ab
 
 |
 
-    .. note::
+.. note::
 
-         It had been recommended to use a multi-project structure :ref:`in the previous section of "Project Configuration" <application-layering_project-structure>` .
-         In this tutorial, a single project configuration is used because it focuses on ease of learning. However, when in a real project, multi project configuration is 
-         strongly recommended.
+  It had been recommended to use a multi-project structure in :ref:`"Project Structure" section of previous chapter <application-layering_project-structure>` .
+  In this tutorial, a single project configuration is used because it focuses on ease of learning. However, when in a real project, multi project configuration is
+  strongly recommended.
 
 |
 
@@ -537,9 +538,9 @@ and describe the contents as follows.
    * - | (4)
      - | Define ``DispatcherServlet`` that is the entry point of Spring MVC.
        | Path of Bean definition file to be used in Spring MVC is ``META-INF/spring/spring-mvc.xml`` just under the classpath.
-       |  ``ApplicationContext`` created here is the child of ``ApplicationContext`` created in step (2).
+       | ``ApplicationContext`` created here is the child of ``ApplicationContext`` created in step (2).
    * - | (5)
-     - | Define common JSP to be included. Include ``/WEB-INF/views/common/include.jsp`` for any JSP(*.JSP)
+     - | Define common JSP to be included. Include ``/WEB-INF/views/common/include.jsp`` for any JSP(\*.JSP)
 
 
 .. figure:: ./images/image013.png
@@ -556,7 +557,7 @@ Create views/common folder and include.jsp file and describe as follows.
 
 .. code-block:: jsp
 
-	<%@ page session="false"%>
+    <%@ page session="false"%>
     <!-- (1) -->
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
@@ -687,7 +688,7 @@ todo-domain.xml
 Carry out settings related to domain layer in ``src/main/resources/META-INF/spring/todo-domain.xml``.
 
 
-Create todo-domain.xml using ``New``->``Spring Bean Configuration File`` under ``META-INF/spring``.
+Create todo-domain.xml using ``New`` -> ``Spring Bean Configuration File`` under ``META-INF/spring``.
 
 
 .. code-block:: xml
@@ -808,9 +809,9 @@ Define Spring MVC related definitions in ``src/main/resources/META-INF/spring/sp
    * - | (3)
      - | Carry out the settings for accessing the static resource (css, images, js etc.).
        | Set URL path to ``mapping`` attribute and physical path to ``location`` attribute.
-       | In case of this setting, when there is a request for ``<contextPath>/resources/css/styles.css``, `WEB-INF/resources/css/styles.css`` is searched. 
+       | In case of this setting, when there is a request for ``<contextPath>/resources/css/styles.css``, ``WEB-INF/resources/css/styles.css`` is searched. 
        | If not found, ``resources/css/style.css`` is searched in classpath (src/main/resources and jar). If not found again, 404 error is returned.
-       | Cache period (3600 seconds = 50 minutes) of static resources is set in ``cache-period`` attribute.
+       | Cache period (3600 seconds = 60 minutes) of static resources is set in ``cache-period`` attribute.
        | Further, static resources are not used in this tutorial.
        | ``cache-period="3600"`` is also correct, however, in order to demostrate that it is 60 minutes, it is better to write as ``cache-period="#{60 * 60}"`` which uses `SpEL <http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/expressions.html#expressions-beandef-xml-based>`_ .
    * - | (4)
@@ -975,7 +976,7 @@ Edit HelloController as shown below.
    * - Sr.No.
      - Description
    * - | (1)
-     - | In order to make the Controller as component-scan target, attach `@Controller`` annotation to class level.
+     - | In order to make the Controller as component-scan target, attach ``@Controller`` annotation to class level.
    * - | (2)
      - | Generate logger. Since logback implements logger and API is SLF4J, ``org.slf4j.Logger`` should be used.
    * - | (3)
@@ -1016,7 +1017,7 @@ Next, create view(jsp). Create src/main/webapp/WEB-INF/views/hello.jsp as follow
    * - Sr.No.
      - Description
    * - | (1)
-     - |Display ``now`` passed from Controller. Here, ``<fmt:formatDate>`` tag is used for date formating.
+     - | Display ``now`` passed from Controller. Here, ``<fmt:formatDate>`` tag is used for date formating.
 
 Right click package project name ``todo`` and click ``Run As`` -> ``Run on Server``
 
@@ -1062,7 +1063,7 @@ following is displayed.
    :width: 40%
 
 
-If you see console, you will understand that TRACE log using ``TraceLoggingInterceptor``and debug log implemented by Controller is output.
+If you see console, you will understand that TRACE log using ``TraceLoggingInterceptor`` and debug log implemented by Controller is output.
 
 .. code-block:: guess
 
@@ -1317,7 +1318,7 @@ Creation of RepositoryImpl (Infrastructure layer)
      - | To consider Repository as component scan target, add \ ``@Repository``\ annotation at class level.
 
 
-Since the business rules must not be included in Repository, it should only focus only on inserting and removing information from the persistence store (here, it is Map). 
+Since the business rules must not be included in Repository, it should focus only on inserting and removing information from the persistence store (here, it is Map). 
 
 
 .. figure:: ./images/image062.png
@@ -1891,7 +1892,7 @@ To define input validation rules, add annotations in form class.
 
 Modifications in JSP
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-Add the tag for dislaying the result.
+Add the tag for dislaying the result message.
 
 .. code-block:: jsp
    :emphasize-lines: 16,22
@@ -2351,7 +2352,7 @@ Take precaution of using **@Validated instead of @Valid** for executing the grou
     However, as the number of classes increase, duplicate properties also increase, and when the specifications change, the modification cost will also be more.
     Moreover, if multiple Form objects in the same Controller are initialized by ``@ModelAttribute`` method,
     unnecessary instance gets generated because every time all Forms are being initialized. Therefore,
-   it is recommended to basically consolidate the Form as much as possible to be used in a single Controller and carry out the group validation settings.
+    it is recommended to basically consolidate the Form as much as possible to be used in a single Controller and carry out the group validation settings.
 
 
 After creating new Todo, if submit is performed by Finish button, then strike-through is shown as below and it can be understood that the operation is completed.
@@ -2691,8 +2692,7 @@ Common settings
 --------------------------------------------------------------------------------
 
 First, apply settings common to the both, Spring Data JPA version and TERASOLUNA Dao version.
-Currently, H2Database is used for reducing DB setup troubles.
-。
+Currently, H2Database is used for reducing the effort of setting up a DB.
 
 
 Modifications in pom.xml
@@ -2711,7 +2711,7 @@ Define dependency for using H2Database in pom.xml.
 
 .. warning::
 
-  The above settings are \**for easy trial of the application**\ and is not to be used in actual application development. These settings must be deleted in actual project.
+  The above settings are \ **for easy trial of the application**\ and is not to be used in actual application development. These settings must be deleted in actual project.
   
   further,  \ ``<scope>``\  of JDBC driver must be \ ``provided``\ .
 
@@ -3326,7 +3326,7 @@ Modifications in TodoRepository
      - | Specify JPQL executed at the time of calling ``countByFinished`` by @Query.
    * - | (3)
      - | Set bind variable of JPQL specified in (2) by ``@Param``. 
-       | Here, add ``@Param("finished") to method argument for inserting \ ``”:finished”``\  in JPQL.
+       | Here, add ``@Param("finished")`` to method argument for inserting \ ```:finished"``\  in JPQL.
 
 
 Modifications in TodoRepositoryImpl

@@ -21,7 +21,7 @@ The description of this chapter has been verified on the following environment. 
      - Version
    * - JDK
      - 1.6.0\_33
-   * - SpringSource Tool Suite (STS)
+   * - Spring Tool Suite (STS)
      - 3.2.0
    * - VMware vFabric tc Server Developer Edition
      - 2.8
@@ -31,7 +31,7 @@ The description of this chapter has been verified on the following environment. 
 .. note::
 
   To connect to the internet via a proxy server, 
-  STS Proxy settings and \ `Maven Proxy settings <http://maven.apache.org/guides/mini/guide-proxies.html>`_\ are required for the following operations.
+  STS Proxy settings and \ `Maven Proxy settings <http://maven.apache.org/guides/mini/guide-proxies.html>`_\  are required for the following operations.
 
 
 .. warning::
@@ -238,7 +238,7 @@ Implementation of Eco application is completed here. Start the server, access th
 Implement Input Validation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Input validation is not performed in this application till this point.
-In Spring MVC, Bean Validation (`JSR-303 <http://jcp.org/en/jsr/detail?id=303>`_\)  and annotation based input validation can be easily implemented. For example input validation of name is performed in Eco Application. 
+In Spring MVC, Bean Validation (\ `JSR-303 <http://jcp.org/en/jsr/detail?id=303>`_\ ) and annotation based input validation can be easily implemented. For example input validation of name is performed in Eco Application. 
 
 Following dependency is added to pom.xml for using Bean Validation. 
 
@@ -296,7 +296,8 @@ In ``EchoController`` class, add ``@Valid`` annotation as shown below and also u
      - | Add ``form:errors`` tag for displaying error message when an error occurs on input screen.
 
 
-Implementation of input validation is completed. Error message is displayed in the following conditions:
+| Implementation of input validation is completed. 
+| Error message is displayed in the following conditions:
 * When an empty name is sent 
 * Size is more than 5 characters.
 

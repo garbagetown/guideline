@@ -20,7 +20,7 @@ Each layer has the following components.
 
 
 Application layer as well as infrastructure layer depends on domain layer, however
-\ ** domain layer should not depend on other layers.**
+\ **domain layer should not depend on other layers.**
 There can be changes in the application layer with the changes in domain layer,
 However, there should be no changes in domain layer with the changes in application layer.
 
@@ -67,9 +67,9 @@ so that domain layer does not dependent on the application layer.
 
 
 .. note::
- When conversion is done in controller, source code of controller can get too long.,
- and visibility of Controller's main responsibility (like screen transition) becomes poor.
- In that case, it is recommended to create helper class and delegate conversion logic to helper classes.
+
+  When conversion is done in controller, source code of controller can get too long and visibility of Controller's main responsibility (like screen transition) becomes poor.
+  In that case, it is recommended to create helper class and delegate conversion logic to helper classes.
 
 In Spring MVC, form object are the POJO class that store request parameters. It is called as form backing bean.
 
@@ -85,8 +85,10 @@ Helper is an option, and should be created as POJO class if required.
 .. note::
 
   Helper class exists to improve the visibility of Controller; hence, it is OK to think of it as a part of Controller.
+  
   The main duty of Controller is routing (URL mapping and sepcifying the destination). If there is any processing required (converting JavaBean etc), 
   then that part must be cut-off from controller and must be delegated to helper classes.
+  
   The purpose is to keep the controller class clean; hence, helper class is similar to private methods of Controller.
 
 
@@ -101,7 +103,7 @@ DomainObject
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 | DomainObject is a model that represents resources required for business and items generated in the business process.
-| Models are broadly classified into following 4 categories.
+| Models are broadly classified into following 3 categories.
 * Resource models such as Employee, Customer, Product etc. (generally indicated by a noun),  
 * Event models such as Order, Payment (generally indicated by a verb), 
 * Summary model such as YearlySales, MonthlySales.
@@ -110,9 +112,11 @@ Domain Object is the Entity that represents an object which indicates 1 record o
 
 .. note::
   Mainly \ `Models holding state only <http://martinfowler.com/bliki/AnemicDomainModel.html>`_\ are handled in this guideline.
+  
   In "Patterns of Enterprise Application Architecture (2002, Addison-Wesley)" of Martin Fowler,
   Domain Model is defined as \ `Item having state and behavior <http://martinfowler.com/eaaCatalog/domainModel.html>`_\. 
   We will not be touching such models in detail.
+  
   In this guideline, \ `Rich domain model <http://domaindrivendesign.org>`_\  proposed by Eric Evans is also not included.
   However, it is mentioned here for classification.
 
@@ -137,7 +141,7 @@ It is responsible for storing the data permanently (location where data is store
 
 RepositoryImpl
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Represents implementation of Repository interface of domain layer. IT covers life cycle management of DomainObject.
+Represents implementation of Repository interface of domain layer. It covers life cycle management of DomainObject.
 With the help of this structure, it is possible to hide implementation details from domain layer.
 When using Spring Data JPA, a few RepositoryImpls are created by Spring Data JPA automatically.
 
@@ -240,7 +244,7 @@ Please refer to the below table to determine whether it is OK to call a componen
            :align: center
 
 
-Note that \**Calling a Service from another Service is basically prohibited**\.
+Note that \ **calling a Service from another Service is basically prohibited**\.
 If services that can be used even from other services are required,
 SharedService should be created in order to clarify such a possibility.
 Refer to \ :doc:`../ImplementationAtEachLayer/DomainLayer`\  for the details.
@@ -286,6 +290,7 @@ Inter-dependency between components in this case must be as shown below:
       - .. image:: images/tick.png
            :align: center
 
+.. _application-layering_project-structure:
 
 Project structure
 ================================================================================
@@ -305,7 +310,7 @@ Basically, it is recommended to create the multiple projects with the following 
 .. note::
     Classes of infrastructure layer such as RepositoryImpl are also included in project-domain.
     Originally, [projectname]-infra project should be created separately; however, normally there 
-    is no need to conceal the implementation details in the infra project and development becomes easy if implementation is also stored in domain project, . 
+    is no need to conceal the implementation details in the infra project and development becomes easy if implementation is also stored in domain project. 
     Moreover, when required, [projectname]-infra project can be created.
 
 
@@ -366,8 +371,7 @@ Recommended structure of [projectname]-domain project is as below:
         | If there are associated Entities to the main entity, then Repository interfaces of associated Entities must also be placed in the same package as main Entity.
         | (For example, Order and OrderLine). If DTO is also required, it too must be placed in this package.
         | RepositoryImpl belongs to Infrastructure layer; however, there is no problem in keeping it in this project. 
-        | In case of using different data stores or existance of multiple persistence platforms, RepositoryImpl class must be kept in separate project or separate package so that 
-        | implementation related details are concealed.
+        | In case of using different data stores or existance of multiple persistence platforms, RepositoryImpl class must be kept in separate project or separate package so that implementation related details are concealed.
     * - | (3)
       - | Service classes are kept here. Package must be created based on Entity Model or other functional unit. Interface and Implementation class must be kept at the same level of package.
         | If input/output classes are also required, then they must be placed in this package.
@@ -436,7 +440,7 @@ Recommended structure of [projectname]-web
     * - | (5)
       - | Bean definitions related to Spring Security
     * - | (6)
-      - | Define the key-values to be used for screen display (internationalization).
+      - | Define the messages and other contents to be used for screen display (internationalization).
     * - | (7)
       - | Store View(jsp) files.
 

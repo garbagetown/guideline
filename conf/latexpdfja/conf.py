@@ -189,6 +189,7 @@ latex_elements = {
 # Additional stuff for the LaTeX preamble.
 'preamble': '''
 \\definecolor{VerbatimColor}{rgb}{0.95,0.95,0.95}
+\\setcounter{tocdepth}{4}
 ''',
 }
 

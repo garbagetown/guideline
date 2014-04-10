@@ -1368,7 +1368,7 @@ Notifying business error
 
    Since business exceptions need to be handled in controller class, they can be configured as checked exception.
    However in this guideline, it is recommended that business exception be subclass of unchecked exception (``java.lang.RuntimeException``). By default, 
-   if there is a RuntimeException, transaction will be rollbacked. Hence, doing this will prevent leaving a bug in the source-code due to inadequate settings. 
+   if there is a RuntimeException, transaction will be rollbacked. Hence, doing this will prevent leaving a bug in the source-code due to inadequate settings of @Transactional annotation. 
    Obviously, if settings are changed such that transaction rollbacks even in case checked exceptions, business exception can be configured as subclass of checked exceptions.
 
 | Example of throwing business exception.

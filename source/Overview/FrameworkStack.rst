@@ -1,9 +1,11 @@
 TERASOLUNA Global Frameworkのスタック
 ================================================================================
 
-.. contents:: 目次
-   :depth: 3
-   :local:
+.. only:: html
+
+ .. contents:: 目次
+    :depth: 3
+    :local:
 
 TERASOLUNA Global FrameworkのSoftware Framework概要
 --------------------------------------------------------------------------------
@@ -113,6 +115,7 @@ JSPをTiles化する場合は、
 
 version 1.0.1.RELEASEで利用するOSSの一覧を以下に示す。
 
+.. tabularcolumns:: |p{0.20\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|p{0.5\linewidth}|
 .. list-table::
     :header-rows: 1
     :stub-columns: 1
@@ -453,6 +456,7 @@ version 1.0.1.RELEASEで利用するOSSの一覧を以下に示す。
 \ `共通ライブラリ <https://github.com/terasolunaorg/terasoluna-gfw>`_\ は、TERASOLUNA Global Frameworkが含むSpring Ecosystem や、その他依存ライブラリでは足りない+αな機能を提供するライブラリである。
 基本的には、このライブラリがなくてもTERASOLUNA Global Frameworkによるアプリケーション開発は可能であるが、"あると便利"な存在である。
 
+.. tabularcolumns:: |p{0.05\linewidth}|p{0.30\linewidth}|p{0.35\linewidth}|p{0.30\linewidth}|
 .. list-table::
     :header-rows: 1
     :widths: 5 30 35 30
@@ -534,4 +538,8 @@ terasoluna-gfw-security-web
 * 認証ユーザ名ログ出力用サーブレットフィルタ
 * オープンリダイレクト脆弱性対策リダイレクトハンドラ
 * CSRF対策 (Spring Security 3.2を導入するまでの暫定措置)
+
+.. raw:: latex
+
+   \newpage
 

@@ -1328,7 +1328,7 @@ Processing method that receives request parameter separately using ``@RequestPar
    * - Sr.No.
      - Description
    * - | (1)
-     -Receive \ ``SampleForm``\ object as argument.
+     - Receive \ ``SampleForm``\ object as argument.
 
  .. note::
     When form object is used as argument, unlike \ ``@RequestParam``\,
@@ -1454,7 +1454,7 @@ and add the data to ``RedirectAttributes`` object.
    :header-rows: 1
    :widths: 10 90
 
-   * -Sr.No.
+   * - Sr.No.
      - Description
    * - | (1)
      - Fetch \ ``RedirectAttributes``\ object as argument of the processing method of controller.

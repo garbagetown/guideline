@@ -2065,7 +2065,8 @@ When the form is sent with input fields left blank after adding the above settin
 
   Since \ ``{FQCN of annotation.message}``\  is set in \ ``message``\  attribute in Bean Validation standard annotations and independent Hibernate Validator annotations,
   messages can be defined in properties file in the above format. However, since all annotations may not be in this format, Javadoc or source code of the target annotation should be checked.
-    .. code-block:: properties
+    
+.. code-block:: properties
 
       FQCN of annotation.message = Message
 

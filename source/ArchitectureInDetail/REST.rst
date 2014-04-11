@@ -1,9 +1,11 @@
 RESTful Web Service
 ================================================================================
 
-.. contents:: 目次
-   :depth: 3
-   :local:
+.. only:: html
+
+ .. contents:: 目次
+    :depth: 3
+    :local:
 
 .. _RESTOverview:
 
@@ -47,6 +49,7 @@ RESTful Web Serviceとは
    :alt: Constitution of RESTful Web Service
    :width: 100%
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -75,6 +78,7 @@ TERASOLUNA Global Frameworkでは、Spring MVCの機能を利用してRESTful We
 | Spring MVCにデフォルトで組み込まれている主な共通機能は以下の通りである。
 | これらの機能は、REST APIを提供するControllerのメソッドにアノテーションを指定だけで有効にする事ができる。
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -101,6 +105,7 @@ TERASOLUNA Global Frameworkでは、Spring MVCの機能を利用してRESTful We
    :alt: Application constitution of RESTful Web Service on Spring MVC
    :width: 100%
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.20\linewidth}|p{0.70\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 20 70
@@ -155,6 +160,7 @@ RESTful Web Serviceのモジュールの構成
 
 * **アプリケーション層のモジュール**
 
+     .. tabularcolumns:: |p{0.10\linewidth}|p{0.20\linewidth}|p{0.70\linewidth}|
      .. list-table::
         :header-rows: 1
         :widths: 10 20 70
@@ -189,6 +195,7 @@ RESTful Web Serviceのモジュールの構成
 
 * **ドメイン層のモジュール**
 
+     .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
      .. list-table::
         :header-rows: 1
         :widths: 10 90
@@ -203,6 +210,7 @@ RESTful Web Serviceのモジュールの構成
 
 * **インフラストラクチャ層のモジュール**
 
+     .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
      .. list-table::
         :header-rows: 1
         :widths: 10 90
@@ -312,6 +320,7 @@ REST APIの実装サンプル
 
  Todoリソースに対して、以下の5つのREST API(Controllerの処理メソッド)を作成する。
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.15\linewidth}|p{0.10\linewidth}|p{0.30\linewidth}|p{0.15\linewidth}|p{0.20\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 15 10 30 15 20
@@ -466,6 +475,7 @@ Architecture
 
 以下の5つのアーキテクチャは、アプリケーションの特性に関係なく適用すべきアーキテクチャである。
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.35\linewidth}|p{0.55\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 35 55
@@ -493,6 +503,7 @@ Architecture
 
 以下の2つのアーキテクチャは、アプリケーションの特性に応じて、適用するアーキテクチャである。
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.35\linewidth}|p{0.55\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 35 55
@@ -577,6 +588,7 @@ HTTPメソッドによるリソースの操作
 
 以下に、HTTPメソッドに割り当てられるリソースに対する操作の対応付けと、それぞれの操作が保証すべき事後条件について説明する。
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 20 35 35
@@ -650,6 +662,7 @@ HTTPメソッドによるリソースの操作
            :alt: Image of processing for create new resource using by PUT method
            :width: 70%
 
+         .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
          .. list-table::
             :header-rows: 1
             :widths: 10 90
@@ -671,6 +684,7 @@ HTTPメソッドによるリソースの操作
            :width: 70%
 
 
+         .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
          .. list-table::
             :header-rows: 1
             :widths: 10 90
@@ -720,6 +734,7 @@ HTTPメソッドによるリソースの操作
 
   RESTful Web Serviceで使用される代表的なMIMEタイプを以下に示す。
 
+     .. tabularcolumns:: |p{0.10\linewidth}|p{0.30\linewidth}|p{0.60\linewidth}|
      .. list-table::
         :header-rows: 1
         :widths: 10 30 60
@@ -756,6 +771,7 @@ HTTPメソッドによるリソースの操作
 | HTMLを返却するような伝統的なWebアプリケーションでは、処理結果を判断するのはオペレータ(人間)のため、この仕組みでも問題が発生する事はなかった。
 | しかし、この仕組みでRESTful Web Serviceを構築した場合、以下のような問題が潜在的に存在することになるため、適切なHTTPステータスコードを設定することを推奨する。
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -824,6 +840,7 @@ HTTPメソッドによるリソースの操作
    :alt: Image of resource connectivity
    :width: 100%
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -945,6 +962,7 @@ HTTPメソッドによるリソースの操作
 | 逆に、ユーザインタフェースを持つクライアントアプリケーションとRESTful Web Serviceの間で直接リソースのやりとりを行う場合は、リンクを設けることで、クライアントとサーバ間の疎結合性を高めることが出来る。
 | クライアントとサーバ間の疎結合性を高めることが出来る理由は以下の通りである。
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -989,6 +1007,7 @@ How to design
 
 リソースを抽出する際の注意点を以下に示す。
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -1067,6 +1086,7 @@ RESTful Web Serviceは、複数のバージョンで稼働が必要になる可�
 | Web上に公開するリソースに対して、以下の２つのURIを割り当てる。
 | 下記の例では、会員情報をWeb上に公開する場合のURI例を記載している。
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.35\linewidth}|p{0.25\linewidth}|p{0.30\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 35 25 30
@@ -1089,6 +1109,7 @@ RESTful Web Serviceは、複数のバージョンで稼働が必要になる可�
 | Web上に公開する関連リソースへのURIは、ネストさせて表現する。
 | 下記の例では、会員毎の注文情報をWeb上に公開する場合のURI例を記載している。
     
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.35\linewidth}|p{0.25\linewidth}|p{0.30\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 35 25 30
@@ -1111,6 +1132,7 @@ RESTful Web Serviceは、複数のバージョンで稼働が必要になる可�
 | Web上に公開する関連リソースの要素が1件の場合は、関連リソースを示す名詞は複数系ではなく単数形とする。
 | 下記の例では、会員毎の資格情報をWeb上に公開する場合のURI例を記載している。
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.35\linewidth}|p{0.25\linewidth}|p{0.30\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 35 25 30
@@ -1145,6 +1167,7 @@ HTTPメソッドの割り当て
 リソースコレクションのURIに対するHTTPメソッドの割り当て
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.20\linewidth}|p{0.70\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 20 70
@@ -1179,6 +1202,7 @@ HTTPメソッドの割り当て
 特定リソースのURIに対するHTTPメソッドの割り当て
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.20\linewidth}|p{0.70\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 20 70
@@ -1341,6 +1365,7 @@ HTTPステータスコード
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 HTTPステータスコードは、以下の指針に則って応答する。
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -1363,6 +1388,7 @@ HTTPステータスコードは、以下の指針に則って応答する。
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 リクエストが成功した場合は、状況に応じて以下のHTTPステータスコードを応答する。
  
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.20\linewidth}|p{0.30\linewidth}|p{0.40\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 20 30 40
@@ -1403,6 +1429,7 @@ HTTPステータスコードは、以下の指針に則って応答する。
 
 リソースを扱う個々のREST APIで意識する必要があるステータスコードは以下の通り。
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.20\linewidth}|p{0.30\linewidth}|p{0.40\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 20 30 40
@@ -1434,6 +1461,7 @@ HTTPステータスコードは、以下の指針に則って応答する。
 | リソースを扱う個々のREST APIで意識する必要がないステータスコードは以下の通り。
 | 以下のステータスコードは、フレームワークや共通処理として意識する必要がある。
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.20\linewidth}|p{0.30\linewidth}|p{0.40\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 20 30 40
@@ -1468,6 +1496,7 @@ HTTPステータスコードは、以下の指針に則って応答する。
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 リクエストが失敗した原因がサーバ側にある場合は、状況に応じて以下のHTTPステータスコードを応答する。
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.20\linewidth}|p{0.30\linewidth}|p{0.40\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 20 30 40
@@ -1551,6 +1580,7 @@ Webアプリケーションの構成
 | RESTful Web Serviceを構築する場合は、以下のいずれかの構成でWebアプリケーション(war)を構築する。
 | **特に理由がない場合は、RESTful Web Service専用のWebアプリケーションとして構築する事を推奨する。**
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.30\linewidth}|p{0.60\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 30 60
@@ -1693,6 +1723,7 @@ RESTful Web Serviceで必要となるSpring MVCのコンポーネントを有効
 
     </beans>
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -1760,6 +1791,7 @@ RESTful Web Service用のサーブレットの設定
 
     <!-- omitted -->
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -1850,6 +1882,7 @@ REST APIの実装
  
  リソース(JSON)の項目毎の仕様は以下の通りとする。
  
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.20\linewidth}|p{0.10\linewidth}|p{0.10\linewidth}|p{0.15\linewidth}|p{0.25\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 20 10 10 15 25
@@ -1982,6 +2015,7 @@ REST APIの実装
 
  実装するREST APIは以下の5つのAPIとする。
  
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.15\linewidth}|p{0.10\linewidth}|p{0.25\linewidth}|p{0.15\linewidth}|p{0.25\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 15 10 25 15 25
@@ -2099,6 +2133,7 @@ Resourceクラスの作成
 
 Resourceクラスの役割は以下の通りである。
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.30\linewidth}|p{0.60\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 30 60
@@ -2208,6 +2243,7 @@ Resourceクラスの役割は以下の通りである。
     
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -2269,6 +2305,7 @@ Resourceクラスの役割は以下の通りである。
     
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -2313,6 +2350,7 @@ Controllerクラスの作成
 
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -2356,6 +2394,7 @@ URIで指定されたMemberリソースのコレクションをページ検索�
     
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -2420,6 +2459,7 @@ URIで指定されたMemberリソースのコレクションをページ検索�
 
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -2557,6 +2597,7 @@ URIで指定されたMemberリソースのコレクションをページ検索�
     
     </mappings>
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -2705,6 +2746,7 @@ URIで指定されたMemberリソースのコレクションをページ検索�
 
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -2801,6 +2843,7 @@ URIで指定されたMemberリソースを取得するREST APIの実装例を、
 
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -2898,6 +2941,7 @@ URIで指定されたMemberリソースを更新するREST APIの実装例を、
         
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -2993,6 +3037,7 @@ URIで指定されたMemberリソースを削除するREST APIの実装例を、
         
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -3066,6 +3111,7 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
    :width: 100%
 
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.20\linewidth}|p{0.70\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10  20 70
@@ -3185,6 +3231,7 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
     
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -3236,6 +3283,7 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
     
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -3298,6 +3346,7 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
     }
 
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -3349,6 +3398,7 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
 
 入力エラーを応答するためには、以下の３つの例外をハンドリングする必要がある。
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.35\linewidth}|p{0.55\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 35 55
@@ -3431,6 +3481,7 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
 
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -3509,6 +3560,7 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
 
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -3541,6 +3593,7 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
 
     リソースのフォーマットとしてJSONを使用する場合、以下の例外が\ ``HttpMessageNotReadableException``\の原因例外として格納される。
 
+     .. tabularcolumns:: |p{0.10\linewidth}|p{0.35\linewidth}|p{0.55\linewidth}|
      .. list-table::
         :header-rows: 1
         :widths: 10 35 55
@@ -3664,6 +3717,7 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
         
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -3724,6 +3778,7 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
 
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -3790,6 +3845,7 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
     }
 
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -3852,6 +3908,7 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
     
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -3913,6 +3970,7 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
     
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -4097,6 +4155,7 @@ Filterでエラーが発生した場合や\ ``HttpServletResponse#sendError``\�
    :width: 100%
 
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.20\linewidth}|p{0.70\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 20 70
@@ -4182,6 +4241,7 @@ Filterでエラーが発生した場合や\ ``HttpServletResponse#sendError``\�
     
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -4251,6 +4311,7 @@ Filterでエラーが発生した場合や\ ``HttpServletResponse#sendError``\�
 
     <!-- omitted -->
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -4415,6 +4476,7 @@ RESTful Web Service用の\ ``DispatcherServlet``\を設ける方法
 
     <!-- omitted -->
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -4492,6 +4554,7 @@ JSONの中に関連リソースへのハイパーメディアリンクを含め�
     
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -4546,6 +4609,7 @@ JSONの中に関連リソースへのハイパーメディアリンクを含め�
     
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -4592,6 +4656,7 @@ JSONの中に関連リソースへのハイパーメディアリンクを含め�
 
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -4633,6 +4698,7 @@ JSONの中に関連リソースへのハイパーメディアリンクを含め�
 
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -4683,6 +4749,7 @@ JSONの中に関連リソースへのハイパーメディアリンクを含め�
 
     }
     
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -4783,6 +4850,7 @@ POST時のLocationヘッダの設定
     
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -4854,6 +4922,7 @@ POST時のLocationヘッダの設定
 
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -4919,6 +4988,7 @@ OPTIONSメソッドのリクエストをControllerにディスパッチするた
 
     <!-- omitted -->
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
    :header-rows: 1
    :widths: 10 90
@@ -4969,6 +5039,7 @@ OPTIONSメソッドの実装
     }
 
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -5068,6 +5139,7 @@ HEADメソッドの実装
 
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -5151,6 +5223,7 @@ RESTful Web Service向けのリクエストに対して、CSRF対策の処理が
 
     <!-- omitted -->
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
    :header-rows: 1
    :widths: 10 90
@@ -5200,6 +5273,7 @@ Spring-oxmを依存アーティファクトとして追加する。
 
     <!-- omitted -->
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
    :header-rows: 1
    :widths: 10 90
@@ -5244,6 +5318,7 @@ Spring-oxmから提供されているクラスを使用してXMLとオブジェ�
 
     <!-- omitted -->
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
    :header-rows: 1
    :widths: 10 90
@@ -5363,6 +5438,7 @@ Dozerを使用して、Joda-Timeのクラス(\ ``org.joda.time.DateTime``\、\ `
     
     </mappings>
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90
@@ -5392,6 +5468,7 @@ Dozerを使用して、Joda-Timeのクラス(\ ``org.joda.time.DateTime``\、\ `
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 | \ :ref:`RESTHowToUse`\の説明で使用したアプリケーション層のソースコードのうち、断片的に貼りつけていたソースコードの完全版を添付しておく。
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.45\linewidth}|p{0.45\linewidth}|
  .. list-table::
    :header-rows: 1
    :widths: 10 45 45
@@ -5768,6 +5845,7 @@ REST API実装時に作成したドメイン層のクラスのソースコード
 | \ :ref:`RESTHowToUse`\で説明したREST APIから呼び出しているドメイン層のクラスのソースコードを添付しておく。
 | なお、インフラストラクチャ層は、JPA(Spring Data JPA)を使って実装している。
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.35\linewidth}|p{0.55\linewidth}|
  .. list-table::
    :header-rows: 1
    :widths: 10 35 55

@@ -1,9 +1,11 @@
 チュートリアル(Todoアプリケーション REST編)
 ********************************************************************************
 
-.. contents:: 目次
-   :depth: 3
-   :local:
+.. only:: html
+
+ .. contents:: 目次
+    :depth: 3
+    :local:
 
 はじめに
 ================================================================================
@@ -27,6 +29,7 @@
 ただし、REST Clientとして、Google Chromeの拡張機能である「\ `Dev HTTP Client <https://chrome.google.com/webstore/detail/dev-http-client/aejoelaoggembcahagimdiliamlcdmfm>`_\ 」を使用するため、
 Web BrowserはGoogle Chromeを使用する必要がある。
 
+ .. tabularcolumns:: |p{0.25\linewidth}|p{0.75\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 25 75
@@ -121,6 +124,7 @@ Chromeのアプリケーション一覧を開く(ブラウザのアドレスバ�
 | コマンドを実行すると、プロンプト上に以下の順で６つの入力が求められる。
 | 本チュートリアルでは、入力値は以下に示す値とする。
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.70\linewidth}|p{0.20\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 70 20
@@ -277,6 +281,7 @@ REST APIの作成
 
 本チュートリアルでは、todoテーブルで管理しているデータ(以降、「Todoリソース」呼ぶ)をWeb上に公開するためのREST APIを作成する。
 
+ .. tabularcolumns:: |p{0.20\linewidth}|p{0.10\linewidth}|p{0.30\linewidth}|p{0.15\linewidth}|p{0.25\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 20 10 30 15 25
@@ -644,6 +649,7 @@ web.xmlの修正
     </web-app>
 
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
    :header-rows: 1
    :widths: 10 90
@@ -736,6 +742,7 @@ spring-mvc-rest.xmlの作成
         </aop:config>
     </beans>
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
    :header-rows: 1
    :widths: 10 90
@@ -835,6 +842,7 @@ REST API用のSpring Securityの定義追加
     
     </beans>
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
    :header-rows: 1
    :widths: 10 90
@@ -978,6 +986,7 @@ Controllerクラスの作成
     
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
    :header-rows: 1
    :widths: 10 90
@@ -1038,6 +1047,7 @@ GET Todosの実装
 
 
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
    :header-rows: 1
    :widths: 10 90
@@ -1155,6 +1165,7 @@ Todoリソースを新規作成するAPI(POST Todos)の処理を、\ ``TodoRestC
     }
 
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
    :header-rows: 1
    :widths: 10 90
@@ -1398,6 +1409,7 @@ Todoリソースを一件取得するAPI(GET Todo)の処理を、\ ``TodoRestCon
 
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
    :header-rows: 1
    :widths: 10 90
@@ -1500,6 +1512,7 @@ Todoリソースを一件更新(完了状態へ更新)するAPI(PUT Todo)の処�
         
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
    :header-rows: 1
    :widths: 10 90
@@ -1612,6 +1625,7 @@ DELETE Todoの実装
 
     }
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
    :header-rows: 1
    :widths: 10 90
@@ -2453,4 +2467,7 @@ HTTPレスポンスBODYにエラー情報を出力するための実装
             
             (omitted)
      
-    
+.. raw:: latex
+
+   \newpage
+

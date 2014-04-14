@@ -173,7 +173,7 @@ Implementation method is explained using "New user registration" process as an e
      :widths: 10 90
 
 
-     * - S. No.
+     * - S.No.
        - Description
      * - | (1)
        - | Assign \ ``javax.validation.constraints.NotNull``\  indicating that the target field is not \ ``null``\.

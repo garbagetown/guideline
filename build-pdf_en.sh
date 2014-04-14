@@ -1,3 +1,2 @@
 rm -rf build
-export SOURCEDIR=source_en
-make SPHINXOPTS="-c conf/latexpdfja" latexpdfja
+make SPHINXOPTS="-c conf/latexpdfen" SOURCEDIR=source_en BUILDDIR=build_en latexpdfja

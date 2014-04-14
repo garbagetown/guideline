@@ -123,6 +123,13 @@ latexpdfja:
 	$(MAKE) -C $(BUILDDIR)/latex all-pdf-ja
 	@echo "pdflatex finished; the PDF files are in $(BUILDDIR)/latex."
 
+latexpdfen:
+	$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) $(BUILDDIR)/latex
+	@echo "Running LaTeX files through platex and dvipdfmx..."
+	sh $(REPLACE_SHELL) $(BUILDDIR)/latex/*.tex
+	$(MAKE) -C $(BUILDDIR)/latex all-pdf-ja
+	@echo "pdflatex finished; the PDF files are in $(BUILDDIR)/latex."
+
 text:
 	$(SPHINXBUILD) -b text $(ALLSPHINXOPTS) $(BUILDDIR)/text
 	@echo

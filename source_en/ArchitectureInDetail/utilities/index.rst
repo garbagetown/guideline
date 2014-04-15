@@ -5,3 +5,9 @@
    
    BeanConverter
    JodaTime
+
+
+.. raw:: latex
+
+   \newpage
+

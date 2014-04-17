@@ -5,3 +5,5 @@ sed -i -e "s/\\\\begin{notice}{note}{ノート:}/\\\\begin{notice}{note}{Note:}/
 sed -i -e "s/\\\\begin{notice}{warning}{警告:}/\\\\begin{notice}{warning}{Warning:}/g" ${1}
 sed -i -e "s/\\\\begin{notice}{tip}{ちなみに:}/\\\\begin{notice}{tip}{Tip:}/g" ${1}
 sed -i -e "s/\\\\begin{notice}{note}{課題}/\\\\begin{notice}{note}{Todo}/g" ${1}
+sed -i -e "s/\\\\textsf{次のページに続く}/\\\\textsf{Continued on Next page}/g" ${1}
+sed -i -e "s/\\\\textsf{\\\\tablename\\\\ \\\\thetable{} -- 前のページからの続き}/\\\\textsf{\\\\tablename\\\\ \\\\thetable{} -- continued from previous page}/g" ${1}

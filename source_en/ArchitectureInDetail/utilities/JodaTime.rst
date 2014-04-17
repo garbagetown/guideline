@@ -3,9 +3,9 @@ Date Operations (Joda Time)
 
 .. only:: html
 
-.. contents:: Table of Contents
-   :depth: 4
-   :local:
+ .. contents:: Table of Contents
+    :depth: 4
+    :local:
 
 |
 

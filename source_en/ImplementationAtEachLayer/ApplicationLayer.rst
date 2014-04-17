@@ -3,7 +3,7 @@
 
 .. only:: html
 
- .. contents:: 目次
+ .. contents:: Index
     :depth: 3
     :local:
 

@@ -1,9 +1,10 @@
-ユーティリティ
+Utilities
 --------------------
+
 .. toctree::
    :maxdepth: 1
    
-   BeanConverter
+   Dozer
    JodaTime
 
 

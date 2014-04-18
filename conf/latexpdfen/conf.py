@@ -190,9 +190,9 @@ latex_elements = {
 'preamble': '''
 \\definecolor{VerbatimColor}{rgb}{0.95,0.95,0.95}
 \\setcounter{tocdepth}{4}
-\\renewcommand{\\prepartname}{Part.}
+\\renewcommand{\\prepartname}{}
 \\renewcommand{\\postpartname}{}
-\\renewcommand{\\prechaptername}{Chapter.}
+\\renewcommand{\\prechaptername}{}
 \\renewcommand{\\postchaptername}{}
 \\renewcommand{\\contentsname}{CONTENTS}
 \\renewcommand{\\listfigurename}{LIST of FIGURE}

@@ -191,6 +191,8 @@ latex_elements = {
 \\definecolor{VerbatimColor}{rgb}{0.95,0.95,0.95}
 \\setcounter{tocdepth}{4}
 ''',
+
+'classoptions': ',dvipdfmx,bookmarks=true,bookmarksnumbered=true',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples

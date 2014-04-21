@@ -203,6 +203,8 @@ latex_elements = {
 \\renewcommand{\\tablename}{Table.}
 \\renewcommand{\\appendixname}{APPENDIX}
 ''',
+
+'classoptions': ',dvipdfmx,bookmarks=true,bookmarksnumbered=true',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples

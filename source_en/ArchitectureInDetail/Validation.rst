@@ -2728,6 +2728,7 @@ Set constraint of assigning "confirm" as the prefix of confirmation field.
      * - | (4)
        - | Create independent \ ``ConstraintViolation``\  object.
          | Define message to be output in \ ``ConstraintValidatorContext.buildConstraintViolationWithTemplate``\ .
+         | Specify field name to output error message in \ ``ConstraintViolationBuilder.addNode``\.
          | Refer to \ `JavaDoc <http://docs.oracle.com/javaee/6/api/javax/validation/ConstraintValidatorContext.html>`_\ for details.
 
 

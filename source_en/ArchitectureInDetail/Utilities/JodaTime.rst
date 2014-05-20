@@ -407,7 +407,7 @@ Class indicating the interval between two instances (DateTime）.
 
 The following 4 are checked using the Interval class.
 
-* Checking whether the interval includes the specified date and interval.
+* Checking whether the interval includes the specified date or interval.
 * Checking whether the 2 intervals are consecutive.
 * Fetching the difference between 2 intervals in an interval
 * Fetching the overlapping interval between 2 intervals

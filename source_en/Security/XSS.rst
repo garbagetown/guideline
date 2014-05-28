@@ -173,7 +173,8 @@ Example of escaping output value using f:h() function
     </tr>
     <!-- omitted -->
 \
-    .. tip::
+    
+.. tip::
 
     **java.util.Date subclass format**
 
@@ -187,9 +188,10 @@ Example of escaping output value using f:h() function
         If \ ``f:h()``\  is used for setting the value of "value" attribute, it gets converted into String and \ ``javax.el.ELException``\  is thrown; hence \ ``${form.date}``\  is used as is.
         However, it is safe from XSS attack since the value is in yyyyMMdd format.
 \
-    .. tip::
+    
+.. tip::
 
-        **String that can be parsed into java.lang.Number subclasses or java.lang.Number**
+        **String that can be parsed into java.lang.Number or subclass of java.lang.Number**
 
         It is recommended that you use \ ``<fmt:formatNumber>``\  to format and display the string that can be parsed to java.lang.Number subclasses or java.lang.Number.
         See the example below.
@@ -273,10 +275,10 @@ Example of vulnerability when output values are not escaped
         document.write(aaa);
     </script>
 \
-    .. tip::
+.. tip::
 
-        Specification wherein JavaScript elements are dynamically generated depending on user input carries a risk of non-essential scripts being inserted;
-        hence an alternate way should be considered or it should be avoided as much as possible unless there is a specific business requirement.
+        Dynamically generated javascript code depending on user input carries a risk of any script being inserted; hence an alternate 
+        way should be considered or it should be avoided as much as possible unless there is a specific business requirement.
 
 Example of escaping output value using f:js() function
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

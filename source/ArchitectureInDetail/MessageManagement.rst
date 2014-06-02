@@ -849,26 +849,38 @@ infoメッセージを表示したい場合は、次のように\ ``ResultMessag
 .. tabularcolumns:: |p{0.20\linewidth}|p{0.40\linewidth}|p{0.40\linewidth}|
 .. list-table::
   :header-rows: 1
-  :widths: 20 40 40
+  :widths: 15 30 25 30
 
   * - メッセージタイプ
     - \ ``ResultMessages``\ オブジェクトの作成
     - デフォルトで出力されるclass名
+    - 備考
   * - | success
     - | ``ResultMessages.success()``\
     - | alert alert-success
+    - | \-
   * - | info
     - | \ ``ResultMessages.info()``\
     - | alert alert-info
+    - | \-
   * - | warn
     - | \ ``ResultMessages.warn()``\
     - | alert alert-warn
+    - | terasoluna-gfw-common 1.1.0.RELEASEから非推奨
+      | 1.1.0.RELEASE以降を利用する場合は、メッセージタイプ「warning」を利用されたい。\ **このメッセージタイプは将来削除される可能性がある。**\
+  * - | warning
+    - | \ ``ResultMessages.warning()``\
+    - | alert alert-warning
+    - | terasoluna-gfw-common 1.1.0.RELEASEから追加
+      | CSSフレームワークである\ `Bootstrap <http://getbootstrap.com/>`_ 3.0.0の\ `Alertsコンポーネント <http://getbootstrap.com/components/#alerts>`_\で用意されていメッセージタイプをデフォルトでサポートするために追加。
   * - | error
     - | \ ``ResultMessages.error()``\
     - | alert alert-error
+    - | \-
   * - | danger
     - | \ ``ResultMessages.danger()``\
     - | alert alert-danger
+    - | \-
 
 メッセージタイプに応じてCSSを定義されたい。以下に、CSSを適用した場合の例を示す。
 
@@ -886,7 +898,7 @@ infoメッセージを表示したい場合は、次のように\ ``ResultMessag
       color: #2d7091;
       border-color: rgba(45, 112, 145, 0.3);
     }
-    .alert-warn {
+    .alert-warning {
       background: #fffceb;
       color: #e28327;
       border-color: rgba(226, 131, 39, 0.3);
@@ -904,7 +916,7 @@ infoメッセージを表示したい場合は、次のように\ ``ResultMessag
         :width: 100%
 
 
-* \ ``ResultMessages.warn().add("w.ex.an.2001")``\ を\ ``<t:messagesPanel />``\ で出力した例
+* \ ``ResultMessages.warning().add("w.ex.an.2001")``\ を\ ``<t:messagesPanel />``\ で出力した例
 
 
     .. figure:: ./images_MessageManagement/message-management-resultmessage-warn.jpg
@@ -946,7 +958,7 @@ infoメッセージを表示したい場合は、次のように\ ``ResultMessag
         public String showMessages(Model model) {
 
             model.addAttribute("messages1",
-                        ResultMessages.warn().add("w.ex.an.2001")); // (1)
+                        ResultMessages.warning().add("w.ex.an.2001")); // (1)
             model.addAttribute("messages2",
                         ResultMessages.error().add("e.ex.an.9001")); // (2)
 
@@ -963,7 +975,7 @@ infoメッセージを表示したい場合は、次のように\ ``ResultMessag
       * - 項番
         - 説明
       * - | (1)
-        - | メッセージタイプが"warn"である、\ ``ResultMessages``\ を属性名"messages1"でModelに追加する。
+        - | メッセージタイプが"warning"である、\ ``ResultMessages``\ を属性名"messages1"でModelに追加する。
       * - | (2)
         - | メッセージタイプが"info"である、\ ``ResultMessages``\ を属性名"messages2"でModelに追加する。
 
@@ -992,7 +1004,7 @@ infoメッセージを表示したい場合は、次のように\ ``ResultMessag
             border-color: rgba(45, 112, 145, 0.3);
         }
 
-        .alert-warn {
+        .alert-warning {
             background: #fffceb;
             color: #e28327;
             border-color: rgba(226, 131, 39, 0.3);

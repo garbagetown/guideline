@@ -9,7 +9,7 @@ Change Log
     * - Modified on
       - Modified locations
       - Modification details
-    * - 2014-05-xx
+    * - 2014-06-xx
       - \-
       - Released "1.0.1 RELEASE" version
         
@@ -74,6 +74,11 @@ Change Log
       
         :doc:`../ArchitectureInDetail/FileUpload`
       - Added a warning about `CVE-2014-0050 <http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-0050>`_\ (File Upload Vulnerability)
+      
+        Fixed guideline errors.
+        
+        * Added how to handle \ ``MultipartException``\  using error-page functionality of servlet container, because your application can't handle \ ``MultipartException``\  using \ ``SystemExceptionResolver``\  when used \ ``MultipartFilter``\.
+          For details, refer to \ `Issue of guideline#59 <https://github.com/terasolunaorg/guideline/issues/59>`_\ .
     * - 2013-12-17
       - Japanese version
       - Released "1.0.0 Public Review" version

@@ -135,7 +135,7 @@ Example of escaping output value using f:h() function
     .<!-- omitted -->
 
 .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
-.. list-table:: 
+.. list-table::
    :header-rows: 1
    :widths: 10 90
 
@@ -155,7 +155,7 @@ Example of escaping output value using f:h() function
 
 | By escaping special characters, input value is output as is without being recognized as <script> tag.
 
-.. figure:: ./images/xss_screen_escape_result.png 
+.. figure:: ./images/xss_screen_escape_result.png
    :alt: escape_result
    :width: 60%
    :align: center
@@ -173,10 +173,10 @@ Example of escaping output value using f:h() function
     </tr>
     <!-- omitted -->
 \
-    
-.. tip::
+    .. tip::
 
-    **java.util.Date subclass format**
+
+        **java.util.Date subclass format**
 
         It is recommended that you use \ ``<fmt:formatDate>``\  of JSTL to format and display java.util.Date subclasses.
         See the example below.
@@ -188,15 +188,15 @@ Example of escaping output value using f:h() function
         If \ ``f:h()``\  is used for setting the value of "value" attribute, it gets converted into String and \ ``javax.el.ELException``\  is thrown; hence \ ``${form.date}``\  is used as is.
         However, it is safe from XSS attack since the value is in yyyyMMdd format.
 \
-    
-.. tip::
+    .. tip::
+
 
         **String that can be parsed into java.lang.Number or subclass of java.lang.Number**
 
         It is recommended that you use \ ``<fmt:formatNumber>``\  to format and display the string that can be parsed to java.lang.Number subclasses or java.lang.Number.
         See the example below.
 
-        .. code-block:: jsp
+            .. code-block:: jsp
 
                 <fmt:formatNumber value="${f:h(form.price)}" pattern="###,###" />
 
@@ -275,7 +275,7 @@ Example of vulnerability when output values are not escaped
         document.write(aaa);
     </script>
 \
-.. tip::
+    .. tip::
 
         Dynamically generated javascript code depending on user input carries a risk of any script being inserted; hence an alternate 
         way should be considered or it should be avoided as much as possible unless there is a specific business requirement.

@@ -317,7 +317,7 @@ Fetching first and last day of the month
    * - Sr. No.
      - Description
    * - | (1)
-     - | Get Property object that holds the attribute values related to month of current date.
+     - | Get Property object that holds the attribute values related to day of current month.
    * - | (2)
      - | Get first day of the month by fetching the minimum value from Property object. In this example, it becomes \ ``2013-01-01T13:30:22.123Z``\.
    * - | (3)
@@ -346,7 +346,7 @@ Fetching the first and the last day of the week
    * - Sr. No.
      - Description
    * - | (1)
-     - | Get Property object that holds attribute values related to the week of current date.
+     - | Get Property object that holds attribute values related to the day of current week.
    * - | (2)
      - | Get first day of the week (Monday) by fetching the minimum value from Property object. In this example, it becomes \ ``2013-01-07T13:30:22.123Z``\.
    * - | (3)
@@ -407,7 +407,7 @@ Class indicating the interval between two instances (DateTime）.
 
 The following 4 are checked using the Interval class.
 
-* Checking whether the interval includes the specified date and interval.
+* Checking whether the interval includes the specified date or interval.
 * Checking whether the 2 intervals are consecutive.
 * Fetching the difference between 2 intervals in an interval
 * Fetching the overlapping interval between 2 intervals

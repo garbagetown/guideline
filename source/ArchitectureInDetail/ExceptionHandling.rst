@@ -694,7 +694,7 @@ Detail
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 | 例外をフレームワーク(サーブレット単位)でハンドリングする場合、SystemExceptionResolverで捕捉し例外処理を行う。
 | 基本フローは、以下の通りである。
-| 下記の図は、 本フレームワークから提供しているビジネス例外(\ ``org.terasoluna.gfw.common.exception.SystemException``\ )を、\ ``org.terasoluna.gfw.web.exception.SystemExceptionResolver``\ を使ってハンドリングする場合の基本フローである。
+| 下記の図は、 本フレームワークから提供しているシステム例外(\ ``org.terasoluna.gfw.common.exception.SystemException``\ )を、\ ``org.terasoluna.gfw.web.exception.SystemExceptionResolver``\ を使ってハンドリングする場合の基本フローである。
 | ログは、例外ハンドリングメソッドの引数に指定された例外を記録するインタセプタ(\ ``org.terasoluna.gfw.web.exception.HandlerExceptionResolverLoggingInterceptor``\ )を使用して、出力する。
 
 .. figure:: ./images/exception-handling-flow-resolver.png

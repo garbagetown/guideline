@@ -7,11 +7,11 @@
     :depth: 4
     :local:
 
-This chapter talks about exception handling mechanism for web applications created using this guideline.
+This chapter describes exception handling mechanism for web applications created using this guideline.
 
 Overview
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-This section illustrates handling of exceptions occurring within the boundary of Spring MVC. The overall flow is as follows:
+This section illustrates handling of exceptions occurring within the boundary of Spring MVC. The scope of description is as follows:
 
 .. figure:: ./images/exception-handling-description-target.png
   :alt: description target
@@ -83,7 +83,7 @@ Exception handling methods
      - | 1. :ref:`exception-handling-class-from-middle-label`
    * - | (2)
      - | Use \ ``@ExceptionHandler``\  annotation to carry out exception handling in application code.
-     - | This is used when exceptions are to be handled at use case (Controller) level.
+     - | Use this when exceptions are to be handled at use case (Controller) level.
        | For details, refer to \ :ref:`exception-handling-basic-flow-annotation-label`\ .
      - | 1. :ref:`exception-handling-class-from-first-label`
    * - | (3)
@@ -114,7 +114,7 @@ Exception handling methods
 .. note:: **Who will carry out exception handling?**
 
   - Application Developer should design and implement (1) and (2).
-  - Application Architect should design and set (3) and (4).
+  - Application Architect should design and configure (3) and (4).
 
 .. note:: **About automatically registered HandlerExceptionResolver**
 
@@ -430,7 +430,7 @@ When partial redo (from middle) of a use case is to be notified, catch (try-catc
 
 .. note:: **Example of notifying partial redo of a use case**
 
-  - | When an order is placed through a shopping site, if business exception notifying stock shortage occurs
+  - | When an order is placed through a shopping site, if business exception notifying stock shortage occurs.
     | In such a case, order can be placed if the no. of items to be ordered is reduced; hence display a screen on which no. of items can be changed and prompt a message asking to change the same.
 
 .. figure:: ./images/exception-handling-class-again-from-middle.png
@@ -470,9 +470,9 @@ When an exception to notify that system or application is not in a normal state 
 
   - | In case of a use case for connecting to an external system, if an exception occurs notifying that the external system is blocked.
     | In such a case, since use case cannot be executed until external system resumes service, display the error screen, and notify that the use case cannot be executed till the external system resumes service.
-  - | When searching master information with the value specified in the application, if the corresponding master information does not exist
+  - | When searching master information with the value specified in the application, if the corresponding master information does not exist.
     | In such a case, there is a possibility of bug in master maintenance function or of error (release error) in data input by the system administrator; hence display the system error screen and notify that a system error has occurred.
-  - | When IOException occurs from the API during file operations
+  - | When IOException occurs from the API during file operations.
     | This could be a case of disk failure etc.; hence display the system error screen and notify that system error has occurred.
   - etc ...
 
@@ -712,9 +712,9 @@ Basic flow when the framework handles the exception at servlet level
 .. _exception-handling-basic-flow-container-label:
 
 Basic flow when the servlet container handles the exception at web application level
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 | In order to handle exceptions at web application level, catch the exception using servlet container.
-| Fatal errors, exceptions which are not handled using the framework (exceptions in JSP etc.) and exceptions occurred in Filter are to be handled.
+| Fatal errors, exceptions which are not handled using the framework (exceptions in JSP etc.) and exceptions occurred in Filter are to be handled using this flow.
 | Refer to the figure below.
 | It illustrates the basic flow at the time of handling java.lang.Exception by "error page".
 | Log is output using servlet filter (\ ``org.terasoluna.gfw.web.exception.ExceptionLoggingFilter``\ ) which records that an unhandled exception has occurred.
@@ -766,7 +766,7 @@ Application Settings
 Common Settings
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-(1) Add bean definition of logger class (\ ``ExceptionLogger``\ ) which will output exception log.
+1. Add bean definition of logger class (\ ``ExceptionLogger``\ ) which will output exception log.
 
 - **applicationContext.xml**
 
@@ -825,10 +825,10 @@ Common Settings
     * - | (4)
       - | Add \ ``ExceptionLogger``\  to bean definition.
     * - | (5)
-      - | Inject \ ``ExceptionCodeResolver``\ into the bean definition of \ ``ExceptionLogger``\.
+      - | Inject \ ``ExceptionCodeResolver``\  into the bean definition of \ ``ExceptionLogger``\.
 
 
-(2) Add log definition.
+2. Add log definition.
 
 - **logback.xml**
 
@@ -861,7 +861,7 @@ Common Settings
     * - Sr. No.
       - Description
     * - | (1)
-      - | Specify appender definition used for outputting monitoring log. In the above example, an appender to be output to a file has been considered, however the appender used should be as per the system requirements.
+      - | Specify appender definition used for outputting monitoring log. In the above example, an appender to be output to a file has been specified, however the appender used should be consider as per the system requirements.
         | **[Location to be customized for each project]**
     * - | (2)
       - | Specify logger definition for monitoring log. When creating ExceptionLogger, if any logger name is not specified, the above settings can be used as is.
@@ -911,7 +911,7 @@ Common Settings
     * - Sr. No.
       - Description
     * - | (1)
-      - | Specify appender definition used for outputting application log. In the above example, an appender to be output to a file has been considered; however the appender used should be as per the system requirements.
+      - | Specify appender definition used for outputting application log. In the above example, an appender to be output to a file has been specified, however the appender used should be consider as per the system requirements.
         | **[Location to be customized for each project]**
     * - | (2)
       - | Specify logger definition for application log. When creating ExceptionLogger, if any logger name is not specified, the above settings can be used as is.
@@ -1023,7 +1023,7 @@ Add to bean definition, the class (\ ``SystemExceptionResolver``\ )  used for ha
     * - | (1)
       - | Add \ ``SystemExceptionResolver``\  to bean definition.
     * - | (2)
-      - | Inject the object that resolves exception code (Message ID). Specify \ "exceptionCodeResolver"\ defined in \ ``applicationContext.xml``\ .
+      - | Inject the object that resolves exception code (Message ID). Specify \ "exceptionCodeResolver"\  defined in \ ``applicationContext.xml``\ .
     * - | (3)
       - | Specify the order of priority for handling. The value can be "3". When \ ``<mvc:annotation-driven>``\  is specified, automatically \ :ref:`registered class <exception-handling-annotation-driven>`\  is given higher priority.
 
@@ -1088,11 +1088,11 @@ AOP settings and interceptor class (\ ``HandlerExceptionResolverLoggingIntercept
     * - | (3)
       - | Apply \ ``HandlerExceptionResolverLoggingInterceptor``\  to resolveException method of \ ``HandlerExceptionResolver``\  interface.
         |
-        | As per default settings, this class will not output the log for library provided ``org.terasoluna.gfw.common.exception.ResultMessagesNotificationException`` class and its subclasses.
+        | As per default settings, this class will not output the log for common library provided ``org.terasoluna.gfw.common.exception.ResultMessagesNotificationException`` class and its subclasses.
         | The reason the exceptions of the sub class of ``ResultMessagesNotificationException`` are excluded from the log output is because their log output is carried out by ``org.terasoluna.gfw.common.exception.ResultMessagesLoggingInterceptor``.
         | If default settings need to be changed, refer to :ref:`exception-handling-about-handlerexceptionresolverlogginginterceptor`.
 
-Filter class (\``ExceptionLoggingFilter``\ ) used to output log of fatal errors and exceptions that are out of the boundary of Spring MVC should be added to bean definition and \ ``web.xml``\ .
+ Filter class (\ ``ExceptionLoggingFilter``\ ) used to output log of fatal errors and exceptions that are out of the boundary of Spring MVC should be added to bean definition and \ ``web.xml``\ .
 
 - **applicationContext.xml**
 
@@ -1161,7 +1161,7 @@ Add error-page definition for Servlet Container in order to handle error respons
 
 - **web.xml**
 
-Add definitions in order to handle error response (HttpServletResponse#sendError) received through default exception handling functionality of Spring MVC.
+ Add definitions in order to handle error response (HttpServletResponse#sendError) received through default exception handling functionality of Spring MVC.
 
  .. code-block:: xml
 
@@ -1472,7 +1472,7 @@ Catch the exception to continue the execution
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 | When it is necessary to catch the exception to continue the execution, the exception should be logged before continuing the execution.
 
-| When fetching customer history from external system fails, the process of fetching information other than customer history can still be continued. This is illustrated in the following example.
+| When fetching customer interaction history from external system fails, the process of fetching information other than customer history can still be continued. This is illustrated in the following example.
 | In this example, although fetching of customer history fails, business process does not have to be stopped and hence the execution continues.
 
  .. code-block:: java
@@ -1794,7 +1794,7 @@ Exception handling classes provided by the common library
        | This class is implemented in accordance with the rules of the message ID described in \ :doc:`Message <MessageManagement>`\  guidelines.
    * - | (6)
      - | ExceptionLogger
-     - | A class to output log of exceptions
+     - | A class to output log of exceptions.
        | Monitoring log (only messages) and application log (both messages and stack trace) can be output.
        | This class is used from Filter or Interceptor classes provided by the framework.
        | When the execution is to be continued by handling the exceptions in application code, log should be output by using this class.
@@ -1839,12 +1839,12 @@ Exception handling classes provided by the common library
    * - Sr. No.
      - Class
      - Role
-   * - | (14)
+   * - | (13)
      - | SystemException
        | Resolver
      - | This is a class for handling the exceptions that will not be handled by \ ``HandlerExceptionResolver``\ , which is registered automatically when \ ``<mvc:annotation-driven>``\  is specified.
        | It inherits \ ``SimpleMappingExceptionResolver``\  provided by Spring MVC and adds the functionality of referencing ResultMessages of exception code from View.
-   * - | (15)
+   * - | (14)
      - | HandlerException
        | ResolverLogging
        | Interceptor
@@ -1856,7 +1856,7 @@ Exception handling classes provided by the common library
        |   4. When it is "-99", log is not output.
        | By using this Interceptor, it is possible to output the log of all exceptions which are within the boundary of Spring MVC.
        | Log is output using \ ``ExceptionLogger``\ .
-   * - | (16)
+   * - | (15)
      - | ExceptionLogging
        | Filter
      - | This is a Filter class to output the log of fatal errors and exceptions that are out of the boundary of Spring MVC.

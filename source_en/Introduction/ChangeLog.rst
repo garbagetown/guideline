@@ -43,7 +43,7 @@ Change Log
       - :doc:`../Overview/FrameworkStack`
       - Updated the OSS version in accordance with bug fixes.
       
-        * GroupId (\ ``org.springframework``\ ) updated to 3.2.8.RELEASE from 3.2.4.RELEASE
+        * GroupId (\ ``org.springframework``\ ) updated to 3.2.9.RELEASE from 3.2.4.RELEASE
         * GroupId (\ ``org.springframework.data``\ )/ArtifactId(\ ``spring-data-commons``\ ) updated to 1.6.4.RELEASE from 1.6.1.RELEASE
         * GroupId (\ ``org.springframework.data``\ )/ArtifactId(\ ``spring-data-jpa``\ ) updated to 1.4.3.RELEASE from 1.4.1.RELEASE
         * Deleted GroupId (\ ``javax.transaction``\ )/ArtifactId(\ ``jta``\ )

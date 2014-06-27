@@ -1837,10 +1837,10 @@ SystemExceptionResolverの設定項目について
      - 説明
      - デフォルト値
    * - | (1)
-     - | ビジネス例外メッセージの属性名
+     - | 結果メッセージの属性名
      - | resultMessagesAttribute
      - | ビジネス例外に設定されているメッセージ情報として、モデルに設定する際の属性名(String)を指定する。
-       | View(JSP)からビジネス例外メッセージにアクセスする際の、属性名となる。
+       | View(JSP)から結果メッセージにアクセスする際の、属性名となる。
      - resultMessages
    * - | (2)
      - | 例外コード(メッセージID)の属性名
@@ -1891,10 +1891,10 @@ SystemExceptionResolverの設定項目について
 | (5)-(7)は、\ ``org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver``\ の設定項目。
 
 
-ビジネス例外メッセージの属性名
+結果メッセージの属性名
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 | SystemExceptionResolverでハンドリングして設定したメッセージと、アプリケーションコードでハンドリングして設定したメッセージを、View(JSP)で別のmessagesPanelとして出力したい場合は、SystemExceptionResolver専用の属性名を指定する。
-| 下記に示す例は、デフォルト値から「exceptionResolverMessages」に変更する場合の、設定&実装例である。
+| 下記に示す例は、デフォルト値から「resultMessagesForExceptionResolver」に変更する場合の、設定&実装例である。
 
 - **spring-mvc.xml**
 
@@ -1904,7 +1904,7 @@ SystemExceptionResolverの設定項目について
 
         <!-- omitted -->
 
-        <property name="resultMessagesAttribute" value="exceptionResolverBussinessMessages" /> <!-- (1) -->
+        <property name="resultMessagesAttribute" value="resultMessagesForExceptionResolver" /> <!-- (1) -->
 
         <!-- omitted -->
     </bean>
@@ -1913,7 +1913,7 @@ SystemExceptionResolverの設定項目について
 
   .. code-block:: xml
 
-    <t:messagesPanel messagesAttributeName="exceptionResolverBussinessMessages"/> <!-- (2) -->
+    <t:messagesPanel messagesAttributeName="resultMessagesForExceptionResolver"/> <!-- (2) -->
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
@@ -1923,7 +1923,7 @@ SystemExceptionResolverの設定項目について
     * - 項番
       - 説明
     * - | (1)
-      - | ビジネス例外メッセージの属性名(resultMessagesAttribute)に、"exceptionResolverBussinessMessages"を指定する。
+      - | 結果メッセージの属性名(resultMessagesAttribute)に、"resultMessagesForExceptionResolver"を指定する。
     * - | (2)
       - | メッセージ属性名(messagesAttributeName)に、SystemExceptionResolverで設定した属性名を指定する。
 

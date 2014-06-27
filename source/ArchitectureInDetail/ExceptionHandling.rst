@@ -659,7 +659,7 @@ Webアプリケーション単位でサーブレットコンテナがハンド�
   **図-Webアプリケーション単位でサーブレットコンテナがハンドリングする場合の基本フロー**
 
 4. DispatcherServletは、XxxErrorを捕捉し、ServletExceptionにラップしてスローする。
-#. ExceptionLoggingFilterは、ServletExceptionを捕捉し、ExceptionLoggerを呼び出す。ExceptionLoggerは、errorレベルのログ(監視ログとアプリケーションログ)を出力する。ExceptionLoggingFilterは、ServletExceptionを再スローする。
+#. ExceptionLoggingFilterは、ServletExceptionを捕捉し、ExceptionLoggerを呼び出す。ExceptionLoggerは、例外コードに対応するレベル(info, warn, error)のログ(監視ログとアプリケーションログ)を出力する。ExceptionLoggingFilterは、ServletExceptionを再スローする。
 #. ServletContainerは、ServletExceptionを捕捉し、サーバログにログを出力する。ログのレベルは、アプリケーションサーバによって異なる。
 #. ServletContainerは、``web.xml`` に定義されている遷移先(HTMLなど)を呼び出す。
 #. 呼び出された遷移先で生成されたレスポンスが表示される。

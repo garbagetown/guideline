@@ -1808,10 +1808,10 @@ The settings should be performed depending on the requirements.
      - Description
      - Default Value
    * - | (1)
-     - | Attribute name of business exception message
+     - | Attribute name of result message
      - | resultMessagesAttribute
      - | Specify the attribute name (String) used for setting message of businessException to Model.
-       | This attribute name is used for accessing message of businessException in View(JSP).
+       | This attribute name is used for accessing result message in View(JSP).
      - resultMessages
    * - | (2)
      - | Attribute name of exception code (message ID)
@@ -1862,10 +1862,10 @@ The settings should be performed depending on the requirements.
 | (5)-(7) are the settings of \ ``org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver``\ .
 
 
-Attribute name of business exception message
+Attribute name of result message
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 | If the message set by handling the exception using SystemExceptionResolver and the message set by handling the exception in application code, both are to be output in separate messagesPanel tags in View(JSP), then specify an attribute name exclusive to SystemExceptionResolver.
-| The example below illustrates settings and implementation when changing the default value to "exceptionResolverMessages".
+| The example below illustrates settings and implementation when changing the default value to "resultMessagesForExceptionResolver".
 
 - **spring-mvc.xml**
 
@@ -1875,7 +1875,7 @@ Attribute name of business exception message
 
         <!-- omitted -->
 
-        <property name="resultMessagesAttribute" value="exceptionResolverBussinessMessages" /> <!-- (1) -->
+        <property name="resultMessagesAttribute" value="resultMessagesForExceptionResolver" /> <!-- (1) -->
 
         <!-- omitted -->
     </bean>
@@ -1884,7 +1884,7 @@ Attribute name of business exception message
 
   .. code-block:: xml
 
-    <t:messagesPanel messagesAttributeName="exceptionResolverBussinessMessages"/> <!-- (2) -->
+    <t:messagesPanel messagesAttributeName="resultMessagesForExceptionResolver"/> <!-- (2) -->
 
  .. list-table::
     :header-rows: 1
@@ -1893,7 +1893,7 @@ Attribute name of business exception message
     * - Sr. No.
       - Description
     * - | (1)
-      - | Specify "exceptionResolverBussinessMessages" in attribute name (resultMessagesAttribute) of business exception message.
+      - | Specify "resultMessagesForExceptionResolver" in result message attribute name (resultMessagesAttribute).
     * - | (2)
       - | Specify attribute name that was set in SystemExceptionResolver, in message attribute name (messagesAttributeName).
 

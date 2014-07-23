@@ -46,6 +46,7 @@
         * GroupId「\ ``org.springframework``\」のバージョンを3.2.4.RELEASEから3.2.9.RELEASEに更新
         * GroupId「\ ``org.springframework.data``\」ArtifactId「\ ``spring-data-commons``\」のバージョンを1.6.1.RELEASEから1.6.4.RELEASEに更新
         * GroupId「\ ``org.springframework.data``\」ArtifactId「\ ``spring-data-jpa``\」のバージョンを1.4.1.RELEASEから1.4.3.RELEASEに更新
+        * GroupId「\ ``org.aspectj``\」のバージョンを1.7.3から1.7.4に更新
         * GroupId「\ ``javax.transaction``\」ArtifactId「\ ``jta``\」を削除
     * - 
       - :doc:`../ImplementationAtEachLayer/ApplicationLayer`

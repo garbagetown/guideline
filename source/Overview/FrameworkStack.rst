@@ -294,12 +294,12 @@ version 1.0.1.RELEASEで利用するOSSの一覧を以下に示す。
     * - AOP
       - org.aspectj
       - aspectjrt
-      - 1.7.3
+      - 1.7.4
       -
     * - AOP
       - org.aspectj
       - aspectjweaver
-      - 1.7.3
+      - 1.7.4
       -
     * - ログ出力
       - ch.qos.logback

@@ -478,7 +478,7 @@ Perform the following settings when transaction manager (JTA) of the application
       - Description
     * - | (1)
       - The most appropriate \ ``org.springframework.transaction.jta.JtaTransactionManager``\  is defined as bean with id as "transactionManager", in the application server on which the application has been deployed.
-        Bean definition class performs transaction control by calling APIs of JTA.
+        Bean definition class controls transaction by calling APIs of JTA.
 
 persistence.xml settings
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

@@ -10,9 +10,9 @@
 Overview
 --------------------------------------------------------------------------------
 
-| A codelist is a pair of "Code values (Value) and their display names (Label)".
+| A codelist is a pair comprising of "Code values (Value) and their display names (Label)".
 
-| It is used as a mapping of code values with the labels to be displayed on screen such as selectbox.
+| It is used for mapping code values with the labels to be displayed on screen such as selectbox.
 
 | 
 | Common library provides the following functionalities:
@@ -31,11 +31,11 @@ Overview
 
     .. note::
 
-      As per standard specifications, only the codelist defined in DB is re-loadable.
+      As per standard specifications, only the codelist defined in DB is reloadable.
 
 |
 
-| Following 4 types of codelists are implemented in common library.
+| Following four types of codelists are implemented in common library.
 
 .. _listOfCodeList:
 
@@ -225,7 +225,7 @@ Using codelist in JSP
    * - Sr. No.
      - Description
    * - | (1)
-     - | When setting dummy value on the top of the selectbox, null characters should be specified in value.
+     - | When setting dummy value at the top of the selectbox, null characters should be specified in the value.
    * - | (2)
      - | Specify the beanID for which codelist is defined.
 
@@ -348,7 +348,7 @@ Example of setting From value < To value is shown below.
    * - | (2)
      - | Specify the range start value. When omitted, "0" is set as range start value.
    * - | (3)
-     - | Specify the range end value. It cannot be left blank.
+     - | Specify the range end value. It cannot be blank.
    * - | (4)
      - | Specify the format of the key to be set in Map. Format used should be ``java.lang.String.format``.
        | When omitted, "%s" is set.
@@ -423,7 +423,7 @@ Example of setting To value < From value is shown below.
        | Since interval is not set, default value 1 is applied.
    * - | (2)
      - | Specify the range end value.
-       | In this example, since 2000 is specified as range end value; the value is decreased by 1 and stored in descending order from 2013-2000.
+       | In this example, since 2000 is specified as range end value; the value is reduced by 1 and stored in descending order from 2013 to 2000.
 
 
 **Example of jsp implementation**
@@ -1150,7 +1150,7 @@ When large number of records need to be read from JdbcCodeList
 
 When reloading the codelist
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-| Codelist provided in common library is read at the time of launching the application. After that, it is not updated.
+| Codelist provided in common library is read at the time of launching the application and it is never updated subsequently.
 | However, in some cases, when the master data of the codelist is updated, the codelist also needs to be updated.
 | Example: Updating the codelist when DB master is updated using JdbcCodeList.
 
@@ -1165,7 +1165,7 @@ When reloading the codelist
 
 | This guideline recommends the method to reload the codelist periodically using \ `Spring Task Scheduler <http://docs.spring.io/spring/docs/3.2.x/spring-framework-reference/html/scheduling.html>`_\ .
 
-| However, when it is necessary to refresh the codelist in an arbitrary timing, it is desirable to call refresh method in Controller class.
+| However, when it is necessary to arbitrarily refresh the codelist, it is appropriate to call refresh method in Controller class.
 
     .. note::
 
@@ -1278,7 +1278,7 @@ Calling refresh method in Controller (Service) class
 
 **Service class**
 
-The description below is given only for the implementation class. Description for interface class has been skipped.
+The description below is given only for the implementation class. Description for interface class has been omitted.
 
 .. code-block:: java
 
@@ -1437,7 +1437,7 @@ Customizing the codelist independently
 
     .. note::
 
-      Implementation should be made thread-safe at the time of customizing the re-loadable CodeList independently.
+      Implementation should be made thread-safe at the time of customizing the reloadable CodeList independently.
 
 |
 

@@ -11,13 +11,13 @@ Overview
 --------------------------------------------------------------------------------
 
 | A message consists of fixed text displayed on screens or reports, or dynamic text displayed depending on screen operations performed by user.
-| It should be defined in as much details as possible.
+| It is recommended to define a message in as much details as possible.
 \
     .. warning::
        In following cases, there is a risk of inability to identify error cause during the production phase or during the testing just before entering into production phase (however, such risks may not surface during the development phase).
 
        * When only one error message is defined
-       * When only 2 error messages of "Important" and "Warning" are defined
+       * When only two types of error messages ("Important" and "Warning") are defined
 
        Thus, if messages are changed when the number of developers in the team is less, the cost to modify these messages would increase as the development progresses.
        It is, therefore, recommended to define the messages in advance at a detailed level.
@@ -26,7 +26,7 @@ Types of messages
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 | Messages should be classified into following 3 types depending on the message contents.
-| When defining any message, it important to note to its type.
+| When defining any message, it important to note its type.
 
 .. _message-level-table-label:
 
@@ -466,7 +466,7 @@ For the messages to be displayed in case of input validation error, refer to \ :
 
         * | Single field input validation error messages should be displayed next to the target field so that it can be identified easily.
         * | Correlation input validation error messages should be displayed collectively on the top of the page .
-        * | When it is difficult to display the single field validation message next to the target field, they should be displayed on the top of the page.
+        * | When it is difficult to display the single field validation message next to the target field, it should be displayed on the top of the page.
           | In that case, field name should be included in the message.
 
 |
@@ -524,7 +524,7 @@ Display of messages set in properties
 
     .. note::
 
-        Earlier, it was necessary to convert the characters (such as Japanese characters etc.) that cannot be expressed in  \ ``native2ascii``\  into "ISO-8859-1"
+        Earlier, it was necessary to convert the characters (such as Japanese characters etc.) that cannot be expressed into "ISO-8859-1"
         with the help of \ ``native2ascii``\  command. However, from JDK version 6 onwards, it has become possible to specify the character encoding;
         hence character conversion is no longer needed. By setting the character encoding to UTF-8, Japanese characters etc. can be used directly in properties file.
 
@@ -554,12 +554,12 @@ Display of messages set in properties
                 </bean>
 
         ISO-8859-1 is used by default; hence when describing the Japanese characters directly in properties file,
-        make sure that the character encoding is set to \ ``defaultEncoding``\  .
+        make sure that the character encoding is set as value of \ ``defaultEncoding``\  property.
 
 * JSP
 
     Messages set above can be displayed using \ ``<spring:message>``\  tag in JSP.
-    \ :ref:`view_jsp_include-label`\  should be set.
+    For using it, settings mentioned in \ :ref:`view_jsp_include-label`\  must be done.
 
     .. code-block:: jsp
 
@@ -613,8 +613,8 @@ Display of messages set in properties
 Display of result messages
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-| \ ``org.terasoluna.gfw.common.message.ResultMessages``\  and \ ``org.terasoluna.gfw.common.message.ResultMessage``\  are provided in common library,
-| as classes storing the result messages which indicate success or failure of process at server side.
+\ ``org.terasoluna.gfw.common.message.ResultMessages``\  and \ ``org.terasoluna.gfw.common.message.ResultMessage``\  are provided in common library,
+as classes storing the result messages which indicate success or failure of process at server side.
 
 .. tabularcolumns:: |p{0.20\linewidth}|p{0.80\linewidth}|
 .. list-table::
@@ -624,8 +624,8 @@ Display of result messages
   * - Class name
     - Description
   * - | ``ResultMessages``
-    - | Class having result messages list and message type.
-      | Result message list is expressed in terms of \ ``List<ResultMessage>``\  interface and message type is expressed in terms of \ ``org.terasoluna.gfw.common.message.ResultMessageType``\  interface.
+    - | Class having list of result messages and message type.
+      | List of Result messages is expressed in terms of \ ``List<ResultMessage>``\  and message type is expressed in terms of \ ``org.terasoluna.gfw.common.message.ResultMessageType``\  interface.
   * - | ``ResultMessage``
     - | Class having result message ID or message text.
 
@@ -785,7 +785,7 @@ In such a case, the HTML shown below is output using \ ``<t:messagesPanel />``\ 
  .. note::
  
     \ ``ResourceBundleMessageSource``\  uses \ ``java.text.MessageFormat``\  at the time of creating a message; hence \ ``1024``\  is displayed as
-    \ ``1,024``\ with comma. When comma is not required, perform settings in properties file as shown below.
+    \ ``1,024``\  with comma. When comma is not required, perform settings in properties file as shown below.
  
         .. code-block:: properties
 
@@ -1034,7 +1034,7 @@ Specifying attribute name of result messages
 Displaying business exception messages
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 | \ ``org.terasoluna.gfw.common.exception.BusinessException``\  and \ ``org.terasoluna.gfw.common.exception.ResourceNotFoundException``\  stores
-| \ ``ResultMessages``\ internally.
+| \ ``ResultMessages``\  internally.
 
 | When displaying the business exception message, \ ``BusinessException``\  wherein \ ``ResultMessages``\  is set should be thrown in Service class.
 | Catch \ ``BusinessException``\  in Controller class and add the result message fetched from the caught exception to Model.
@@ -1119,8 +1119,8 @@ Creating independent message types
 | depending upon the CSS library. See the example below for adding the message type "notice". 
 
 
-| First, create independent message type class wherein \ ``org.terasoluna.gfw.common.message.ResultMessageType``\  interface is implemented
-| as follows:
+First, create independent message type class wherein \ ``org.terasoluna.gfw.common.message.ResultMessageType``\  interface is implemented
+as follows:
 
 .. code-block:: java
 
@@ -1218,7 +1218,7 @@ Changing attribute of <t:messagesPanel> tag
      - Prefix of CSS class name
      - alert-
    * - messagesType
-     - Message type. When this attribute is set, the set message type is given preference over the message type having \ ``ResultMessages``\ .
+     - Message type. When this attribute is set, the set message type is given preference over the message type of \ ``ResultMessages``\  object.
      -
    * - outerElement
      - Outer tag of HTML configuring result messages list
@@ -1440,7 +1440,7 @@ Apart from \ ``ResultMessages``\  object, \ ``<t:messagesPanel>``\  tag can also
   * - Sr. No.
     - Description
   * - | (1)
-    - | Re-define the CSS which has already been mentioned above for displaying result messages. It is strongly recommended to mention it in CSS file.
+    - | Re-define the CSS. It is strongly recommended to mention it in CSS file.
   * - | (2)
     - | In \ ``messagesAttributeName``\  attribute, specify the attribute name wherein \ ``Exception``\   object is stored.
       | Unlike the \ ``ResultMessages``\  object, it does not contain the information of message type; hence
@@ -1465,11 +1465,11 @@ and it will be displayed in the browser as follows:
 
 Auto-generation tool of message key constant class
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-| In all earlier examples, message keys were hard-coded strings; however
-| it is recommended that you define the message keys in constant class.
+In all earlier examples, message keys were hard-coded strings; however
+it is recommended that you define the message keys in constant class.
 
-| This section introduces the program that auto-generates message key constant class from properties file
-| and the corresponding usage method. You can customize and use them based on the requirements.
+This section introduces the program that auto-generates message key constant class from properties file
+and the corresponding usage method. You can customize and use them based on the requirements.
 
 #. Creation of message key constant class
 
@@ -1563,7 +1563,7 @@ Auto-generation tool of message key constant class
     .. figure:: ./images_MessageManagement/message-management-messagekeysgen.png
         :width: 60%
 
-    \ ``MessageKeys``\ class is overwritten as follows:
+    \ ``MessageKeys``\  class is overwritten as follows:
 
 
     .. code-block:: java

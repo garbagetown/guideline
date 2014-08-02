@@ -9,7 +9,7 @@ Change Log
     * - Modified on
       - Modified locations
       - Modification details
-    * - 2014-07-02
+    * - 2014-08-xx
       - \-
       - Released "1.0.1 RELEASE" version
         
@@ -36,6 +36,7 @@ Change Log
         * :doc:`../ImplementationAtEachLayer/index`
         * :doc:`../ArchitectureInDetail/Validation`
         * :doc:`../ArchitectureInDetail/ExceptionHandling`
+        * :doc:`../ArchitectureInDetail/MessageManagement`
         * :doc:`../ArchitectureInDetail/utilities/JodaTime`
         * :doc:`../Security/XSS`
         * :doc:`../Appendix/ReferenceBooks`

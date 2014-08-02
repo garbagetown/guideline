@@ -9,7 +9,7 @@
     * - 更新日付
       - 更新箇所
       - 更新内容
-    * - 2014-07-02
+    * - 2014-08-xx
       - \-
       - 1.0.1 RELEASE版公開
         
@@ -36,6 +36,7 @@
         * :doc:`../ImplementationAtEachLayer/index`
         * :doc:`../ArchitectureInDetail/Validation`
         * :doc:`../ArchitectureInDetail/ExceptionHandling`
+        * :doc:`../ArchitectureInDetail/MessageManagement`
         * :doc:`../ArchitectureInDetail/Utilities/JodaTime`
         * :doc:`../Security/XSS`
         * :doc:`../Appendix/ReferenceBooks`

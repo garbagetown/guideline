@@ -2042,7 +2042,7 @@ Reflecting values to domain object
 
  .. note::
     Bean conversion functionality can be used as an alternative way to delegate the process of reflecting form object values, to Helper class.
-    Refer to :doc:`../ArchitectureInDetail/Utilities/BeanConverter`  for the details of Bean conversion functionality.
+    Refer to :doc:`../ArchitectureInDetail/Utilities/Dozer`  for the details of Bean conversion functionality.
 
 |
 
@@ -2133,7 +2133,7 @@ However considering the readability of processing method in case of large amount
 
  .. note::
     Bean conversion functionality can be used as an alternative method to delegate the process to Helper class.
-    Refer to :doc:`../ArchitectureInDetail/Utilities/BeanConverter`  for the details of Bean conversion functionality.
+    Refer to :doc:`../ArchitectureInDetail/Utilities/Dozer`  for the details of Bean conversion functionality.
 
 |
 |

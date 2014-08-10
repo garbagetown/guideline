@@ -2043,7 +2043,7 @@ Controllerで実装すべき処理を以下に4つ示す。
 
  .. note::
     Helperクラスに処理を委譲する以外の方法として、Bean変換機能を使用する方法がある。
-    Bean変換機能の詳細は、:doc:`../ArchitectureInDetail/Utilities/BeanConverter` を参照されたい。
+    Bean変換機能の詳細は、:doc:`../ArchitectureInDetail/Utilities/Dozer` を参照されたい。
 
 |
 
@@ -2134,7 +2134,7 @@ Controllerで実装すべき処理を以下に4つ示す。
 
  .. note::
     Helperクラスに処理を委譲する以外の方法として、Bean変換機能を使用する方法がある。
-    Bean変換機能の詳細は、:doc:`../ArchitectureInDetail/Utilities/BeanConverter` を参照されたい。
+    Bean変換機能の詳細は、:doc:`../ArchitectureInDetail/Utilities/Dozer` を参照されたい。
 
 |
 |

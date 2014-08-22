@@ -40,11 +40,11 @@
     * - OS
       - Windows7 64bit
     * - JVM
-      - Java 1.6
+      - Java 1.7
     * - IDE
-      - Spring Tool Suite Version: 3.2.0.RELEASE, Build Id: 201303060821 (以下STS) Build   Maven 3.0.4 (STS付属)
+      - Spring Tool Suite Version: Version: 3.5.0.RELEASE Build Id: 201404011654 (以下STS) Build   Maven 3.0.4 (STS付属)
     * - Application Server
-      - VMWare vFabric tc Server Developer Edition v2.8 (STS付属)
+      - VMWare vFabric tc Server Developer Edition v2.9 (STS付属)
     * - Web Browser
       - Google Chrome 27.0.1453.94 m
 
@@ -186,41 +186,84 @@ Delete TODO
 プロジェクトの作成
 --------------------------------------------------------------------------------
 
-「File」->「Other」->「Maven」->「Maven Project」を選択して「Next」。
 
+インターネットから `mvn archetype:generate` を利用して、プロジェクトを作成する。
 
+.. code-block:: console
 
-.. figure:: ./images/image004.jpg
+  mvn archetype:generate -B^
+   -DarchetypeCatalog=http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-releases^
+   -DarchetypeGroupId=org.terasoluna.gfw.blank^
+   -DarchetypeArtifactId=terasoluna-gfw-web-blank-jpa-archetype^
+   -DarchetypeVersion=1.0.1.RELEASE^
+   -DgroupId=todo^
+   -DartifactId=todo^
+   -Dversion=1.0.0-SNAPSHOT
+
+ここではwindows上にプロジェクトの元を作成する。
+
+.. code-block:: console
+
+    C:\work>mvn archetype:generate -B^
+    More?  -DarchetypeCatalog=http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-releases^
+    More?  -DarchetypeGroupId=org.terasoluna.gfw.blank^
+    More?  -DarchetypeArtifactId=terasoluna-gfw-web-blank-jpa-archetype^
+    More?  -DarchetypeVersion=1.0.1.RELEASE^
+    More?  -DgroupId=todo^
+    More?  -DartifactId=todo^
+    More?  -Dversion=1.0.0-SNAPSHOT
+    [INFO] Scanning for projects...
+    [INFO]
+    [INFO] ------------------------------------------------------------------------
+    [INFO] Building Maven Stub Project (No POM) 1
+    [INFO] ------------------------------------------------------------------------
+    [INFO]
+    [INFO] >>> maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom >>>
+    [INFO]
+    [INFO] <<< maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom <<<
+    [INFO]
+    [INFO] --- maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom ---
+    [INFO] Generating project in Batch mode
+    [INFO] Archetype repository missing. Using the one from [org.terasoluna.gfw.blank:terasoluna-gfw-web-blank-jpa-archetype:1.0.0.RELEASE -> http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-releases] found in catalog http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-releases
+    [INFO] ----------------------------------------------------------------------------
+    [INFO] Using following parameters for creating project from Archetype: terasoluna-gfw-web-blank-jpa-archetype:1.0.1.RELEASE
+    [INFO] ----------------------------------------------------------------------------
+    [INFO] Parameter: groupId, Value: org.tarasoluna.tutorial
+    [INFO] Parameter: artifactId, Value: todo
+    [INFO] Parameter: version, Value: 1.0.0-SNAPSHOT
+    [INFO] Parameter: package, Value: org.tarasoluna.tutorial
+    [INFO] Parameter: packageInPathFormat, Value: org/tarasoluna/tutorial
+    [INFO] Parameter: package, Value: org.tarasoluna.tutorial
+    [INFO] Parameter: version, Value: 1.0.0-SNAPSHOT
+    [INFO] Parameter: groupId, Value: org.tarasoluna.tutorial
+    [INFO] Parameter: artifactId, Value: todo
+    [INFO] project created from Archetype in dir: C:\work\todo
+    [INFO] ------------------------------------------------------------------------
+    [INFO] BUILD SUCCESS
+    [INFO] ------------------------------------------------------------------------
+    [INFO] Total time: 2.394s
+    [INFO] Finished at: Fri Aug 22 18:41:45 JST 2014
+    [INFO] Final Memory: 10M/182M
+    [INFO] ------------------------------------------------------------------------
+    C:\work>
+
+SpringSource Tool Suiteのメニューから、[File] -> [Import] -> [Maven] -> [Existing Maven Projects] -> [Next]を選択し、archetypeで作成したプロジェクトを選択する。
+
+.. figure:: images/NewMVCProjectImport.png
+   :alt: New MVC Project Import
    :width: 60%
 
-「Create a simple project」にチェックを入れて「Next」。
+Root Directoryに C:\work\helloworld を設定し、Projectsにhelloworldのpom.xmlが選択された状態で、 [Finish] を押下する。
 
-.. figure:: ./images/image006.jpg
+.. figure:: images/NewMVCProjectCreate.png
+   :alt: New MVC Project Import
    :width: 60%
 
+Package Explorerに、次のようなプロジェクトが生成される( **要インターネット接続** )。
 
-.. tabularcolumns:: |p{0.25\linewidth}|p{0.75\linewidth}|
-.. list-table::
-    :widths: 25 75
-    :stub-columns: 1
-
-    * - Group Id:
-      - org.terasoluna.tutorial
-    * - Artifact Id:
-      - todo
-    * - Packaging:
-      - war
-
-で「Finish」
-
-.. figure:: ./images/image008.jpg
-   :width: 60%
-
-以下のようなプロジェクトが作成される。
-
-
-.. figure:: ./images/image009.png
-   :width: 40%
+.. figure:: images/image004.jpg
+   :alt: workspace
+   :width: 30%
 
 |
 
@@ -228,8 +271,8 @@ Delete TODO
 
   パッケージ構成上、Package PresentaionをHierarchicalにしたほうが見通しがよい。
 
-  .. figure:: ./images/presentation-hierarchical.png
-     :width: 80%
+      .. figure:: ./images/presentation-hierarchical.png
+         :width: 80%
 
 Mavenの設定
 --------------------------------------------------------------------------------
@@ -334,28 +377,6 @@ pom.xmlを編集した後、プロジェクト名を右クリックし、「Mave
    :width: 60%
 
 「OK」ボタンをクリックする。
-
-以下のように"JRE System Library"のバージョンが"[JavaSE-1.6]"になっていることを確認する。
-
-.. figure:: ./images/check-jre.jpg
-   :width: 30%
-
-|
-
-    .. note::
-        JDKのバージョンを7に変更したい場合は、pom.xmlの ``<properties>`` に ``<java-version>1.7</java-version>`` を設定した後、
-        「Update Project」を実施すること。
-
-            .. code-block:: xml
-               :emphasize-lines: 4-6
-
-                <project>
-                    <!-- omitted -->
-
-                    <properties>
-                        <java-version>1.7</java-version>
-                    </properties>
-                </project>
 
 Mavenの知識がある場合は、以下の解説を確認すること。
 
@@ -610,12 +631,16 @@ views/commonフォルダ、include.jspファイルを作成し、以下のよう
 Bean定義ファイルの設定
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+理解を深めるために手動で作成する場合の手順を記述する。
+
 Bean定義ファイルは、以下4種類のファイルを作成する。
 
 * applicationContext.xml
 * todo-domain.xml
 * todo-infra.xml
 * spring-mvc.xml
+
+archetypeから作成したプロジェクトでは以下のファイルは設定済みで作成される。
 
 上から順に説明する。
 
@@ -3001,13 +3026,13 @@ todo-infra.xmlに、JPA、およびSpring Data JPAを使用するための設定
    :emphasize-lines: 4-5,7-8,12-44
 
     <?xml version="1.0" encoding="UTF-8"?>
-	<beans xmlns="http://www.springframework.org/schema/beans"
-    	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-    	xmlns:util="http://www.springframework.org/schema/util"
-    	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-        	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
-        	http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+        xmlns:util="http://www.springframework.org/schema/util"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+            http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
         <import resource="classpath:/META-INF/spring/todo-env.xml" />
 

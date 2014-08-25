@@ -108,7 +108,7 @@ SpringSource Tool Suiteのメニューから、[File] -> [Import] -> [Maven] -> 
    :alt: New MVC Project Import
    :width: 60%
 
-Root Directoryに C:\work\helloworld を設定し、Projectsにhelloworldのpom.xmlが選択された状態で、 [Finish] を押下する。
+Root Directoryに \ ``C:\work\helloworld``\ を設定し、Projectsにhelloworldのpom.xmlが選択された状態で、 [Finish] を押下する。
 
 .. figure:: images/NewMVCProjectCreate.png
    :alt: New MVC Project Import
@@ -122,6 +122,7 @@ Package Explorerに、次のようなプロジェクトが生成される( **要
 Spring MVCの設定方法を理解するために、生成されたSpring MVCの設定ファイル(src/main/resources/META-INF/spring/spring-mvc.xml)について、簡単に説明する。
 
 .. code-block:: xml
+    :emphasize-lines: 15-16, 25-26, 58-64 
 
     <?xml version="1.0" encoding="UTF-8"?>
     <beans xmlns="http://www.springframework.org/schema/beans"
@@ -147,7 +148,7 @@ Spring MVCの設定方法を理解するために、生成されたSpring MVCの
     
         <mvc:default-servlet-handler />
     
-        <!-- (3) -->
+        <!-- (2) -->
         <context:component-scan base-package="com.example.helloworld.app" />
     
         <mvc:resources mapping="/resources/**"
@@ -180,7 +181,7 @@ Spring MVCの設定方法を理解するために、生成されたSpring MVCの
                 REMOVE THIS LINE IF YOU USE JPA  -->
         </mvc:interceptors>
     
-        <!-- (2) Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+        <!-- (3) Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
         <!-- Settings View Resolver. -->
         <bean id="viewResolver"
             class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -245,17 +246,17 @@ Spring MVCの設定方法を理解するために、生成されたSpring MVCの
    * - 項番
      - 説明
    * - | (1)
-     - <annotation-driven /> を定義することにより、Spring MVCのデフォルト設定が行われる。デフォルトの設定については、 Springの公式ページである `Enabling the MVC Java Config or the MVC XML Namespace <http://docs.spring.io/spring/docs/3.2.x/spring-framework-reference/html/mvc.html#mvc-config-enable>`_ を参照されたい。
+     - \ ``<mvc:annotation-driven>``\要素を定義することにより、Spring MVCのデフォルト設定が行われる。デフォルトの設定については、 Springの公式ページである `Enabling the MVC Java Config or the MVC XML Namespace <http://docs.spring.io/spring/docs/3.2.x/spring-framework-reference/html/mvc.html#mvc-config-enable>`_ を参照されたい。
    * - | (2)
-     - ViewのResolverを指定し、Viewの配置場所を定義する。
-   * - | (3)
      - Spring MVCで使用するコンポーネントを探すパッケージを定義する。
+   * - | (3)
+     - ViewのResolverを指定し、Viewの配置場所を定義する。
 
 ``com.example.helloworld.app.welcome.HomeController`` を以下に示す。
 
 
 .. code-block:: java
-   :emphasize-lines: 17,26,27,38
+   :emphasize-lines: 17,26,36,38
 
     package com.example.helloworld.app.welcome;
     
@@ -283,7 +284,7 @@ Spring MVCの設定方法を理解するために、生成されたSpring MVCの
          * Simply selects the home view to render by returning its name.
          */
         @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST}) // (2)
-        public String home(Locale locale, Model model) { // (3)
+        public String home(Locale locale, Model model) {
             logger.info("Welcome home! The client locale is {}.", locale);
     
             Date date = new Date();
@@ -292,7 +293,7 @@ Spring MVCの設定方法を理解するために、生成されたSpring MVCの
     
             String formattedDate = dateFormat.format(date);
     
-            model.addAttribute("serverTime", formattedDate);
+            model.addAttribute("serverTime", formattedDate); // (3)
     
             return "welcome/home"; // (4)
         }
@@ -311,13 +312,13 @@ Spring MVCの設定方法を理解するために、生成されたSpring MVCの
    * - 項番
      - 説明
    * - | (1)
-     - ``@Controller`` アノテーションを付けることで、DIコンテナにより、コントローラクラスが自動で読み込まれる。前述「Spring MVCの設定ファイルの説明(3)」の設定により、component-scanの対象となっている。
+     - ``@Controller`` アノテーションを付けることで、DIコンテナにより、コントローラクラスが自動で読み込まれる。前述「Spring MVCの設定ファイルの説明(2)」の設定により、component-scanの対象となっている。
    * - | (2)
      - HTTPメソッドがGETで、Resource（もしくはRequest URL）が"/"で、アクセスする際に実行される。
    * - | (3)
      - Viewに渡したいオブジェクトを設定する。
    * - | (4)
-     - View名を返却する。前述「Spring MVCの設定ファイルの説明(2)」の設定により、"WEB-INF/views/home.jsp"がレンダリングされる。
+     - View名を返却する。前述「Spring MVCの設定ファイルの説明(3)」の設定により、"WEB-INF/views/home.jsp"がレンダリングされる。
 
 Modelに設定したオブジェクトが、HttpServletRequestに設定される。
 home.jspで以下のように ``${serverTime}`` を記述することで、Controllerから渡された値を出力することができる。
@@ -346,7 +347,7 @@ home.jspで以下のように ``${serverTime}`` を記述することで、Contr
 
 サーバーを起動する
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-| STSで、"helloworld"プロジェクトを右クリックして、"Run As" -> "Run On Server" -> "localhost" -> "VMware vFabric tc Server v2.5 - v2.9 at localhost" -> "Finish"を実行し、helloworldプロジェクトを起動する。
+| STSで、"helloworld"プロジェクトを右クリックして、"Run As" -> "Run On Server" -> "localhost" -> "VMware vFabric tc Server Developer Edition v2.9" -> "Finish"を実行し、helloworldプロジェクトを起動する。
 | ブラウザに "http://localhost:8080/helloworld/" を入力し、実行すると下記の画面が表示される。
 
 .. figure:: images/AppHelloWorldIndex.png
@@ -402,7 +403,7 @@ Controllerの作成
 | 同じく ``com.example.helloworld.app.echo`` パッケージに、``EchoController`` クラスを作成する。
 
 .. code-block:: java
-   :emphasize-lines: 12,18,20,23-25
+    :emphasize-lines: 12,18,20,23-25
 
     package com.example.helloworld.app.echo;
 
@@ -423,11 +424,11 @@ Controllerの作成
 
         @RequestMapping // (2)
         public String index(Model model) {
-            return "echo/index"; // (4)
+            return "echo/index"; // (3)
         }
 
-        @RequestMapping("hello") // (5)
-        public String hello(EchoForm form, Model model) {// (3)
+        @RequestMapping("hello") // (4)
+        public String hello(EchoForm form, Model model) {// (5)
             model.addAttribute("name", form.getName()); // (6)
             return "echo/hello";
         }
@@ -448,11 +449,11 @@ Controllerの作成
      - | メソッドに付加した ``@RequestMapping`` アノテーションの ``value`` 属性に、何も指定しない場合、クラスに付加した ``@RequestMapping`` のルートに、マッピングされる。この場合、"<contextPath>/echo"にアクセスすると、 ``index`` メソッドが呼ばれる。
        | ``method`` 属性に何もしない場合は、任意のHTTPメソッドでマッピングされる。
    * - | (3)
-     - | 引数に、EchoFormには(1)によりModelに追加されたEchoFormオブジェクトが渡される。
-   * - | (4)
      - | View名で"echo/index"を返すので、ViewResolverにより、 "WEB-INF/views/echo/index.jsp"がレンダリングされる。
-   * - | (5)
+   * - | (4)
      - | メソッドに付加した ``@RequestMapping`` アノテーションに"hello"を指定しているので、この場合、"<contextPath>/echo/hello"にアクセスすると ``hello`` メソッドが呼ばれる。
+   * - | (5)
+     - | 引数に、EchoFormには(1)によりModelに追加されたEchoFormオブジェクトが渡される。
    * - | (6)
      - | フォームで入力された ``name`` を、Viewにそのまま渡す。
 
@@ -526,19 +527,27 @@ JSPの作成
     </head>
     <body>
       <p>
-        Hello <c:out value="${name}" />!
+        Hello <c:out value="${name}" />! <!-- (2) -->
       </p>
     </body>
     </html>
-    Controllerから渡された"name"を出力する。 ``c:out`` タグにより、XSS対策を行っている。
 
-|
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+   :header-rows: 1
+   :widths: 10 90
+
+   * - 項番
+     - 説明
+   * - | (2)
+     - | Controllerから渡された"name"を出力する。 ``c:out`` タグにより、XSS対策を行っている。
 
 .. note::
 
     ここではXSS対策を標準タグの ``c:out`` で実現したが、より容易に使用できる ``f:h()`` 関数を共通ライブラリで用意している。
     詳細は、  :doc:`../Security/XSS` を参照されたい。
 
+|
 
 | これでエコーアプリケーションの実装は完了である。
 | サーバーを起動し、 "http://localhost:8080/helloworld/echo"にアクセスするとフォームが表示される。
@@ -551,12 +560,10 @@ JSPの作成
 Spring MVCでは、Bean Validation (`JSR-303 <http://jcp.org/en/jsr/detail?id=303>`_\)をサポートしており、アノテーションベースな入力チェックを、簡単に
 実装することができる。例として、エコーアプリケーションで名前の入力チェックを行う。
 
-archetypeから作成したプロジェクトを使用する場合は、Bean Validationのdependencyを解決されている。
-
 ``EchoForm`` を以下の通り、 ``name`` プロパティに ``@NotNull`` アノテーションおよび、 ``@Size`` アノテーションを付加する(getterメソッドに付加してもよい)。
 
 .. code-block:: java
-   :emphasize-lines: 5,6,11,12
+    :emphasize-lines: 5,6,11,12
 
     package com.example.helloworld.app.echo;
 
@@ -598,15 +605,14 @@ archetypeから作成したプロジェクトを使用する場合は、Bean Val
 
 
 .. code-block:: java
-   :emphasize-lines: 3,7,27-30
+    :emphasize-lines: 5,6,26-29
 
     package com.example.helloworld.app.echo;
-
-    import javax.validation.Valid;
 
     import org.springframework.stereotype.Controller;
     import org.springframework.ui.Model;
     import org.springframework.validation.BindingResult;
+    import org.springframework.validation.annotation.Validated;
     import org.springframework.web.bind.annotation.ModelAttribute;
     import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -626,7 +632,7 @@ archetypeから作成したプロジェクトを使用する場合は、Bean Val
         }
 
         @RequestMapping("hello")
-        public String hello(@Valid EchoForm form, BindingResult result, Model model) { // (1)
+        public String hello(@Validated EchoForm form, BindingResult result, Model model) { // (1)
             if (result.hasErrors()) { // (2)
                 return "echo/index";
             }
@@ -644,7 +650,7 @@ archetypeから作成したプロジェクトを使用する場合は、Bean Val
    * - 項番
      - 説明
    * - | (1)
-     - | コントローラー側には、Validation対象の引数に ``@Valid`` アノテーションを付加し、 ``BindingResult`` オブジェクトを引数に追加する。
+     - | コントローラー側には、Validation対象の引数に ``@Validated`` アノテーションを付加し、 ``BindingResult`` オブジェクトを引数に追加する。
        | Bean Validationによる入力チェックは、自動で行われる。結果は、 ``BindingResult`` オブジェクトに渡される。
    * - | (2)
      - | ``hasErrors`` メソッドを実行して、エラーがあるかどうかを確認できる。
@@ -653,7 +659,7 @@ archetypeから作成したプロジェクトを使用する場合は、Bean Val
 
 
 .. code-block:: jsp
-   :emphasize-lines: 15
+    :emphasize-lines: 15
 
     <!DOCTYPE html>
     <html>
@@ -720,7 +726,8 @@ archetypeから作成したプロジェクトを使用する場合は、Bean Val
 
 この章では、
 
-#. 最も簡易な、SpringMVCの設定ファイル設定方法
+#. \ ``mvn archetype:generate``\を利用したブランクプロジェクトの作成方法
+#. SpringMVCの基本的な設定方法
 #. 最も簡易な、画面遷移方法
 #. 画面間での値の引き渡し方法
 #. シンプルな入力チェック方法

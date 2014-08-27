@@ -194,12 +194,12 @@ Delete TODO
 
 の3種類を用意している。
 
-まず、`mvn archetype:generate` を利用して、実装するインフラストラクチャ層向けのブランクプロジェクトを作成する。
+まず、\ ``mvn archetype:generate``\ を利用して、実装するインフラストラクチャ層向けのブランクプロジェクトを作成する。
 
 ここでは、Windows上にブランクプロジェクトを作成する手順となっている。
 
 
-* データベースを使用せずMapを使ったインメモリ実装のRepositoryImpl用のプロジェクトを作成する場合は、O/R Mapperに依存しないブランクプロジェクトを作成するために、以下のコマンドを実行する。
+* データベースを使用せずMapを使ったインメモリ実装のRepositoryImpl用のプロジェクトを作成する場合は、O/R Mapperに依存しないブランクプロジェクトを作成するために、コマンドプロンプトで以下のコマンドを実行する。
 
  .. code-block:: console
 
@@ -212,7 +212,7 @@ Delete TODO
      -DartifactId=todo^
      -Dversion=1.0.0-SNAPSHOT
 
-* Spring Data JPAの使用してデータベースにアクセスするRepositoryImpl用のプロジェクトを作成する場合は、JPA用のブランクプロジェクトを作成するために、以下のコマンドを実行する。
+* Spring Data JPAの使用してデータベースにアクセスするRepositoryImpl用のプロジェクトを作成する場合は、JPA用のブランクプロジェクトを作成するために、コマンドプロンプトで以下のコマンドを実行する。
 
  .. code-block:: console
 
@@ -225,7 +225,7 @@ Delete TODO
      -DartifactId=todo^
      -Dversion=1.0.0-SNAPSHOT
 
-* TERASOLUNA DAO(MyBatis2)を使用してデータベースにアクセスするRepositoryImpl用のプロジェクトを作成する場合は、TERASOLUNA DAO(MyBatis2)用のブランクプロジェクトを作成するために、以下のコマンドを実行する。
+* TERASOLUNA DAO(MyBatis2)を使用してデータベースにアクセスするRepositoryImpl用のプロジェクトを作成する場合は、TERASOLUNA DAO(MyBatis2)用のブランクプロジェクトを作成するために、コマンドプロンプトで以下のコマンドを実行する。
 
  .. code-block:: console
 
@@ -309,6 +309,25 @@ Package Explorerに、次のようなプロジェクトが生成される( **要
 
       .. figure:: ./images/presentation-hierarchical.png
          :width: 80%
+
+
+
+ .. note::
+
+    Bash上で\ ``mvn archetype:generate``\ を実行する場合は以下のように\ ``^``\ を\ ``\``\ に置き換えて実行する必要がある。
+    
+      .. code-block:: bash
+      
+        mvn archetype:generate -B\
+         -DarchetypeCatalog=http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-releases\
+         -DarchetypeGroupId=org.terasoluna.gfw.blank\
+         -DarchetypeArtifactId=terasoluna-gfw-web-blank-archetype\
+         -DarchetypeVersion=1.0.1.RELEASE\
+         -DgroupId=todo\
+         -DartifactId=todo\
+         -Dversion=1.0.0-SNAPSHOT
+
+
 
 Mavenの設定
 --------------------------------------------------------------------------------
@@ -1182,10 +1201,10 @@ todo-env.xmlの確認
  .. note::
  
     JavaEEコンテナ上にアプリケーションをデプロイする場合は、
-    JTAのAPIを利用してトランザクションを制御するクラス(\ ``org.springframework.transaction.jta.JtaTransactionManager``\)を使用したほうがよい。
-    \ ``JtaTransactionManager``\を使う場合は、
-    \ ``<tx:jta-transaction-manager />``\を指定してトランザクションマネージャの定義を行う。
-
+    JTAのAPIを利用してトランザクションを制御するクラス(\ ``org.springframework.transaction.jta.JtaTransactionManager``\ )を使用したほうがよい。
+    \ ``JtaTransactionManager``\ を使う場合は、
+    \ ``<tx:jta-transaction-manager />``\ を指定してトランザクションマネージャの定義を行う。
+    
     トランザクションマネージャの設定が、アプリケーションをデプロイする環境によって変わらないプロジェクト(例えば、Tomcatを使用する場合など)は、
     \ :file:`todo-infra.xml`に定義してもよい。
 
@@ -1629,7 +1648,7 @@ Todoアプリケーションの開発を始める前に、ブランクプロジ�
      - 説明
    * - | (1)
      - | ControllerでModelに設定した”serverTime”を表示する。
-       | ここでは、XSS対策を行っていないが、ユーザの入力値を表示する場合は、必ずXSS対策を行うこと。
+       | ここでは、XSS対策を行っていないが、ユーザの入力値を表示する場合は、\ ``f:h()``\ 関数を用いて、必ずXSS対策を行うこと。
 
 |
 
@@ -2890,10 +2909,10 @@ Controllerの修正
     @RequestMapping("todo")
     public class TodoController {
         @Inject
-        protected TodoService todoService;
+        TodoService todoService;
 
         @Inject
-        protected Mapper beanMapper;
+        Mapper beanMapper;
 
         @ModelAttribute
         public TodoForm setUpForm() {
@@ -3213,10 +3232,10 @@ Controllerの修正
     @RequestMapping("todo")
     public class TodoController {
         @Inject
-        protected TodoService todoService;
+        TodoService todoService;
 
         @Inject
-        protected Mapper beanMapper;
+        Mapper beanMapper;
 
         @ModelAttribute
         public TodoForm setUpForm() {

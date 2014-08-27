@@ -128,24 +128,7 @@ Chromeのアプリケーション一覧を開く(ブラウザのアドレスバ�
      -DartifactId=todo-api^
      -Dversion=1.0-SNAPSHOT
 
-| コマンドを実行すると、プロンプト上に以下の順で６つの入力が求められる。
-| 本チュートリアルでは、入力値は以下に示す値とする。
-
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.70\linewidth}|p{0.20\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 20 70
-
-    * - パラメータ
-      - 入力値
-    * - | \-DarchetypeArtifactId
-      - | \ ``terasoluna-gfw-web-blank-mybatis2-archetype``\
-    * - | \ -DgroupId
-      - | \ ``todo``\
-    * - | \-DartifactId
-      - | \ ``todo-api``\
-    * - | \-Dversion
-      - | \ ``1.0-SNAPSHOT``\
+コンソール上に以下のようなログが表示されれば、ブランクプロジェクトの作成は成功となる。
 
  .. code-block:: console
     

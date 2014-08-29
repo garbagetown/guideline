@@ -1255,7 +1255,7 @@ Controller(Service)クラスでrefreshメソッドを呼び出す方法
   public class CodeListContoller {
 
       @Inject
-      protected CodeListService codeListService; // (1)
+      CodeListService codeListService; // (1)
 
       @RequestMapping(method = RequestMethod.GET, params = "refresh")
       public String refreshJdbcCodeList() {
@@ -1362,7 +1362,7 @@ Controller(Service)クラスでrefreshメソッドを呼び出す方法
   public class DepYearCodeList extends AbstractCodeList { // (2)
 
       @Inject
-      protected DateFactory dateFactory; // (3)
+      DateFactory dateFactory; // (3)
 
       @Override
       public Map<String, String> asMap() {  // (4)

@@ -1513,7 +1513,7 @@ How to extend
     public class UnnecessaryFilesCleaner {
     
         @Inject
-        private DateFactory dateFactory;
+        DateFactory dateFactory;
     
         @Value("${app.upload.temporaryFileSavedPeriodMinutes}")
         private int savedPeriodMinutes;

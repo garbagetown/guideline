@@ -1890,7 +1890,7 @@ Controllerで実装すべき処理を以下に4つ示す。
     :emphasize-lines: 2,6
 
     @Inject
-    protected PasswordEqualsValidator passwordEqualsValidator; // (1)
+    PasswordEqualsValidator passwordEqualsValidator; // (1)
 
     @InitBinder
     protected void initBinder(WebDataBinder binder){
@@ -1922,7 +1922,7 @@ Controllerで実装すべき処理を以下に4つ示す。
     :emphasize-lines: 2,6
 
     @Inject
-    protected SampleService sampleService; // (1)
+    SampleService sampleService; // (1)
 
     @RequestMapping("hello")
     public void hello(Model model){
@@ -1993,7 +1993,7 @@ Controllerで実装すべき処理を以下に4つ示す。
     :emphasize-lines: 2,7
 
     @Inject
-    protected SampleHelper sampleHelper; // (1)
+    SampleHelper sampleHelper; // (1)
 
     @RequestMapping("hello")
     public void hello(@Validated SampleForm form, BindingResult result){
@@ -2011,7 +2011,7 @@ Controllerで実装すべき処理を以下に4つ示す。
     public class SampleHelper {
 
         @Inject
-        protected SampleService sampleService;
+        SampleService sampleService;
 
         public void hello(SampleForm form){ // (3)
             Sample sample = new Sample();

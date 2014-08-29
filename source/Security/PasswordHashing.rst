@@ -131,7 +131,7 @@ BCryptPasswordEncoderの設定例
   .. code-block:: java
   
         @Inject
-        protected PasswordEncoder passwordEncoder;  // (1)
+        PasswordEncoder passwordEncoder;  // (1)
   
         public String register(Customer customer, String rawPassword) {
             // omitted
@@ -360,7 +360,7 @@ ShaPasswordEncoderを使用した例
   .. code-block:: java
   
       @Inject
-      protected PasswordEncoder passwordEncoder;
+      PasswordEncoder passwordEncoder;
   
       public String register(Customer customer, String rawPassword, String userSalt) {
           // omitted

@@ -1238,7 +1238,7 @@ GET Todoの実装
     @Transactional
     public class TodoServiceImpl implements TodoService {
         @Inject
-        protected TodoRepository todoRepository;
+        TodoRepository todoRepository;
     
         private static final long MAX_UNFINISHED_COUNT = 5;
     
@@ -1666,7 +1666,7 @@ DELETE Todoの実装
     @Transactional
     public class TodoServiceImpl implements TodoService {
         @Inject
-        protected TodoRepository todoRepository;
+        TodoRepository todoRepository;
     
         private static final long MAX_UNFINISHED_COUNT = 5;
     

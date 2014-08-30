@@ -1,4 +1,4 @@
-﻿二重送信防止
+二重送信防止
 ================================================================================
 
 .. only:: html
@@ -542,7 +542,7 @@ PRG(Post-Redirect-Get)パターンの適用
     public class PostRedirectGetExampleController {
 
         @Inject
-        protected UserService userService;
+        UserService userService;
 
         @ModelAttribute
         public PostRedirectGetForm setUpForm() {

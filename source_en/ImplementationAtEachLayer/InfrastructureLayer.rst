@@ -134,10 +134,10 @@ Implementing Repository using MyBatis2
       @Transactional // (2)
       public class TodoRepositoryImpl implements TodoRepository {
           @Inject
-          protected QueryDAO queryDAO; // (3)
+          QueryDAO queryDAO; // (3)
 
           @Inject
-          protected UpdateDAO updateDAO; // (4)
+          UpdateDAO updateDAO; // (4)
 
           @Override
           @Transactional(readOnly = true) // (5)

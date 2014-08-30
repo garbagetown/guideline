@@ -1,4 +1,4 @@
-﻿Tutorial (Todo Application)
+Tutorial (Todo Application)
 ********************************************************************************
 
 .. only:: html
@@ -1797,11 +1797,11 @@ Add ``create`` method to TodoController.
     @RequestMapping("todo")
     public class TodoController {
         @Inject
-        protected TodoService todoService;
+        TodoService todoService;
 
         // (8)
         @Inject
-        protected Mapper beanMapper;
+        Mapper beanMapper;
 
         @ModelAttribute
         public TodoForm setUpForm() {
@@ -2285,10 +2285,10 @@ Take precaution of using **@Validated instead of @Valid** for executing the grou
     @RequestMapping("todo")
     public class TodoController {
         @Inject
-        protected TodoService todoService;
+        TodoService todoService;
 
         @Inject
-        protected Mapper beanMapper;
+        Mapper beanMapper;
 
         @ModelAttribute
         public TodoForm setUpForm() {
@@ -2609,10 +2609,10 @@ Add the logic for delete processing to TodoController. It is almost same as the 
     @RequestMapping("todo")
     public class TodoController {
         @Inject
-        protected TodoService todoService;
+        TodoService todoService;
 
         @Inject
-        protected Mapper beanMapper;
+        Mapper beanMapper;
 
         @ModelAttribute
         public TodoForm setUpForm() {
@@ -2899,7 +2899,7 @@ Modifications in TodoServiceImpl
     @Transactional // (9)
     public class TodoServiceImpl implements TodoService {
         @Inject
-        protected TodoRepository todoRepository;
+        TodoRepository todoRepository;
 
         private static final long MAX_UNFINISHED_COUNT = 5;
 
@@ -3648,10 +3648,10 @@ Modifications in RepositoryImpl
     public class TodoRepositoryImpl implements TodoRepository {
         // (2)
         @Inject
-        protected QueryDAO queryDAO;
+        QueryDAO queryDAO;
 
         @Inject
-        protected UpdateDAO updateDAO;
+        UpdateDAO updateDAO;
 
         // (3)
         @Override

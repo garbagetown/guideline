@@ -1,4 +1,4 @@
-﻿Exception Handling
+Exception Handling
 ------------------
 
 .. only:: html
@@ -1116,7 +1116,7 @@ Add error-page definition for Servlet Container in order to handle error respons
 
  Add definitions in order to handle fatal errors and exceptions that are out of the boundary of Spring MVC.
 
-  .. code-block:: xml
+ .. code-block:: xml
 
     <error-page>
         <!-- (3) -->
@@ -1240,13 +1240,13 @@ The method of generating Business Exception is given below.
       - | Specify ResultMessages and generate BusinessException.
 
 
-.. tip::
+ .. tip::
 
-  For the purpose of explanation, ``xxxService.java`` logic is written in steps (2)-(4) as shown above, however it can also be written in a single step.
+    For the purpose of explanation, ``xxxService.java`` logic is written in steps (2)-(4) as shown above, however it can also be written in a single step.
 
-    .. code-block:: java
+     .. code-block:: java
 
-      throw new BusinessException(ResultMessages.error().add(
+        throw new BusinessException(ResultMessages.error().add(
              "e.ad.od.5001", stockQuantity));
 
 
@@ -1260,28 +1260,28 @@ The method of generating Business Exception is given below.
 
 An application log as shown below is output.
 
-.. code-block:: console
+ .. code-block:: console
 
-  date:2013-09-17 22:25:55	thread:tomcat-http--8	X-Track:6cfb0b378c124b918e40ac0c32a1fac7	level:WARN 	logger:o.t.gfw.common.exception.ExceptionLogger        	message:[e.xx.fw.8001] ResultMessages [type=error, list=[ResultMessage [code=e.ad.od.5001, args=[5], text=null]]]
-  org.terasoluna.gfw.common.exception.BusinessException: ResultMessages [type=error, list=[ResultMessage [code=e.ad.od.5001, args=[5], text=null]]]
+    date:2013-09-17 22:25:55	thread:tomcat-http--8	X-Track:6cfb0b378c124b918e40ac0c32a1fac7	level:WARN 	logger:o.t.gfw.common.exception.ExceptionLogger        	message:[e.xx.fw.8001] ResultMessages [type=error, list=[ResultMessage [code=e.ad.od.5001, args=[5], text=null]]]
+    org.terasoluna.gfw.common.exception.BusinessException: ResultMessages [type=error, list=[ResultMessage [code=e.ad.od.5001, args=[5], text=null]]]
 
-  // stackTrace omitted
-  ...
+    // stackTrace omitted
+    ...
 
-  date:2013-09-17 22:25:55	thread:tomcat-http--8	X-Track:6cfb0b378c124b918e40ac0c32a1fac7	level:DEBUG	logger:o.t.gfw.web.exception.SystemExceptionResolver   	message:Resolving exception from handler [public java.lang.String org.terasoluna.exception.app.example.ExampleExceptionController.home(java.util.Locale,org.springframework.ui.Model)]: org.terasoluna.gfw.common.exception.BusinessException: ResultMessages [type=error, list=[ResultMessage [code=e.ad.od.5001, args=[5], text=null]]]
-  date:2013-09-17 22:25:55	thread:tomcat-http--8	X-Track:6cfb0b378c124b918e40ac0c32a1fac7	level:DEBUG	logger:o.t.gfw.web.exception.SystemExceptionResolver   	message:Resolving to view 'common/error/businessError' for exception of type [org.terasoluna.gfw.common.exception.BusinessException], based on exception mapping [BusinessException]
-  date:2013-09-17 22:25:55	thread:tomcat-http--8	X-Track:6cfb0b378c124b918e40ac0c32a1fac7	level:DEBUG	logger:o.t.gfw.web.exception.SystemExceptionResolver   	message:Applying HTTP status code 409
-  date:2013-09-17 22:25:55	thread:tomcat-http--8	X-Track:6cfb0b378c124b918e40ac0c32a1fac7	level:DEBUG	logger:o.t.gfw.web.exception.SystemExceptionResolver   	message:Exposing Exception as model attribute 'exception'
+    date:2013-09-17 22:25:55	thread:tomcat-http--8	X-Track:6cfb0b378c124b918e40ac0c32a1fac7	level:DEBUG	logger:o.t.gfw.web.exception.SystemExceptionResolver   	message:Resolving exception from handler [public java.lang.String org.terasoluna.exception.app.example.ExampleExceptionController.home(java.util.Locale,org.springframework.ui.Model)]: org.terasoluna.gfw.common.exception.BusinessException: ResultMessages [type=error, list=[ResultMessage [code=e.ad.od.5001, args=[5], text=null]]]
+    date:2013-09-17 22:25:55	thread:tomcat-http--8	X-Track:6cfb0b378c124b918e40ac0c32a1fac7	level:DEBUG	logger:o.t.gfw.web.exception.SystemExceptionResolver   	message:Resolving to view 'common/error/businessError' for exception of type [org.terasoluna.gfw.common.exception.BusinessException], based on exception mapping [BusinessException]
+    date:2013-09-17 22:25:55	thread:tomcat-http--8	X-Track:6cfb0b378c124b918e40ac0c32a1fac7	level:DEBUG	logger:o.t.gfw.web.exception.SystemExceptionResolver   	message:Applying HTTP status code 409
+    date:2013-09-17 22:25:55	thread:tomcat-http--8	X-Track:6cfb0b378c124b918e40ac0c32a1fac7	level:DEBUG	logger:o.t.gfw.web.exception.SystemExceptionResolver   	message:Exposing Exception as model attribute 'exception'
 
 Displayed screen
 
-.. figure:: ./images/exception-handling-screen-businessexception.png
-  :alt: screen business exception
-  :width: 50%
+ .. figure:: ./images/exception-handling-screen-businessexception.png
+    :alt: screen business exception
+    :width: 50%
 
-.. warning::
-  It is recommended that you handle business exception in Controller and display a message on each business screen.
-  The above example illustrates a screen which is displayed when the exception is not handled in Controller.
+ .. warning::
+    It is recommended that you handle business exception in Controller and display a message on each business screen.
+    The above example illustrates a screen which is displayed when the exception is not handled in Controller.
 
 
 Catch an exception to generate a business exception
@@ -1357,15 +1357,15 @@ Displayed screen
    :alt: screen system exception
    :width: 60%
 
-.. note::
+ .. note::
 
-  It is desirable to have a common system error screen rather than creating multiple screens for system errors.
+    It is desirable to have a common system error screen rather than creating multiple screens for system errors.
 
-  The screen mentioned in this guideline displays a (business-wise) message ID for system errors and has a fixed message.
-  This is because there is no need to inform the details of error to the operator and it is sufficient to only convey that the system error has occured.
-  Therefore, in order to enhance the response for inquiry against system errors, the Message ID which acts as a key for the message text is displayed on the screen,
-  in order to make the analysis easier for the development side.
-  Displayed error screens should be designed in accordance with the UI standards of each project.
+    The screen mentioned in this guideline displays a (business-wise) message ID for system errors and has a fixed message.
+    This is because there is no need to inform the details of error to the operator and it is sufficient to only convey that the system error has occured.
+    Therefore, in order to enhance the response for inquiry against system errors, the Message ID which acts as a key for the message text is displayed on the screen,
+    in order to make the analysis easier for the development side.
+    Displayed error screens should be designed in accordance with the UI standards of each project.
 
 
 Catch an exception to generate system exception.
@@ -1456,7 +1456,7 @@ An application log as shown below is output.
 
       date:2013-09-19 21:31:47	X-Track:df5271ece2304b12a2c59ff494806397	level:ERROR	message:[e.xx.fw.9001] Test example exception
 
- | As shown in this example, if there is no problem in continuing the execution, and if monitoring log is being monitored through application monitoring, it should be set to a level such that it will not get monitored at log output level or defined such that it does not get monitored from the log content (log message).
+As shown in following example, if there is no problem in continuing the execution, and if monitoring log is being monitored through application monitoring, it should be set to a level such that it will not get monitored at log output level or defined such that it does not get monitored from the log content (log message).
 
  .. code-block:: java
 
@@ -1580,7 +1580,7 @@ The coding points in JSP while handling the exceptions are given below.
 
 Method to display messages on screen using MessagesPanelTag
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
- The example below illustrates implementation at the time of outputting ResultMessages to an arbitrary location.
+The example below illustrates implementation at the time of outputting ResultMessages to an arbitrary location.
 
  .. code-block:: xml
 
@@ -1600,7 +1600,7 @@ Method to display messages on screen using MessagesPanelTag
 
 Method to display system exception code on screen
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
- The example below illustrates implementation at the time of displaying exception code (message ID) and fixed message at an arbitrary location.
+The example below illustrates implementation at the time of displaying exception code (message ID) and fixed message at an arbitrary location.
 
  .. code-block:: xml
 

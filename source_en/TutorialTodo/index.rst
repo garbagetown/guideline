@@ -1314,8 +1314,7 @@ Creation of RepositoryImpl (Infrastructure layer)
         @Override
         public long countByFinished(boolean finished) {
             long count = 0;
-            for (Map.Entry<String, Todo> e : TODO_MAP.entrySet()) {
-                Todo todo = e.getValue();
+            for (Todo todo : TODO_MAP.values()) {
                 if (finished == todo.isFinished()) {
                     count++;
                 }

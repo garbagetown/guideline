@@ -1,4 +1,4 @@
-﻿Exception Handling
+Exception Handling
 ------------------
 
 .. only:: html
@@ -89,7 +89,7 @@ Exception handling methods
    * - | (3)
      - | Use HandlerExceptionResolver mechanism provided by the framework to carry out exception handling.
      - | Use this in order to handle exceptions at servlet level.
-       | When \ ``<mvc:annotation-driven>``\  is specified, HandlerExceptionResolver uses \ :ref:`automatically registered class <ExceptionHandling-annotation-driven>`\ , and \ ``SystemExceptionResolver``\  provided by this framework.
+       | When \ ``<mvc:annotation-driven>``\  is specified, HandlerExceptionResolver uses \ :ref:`automatically registered class <ExceptionHandling-annotation-driven>`\ , and \ ``SystemExceptionResolver``\  provided by common library.
        | For details, refer to \ :ref:`exception-handling-basic-flow-resolver-label`\ .
      - | 1. :ref:`exception-handling-class-systemerror-label`
        |
@@ -541,7 +541,7 @@ When notifying that an exception has occurred in the presentation layer (JSP etc
 Basic Flow of Exception Handling
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 | The basic flow of exception handling is shown below.
-| For an overview of classes provided by this framework, refer to \ :ref:`exception-handling-about-classes-of-library-label`\ .
+| For an overview of classes provided by common library, refer to \ :ref:`exception-handling-about-classes-of-library-label`\ .
 | **The processing to be implemented in the application code is indicated in Bold.**
 | The log of stack trace and exception messages is output by the classes (Filter and Interceptor class) provided by the common library.
 | When any information other than exception messages and stack trace needs to be logged, it should be implemented separately in each of the logic.
@@ -559,7 +559,7 @@ Basic flow when the Controller class handles the exception at request level
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 | In order to handle the exception at request level, catch (try-catch) the exception in the application code of the Controller class.
 | Refer to the figure below:
-| It illustrates the basic flow at the time of handling a business exception (\ ``org.terasoluna.gfw.common.exception.BusinessException``\ ) provided by this framework.
+| It illustrates the basic flow at the time of handling a business exception (\ ``org.terasoluna.gfw.common.exception.BusinessException``\ ) provided by common library.
 | Log is output using interceptor (\ ``org.terasoluna.gfw.common.exception.ResultMessagesLoggingInterceptor``\ ) which records that an exception holding the result message has occurred.
 
 .. figure:: ./images/exception-handling-flow-catch.png
@@ -614,7 +614,7 @@ Basic flow when the framework handles the exception at servlet level
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 | In order to handle the exception using the framework (at servlet level), catch the exception using SystemExceptionResolver.
 | Refer to the figure below.
-| It illustrates the basic flow at the time of handling the system exception (\ ``org.terasoluna.gfw.common.exception.SystemException``\ ) provided by this framework using \ ``org.terasoluna.gfw.web.exception.SystemExceptionResolver``\ .
+| It illustrates the basic flow at the time of handling the system exception (\ ``org.terasoluna.gfw.common.exception.SystemException``\ ) provided by common library using \ ``org.terasoluna.gfw.web.exception.SystemExceptionResolver``\ .
 | Log is output using interceptor (\ ``org.terasoluna.gfw.web.exception.HandlerExceptionResolverLoggingInterceptor``\ ) which records the exception specified in the argument of exception handling method.
 
 .. figure:: ./images/exception-handling-flow-resolver.png

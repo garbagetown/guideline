@@ -1598,6 +1598,18 @@ Spring MVCの、デフォルトの例外ハンドリング機能によって行�
 #. :ref:`exception-handling-how-to-use-codingpoint-jsp-panel-label`
 #. :ref:`exception-handling-how-to-use-codingpoint-jsp-exceptioncode-label`
 
+.. tip::
+
+    Internet Explorerがサポートブラウザとなっている場合は、
+    エラー画面として応答するHTMLのサイズが513バイト以上になるように実装する必要がある。
+
+    Internet Explorerでは、
+    
+    * 応答されたステータスコードがエラー系(4xxと5xx)
+    * 応答されたHTMLが512バイト以下
+    * ブラウザの設定が「HTTP簡易メッセージを表示する」が有効な状態
+    
+    という３つの条件を充たした際に、Internet Explorerが用意している簡易メッセージが表示される仕組みになっているためである。
 
 .. _exception-handling-how-to-use-codingpoint-jsp-panel-label:
 

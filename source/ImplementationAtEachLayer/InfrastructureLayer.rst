@@ -167,12 +167,12 @@ MyBatis2系を使ってRepositoryを実装
           @Transactional(readOnly = true) // (5)
           Page<Todo> findAll(Pageable pageable) { // (7)
               long count = count();
-              List<Todo> todos = new ArrayList<Todo>();
+              List<Todo> todos = null;
               if(0 < count){
                   todos = queryDAO.executeForObjectList("todo.findAllSort",
                       pageable.getSort(),pageable.getOffset(),pageable.getPageSize());
               } else {
-                  todos = new ArrayList<Todo>();
+                  todos = Collections.emptyList();
               }
               Page page = new PageImpl(todos,pageable,count);
               return page;

@@ -1131,7 +1131,7 @@ Spring MVCの、デフォルトの例外ハンドリング機能によって行�
 
  致命的なエラー、Spring MVC管理外で発生する例外をハンドリングするための定義を追加する。
 
-  .. code-block:: xml
+ .. code-block:: xml
 
     <error-page>
         <!-- (3) -->
@@ -1258,13 +1258,13 @@ Spring MVCの、デフォルトの例外ハンドリング機能によって行�
       - | ResultMessagesを指定して、BusinessExceptionを発生させる。
 
 
-.. tip::
+ .. tip::
 
-  上記の ``xxxService.java`` は説明用に(2)-(4)に分けて処理をしているが、1ステップで実装することができる。
+    上記の ``xxxService.java`` は説明用に(2)-(4)に分けて処理をしているが、1ステップで実装することができる。
 
-    .. code-block:: java
+     .. code-block:: java
 
-      throw new BusinessException(ResultMessages.error().add(
+        throw new BusinessException(ResultMessages.error().add(
              "e.ad.od.5001", stockQuantity));
 
 
@@ -1278,28 +1278,28 @@ Spring MVCの、デフォルトの例外ハンドリング機能によって行�
 
 下記のようなアプリケーションログが出力される。
 
-.. code-block:: console
+ .. code-block:: console
 
-  date:2013-09-17 22:25:55	thread:tomcat-http--8	X-Track:6cfb0b378c124b918e40ac0c32a1fac7	level:WARN 	logger:o.t.gfw.common.exception.ExceptionLogger        	message:[e.xx.fw.8001] ResultMessages [type=error, list=[ResultMessage [code=e.ad.od.5001, args=[5], text=null]]]
-  org.terasoluna.gfw.common.exception.BusinessException: ResultMessages [type=error, list=[ResultMessage [code=e.ad.od.5001, args=[5], text=null]]]
+    date:2013-09-17 22:25:55	thread:tomcat-http--8	X-Track:6cfb0b378c124b918e40ac0c32a1fac7	level:WARN 	logger:o.t.gfw.common.exception.ExceptionLogger        	message:[e.xx.fw.8001] ResultMessages [type=error, list=[ResultMessage [code=e.ad.od.5001, args=[5], text=null]]]
+    org.terasoluna.gfw.common.exception.BusinessException: ResultMessages [type=error, list=[ResultMessage [code=e.ad.od.5001, args=[5], text=null]]]
 
-  // stackTarace ommited
-  ...
+    // stackTarace ommited
+    ...
 
-  date:2013-09-17 22:25:55	thread:tomcat-http--8	X-Track:6cfb0b378c124b918e40ac0c32a1fac7	level:DEBUG	logger:o.t.gfw.web.exception.SystemExceptionResolver   	message:Resolving exception from handler [public java.lang.String org.terasoluna.exception.app.example.ExampleExceptionController.home(java.util.Locale,org.springframework.ui.Model)]: org.terasoluna.gfw.common.exception.BusinessException: ResultMessages [type=error, list=[ResultMessage [code=e.ad.od.5001, args=[5], text=null]]]
-  date:2013-09-17 22:25:55	thread:tomcat-http--8	X-Track:6cfb0b378c124b918e40ac0c32a1fac7	level:DEBUG	logger:o.t.gfw.web.exception.SystemExceptionResolver   	message:Resolving to view 'common/error/businessError' for exception of type [org.terasoluna.gfw.common.exception.BusinessException], based on exception mapping [BusinessException]
-  date:2013-09-17 22:25:55	thread:tomcat-http--8	X-Track:6cfb0b378c124b918e40ac0c32a1fac7	level:DEBUG	logger:o.t.gfw.web.exception.SystemExceptionResolver   	message:Applying HTTP status code 409
-  date:2013-09-17 22:25:55	thread:tomcat-http--8	X-Track:6cfb0b378c124b918e40ac0c32a1fac7	level:DEBUG	logger:o.t.gfw.web.exception.SystemExceptionResolver   	message:Exposing Exception as model attribute 'exception'
+    date:2013-09-17 22:25:55	thread:tomcat-http--8	X-Track:6cfb0b378c124b918e40ac0c32a1fac7	level:DEBUG	logger:o.t.gfw.web.exception.SystemExceptionResolver   	message:Resolving exception from handler [public java.lang.String org.terasoluna.exception.app.example.ExampleExceptionController.home(java.util.Locale,org.springframework.ui.Model)]: org.terasoluna.gfw.common.exception.BusinessException: ResultMessages [type=error, list=[ResultMessage [code=e.ad.od.5001, args=[5], text=null]]]
+    date:2013-09-17 22:25:55	thread:tomcat-http--8	X-Track:6cfb0b378c124b918e40ac0c32a1fac7	level:DEBUG	logger:o.t.gfw.web.exception.SystemExceptionResolver   	message:Resolving to view 'common/error/businessError' for exception of type [org.terasoluna.gfw.common.exception.BusinessException], based on exception mapping [BusinessException]
+    date:2013-09-17 22:25:55	thread:tomcat-http--8	X-Track:6cfb0b378c124b918e40ac0c32a1fac7	level:DEBUG	logger:o.t.gfw.web.exception.SystemExceptionResolver   	message:Applying HTTP status code 409
+    date:2013-09-17 22:25:55	thread:tomcat-http--8	X-Track:6cfb0b378c124b918e40ac0c32a1fac7	level:DEBUG	logger:o.t.gfw.web.exception.SystemExceptionResolver   	message:Exposing Exception as model attribute 'exception'
 
 表示される画面
 
-.. figure:: ./images/exception-handling-screen-businessexception.png
-  :alt: screen business exception
-  :width: 50%
+ .. figure:: ./images/exception-handling-screen-businessexception.png
+    :alt: screen business exception
+    :width: 50%
 
-.. warning::
-  ビジネス例外は、Controllerでハンドリングし、各業務画面でメッセージを表示させることを推奨する。
-  上記例は、Controllerでハンドリングしなかった場合に、表示される画面となる。
+ .. warning::
+    ビジネス例外は、Controllerでハンドリングし、各業務画面でメッセージを表示させることを推奨する。
+    上記例は、Controllerでハンドリングしなかった場合に、表示される画面となる。
 
 
 例外を捕捉して、ビジネス例外を発生させる
@@ -1377,14 +1377,14 @@ Spring MVCの、デフォルトの例外ハンドリング機能によって行�
    :alt: screen system exception
    :width: 60%
 
-.. note::
+ .. note::
 
-  システムエラー画面は、個別に用意せず、共通的に決めることを推奨する。
+    システムエラー画面は、個別に用意せず、共通的に決めることを推奨する。
 
-  本ガイドラインの画面では、システムエラーのためのメッセージID（業務毎）を表示し、文言は固定にしている。
-  その理由は、オペレータに対して、エラーの細かい内容を知らせる必要がなく、システムに異常があることだけを伝えればよいためである。
-  そこで、開発側では、解析を簡易にするために、キーとなるメッセージIDを画面に表示して、システム異常の問い合わせに対するレスポンスを向上しようとしている。
-  表示される画面については、各プロジェクトでUI規約に従い、用意すること。
+    本ガイドラインの画面では、システムエラーのためのメッセージID（業務毎）を表示し、文言は固定にしている。
+    その理由は、オペレータに対して、エラーの細かい内容を知らせる必要がなく、システムに異常があることだけを伝えればよいためである。
+    そこで、開発側では、解析を簡易にするために、キーとなるメッセージIDを画面に表示して、システム異常の問い合わせに対するレスポンスを向上しようとしている。
+    表示される画面については、各プロジェクトでUI規約に従い、用意すること。
 
 
 例外を捕捉して、システム例外を発生させる
@@ -1473,11 +1473,11 @@ Spring MVCの、デフォルトの例外ハンドリング機能によって行�
 
     \ ``exceptionLogger``\ で、log()を使用した場合には、errorレベルで出力されるため、デフォルトで監視ログにも出力される。
 
- .. code-block:: guess
+ .. code-block:: console
 
       date:2013-09-19 21:31:47	X-Track:df5271ece2304b12a2c59ff494806397	level:ERROR	message:[e.xx.fw.9001] Test example exception
 
- | この例のように、処理を継続させて問題ない場合に、運用監視で監視ログを監視している場合は、出力レベルで監視されないレベルにするか、メッセージから監視されないよう定義が必要である。
+次の例のように、処理を継続させて問題ない場合に、運用監視で監視ログを監視している場合は、出力レベルで監視されないレベルにするか、メッセージから監視されないよう定義が必要である。
 
  .. code-block:: java
 
@@ -1603,7 +1603,7 @@ Spring MVCの、デフォルトの例外ハンドリング機能によって行�
 
 MessagesPanelTagを使用して、メッセージを画面表示する方法
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
- 任意の場所に、ResultMessagesを出力する際の実装例を、以下に示す。
+任意の場所に、ResultMessagesを出力する際の実装例を、以下に示す。
 
  .. code-block:: xml
 
@@ -1624,7 +1624,7 @@ MessagesPanelTagを使用して、メッセージを画面表示する方法
 
 システム例外の例外コードを、画面表示する方法
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
- 任意の場所に、例外コード(メッセージID)と、固定メッセージを表示する際の実装例を、以下に示す。
+任意の場所に、例外コード(メッセージID)と、固定メッセージを表示する際の実装例を、以下に示す。
 
  .. code-block:: xml
 

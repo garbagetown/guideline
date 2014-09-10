@@ -64,7 +64,7 @@ Mapping of Java objects to the relational database records at the time of using 
 
 | In JPA, if the value stored in the "managed" entity is changed (by calling setter method), there is a mechanism to reflect the changes in the relational database.
 | This mechanism is quite similar to the client software such as Table viewer with Edit functionality.
-| In client software such as Table viewer, if the value of viewer is changed, it is reflected in the database. However, in JPA, if the value of Java object (JavaBean) called "Entity" is changed, it is reflected in the database.
+| In client software such as Table viewer, if the value of viewer is changed, it is reflected in the database. While in JPA, if the value of Java object (JavaBean) called "Entity" is changed, it is reflected in the database.
 
 Basic JPA terminology
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -91,7 +91,7 @@ The basic terminology of JPA is described below.
     * - 3.
       - | TypedQuery
       - | An interface which provides API for searching an entity
-        | Using methods of \ `` javax.persistence.TypedQuery `` \ , the application searches for the entity matching the specified conditions except for an ID.
+        | Using methods of \ ``javax.persistence.TypedQuery``\ , the application searches for the entity matching the specified conditions other than ID.
         | When using Spring Data JPA, this interface is usually not used directly; however, if it is necessary to generate a query that cannot be expressed using Spring Data JPA mechanism, then this interface can be used to search the entity.
         | The method for directly operating (updating or deleting) the entity of persistence layer (DB) matching the conditions, is also provided in this interface.
     * - 4.
@@ -107,20 +107,20 @@ The basic terminology of JPA is described below.
     * - 6.
       - | persist method
       - | Method for setting "new" entity created in the application, to "managed" entity
-        | It is provided as a method of ``EntityManager`` and the operation to INSERT the records in the relational database is accumulated in PersistenceContext.
+        | It is a method of ``EntityManager`` and all the operations performed to INSERT the records in the relational database are accumulated in PersistenceContext (and later reflected to the database at the time of transaction commit or when the flush method of EntityManager is called).
     * - 7.
       - | merge method
       - | Method for setting the "detached" entity which is not managed in PersistenceContext, to "managed" entity.
-        | It is provided as a method of \ ``EntityManager``\  and the operation to UPDATE the records stored in a relational database is accumulated in PersistenceContext.
+        | It is a method of \ ``EntityManager``\  and the all operations performed to UPDATE the records stored in a relational database are accumulated in PersistenceContext (and later reflected to the database at the time of transaction commit or when the flush method of EntityManager is called).
         | However, if the record matching the ID does not exist in the relational database, then INSERT is executed instead of UPDATE.
     * - 8.
       - | remove method
       - | Method for setting the "managed" entity to "removed" entity
-        | It is provided as a method of \ ``EntityManager``\  and the operation to DELETE the records stored in a relational database is accumulated in PersistenceContext.
+        | It is a method of \ ``EntityManager``\  and all the operations performed to DELETE the records stored in a relational database are accumulated in PersistenceContext.
     * - 9.
       - | flush method
       - | Method for forcibly reflecting the operations performed for the entity managed in PersistenceContext to the relational database.
-        | It is provided as a method of \ ``EntityManager``\  and the accumulated un-reflected operations are executed for the relational database.
+        | It is a method of \ ``EntityManager``\  and the accumulated un-reflected operations are reflected in the relational database.
         | Normally, operations are reflected to the relational database only when a transaction is committed; however, flush method is used when the operation needs to be reflected in the database before committing a transaction.
 
 Managing life cycle of entity
@@ -211,7 +211,7 @@ The basic flow at the time of accessing the database using Spring Data JPA is sh
       - | Call the method of Repository interface from Service.
         | Entity object, Entity ID etc. are passed as method calling parameters. In the above example, entity is passed, however a primitive value can also be passed.
     * - | (2)
-      - | Proxy class where Repository interface is implemented dynamically delegates process to \ ``org.springframework.data.jpa.repository.support.SimpleJpaRepository``\  or custom Repository class.
+      - | Proxy class which dynamically implements Repository interface, delegates the process to \ ``org.springframework.data.jpa.repository.support.SimpleJpaRepository``\  or custom Repository class.
         | Parameters specified by Service are passed.
     * - | (3)
       - | Repository implementation class calls JPA APIs.
@@ -220,10 +220,10 @@ The basic flow at the time of accessing the database using Spring Data JPA is sh
       - | Hibernate JPA reference implementation calls the Hibernate core APIs.
         | The parameters specified by implementation class of Repository and the parameters generated by Hibernate JPA reference implementation are passed.
     * - | (5)
-      - | Hibernate Core API generates SQL and bind values from the specified parameter and passes to JDBC driver.
+      - | Hibernate Core API generates SQL and bind values from the specified parameters and passes to JDBC driver.
         | (API of java.sql.PreparedStatement is used for binding the actual values.)
     * - | (6)
-      - | JDBC driver executes SQL by sending the passed SQL and bind values to database.
+      - | JDBC driver executes SQL.
 
 | When creating the repository using Spring Data JPA, APIs of JPA need not be called directly; however, it is better to know which JPA method is being called by
 | methods of Repository interface of Spring Data JPA.
@@ -322,7 +322,7 @@ Perform settings to use \ ``EntityManager``\ .
     * - Sr. No.
       - Description
     * - | (1)
-      - | Specify the adapter class associated with implementation class of JPA provider.
+      - | Specify the adapter class associated with JPA provider.
         | Hibernate will be used as JPA provider; hence specify \ ``org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter``\ .
     * - | (2)
       - Set the SQL output flag. In the example, "false: Do not output" has been specified.
@@ -335,12 +335,11 @@ Perform settings to use \ ``EntityManager``\ .
       - | Specify FactoryBean class to create ``javax.persistence.EntityManagerFactory`` instance.
         | Specify ``org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean`` .
     * - | (5)
-      - | Specify the package where entity class is stored.
-        | The entity class stored in the specified package can be managed in \ ``javax.persistence.EntityManager``\ .
-        | **[The value should be changed to the package of project]**
+      - | Specify the package where entity classes are kept.
+        | The entity classes of the specified package can be managed using \ ``javax.persistence.EntityManager``\ .
+        | **[The value should be changed to the relevant package name according to the project]**
     * - | (6)
       - | Specify the datasource to be used for accessing persistence layer (DB).
-        | Specify the bean of set datasource.
     * - | (7)
       - | Specify ``JpaVendorAdapter`` bean.
         | Specify the bean set in (1).
@@ -380,7 +379,7 @@ Perform settings to use \ ``EntityManager``\ .
 
 | Perform the following settings when transaction manager (JTA) of the application server is to be used.
 | The difference with the case wherein JTA is not used, is explained below.
-| For locations without description, same settings as the case wherein JTA is not used can be performed.
+| For other locations, same settings as the case wherein JTA is not used can be performed.
 
 - xxx-infra.xml
 
@@ -419,7 +418,7 @@ Perform settings to use \ ``EntityManager``\ .
     * - | (10)
       - | Specify the datasource to be used for accessing persistence layer (DB).
         | When using JTA, specify the DataSource defined in application server in \ ``"jtaDataSource"``\  property and not in \ ``"dataSource"``\  property.
-        | Refer to \ :ref:`data-access-common_howtouse_datasource`\ of common edition for the method to fetch DataSource defined in application server.
+        | Refer to \ :ref:`data-access-common_howtouse_datasource`\  of common edition for the method to fetch DataSource defined in application server.
     * - | (11)
       - | Add JTA platform specification in ``"jpaPropertyMap"`` property.
         | The above example illustrates usage of Weblogic JTA.
@@ -459,7 +458,6 @@ Perform the following settings when using local transaction.
       - Specify ``org.springframework.orm.jpa.JpaTransactionManager``. This class controls transaction by calling APIs of JPA.
     * - | (2)
       - | Specify Factory of \ ``EntityManager``\  to be used in the transaction.
-        | Specify bean of the set EntityManagerFactory.
 
 Perform the following settings when transaction manager (JTA) of the application server is to be used.
 
@@ -478,7 +476,7 @@ Perform the following settings when transaction manager (JTA) of the application
       - Description
     * - | (1)
       - The most appropriate \ ``org.springframework.transaction.jta.JtaTransactionManager``\  is defined as bean with id as "transactionManager", in the application server on which the application has been deployed.
-        Bean definition class controls transaction by calling APIs of JTA.
+        This class controls the transaction by calling JTA APIs.
 
 persistence.xml settings
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -636,7 +634,7 @@ See the example of ``OpenEntityManagerInViewInterceptor`` settings below.
       - Description
     * - | (1)
       - | Specify the path for which interceptor is to be applied and path for which interceptor is not to be applied.
-        | In this example, interceptor is being applied for paths of resource files (js, css, image etc.) and for requests other than static web page (HTML).
+        | In this example, interceptor is being applied for paths other than paths of resource files (js, css, image etc.) and static web page (HTML).
     * - | (2)
       - | Specify ``org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor``.
 
@@ -644,12 +642,12 @@ See the example of ``OpenEntityManagerInViewInterceptor`` settings below.
  .. note:: **Interceptor not to be applied to the path of static resources**
 
     It is recommended that interceptor not be applied to the path of static resources (js, css, image, html etc.), as there is no data access in such cases. 
-    Application of interceptor to the path of static resources leads to execution of unnecessary processes (such as instance generation and close process) in ``EntityManager``.
+    Application of interceptor to the path of static resources leads to execution of unnecessary processes (such as instance generation and close process).
 
 |
 
 | When Lazy Fetch is required in Servlet Filter, it is necessary to extend the lifetime of EntityManager till the Servlet Filter layer using ``org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter``.
-| For example, this case is applicable when ``org.springframework.security.core.userdetails.UserDetailsService`` of SpringSecurity is extended and if Entity object is accessed in the extended logic.
+| For example, this case is applicable when ``org.springframework.security.core.userdetails.UserDetailsService`` of SpringSecurity is inherited and if Entity object is accessed in the inherited logic.
 | However, if Lazy Fetch is not required, there is no need to extend the lifetime of ``EntityManager`` till the Servlet Filter layer.
 
  .. note:: **About Lazy Fetch in Servlet Filter layer**
@@ -717,14 +715,14 @@ Spring Data provides the following 3 methods to create entity specific Repositor
       - Description
     * - 1.
       - :ref:`how_to_create_repository_extends_springdata-label`
-      - Create entity specific Repository interface by inheriting the interface of Spring Data.
+      - Create entity specific Repository interface by inheriting from the interface of Spring Data.
         **If there is no specific reason, then it is recommended that you create the entity specific Repository interface using this method.**
     * - 2.
       - :ref:`how_to_create_repository_extends_myinterface-label`
-      - Amongst the Repository interface methods of Spring Data, create a common interface for projects wherein only the required methods are specified, inherit the common interface to create Repository interface for each Entity.
+      - Out of all the methods of Repository interface of Spring Data, create a common project specific interface wherein only the required methods are specified. Inherit the common interface to create entity specific Repository interface.
     * - 3.
       - :ref:`how_to_create_repository_notextends-label`
-      - Create entity specific Repository interface without inheriting the interface of Spring Data and the common interface for project.
+      - Create entity specific Repository interface without inheriting the interface of Spring Data or common project specific common interface.
 
 |
 
@@ -732,7 +730,7 @@ Spring Data provides the following 3 methods to create entity specific Repositor
 
 Inheriting the interface of Spring Data
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-The method to create entity specific Repository interface by inheriting the interface of Spring Data is explained below.
+The method to create entity specific Repository interface by inheriting from the interface of Spring Data is explained below.
 
 Interfaces that can be inherited are as follows:
 
@@ -799,27 +797,27 @@ If entity specific Repository interface is created by inheriting ``JpaRepository
       - Description
     * - 1.
       - <S extends T> S save(S entity)
-      - | Method to accumulate persistence operations (INSERT/UPDATE) for the specified entity in ``javax.persistence.EntityManger``.
+      - | Method to accumulate persistence operations (INSERT/UPDATE) for the specified entity in ``javax.persistence.EntityManager``.
         | If the value is not set in ID property (property with ``@javax.persistence.Id`` annotation or ``@javax.persistence.EmbeddedId`` annotation), ``persist`` method of ``EntityManager`` is called and when the value is set, ``merge`` method is called.
         | When merge method is called, please note that the returned Entity object is different from the Entity which is passed as an argument.
     * - 2.
       - <S extends T> List<S> save(Iterable<S> entities)
-      - | Method to accumulate persistence operations for multiple specified entities in ``EntityManger``.
+      - | Method to accumulate persistence operations for multiple specified entities in ``EntityManager``.
         | The method is implemented by calling ``<S extends T> S save(S entity)`` method repeatedly.
     * - 3.
       - T saveAndFlush(T entity)
-      - | Once the persistence operations for the specified entity are accumulated in ``EntityManger``, this method reflects the accumulated persistence operations (INSERT/UPDATE/DELETE) in persistence layer (DB).
+      - | Once the persistence operations for the specified entity are accumulated in ``EntityManager``, this method reflects the accumulated persistence operations (INSERT/UPDATE/DELETE) in persistence layer (DB).
     * - 4.
       - void flush()
       - Method to execute persistence operations (INSERT/UPDATE/DELETE) for the entity accumulated in ``EntityManager`` in persistence layer (DB).
     * - 5.
       - void delete(ID id)
-      - | Method to accumulate delete operations for the entity of specified ID, in ``EntityManager``.
-        | This method calls ``T findOne(ID)`` method and converts the entity object to "managed" state under ``EntityManger`` and then deletes that object.
+      - | Method to accumulate delete operation for the entity of specified ID, in ``EntityManager``.
+        | This method calls ``T findOne(ID)`` method and converts the entity object to "managed" state under ``EntityManager`` and then deletes that object.
         | If entity is not present when ``T findOne(ID)`` method is called, ``org.springframework.dao.EmptyResultDataAccessException`` occurs.
     * - 6.
       - void delete(T entity)
-      - | Method to accumulate delete operations for the specified entity, in ``EntityManager``.
+      - | Method to accumulate delete operation for the specified entity, in ``EntityManager``.
     * - 7.
       - void delete(Iterable<? extends T> entities)
       - | Method to accumulate delete operations for the multiple specified entities, in ``EntityManager``.
@@ -828,7 +826,7 @@ If entity specific Repository interface is created by inheriting ``JpaRepository
       - void deleteAll()
       - | Method to accumulate delete operations for all entities, in ``EntityManager``.
         | This method is implemented by repeatedly calling ``void delete(T entity)`` method for the entities fetched by ``List<T> findAll()`` method.
-        | In order to delete large number of entities, ``void deleteAllInBatch()`` method should be used. This method reads all the entities to be deleted in the application, thus causing memory exhaustion.
+        | In order to delete large number of entities, ``void deleteAllInBatch()`` method should be used. This method loads all the entities to be deleted in the memory, thus causing memory exhaustion.
     * - 9.
       - void deleteInBatch(Iterable<T> entities)
       - | Method to directly delete multiple specified entities from persistence layer (DB).
@@ -856,14 +854,14 @@ If entity specific Repository interface is created by inheriting ``JpaRepository
         | The entity fetched from persistence layer is managed (cached) using ``EntityManager``.
     * - 15.
       - Page<T> findAll(Pageable pageable)
-      - | Method to fetch the entity matching the specified page (sort order, number of pages, number of records to be displayed on page) from persistence layer (DB).
+      - | Method to fetch the entity matching the specified page (sort order, page number, number of records to be displayed on page) from persistence layer (DB).
         | The entity fetched from persistence layer is managed (cached) by ``EntityManager``.
     * - 16.
       - boolean exists(ID id)
       - | Method to check whether the entity of specified ID exists.
     * - 17.
       - long count()
-      - | Method to fetch the count of entities to be persisted.
+      - | Returns the number of entities available.
 
  .. warning:: **Behavior when using optimistic locking (@javax.persistence.Version) of JPA**
 
@@ -934,18 +932,17 @@ If entity specific Repository interface is created by inheriting ``JpaRepository
 
 .. _how_to_create_repository_extends_myinterface-label:
 
-Inheriting the interface for which only the required methods are defined
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+Inheriting a common project specific interface in which only the required methods are defined
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 Amongst the methods defined in interface of Spring Data, this section defines the method to create entity specific Repository interface by creating and
-inheriting the common interface for which only the required methods are defined.
+inheriting a common project specific interface in which only the required methods are defined.
 
-The signature of methods should match with the methods of Repository interface of Spring Data; however, these methods need to be implemented similar to the case
-wherein the interface is created by inheriting the Repository interface of Spring Data.
+The signature of methods should match with the methods of Repository interface of Spring Data; 
 
  .. note:: **Assumed cases**
 
-    Amongst the methods of Repository interface of Spring Data, there are also methods which are not used or which are not desirable to be used in the actual application.
-    In order to delete such methods from Repository interface, refer to below.
+    Amongst the methods of Repository interface of Spring Data, there are methods which are not used or which are not desirable to be used in the actual application.
+    In order to remove such methods from Repository interface, refer below.
     The methods defined in interface are implemented using \ ``org.springframework.data.jpa.repository.support.SimpleJpaRepository``\  of Spring Data JPA.
 
 
@@ -978,26 +975,26 @@ See the example below.
     * - Sr. No.
       - Description
     * - | (1)
-      - | Define general interface for project by inheriting ``org.springframework.data.repository.Repository``.
-        | Use generic type since it is a general interface.
+      - | Define a common interface for the project by inheriting ``org.springframework.data.repository.Repository``.
+        | Use generic type since it is a not entity specific interface.
     * - | (2)
       - Select and define the required methods from the methods of Repository interface of Spring Data.
     * - | (3)
-      - Inherit the general interface for project and specify entity type in generic type ``<T>`` and entity ID type in generic type ``<ID extends Serializable>``. In this example, \ ``Order``\  type is specified in entity and \ ``Integer``\  type in entity ID.
+      - Inherit this common interface and specify the type of entity in generic type ``<T>`` and type of entity ID in generic type ``<ID extends Serializable>``. In this example, \ ``Order``\  type is specified in entity and \ ``Integer``\  type in entity ID.
 
 .. _how_to_create_repository_notextends-label:
 
 Not inheriting the interface
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-This section explains the method to create entity specific Repository interface without inheriting the interface of Spring Data or common interface.
+This section explains how to create entity specific Repository interface without inheriting any interface of Spring Data or common interface.
 
 | Specify \ ``@org.springframework.data.repository.RepositoryDefinition``\  annotation as class annotation and specify entity type in domainClass attribute and entity ID type in idClass attribute.
-| The methods which have the same signature as methods defined in Repository interface of Spring Data need not be implemented similar to the case wherein the interface is created by inheriting Repository interface of Spring Data.
+| The methods which have the same signature as methods defined in Repository interface of Spring Data need not be implemented.
 \
 
  .. note:: **Assumed cases**
 
-    Repository can be created using this method when common entity operations are not required.
+    Repository can be created in this way when common entity operations are not required.
     The methods having same signature as methods defined in Repository interface of Spring Data are implemented using ``org.springframework.data.jpa.repository.support.SimpleJpaRepository`` provided by Spring Data JPA.
 
 
@@ -1035,7 +1032,7 @@ See the example below.
 Adding query method
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 | It is difficult to develop the actual application using only the Spring Data interface which is used for performing generic CRUD operations.
-| Therefore Spring Data provides a mechanism to add query method for performing any persistence operations (SELECT/UPDATE/DELETE) for the entity specific Repository interface.
+| Therefore Spring Data provides a mechanism to add "query methods" for performing any persistence operations (SELECT/UPDATE/DELETE) for the entity specific Repository interface.
 | In the added query method, entity operations are performed using query language (JPQL or Native SQL).
 
  .. note:: **What is JPQL**
@@ -1071,26 +1068,26 @@ Specifying query to be executed
       - Description
     * - 1.
       - | :ref:`@Query annotation <how_to_specify_query_annotation-label>`
-        | (Spring Data function)
+        | (Spring Data functionality)
       - | In the method to be added to entity specific Repository interface, specify ``@org.springframework.data.jpa.repository.Query`` annotation and the query to be executed.
         | **When there is no specific reason, it is recommended that you specify the query using this method.**
     * - 2.
       - | :ref:`Method name based on naming conventions <how_to_specify_query_mathodname-label>`
-        | (Spring Data function)
+        | (Spring Data functionality)
       - | Specify the query to be executed by assigning a method name as per Spring Data naming conventions.
-        | Query (JPQL) to be executed is generated from the method name using Spring Data JPA function. Only a SELECT clause of JPQL can be generated.
-        | **For a simple query having few conditions, this method can be used instead of using @Query annotation. **However, for a complex query with many conditions, a simple method name indicating behavior should be used and Query should be specified using ``@Query`` annotation.
+        | Query (JPQL) is generated from the method name using Spring Data JPA functionality. Only a SELECT clause of JPQL can be generated.
+        | **For a simple query having few conditions, this method can be used instead of using @Query annotation.** However, for a complex query with many conditions, a simple method name indicating behavior should be used and Query should be specified using ``@Query`` annotation.
     * - 3.
       - | :ref:`Named query of properties file <how_to_specify_query_namedquery_properties-label>`
-        | (Spring Data function)
-      - | Specify the query to be executed in properties file of Spring Data.
-        | **The location of method definition and location wherein the query is specified are separated; hence specifying the query by this method is not recommended.**
+        | (Spring Data functionality)
+      - | Specify the query in a properties file.
+        | **The location of method definition (entity specific Repository interface) and location wherein the query is specified (properties file) are separated; hence this way of specifying the query is not recommended.**
         | **However, when using Native SQL as query, check whether it is necessary to define the database dependent SQL in the properties file.**
         | In case of applications for which any database can be selected or when the database changes (or is likely to be changed) depending on execution environment, then it is necessary to specify the Query using this method and manage the Properties file as environment dependent material.
 
- .. note:: **Using query specification methods concurrently**
+ .. note:: **Using multiple query specification methods**
 
-    Particularly, there is no restriction on using multiple query specification methods concurrently. Query specification methods and restriction on their concurrent usage should be determined in accordance with the project.
+    Particularly, there is no restriction on using multiple query specification methods. Query specification methods and restriction on their concurrent usage should be determined in accordance with the project.
 
  .. note:: **Query Lookup methods**
 
@@ -1101,8 +1098,7 @@ Specifying query to be executed
     #. Create a query (JPQL) from method name and use it.
     #. An error occurs when query (JPQL) cannot be created from method name.
 
-    For details on Query Lookup methods, refer to `Spring Data JPA - Reference Documentation "1.2.2 Defining query methods" -  "Query lookup strategies"
-   <http://static.springsource.org/spring-data/data-jpa/docs/1.3.4.RELEASE/reference/html/repositories.html#repositories.query-methods.query-lookup-strategies>`_\ .
+    For details on Query Lookup methods, refer to `Spring Data JPA - Reference Documentation "1.2.2 Defining query methods" -  "Query lookup strategies" <http://static.springsource.org/spring-data/data-jpa/docs/1.3.4.RELEASE/reference/html/repositories.html#repositories.query-methods.query-lookup-strategies>`_\ .
 
 Fetching entity lock
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1149,23 +1145,23 @@ Fetching entity lock
 
 Operating the entities of Persistence Layer directly
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-| It is recommended that you update and delete the entities for the entity objects managed in ``EntityManager``.
+| It is recommended to perform update and delete operations on entity objects managed in ``EntityManager``.
 | However, when entities need to be updated or deleted in a batch, check whether the entities of persistence layer (DB) are operated using query method.
 
  .. note:: **Reducing the causes of performance degradation**
 
     Operating the entities of persistence layer directly reduces the frequency of SQLs that would be required to be executed for operating these entities.
-    Therefore, in case of applications that demand high performance, the causes of performance degradation can be reduced by operating the entities in batch using this method
+    Therefore, in case of applications that demand high performance, the causes of performance degradation can be reduced by operating the entities in batch using this method.
     Such SQLs are as follows:
 
-    * SQL for reading the entity object in \ ``EntityManager``\ . Need not be executed.
+    * SQL for loading all entity objects in \ ``EntityManager``\ . Need not be executed.
     * SQL for updating and deleting entity. This SQL was earlier required to be executed n times, but now it is sufficient to execute it only once.
 
  .. note::  **Standards for deciding whether to operate entities of persistence layer directly**
 
-    When operating the entities of persistence layer directly, since there are some points to be noted from functionality point of view, **in case of applications which do not demand high performance,
-    it is recommended that you perform the batch operations also for the entity objects managed in EntityManager.**
-    For the points to be noted, refer to the example below.
+    When operating the entities of persistence layer directly, since there are certain points to be careful about from functionality point of view, **in case of applications which do not demand high performance,
+    it is recommended that the batch operations must also be performed through the entity objects managed in EntityManager.**
+    For the points to be careful, refer to the example below.
 
 The example of directly operating the entities of persistence layer using query method is shown below.
 
@@ -1300,17 +1296,17 @@ Specify the query(JPQL) to be executed in value attribute of ``@Query`` annotati
 
  .. note:: **Named Parameters**
 
-    Value can be bound by assigning name to the parameter bound to the query and specifying parameter name from query.
-    To use Named Parameter, add ``@org.springframework.data.repository.query.Param`` annotation to the target argument and specify parameter name in value attribute.
-    At the position where parameter is to be bound in the query, specify it in the ":parametername"  format.
+    Named parameter can be used by assigning a name to bind parameter of the query and using this assigned name to specify the value.
+    To use Named Parameter, add ``@org.springframework.data.repository.query.Param`` annotation to the argument from which the value has to be used to bind to the named parameter in the query. Specify the assigned parameter name in value attribute of param annotation.
+    ON the query side, at the position where parameter is to be bound in the query, specify it in the ":parametername"  format.
 
-    **When there is no specific reason, Named Parameters should be used considering maintainability and readability of query.**
+    **When there is no specific reason, It is recommended to use Named Parameters considering maintainability and readability of query.**
 
 |
 
-| When the type of matching (Forward match, Backward match and Partial match) of LIKE search is fixed, ``"%"`` can be specified in JPQL.
+| In case of LIKE search, if the type of matching (Forward match, Backward match and Partial match) is fixed, ``"%"`` can be specified in JPQL.
 | However, this is in extended Spring Data JPA format and not in standard JPQL, so it can be specified only in JPQL specified with ``@Query`` annotation.
-| An error occurs if ``"%"``  is specified in JPQL to be specified as Named query.
+| An error occurs if ``"%"``  is specified in JPQL specified as Named query.
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.20\linewidth}|p{0.20\linewidth}|p{0.50\linewidth}|
  .. list-table::
@@ -1347,16 +1343,16 @@ Specify the query(JPQL) to be executed in value attribute of ``@Query`` annotati
 
     Search condition values should be escaped during LIKE search.
 
-    The method for escaping these values is provided in ``org.terasoluna.gfw.common.query.QueryEscapeUtils`` class; hence its usage should be checked in order to fulfill the conditions.
+    The method for escaping these values is provided in ``org.terasoluna.gfw.common.query.QueryEscapeUtils`` class; this class can be used if it meets the requirements.
     For details on ``QueryEscapeUtils`` class, refer to ":ref:`data-access-common_appendix_like_escape`" of ":doc:`DataAccessCommon`".
 
  .. note:: **When the type of matching needs to be changed dynamically**
 
-    When it is necessary to change the type of matching (Forward match, Backward match and Partial match) dynamically,
-    ``"%"`` should be added before and after the parameter value to be bound in conventional manner instead of specifying ``%`` in JPQL.
+    When it is necessary to change the type of matching (Forward match, Backward match and Partial match) dynamically, 
+    ``"%"`` should be added before and after the parameter value (same as conventional method), instead of specifying ``%`` in JPQL.
 
     The method for converting into search condition value corresponding to the type of matching is provided in ``org.terasoluna.gfw.common.query.QueryEscapeUtils`` class;
-    hence its usage should be checked in order to fulfill the conditions.
+    this class can be used if it meets the requirements.
     For details on ``QueryEscapeUtils`` class, refer to ":ref:`data-access-common_appendix_like_escape`" of ":doc:`DataAccessCommon`".
 
 | Sort conditions can be directly specified in query.
@@ -1474,18 +1470,18 @@ Specify the query(JPQL) to be executed in value attribute of ``@Query`` annotati
     * - | (4)
       - Do not specify "ORDER BY" clause in query. No need to specify countQuery attribute also.
     * - | (5)
-      - Native SQL for count converted by JPQL.
+      - Native SQL for count converted from JPQL.
     * - | (6)
-      - | Native SQL for fetching the entity of the specified page location converted by JPQL.
+      - | Native SQL for fetching the entity of the specified page location converted from JPQL.
         | Not specified in query; however "ORDER BY" clause is added to the condition specified in ``Sort`` object stored in \ ``Pageable``\  object. In this example, it is SQL for PostgreSQL.
 
 .. _how_to_specify_query_mathodname-label:
 
 Specifying with the method name based on naming conventions
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-| Specify query (JPQL) to be executed by using method name as per the naming conventions stipulated in Spring Data.
-| JPQL is created from the method name using Spring Data JPA function.
-| However, JPQL can be created from the method name only for SELECT and not for UPDATE and DELETE.
+| Specify the query (JPQL) to be executed through method name as per the naming conventions of Spring Data JPA.
+| JPQL is created from the method name by the functionality of Spring Data JPA.
+| However, this is only possible for SELECT queries and not for UPDATE and DELETE.
 
 For naming conventions for creating JPQL, refer to the following pages.
 
@@ -1613,7 +1609,7 @@ See the example below.
 
 Specifying as Named query in Properties file
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-Specify the query to be executed in the properties file (classpath:META-INF/jpa-named-queries.properties) of Spring Data JPA.
+Specify the query in the properties file (classpath:META-INF/jpa-named-queries.properties) of Spring Data JPA.
 
 | **Consider using this method when it is required to write a database platform specific SQL at the time of using NativeQuery.**
 | **Even if it is database platform specific SQL, it is recommended that you use a method to directly specify in @Query annotation when there is no dependency on the execution environment.**
@@ -1633,15 +1629,15 @@ Specify the query to be executed in the properties file (classpath:META-INF/jpa-
     * - Sr. No.
       - Description
     * - | (1)
-      - Class name and method name of entities are combined by ``"."`` (dot) and used as Lookup name of Named query.
-        In the above example, ``"Order.findAllByStatusCode"`` is Lookup name.
+      - Regarding the lookup name of named query, class name of entity and method name linked by ``"."`` (dot) is used.
+        In the above example, ``"Order.findAllByStatusCode"`` is used as Lookup name.
 
- .. tip:: **Method to specify Lookup name of Named query**
+ .. tip:: **Specifying Lookup name of Named query**
 
-    As per default behavior, class name and method name of entities combined with ``"."`` (dot) are used as Lookup name. However, any query name can also be specified.
+    As per default behavior, Lookup name is contructed by connecting class name of the entity linked with method name using ``"."`` (dot). However, any name can be specified.
 
-    * If you want to specify any query name in Lookup name for fetching entities, specify it in name attribute of ``@Query`` annotation.
-    * If you want to specify any query name in Lookup name for count at the time of page search, specify the query name in countName attribute of ``@Query`` annotation.
+    * For fetching entities, specify it in name attribute of ``@Query`` annotation.
+    * For count at the time of page search, specify it in countName attribute of ``@Query`` annotation.
 
  .. code-block:: java
 
@@ -1656,7 +1652,7 @@ Specify the query to be executed in the properties file (classpath:META-INF/jpa-
     * - Sr. No.
       - Description
     * - | (2)
-      - In the above example, ``"OrderRepository.findAllByStatusCode"`` is specified as the query name for Lookup.
+      - In the above example, ``"OrderRepository.findAllByStatusCode"`` is specified as the Lookup name for the query.
 
 |
 
@@ -1675,7 +1671,7 @@ Specify the query to be executed in the properties file (classpath:META-INF/jpa-
     * - Sr. No.
       - Description
     * - | (3)
-      - | Specify the SQL to be executed by using query name as key.
+      - | Specify the SQL to be executed by using lookup name for the query as the key.
         | In the above example, the SQL to be executed has been specified by using ``"Order.findAllByStatusCode"`` as key.
 
  .. tip::
@@ -1704,7 +1700,7 @@ Specify the query to be executed in the properties file (classpath:META-INF/jpa-
 
 Implementing the process to search entities
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-The method to search entities is explained below depending on purpose.
+The method to search entities is explained below.
 
 Searching all entities matching the conditions
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1863,7 +1859,7 @@ Amongst the entities matching the conditions, call a query method to fetch the e
 
 Implementing search process as per the dynamic conditions of entities
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-To add query method to Repository method for searching the entities as per dynamic conditions, search process should be implemented by creating
+To add query method to Repository for searching the entities as per dynamic conditions, search process should be implemented by creating
 custom Repository interface and custom Repository class for the entity specific Repository interface.
 For method of creating custom Repository interface and custom Repository class, refer to ":ref:`custommethod_individual-label`".
 
@@ -1938,7 +1934,7 @@ If no condition is specified, a blank list will be returned.
     * - Sr. No.
       - Description
     * - | (2)
-      - | Fetch Criteria object as an argument in custom Repository interface and define a method for returning List.
+      - | Define a method in custom Repository interface which receives Criteria object as an argument and returns List of Order objects.
 
 - Custom Repository class
 
@@ -2267,7 +2263,7 @@ If no condition is specified, a blank list will be returned.
 
 Page search for the entities matching the dynamic conditions
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-Amongst the entities matching the dynamic conditions, implement and call the query method to fetch the entities corresponding to the specified page.
+Implement and call the query method to fetch the entities corresponding to the specified page, amongst the entities matching the dynamic conditions.
 
 As shown in the example below, the specification is same as that for normal search except for fetching the corresponding page.
 Further, the description for fetching all records is omitted.
@@ -2290,7 +2286,7 @@ Further, the description for fetching all records is omitted.
     * - Sr. No.
       - Description
     * - | (1)
-      - | Amongst the entities matching the dynamic conditions, define the query method to fetch the entities corresponding to the specified page.
+      - | Define the query method to fetch the entities corresponding to the specified page, amongst the entities matching the dynamic conditions.
 
 
 - Custom Repository class
@@ -2400,7 +2396,7 @@ Further, the description for fetching all records is omitted.
     * - Sr. No.
       - Description
    * -  | (2)
-      - | Amongst the entities matching the dynamic conditions, implement the query method to fetch the entities corresponding to the specified page.
+      - | Implement the query method to fetch the entities corresponding to the specified page, amongst the entities matching the dynamic conditions.
         | In the above example, the method is not split for explanation purpose; however it can be split if required.
     * - | (3)
       - | In the above example, when conditions are not specified, return a blank page information as there is no need to perform search.
@@ -2456,14 +2452,14 @@ Further, the description for fetching all records is omitted.
     * - Sr. No.
       - Description
     * - | (13)
-      - | Amongst the entities matching the dynamic conditions, call the query method to fetch the entities corresponding to the specified page.
+      - | Call the query method to fetch the entities corresponding to the specified page, amongst the entities matching the dynamic conditions.
 
 
 |
 
 Implementing the process to fetch entities
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-The method of fetching entities is explained below depending on purpose.
+The method of fetching entities is explained below.
 
 |
 
@@ -2491,7 +2487,7 @@ If the ID (Primary Key) is known, fetch the entity object by calling the findOne
     * - | (1)
       - | Specify the ID (Primary Key) of entity and call the findOne(ID) method of Repository interface.
     * - | (2)
-      - | When the specified entity ID does not exist, the return value would be null, hence null determination is necessary.
+      - | When the specified entity ID does not exist, the return value would be null, hence null check is necessary.
         | If needed, implement the process which is carried out when the specified entity ID does not exist.
 
  .. note :: **Returned entity objects**
@@ -2517,7 +2513,7 @@ If the ID (Primary Key) is known, fetch the entity object by calling the findOne
 
  .. note:: **Sort order of the related-entities having 1:N(N:M) relationship**
 
-    Specify ``@javax.persistence.OrderBy`` annotation in property annotation of the related-entities to control the sort order.
+    Specify ``@javax.persistence.OrderBy`` annotation on the property of related-entities to control the sort order.
 
  See the example below.
 
@@ -2594,14 +2590,14 @@ When the ID is not known, call the query method to search entities by conditions
     * - | (2)
       - | Call the query method defined in Repository interface.
     * - | (3)
-      - | Similar to findOne method of Repository interface, when the entities matching the conditions do not exist, null will be returned. Hence null determination is necessary. 
-        | If needed, implement the process when entities matching the specified conditions do not exist.
+      - | Similar to findOne method of Repository interface, when the entities matching the conditions do not exist, null will be returned. Hence null check is necessary. 
+        | If needed, implement the process for the scenario when entities matching the specified conditions do not exist.
         | When multiple entities matching the conditions exist, ``org.springframework.dao.IncorrectResultSizeDataAccessException`` occurs.
 
  .. note :: **Returned entity objects**
 
-    When a query method is called, the query is always executed for persistence layer (DB).
-    However, when the entities which are fetched by executing the query are already managed in ``EntityManager``, the fetched entity objects are deleted and
+    When a query method is called, the query is always executed on persistence layer (DB).
+    However, when the entities which are fetched by executing the query are already being managed in ``EntityManager``, the entity objects fetched from DB are discarded and
     the entity objects managed in ``EntityManager`` are returned.
 
  .. note :: **Query method using ID + α as condition**
@@ -2609,7 +2605,7 @@ When the ID is not known, call the query method to search entities by conditions
     It is recommended not to create a query method wherein ID + α is used as condition.
     It can be implemented by creating a logic that compares property value of entity objects fetched by calling findOne method.
 
-    The reason for not recommending the creation of this query method is that there is a possibility of the entity objects fetched by executing the query getting deleted and unnecessary query getting executed.
+    The reason for not recommending the creation of this query method is that there is a possibility of the entity objects fetched by executing the query getting discarded and unnecessary query getting executed.
     If the ID is known, it is desirable to use findOne method which prevents execution of unnecessary queries.
     This should be consciously implemented especially in case of applications with high performance requirements.
 
@@ -2632,14 +2628,14 @@ When the ID is not known, call the query method to search entities by conditions
  .. note:: Sort order of the related-entities having 1:N(N:M) relationship
 
    * The sort order of the related-entities specified in JOIN FETCH is controlled by specifying "ORDER BY" clause in JPQL.
-   * The sort order of the related-entities loaded after executing the query is controlled by specifying ``@javax.persistence.OrderBy`` annotation in the property annotation of the related-entities.
+   * The sort order of the related-entities loaded after executing the query is controlled by specifying ``@javax.persistence.OrderBy`` annotation to the property of the related-entities.
 
 |
 
 
 Adding entities
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Example of adding entities is shown below depending on purpose.
+Example of adding entities is shown below.
 
 .. _data-access-jpa_how_to_use_way_to_add_entity:
 
@@ -2662,18 +2658,18 @@ In order to add an entity, create an entity object and call the save method of R
     * - Sr. No.
       - Description
     * - | (1)
-      - | Create an instance of entity object and set the value under required property.
+      - | Create an instance of entity object and set the values for required properties.
         | In the above example, ID generator of JPA is used for setting the ID. When ID generator of JPA is to be used, ID should not be set in the application code.
         | If you set the ID in the application code, merge method of ``EntityManager`` gets called leading to execution of unnecessary processing.
     * - | (2)
       - | Call the save method of Repository interface and manage the entity objects created in (1) in ``EntityManager``.
-        | Note that entity objects managed by ``EntityManager`` will not the entity objects passed as arguments of save method, but these will be the entity objects returned from save method.
-        | ID is set by the ID generator of JPA at this timing.
+        | Take note that entity object passed as an argument of save method will not be the one managed by ``EntityManager``, but the entity object returned by save method will be the one managed by ``EntityManager``.
+        | ID is set by the ID generator of JPA at the time of this process.
 
  .. note:: **Demerits of the merge method getting called**
 
     merge method of ``EntityManager`` has a mechanism to fetch the entities having same ID from persistence layer (DB), when the entities are to be managed in ``EntityManager``.
-    Process to fetch the entities becomes unnecessary while adding the entities. In case of application with high performance requirements, ID generation timing should be noted.
+    Process to fetch the entities becomes unnecessary while adding the entities. In case of application with high performance requirements, ID generation timing should also be taken into account.
 
  .. note:: **Constraint error handling**
 
@@ -2803,11 +2799,11 @@ In order to use this method, ``persist`` needs to be included in the cascade ope
     * - Sr. No.
       - Description
     * - | (1)
-      - | Call the save method of Repository interface and manage the entity objects under ``EntityManager``.
-        | In the above example, save method is being called before setting the related-entity objects for entity objects. This is because it is necessary to generate the ID (orderId) of entities used as a part of ID of the related entities.
+      - | First, call the save method of Repository interface and bring the entity object under ``EntityManager``.
+        | In the above example, save method is being called before setting the related-entity objects. This is because it is necessary to generate the ID (orderId) of parent-entity; this ID is used as a part of ID of the related entity.
     * - | (2)
-      - | Set the related-entity objects for the parent-entity objects that are to be managed under ``EntityManager``.
-        | When committing the transaction, persist operation (INSERT) for parent-entity objects is linked with the related-entity objects.
+      - | Set the related-entity objects for the parent-entity object (that are to be managed under ``EntityManager``).
+        | When committing the transaction, persist operation (INSERT) on parent-entity object is linked with the related-entity objects.
 
 - Entity
 
@@ -2858,9 +2854,9 @@ In order to use this method, ``persist`` needs to be included in the cascade ope
     * - Sr. No.
       - Description
     * - | (3)
-      - | Specify the cascade operation type (``javax.persistence.CascadeType``) in cascade attribute of related annotation.
-        | In the above example, all operations are considered as Cascade operations of the related-entity.
-        | If there is no specific reason, it is recommended to consider all the operations as cascade.
+      - | Specify the cascade operation type (``javax.persistence.CascadeType``) in cascade attribute in corresponding annotation.
+        | In the above example, all operations are target of cascade to the related-entity.
+        | If there is no specific reason, it is recommended to consider all the operations for cascade.
 
  .. warning :: **Related-entity for which cascade attribute should not be specified**
 
@@ -2926,9 +2922,9 @@ In order to use this method, ``persist`` needs to be included in the cascade ope
 
 Adding the related-entity
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-In order to add the related-entity, map the related-entity object with the parent-entity object fetched through Repository interface.
+In order to add a related-entity, link the newly created related-entity object with the parent-entity object fetched through Repository interface.
 
-For using this method, ``persist`` and ``merge`` should be included in the cascade operations of the related-entity.
+For using this method, ``persist`` and ``merge`` should be included in the cascade operation of the related-entity.
 
  .. code-block:: java
 
@@ -2955,7 +2951,7 @@ For using this method, ``persist`` and ``merge`` should be included in the casca
     * - Sr. No.
       - Description
     * - | (1)
-      - | Fetch the entity object using the Repository interface method.
+      - | Fetch the entity object using the Repository interface.
     * - | (2)
       - | In case of entity with 1: N relationship, add the related-entity object to the collection fetched from the parent-entity object.
     * - | (3)
@@ -2965,7 +2961,7 @@ For using this method, ``persist`` and ``merge`` should be included in the casca
 
 Adding the related-entity directly
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-When the related-entity is to be added directly without mapping with the parent-entity object, save it using the Repository interface for related-entity.
+When a related-entity object is to be added directly without linking it with the parent-entity object, save it using the Repository interface of related-entity.
 
  .. code-block:: java
 
@@ -2984,13 +2980,13 @@ When the related-entity is to be added directly without mapping with the parent-
     * - Sr. No.
       - Description
     * - | (1)
-      - | Create the object of related-entity.
+      - | Create an object of related-entity.
     * - | (2)
-      - | Call the save method of Repository interface for the related-entity.
+      - | Call the save method of Repository interface of the related-entity.
 
- .. note:: **Merits of saving the related-entity directly**
+ .. note:: **Merits of saving the related-entity object directly**
 
-     The number of objects created is less. When fetching the parent-entity objects, related-entity objects which are not necessary for the processing may also get created.
+     The number of objects created is less. When fetching the parent-entity object, related-entity objects which are not necessary for the processing may also get created.
 
  .. note:: **Demerits of saving the related-entity directly**
 
@@ -3000,28 +2996,28 @@ When the related-entity is to be added directly without mapping with the parent-
 
  .. warning:: **Points to be noted at the time of using parent-entity object after the related-entity is added**
 
-    When the related-entity is added using Repository save method for related-entity, 
-    it cannot be fetched through the parent-entity object since it is not mapped with the parent-entity object.
+    When the related-entity is added using Repository save method of related-entity, 
+    it cannot be fetched through the parent-entity object since it is not linked with the parent-entity object.
 
     To avoid this problem,
 
-    #. Related-entity object should not be added directly. It should first be mapped with the parent-entity object, and then added.
+    #. Related-entity object should not be added directly. It should first be linked with the parent-entity object, and then added.
     #. Synchronization with persistence layer (DB) should be done before fetching the parent-entity, using saveAndFlush method.
 
-    In such a case, if there is no specific reason, objects of the related-entity should be added by the earlier method.
-    In the latter method, the problem cannot be avoided if the parent-entity objects are already the "managed" entities.
+    In such a case, if there is no specific reason, objects of the related-entity should be added by the former method.
+    In the latter method, the problem cannot be avoided if the parent-entity object is already the "managed" entity.
 
 |
 
 Updating entities
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-The example of updating entities is explained below depending on purpose.
+The example of updating entities is explained below.
 
 |
 
 How to update entities
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-In order to update the entity, set the value to be changed for the entity objects fetched using the Repository interface method.
+In order to update the entity, set the changed value to the entity object fetched using the Repository interface method.
 
  .. code-block:: java
 
@@ -3037,27 +3033,27 @@ In order to update the entity, set the value to be changed for the entity object
     * - Sr. No.
       - Description
     * - | (1)
-      - | Fetch the entity objects using Repository interface method.
+      - | Fetch the entity object using Repository interface method.
     * - | (2)
-      - | Update the status of entity objects by calling setter method.
+      - | Update the state of entity object by calling setter method.
 
  .. note:: **Calling the save method of Repository**
 
-    The entity objects fetched using Repository interface method are managed under ``EntityManager``.
+    The entity object fetched using Repository interface method are managed under ``EntityManager``.
     For the entity objects managed under ``EntityManager``, just by changing the state of objects using setter method,
     the changes are reflected in persistence layer (DB) at the time of committing the transaction.
     Therefore, there is no need to explicitly call the save method of Repository interface.
 
     However, save method needs to be called when the entity objects are not managed under ``EntityManager``.
-    For example, when entity objects are created based on the request parameters sent from the screen.
+    For example, when entity object is created based on the request parameters sent from the screen.
 
 |
 
 Updating the related-entity
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-In order to update the related-entity, set the value to be changed for the related-entity objects fetched from the parent-entity object using Repository interface method.
+In order to update the related-entity, first fetch the related-entity from the parent entity which in turn can be fetched using Repository interface and then set the values to be updated in related-entity object.
 
-For using this method, ``merge`` should be included in the cascade operations of related-entity.
+For using this method, ``merge`` should be included in the cascade operation of related-entity.
 
  .. code-block:: java
 
@@ -3089,7 +3085,7 @@ For using this method, ``merge`` should be included in the cascade operations of
 
 Updating the related-entity directly
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-In order to update the related-entity directly without using the parent-entity, set the value to be changed for the parent entity-object fetched using Repository interface method for the related-entity.
+In order to update the related-entity directly without using the parent-entity, fetch the related-entity directly using its corresponding Repository interface and set the value to be changed.
 
  .. code-block:: java
 
@@ -3116,7 +3112,7 @@ In order to update the related-entity directly without using the parent-entity, 
 
     When the related-entity is updated using save method of Repository for related-entity,
     the related-entity stored in the parent-entity object is also updated unlike the case wherein the related-entity is added.
-    This is because the parent-entity stores the reference of same instances managed under ``EntityManager``.
+    This is because the parent-entity stores the reference of same instance which is managed under ``EntityManager``.
 
 |
 
@@ -3134,8 +3130,8 @@ Deleting parent-entity and related-entity
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 In order to delete parent-entity and related-entity together, call delete method of Repository interface.
 
-For using this method, ``remove`` should be included in the cascade operations of the related-entity
-or the setting for deleting the related-entity should be enabled (orphanRemoval attribute of the associated annotation should be set to ``true``).
+For using this method, ``remove`` should be included in the cascade operation of the related-entity
+or the setting for deleting the related-entity should be enabled (orphanRemoval attribute should be set to ``true``).
 
 - Service
 
@@ -3184,8 +3180,8 @@ or the setting for deleting the related-entity should be enabled (orphanRemoval 
 
  .. note:: **Deleting related-entity**
 
-    If you do not want to delete the related-entity object, perform settings such that ``remove`` is not included in cascade operations.
-    Also, set orphanRemoval attribute of the associated annotation to ``false``.
+    If you do not want to delete the related-entity object, perform settings such that ``remove`` is not included in cascade operation.
+    Also, set orphanRemoval attribute to ``false``.
 
 |
 
@@ -3237,7 +3233,7 @@ For using this method, setting to delete the related-entity should be enabled (o
     * - Sr. No.
       - Description
     * - | (1)
-      - | Fetch the entity object using Repository interface method.
+      - | Fetch the entity object using Repository interface.
     * - | (2)
       - | Describe the example to delete the entity with 1:N relationship.
     * - | (3)
@@ -3247,7 +3243,7 @@ For using this method, setting to delete the related-entity should be enabled (o
     * - | (5)
       - | Delete it from the collection fetched from the related-entity object to be deleted.
     * - | (6)
-      - | In case of entity with 1:1 relationship, set the property to store the related-entity object to be deleted to ``null``.
+      - | In case of entity with 1:1 relationship, set the property to that stores the related-entity object to be deleted to ``null``.
 
 - Entity
 
@@ -3287,7 +3283,7 @@ For using this method, setting to delete the related-entity should be enabled (o
     * - Sr. No.
       - Description
     * - | (7)
-      - | Enable the setting to delete the related-entity (set orphanRemoval attribute of the associated annotation to ``true``).
+      - | Enable the setting to delete the related-entity (set orphanRemoval attribute to ``true``).
 
  .. note :: **Associated annotations that can be specified for orphanRemoval attribute**
 

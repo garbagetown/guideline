@@ -122,7 +122,7 @@ spring-security.xmlの設定
    * - 項番
      - 説明
    * - | (1)
-     - | \ ``<sec:http>``\ 要素に\ ``<sec:csrf />``\ 要素を定義することで、Spring Security のcsrfトークンチェック機能を利用できるようになる。
+     - | \ ``<sec:http>``\ 要素に\ ``<sec:csrf>``\ 要素を定義することで、Spring Security のcsrfトークンチェック機能を利用できるようになる。
        | デフォルトでチェックされるHTTPメソッドについては、\ :ref:`こちら<csrf_default-add-token-method>`\ を参照されたい。
        | 詳細については、\ `Spring Securityのレファレンスドキュメント <http://docs.spring.io/spring-security/site/docs/3.2.x/reference/htmlsingle/#csrf-configure>`_\ を参照されたい。
    * - | (2)
@@ -145,13 +145,33 @@ spring-security.xmlの設定
      - | 実装クラスとして、Spring Securityで用意されている \ ``org.springframework.security.web.access.AccessDeniedHandlerImpl`` を指定する。
        | propertyのnameにerrorPageを指定し、valueに表示するviewを指定する。
 
+|
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table:: AccessDeniedExceptionを継承したExceptionの種類
+   :header-rows: 1
+   :widths: 10 90
+
+   * - Exception
+     - 発生理由
+   * - | AccessDeniedException
+     - | 権限の無いページにアクセスした場合に発生する。
+   * - | InvalidCsrfTokenException
+     - | クライアントからリクエストしたcsrfトークンとサーバで保持しているcsrfトークンが一致しない場合に発生する。
+   * - | MissingCsrfTokenException
+     - | csrfトークンが存在しない場合に発生する。
+       | デフォルトのセッションにトークンを保持している場合はセッションタイムアウトになるため、発生しない。
+       | \ ``<sec:csrf>``\ 要素の \ ``token-repository-ref``\ 属性でトークンの保存先をキャッシュやDBなどに変更し、一定期間などで削除した場合に発生する。
+
+|
+
 .. _csrf_403-webxml-setting:
 
 .. note::
 
-  **Aaccess-denied-handlerの設定を省略した場合の、エラーハンドリングについて**
+  **<sec:access-denied-handler>の設定を省略した場合のエラーハンドリングについて**
 
-  web.xmlに、以下の設定を行うことで、任意のページに遷移させることができる。
+  web.xmlに以下の設定を行うことで、任意のページに遷移させることができる。
 
   **web.xml**
 
@@ -219,7 +239,7 @@ CSRFトークン用の\ ``RequestDataValueProcessor``\ 実装クラスを利用�
 
 .. note::
 
-  CSRFトークンの生成及びチェックは、Spring Securityの設定で \ ``<sec:csrf />``\ が行うため、Controllerでは特にCSRF対策は意識しなくてよい。
+  CSRFトークンの生成及びチェックは \ ``<sec:csrf />``\ の設定で有効になるCsrfFilterにより行われるので、開発者はControllerで特にCSRF対策は意識しなくてよい。
 
 .. _csrf_form-tag-token-send:
 
@@ -304,7 +324,7 @@ CSRFトークンを明示的に埋め込む方法
 
 \ ``<form:form>``\ タグを使用しない場合は、明示的に、\ ``<input type="hidden">``\ タグを追加する必要がある。
 
-\ ``<sec:csrf />``\ により、\ ``org.springframework.security.web.csrf.CsrfToken``\ オブジェクトが、リクエストスコープの
+\ ``<sec:csrf />``\ の設定で有効になるCsrfFilterにより \ ``org.springframework.security.web.csrf.CsrfToken``\ オブジェクトが、リクエストスコープの
 \ ``_csrf``\ 属性に設定されるため、jspでは、以下のように設定すればよい
 
 .. code-block:: jsp
@@ -346,7 +366,7 @@ CSRFトークンを明示的に埋め込む方法
 
 AjaxによるCSRFトークンの送信
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-| ``<sec:csrf />`` は、前述のようにリクエストパラメータからCSRFトークンを取得するだけでなく、
+| ``<sec:csrf />`` の設定で有効になるCsrfFilterにより前述のようにリクエストパラメータからCSRFトークンを取得するだけでなく、
 | HTTPリクエストヘッダーからもCSRFトークンを取得する。
 | Ajaxを利用する場合はHTTPヘッダーに、CSRFトークンを設定することを推奨する。JSON形式でリクエストを送る場合にも対応できるためである。
 

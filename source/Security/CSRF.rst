@@ -147,18 +147,16 @@ spring-security.xmlの設定
 
 |
 
-.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
-.. list-table:: AccessDeniedExceptionを継承したExceptionの種類
+.. tabularcolumns:: |p{0.40\linewidth}|p{0.60\linewidth}|
+.. list-table:: \ ``AccessDeniedException``\ を継承したCSRF対策により発生するExceptionの種類
    :header-rows: 1
-   :widths: 10 90
+   :widths: 40 60
 
    * - Exception
      - 発生理由
-   * - | AccessDeniedException
-     - | 権限の無いページにアクセスした場合に発生する。
-   * - | InvalidCsrfTokenException
+   * - | \ ``org.springframework.security.web.csrf.InvalidCsrfTokenException``\ 
      - | クライアントからリクエストしたcsrfトークンとサーバで保持しているcsrfトークンが一致しない場合に発生する。
-   * - | MissingCsrfTokenException
+   * - | \ ``org.springframework.security.web.csrf.MissingCsrfTokenException``\ 
      - | csrfトークンが存在しない場合に発生する。
        | デフォルトのセッションにトークンを保持している場合はセッションタイムアウトになるため、発生しない。
        | \ ``<sec:csrf>``\ 要素の \ ``token-repository-ref``\ 属性でトークンの保存先をキャッシュやDBなどに変更し、一定期間などで削除した場合に発生する。
@@ -239,7 +237,7 @@ CSRFトークン用の\ ``RequestDataValueProcessor``\ 実装クラスを利用�
 
 .. note::
 
-  CSRFトークンの生成及びチェックは \ ``<sec:csrf />``\ の設定で有効になるCsrfFilterにより行われるので、開発者はControllerで特にCSRF対策は意識しなくてよい。
+  CSRFトークンの生成及びチェックは \ ``<sec:csrf />``\ の設定で有効になる \``CsrfFilter``\ により行われるので、開発者はControllerで特にCSRF対策は意識しなくてよい。
 
 .. _csrf_form-tag-token-send:
 
@@ -324,7 +322,7 @@ CSRFトークンを明示的に埋め込む方法
 
 \ ``<form:form>``\ タグを使用しない場合は、明示的に、\ ``<input type="hidden">``\ タグを追加する必要がある。
 
-\ ``<sec:csrf />``\ の設定で有効になるCsrfFilterにより \ ``org.springframework.security.web.csrf.CsrfToken``\ オブジェクトが、リクエストスコープの
+\ ``<sec:csrf />``\ の設定で有効になる \ ``CsrfFilter``\ により \ ``org.springframework.security.web.csrf.CsrfToken``\ オブジェクトが、リクエストスコープの
 \ ``_csrf``\ 属性に設定されるため、jspでは、以下のように設定すればよい
 
 .. code-block:: jsp
@@ -366,7 +364,7 @@ CSRFトークンを明示的に埋め込む方法
 
 AjaxによるCSRFトークンの送信
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-| ``<sec:csrf />`` の設定で有効になるCsrfFilterにより前述のようにリクエストパラメータからCSRFトークンを取得するだけでなく、
+| \ ``<sec:csrf />``\ の設定で有効になる \ ``CsrfFilter``\ が、前述のようにリクエストパラメータからCSRFトークンを取得するだけでなく、
 | HTTPリクエストヘッダーからもCSRFトークンを取得する。
 | Ajaxを利用する場合はHTTPヘッダーに、CSRFトークンを設定することを推奨する。JSON形式でリクエストを送る場合にも対応できるためである。
 

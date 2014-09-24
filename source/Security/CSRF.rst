@@ -122,7 +122,7 @@ spring-security.xmlの設定
    * - 項番
      - 説明
    * - | (1)
-     - | \ ``<sec:http>``\ 要素に\ ``<sec:csrf>``\ 要素を定義することで、Spring Security のcsrfトークンチェック機能を利用できるようになる。
+     - | \ ``<sec:http>``\ 要素に\ ``<sec:csrf>``\ 要素を定義することで、Spring Security のCSRFトークンチェック機能を利用できるようになる。
        | デフォルトでチェックされるHTTPメソッドについては、\ :ref:`こちら<csrf_default-add-token-method>`\ を参照されたい。
        | 詳細については、\ `Spring Securityのレファレンスドキュメント <http://docs.spring.io/spring-security/site/docs/3.2.x/reference/htmlsingle/#csrf-configure>`_\ を参照されたい。
    * - | (2)
@@ -155,11 +155,11 @@ spring-security.xmlの設定
    * - Exception
      - 発生理由
    * - | \ ``org.springframework.security.web.csrf.InvalidCsrfTokenException``\ 
-     - | クライアントからリクエストしたcsrfトークンとサーバで保持しているcsrfトークンが一致しない場合に発生する。
+     - | クライアントからリクエストしたCSRFトークンとサーバで保持しているCSRFトークンが一致しない場合に発生する。
    * - | \ ``org.springframework.security.web.csrf.MissingCsrfTokenException``\ 
-     - | csrfトークンが存在しない場合に発生する。
-       | デフォルトのセッションにトークンを保持している場合はセッションタイムアウトになるため、発生しない。
-       | \ ``<sec:csrf>``\ 要素の \ ``token-repository-ref``\ 属性でトークンの保存先をキャッシュやDBなどに変更し、一定期間などで削除した場合に発生する。
+     - | CSRFトークンが存在しない場合に発生する。
+       | デフォルトの設定ではトークンをHTTPセッションに保持するため、CSRFトークンが存在しないということはHTTPセッションが破棄されたことを意味する。そのためこの例外が発生する前にセッションタイムアウトの処理が行われる。
+       | \ ``<sec:csrf>``\ 要素の \ ``token-repository-ref``\ 属性でトークンの保存先をキャッシュやDBなどに変更し、一定期間後に削除する運用を行った場合に発生する。
 
 |
 

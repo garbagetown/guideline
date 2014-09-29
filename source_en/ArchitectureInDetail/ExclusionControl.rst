@@ -304,7 +304,7 @@ Exclusive control using database locking
 
     * Optimistic locking is necessary to ensure that the database transactions such as returning and changing the data on screen are cut off and the data remains unchanged in subsequent transaction.
     * When locking is needed in a single transaction, both pessimistic and optimistic locking can be implemented; however when pessimistic locking is used, lock is implemented at database level thus resulting in the possible increase in database processing cost. It is always preferable to use optimistic locking unless there are any specific issues.
-    * If optimistic locking is used in a process with higher update frequency wherein multiple tables are to be updated in a single transaction, the waiting time for obtaining a lock can be minimized. However the possibility of error occurrences increases since an exclusion error may occur in between the process.
+    * If optimistic locking is used in a process with higher update frequency wherein multiple tables are to be updated in a single transaction, the waiting time for obtaining a lock can be minimized. However the possibility of error occurrences increases since an exclusive error may occur in between the process.
       If pessimistic locking is used, the waiting time for obtaining a lock is likely to increase; however since exclusive error does not occur once lock is obtained, it reduces the possibility of error occurrences.
 
 .. tip:: **Business transaction**
@@ -526,7 +526,7 @@ See the example below illustrating a specific scenario.
     * - 6.
       - 〇
       - \-
-      - Update process of Staff B which was kept on hold in step 4 is now resumed since the transaction of Staff A is committed. At this time, since the version of Stock Table data is ``2``, update result is 0 records. When the update result is 0 records, an exclusion error occurs.
+      - Update process of Staff B which was kept on hold in step 4 is now resumed since the transaction of Staff A is committed. At this time, since the version of Stock Table data is ``2``, update result is 0 records. When the update result is 0 records, an exclusive error occurs.
 
         .. code-block:: sql
 
@@ -589,7 +589,7 @@ Exclusive control using pessimistic locking
 Exclusive control with pessimistic locking is used when it is applicable to any of the 3 cases given below.
 
 #. | Data to be updated is managed by dividing it in multiple tables.
-   | When the tables to be updated are divided into multiple tables, it is necessary to ensure that there are no updates by other transaction, till the update of each table is completed.
+   | When the data to be updated is divided into multiple tables, it is necessary to ensure that there are no updates by other transaction, till the update of each table is completed.
 
 #. | Status of the fetched data needs to be checked before performing update.
    | After completing the checks, it is necessary to ensure that there are no updates by other transaction.
@@ -600,7 +600,7 @@ Exclusive control with pessimistic locking is used when it is applicable to any 
 
 See the example below illustrating specific scenario.
 
-* Batch processing has already been executed, and data to be updated online is locked by pessimistic locking.
+* Batch processing has already started execution, and data to be updated online is locked by pessimistic locking.
 * Timeout period of 10 seconds is specified for the online processing and lock is obtained for the data to be updated.
 * Batch processing is terminated after 5 seconds (before timeout).
 

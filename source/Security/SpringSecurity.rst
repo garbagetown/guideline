@@ -14,6 +14,7 @@ Overview
 | 認証機能とは、なりすましによる不正アクセスに対抗するため、ユーザを識別する機能である。
 | 認可機能とは、認証された（ログイン中の）ユーザの権限に応じて、
 | システムのリソースに対するアクセス制御を行う機能である。
+| また、HTTPヘッダーを付与する機能を有する。
 
 | Spring Securityの概要図を、以下に示す。
 
@@ -45,6 +46,10 @@ Overview
 | 認可とは、認証された利用者がリソースにアクセスしようとしたとき、
 | アクセス制御処理でその利用者がそのリソースの使用を許可されていることを調べることである。
 | Spring Securityでの使用方法は、\ :doc:`Authorization`\ を参照されたい。
+
+HTTPヘッダー付与
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+|  \ `IETF <http://tools.ietf.org/>`_\ や\ `OWASP <https://www.owasp.org/>`_\ が定義しているセキュリティに関連するHTTPヘッダーを有効にするため、クライアントに指示するためのものである。
 
 |
 
@@ -150,7 +155,7 @@ spring-security.xmlの設定
             http://www.springframework.org/schema/context
             http://www.springframework.org/schema/context/spring-context.xsd">
         <sec:http  use-expressions="true">  <!-- (1) -->
-          <!-- omitted -->
+        <!-- omitted -->
         </sec:http>
     </beans>
 
@@ -163,11 +168,99 @@ spring-security.xmlの設定
        - 説明
      * - | (1)
        - | use-expressions="true"と記載することで、アクセス属性のSpring EL式を有効することができる。
+
   \
+
       .. note::
           use-expressions="true" で有効になるSpring EL式は、以下を参照されたい。
 
           \ `Expression-Based Access Control <http://static.springsource.org/spring-security/site/docs/3.1.x/reference/el-access.html>`_\
+
+Appendix
+--------------------------------------------------------------------------------
+
+HTTPヘッダー付与の設定
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+spring-security.xmlの\ ``<sec:http>``\ 内に\ ``<sec:headers>``\ を定義し、(1)から(5)を設定することで、HTTPレスポンスにセキュリティに関するヘッダを設定に対応して付与することができる。
+
+  .. code-block:: xml
+
+      <sec:http use-expressions="true">
+        <!-- omitted -->
+        <sec:headers>
+          <sec:cache-control />  <!-- (1) -->
+          <sec:content-type-options />  <!-- (2) -->
+          <sec:hsts />  <!-- (3) -->
+          <sec:frame-options />  <!-- (4) -->
+          <sec:xss-protection />  <!-- (5) -->
+        </sec:headers>
+        <!-- omitted -->
+      </sec:http>
+
+
+  .. tabularcolumns:: |p{0.10\linewidth}|p{0.40\linewidth}|p{0.40\linewidth}|p{0.10\linewidth}|
+  .. list-table:: Spring Security によるHTTPヘッダー付与
+     :header-rows: 1
+     :widths: 10 40 40 10
+
+     * - 項番
+       - デフォルト付与値
+       - 説明
+       - 指定可能オプション有無
+     * - | (1)
+       - | Cache-Control:no-cache, no-store, max-age=0, must-revalidate
+       - | クライアントにデータをキャッシュしないように指示する。
+       - | 無し
+     * - | (2)
+       - | X-Content-Type-Options:nosniff
+       - | コンテントタイプを無視して、クライアント側がコンテンツ内容により、自動的に処理方法を決めないように指示する。
+       - | 無し
+     * - | (3)
+       - | Strict-Transport-Security:max-age=31536000 ; includeSubDomains
+       - | HTTPSでアクセスしたサイトでは、HTTPSの接続を続けるように指示する。（HTTPでのサイトの場合、無視され、ヘッダ項目として付与されない。）
+       - | 有り
+     * - | (4)
+       - | X-Frame-Options:DENY
+       - | コンテンツをiframe内部に表示の可否を指示する。
+       - | 有り
+     * - | (5)
+       - | X-XSS-Protection:1; mode=block
+       - | XSSフィルター機能を有効にする指示をする。
+       - | 有り
+
+|
+
+  .. tabularcolumns:: |p{0.10\linewidth}|p{0.20\linewidth}|p{0.30\linewidth}|p{0.20\linewidth}|p{0.20\linewidth}|
+  .. list-table:: 主に使用する可能性のあるオプション
+     :header-rows: 1
+     :widths: 10 20 30 20 20
+
+     * - 項番
+       - オプション
+       - 説明
+       - 指定例
+       - 出力値
+     * - | (3)
+       - | max-age-seconds
+       - | 該当サイトに対してHTTPSのみでアクセスすることを記憶する秒数（デフォルトは365日）
+       - | max-age-seconds="1000"
+       - | Strict-Transport-Security:max-age=1000 ; includeSubDomains
+     * - | (3)
+       - | include-subdomains
+       - | サブドメインに対しての適用指示。デフォルト : true。falseを指定すると出力されなくなる。
+       - | include-subdomains="false"
+       - | Strict-Transport-Security:max-age=31536000
+     * - | (4)
+       - | policy
+       - | コンテンツをiframe内部に表示する許可方法を指示する。デフォルト : DENY（フレーム内に表示するのを全面禁止）。SAMEORIGINは同サイト内ページのみフレームに読み込みを許可する。
+       - | policy="SAMEORIGIN"
+       - | X-Frame-Options:SAMEORIGIN
+     * - | (5)
+       - | enabled,block
+       - | falseを指定して、XSSフィルターを無効にすることが可能となるが、**未指定を推奨する。**
+       - | enabled="false" block="false"
+       - | X-XSS-Protection:0
 
 .. raw:: latex
 

@@ -196,6 +196,14 @@ Appendix
 * X-Frame-Options
 * X-XSS-Protection
 
+.. note::
+
+    これらのヘッダに対する処理は、一部のブラウザではサポートされていない。ブラウザの公式サイトまたは以下のページを参照されたい。
+
+    * https://www.owasp.org/index.php/HTTP_Strict_Transport_Security (Strict-Transport-Security)
+    * https://www.owasp.org/index.php/Clickjacking_Defense_Cheat_Sheet (X-Frame-Options)
+    * https://www.owasp.org/index.php/List_of_useful_HTTP_headers (X-Content-Type-Options, X-XSS-Protection)
+
 
 これらは以下の(1)から(5)のように個別設定も可能である。必要に応じて取捨選択されたい。
 
@@ -212,6 +220,36 @@ Appendix
       </sec:headers>
       <!-- omitted -->
     </sec:http>
+
+.. tabularcolumns:: |p{0.1\linewidth}|p{0.45\linewidth}||p{0.45\linewidth}|
+.. list-table:: 未設定時に想定される問題と設定時に想定される動作
+   :header-rows: 1
+   :widths: 10 45 45
+
+   * - 項番
+     - 未設定時に想定される問題
+     - 設定時に想定される動作
+   * - | (1)
+     - | キャッシュが有効であると開発者がサーバ上では変更を実施済みであるが、利用者はキャッシュが表示されるばかりで更新したことが反映されないということがある。
+     - | キャッシュしないように指示をして、サーバの情報を常に取得するようにする。
+   * - | (2)
+     - | Content-Typeで内容を決めずにコンテントの中身を調べて動作させる内容を決めてしまい、想定しないScriptが実行される。
+     - | Content-Typeで内容を決めずにコンテントの中身を調べて動作させる内容を決めてしまうということを排除する。MIMEタイプが一致しない場合、Scriptが実行されることを制限する。
+   * - | (3)
+     - | 中間攻撃者によってHTTPリクエストを傍受し、リダイレクトによって悪意のあるサイトへ誘導される。
+     - | 一度正規のWebサイトへHTTPSでアクセスすれば、ブラウザは自動的にHTTPSのみを用いるよう理解して、悪意のあるサイトへ誘導されるという中間者攻撃の実行を防ぐ。
+   * - | (4)
+     - | 悪意あるWebサイトAを閲覧した際に“iframe”というHTMLタグを使い、他の「サイトB」を配置し、ユーザに見えないように透過処理をする。ユーザは、「サイトB」の存在を見た目で知ることはできない。
+       | 例えば、この「サイトB」が、投稿サイトに悪意ある文言を自動的に送信するように仕込まれ、クリックしただけであたかもユーザが投稿したように見せかけることができる。
+     - | 自身の作成したWebサイトが他のWebサイトに“iframe”を利用して読み込まれないようにする。
+   * - | (5)
+     - | 無害なWebサイトが改竄されて悪意のあるコードやスクリプトが埋め込まれることにより、入力した情報である例えばログイン情報などが悪意をもった第三者によって漏洩する可能性がある。
+       | ユーザが認識せずに他サイトのスクリプトを呼び出し実行するよう仕向けることが可能なでサイトを横断するという意味で「クロスサイト」との名前がついている。
+       | Cookieデータの盗聴や改竄が可能であるため、ショッピングサイトで利用したCookieを横取りして、本人になりすまし、物品購入を行ったり、Cookieを認証やセッション管理に使っているサイトに侵入し、深刻な損害を与える可能性がある。
+       | 利用者がとれる根本対策はほとんど無い。（安全であることがわかっているサイト以外は利用しないというほとんど実現不可能と思える対策を実施するしかない。）
+     - | ブラウザに実装されているXSSフィルターによって、有害なスクリプトと判断された場合に、実行するかどうかをユーザに問い合わせるか、無効にされる。
+
+|
 
 .. tabularcolumns:: |p{0.05\linewidth}|p{0.45\linewidth}|p{0.40\linewidth}|p{0.10\linewidth}|
 .. list-table:: Spring Security によるHTTPヘッダー付与
@@ -242,13 +280,15 @@ Appendix
      - | 有り
    * - | (5)
      - | \ ``X-XSS-Protection:1; mode=block``\ 
-     - | XSSフィルター機能を有効にする指示をする。
+     - | \ `XSS攻撃 <https://www.owasp.org/index.php/Cross-site_Scripting_(XSS)>`_\ を検出できるフィルターが実装されているブラウザに対して、XSSフィルター機能を有効にする指示をする。
      - | 有り
+
+|
 
 個別設定した場合は属性を設定可能である。設定可能な属性をいくつか説明する。
 
 .. tabularcolumns:: |p{0.05\linewidth}|p{0.20\linewidth}|p{0.30\linewidth}|p{0.20\linewidth}|p{0.25\linewidth}|
-.. list-table:: 主に使用する可能性のあるオプション
+.. list-table:: 設定可能な属性
    :header-rows: 1
    :widths: 5 20 30 20 25
 
@@ -281,13 +321,6 @@ Appendix
 
 詳細については\ `公式リファレンス <http://docs.spring.io/spring-security/site/docs/3.2.4.RELEASE/reference/htmlsingle/#default-security-headers>`_\ を参照されたい。
 
-.. note::
-
-    これらのヘッダに対する処理は、一部のブラウザではサポートされていない。ブラウザの公式サイトまたは以下のページを参照されたい。
-
-    * https://www.owasp.org/index.php/HTTP_Strict_Transport_Security (Strict-Transport-Security)
-    * https://www.owasp.org/index.php/Clickjacking_Defense_Cheat_Sheet (X-Frame-Options)
-    * https://www.owasp.org/index.php/List_of_useful_HTTP_headers (X-Content-Type-Options, X-XSS-Protection)
     
 .. raw:: latex
 

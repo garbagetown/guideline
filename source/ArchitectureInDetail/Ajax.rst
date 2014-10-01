@@ -585,8 +585,7 @@ Ajaxを使ってフォームのデータをPOSTし、処理結果を取得する
 
     <meta name="contextPath" content="${pageContext.request.contextPath}" />
 
-    <meta name="_csrf_token" content="${_csrf.token}" />
-    <meta name="_csrf_headerName" content="${_csrf.headerName}" />
+    <sec:csrfMetaTags />
 
     <!-- omitted -->
 
@@ -672,7 +671,7 @@ Ajaxを使ってフォームのデータをPOSTし、処理結果を取得する
      - | 説明
    * - | (9)
      - | POSTメソッドでリクエストを行う場合、CSRFトークンをHTTPヘッダに設定して送信する必要がある。
-       | 上記例では、ヘッダ名とトークン値はHTMLの ``<meta>`` 要素に設定し、JavaScriptで値を取得するようにしている。
+       | 上記例では、\ ``<sec:csrfMetaTags />``\ を利用して ``<meta>`` 要素にCSRFトークンヘッダー名とCSRFトークン値を設定し、JavaScriptで値を取得するようにしている。
        | CSRF対策の詳細については、 「 :doc:`../Security/CSRF` 」を参照されたい。
    * - | (10)
      - | フォームに指定された数値をリクエストパラメータに変換し、POSTメソッドで ``/ajax/plusForForm`` に対してリクエストを送信するAjax関数。
@@ -713,8 +712,8 @@ Ajaxを使ってフォームのデータをPOSTし、処理結果を取得する
 
  .. tip::
 
-    上記例ではCSRFトークン値( ``${_csrf.token}`` )とCSRFトークンヘッダー名( ``${_csrf.headerName}`` ) をHTMLの ``<meta>`` 要素に設定しておくことで、
-    JavaScriptのコードからJSPのコードを排除している。
+    上記例では\ ``<sec:csrfMetaTags />``\ を利用して、CSRFトークン値( ``${_csrf.token}`` )とCSRFトークンヘッダー名( ``${_csrf.headerName}`` ) をHTMLの ``<meta>`` 要素に設定しておくことで、
+    JavaScriptのコードからJSPのコードを排除している。\ :ref:`csrf_ajax-token-setting`\ を参照されたい。
 
 |
 

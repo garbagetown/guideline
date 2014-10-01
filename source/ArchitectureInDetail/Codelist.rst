@@ -758,11 +758,11 @@ SimpleI18nCodeListの使用方法
      - 50000
    * - en
      - unlimited
-     - Less than $10,000
-     - Less than $20,000
-     - Less than $30,000
-     - Less than $40,000
-     - Less than $50,000
+     - Less than \\10,000
+     - Less than \\20,000
+     - Less than \\30,000
+     - Less than \\40,000
+     - Less than \\50,000
    * - ja
      - 上限なし
      - 10,000円以下

@@ -1038,6 +1038,53 @@ spring-security.xml
    * - | (5)
      - | \ ``success-handler-ref``\ 属性に、ログアウト成功後に呼び出される、ハンドラクラスを指定する。
 
+.. note::
+
+   \ :doc:`./CSRF`\ で説明している\ ``<sec:csrf>``\ を利用している場合は、CSRFトークンチェックが行われるため、ログアウトをPOSTで実施する必要がある。
+   CSRFトークンを埋め込む方法を以下に記述する。
+
+   * \ :ref:`csrf_formformtag-use`\
+   
+    .. code-block:: jsp
+
+        <form:form method="POST"
+          action="${pageContext.request.contextPath}/logout">
+          <input type="submit" value="Logout" />
+        </form:form>
+
+   * 出力されるHTML例
+     CSRFトークンがhiddenで設定されている。
+
+    .. code-block:: html
+
+        <form id="command" action="/first-springsecurity-web/logout" method="POST">
+          <input type="submit" value="Logout" />
+          <input type="hidden" name="_csrf" value="5826038f-0a84-495b-a851-c363e501b73b" />
+        </form>
+
+   * \ :ref:`csrf_formtag-use`\
+
+    .. code-block:: jsp
+
+        <form  method="POST"
+          action="${pageContext.request.contextPath}/logout">
+          <sec:csrfInput/>
+          <input type="submit" value="Logout" />
+        </form>
+
+   * 出力されるHTML例
+     CSRFトークンがhiddenで設定されている。
+
+    .. code-block:: html
+
+        <form  method="POST"
+          action="/first-springsecurity-web/logout">
+          <input type="hidden" name="_csrf" value="5826038f-0a84-495b-a851-c363e501b73b" />
+          <input type="submit" value="Logout" />
+        </form>
+
+
+
 \ ``<sec:remember-me>``\ 要素の設定
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -245,30 +245,30 @@ Appendix
    :widths: 5 45 40 10
 
    * - 項番
-     - デフォルトで出力されるHTTPレスポンスヘッダ
      - 説明
+     - デフォルトで出力されるHTTPレスポンスヘッダ
      - 属性有無
    * - | (1)
+     - | クライアントにデータをキャッシュしないように指示する。
      - | \ ``Cache-Control:no-cache, no-store, max-age=0, must-revalidate``\ 
        | \ ``Pragma: no-cache``\ 
        | \ ``Expires: 0``\ 
-     - | クライアントにデータをキャッシュしないように指示する。
      - | 無し
    * - | (2)
-     - | \ ``X-Content-Type-Options:nosniff``\ 
      - | コンテントタイプを無視して、クライアント側がコンテンツ内容により、自動的に処理方法を決めないように指示する。
+     - | \ ``X-Content-Type-Options:nosniff``\ 
      - | 無し
    * - | (3)
-     - | \ ``Strict-Transport-Security:max-age=31536000 ; includeSubDomains``\ 
      - | HTTPSでアクセスしたサイトでは、HTTPSの接続を続けるように指示する。（HTTPでのサイトの場合、無視され、ヘッダ項目として付与されない。）
+     - | \ ``Strict-Transport-Security:max-age=31536000 ; includeSubDomains``\ 
      - | 有り
    * - | (4)
-     - | \ ``X-Frame-Options:DENY``\ 
      - | コンテンツをiframe内部に表示の可否を指示する。
+     - | \ ``X-Frame-Options:DENY``\ 
      - | 有り
    * - | (5)
-     - | \ ``X-XSS-Protection:1; mode=block``\ 
      - | \ `XSS攻撃 <https://www.owasp.org/index.php/Cross-site_Scripting_(XSS)>`_\ を検出できるフィルターが実装されているブラウザに対して、XSSフィルター機能を有効にする指示をする。
+     - | \ ``X-XSS-Protection:1; mode=block``\ 
      - | 有り
 
 |

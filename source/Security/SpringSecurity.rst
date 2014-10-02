@@ -190,22 +190,40 @@ Appendix
 
 本設定で、以下の項目に関するHTTPレスポンスヘッダが設定される。
 
-* Cache Control
-* Content Type Options
-* HTTP Strict Transport Security
+* Cache-Control
+* X-Content-Type-Options
+* Strict-Transport-Security
 * X-Frame-Options
 * X-XSS-Protection
 
-.. note::
+.. tabularcolumns:: |p{0.2\linewidth}|p{0.5\linewidth}||p{0.3\linewidth}|
+.. list-table:: 
+   :header-rows: 1
+   :widths: 20 50 30
 
-    これらのヘッダに対する処理は、一部のブラウザではサポートされていない。ブラウザの公式サイトまたは以下のページを参照されたい。
+   * - HTTPヘッダ名
+     - 設定が不適切(未設定含む)な場合の問題
+     - 適切に設定した場合の挙動
+   * - | \ ``Cache-Control``\ 
+     - | あるユーザーがログインして閲覧できるコンテンツがキャッシュされ、ログアウト後に別ユーザーも閲覧できてしまう場合がある。
+     - | コンテンツをキャッシュしないように指示をして、ブラウザがサーバの情報を常に取得するようにする。
+   * - | \ ``X-Content-Type-Options``\ 
+     - | ブラウザが、Content-Typeで内容を決めずにコンテンツの中身を調べて動作させる内容を判断してしまい、想定しないScriptが実行されてしまう場合がある。
+     - | ブラウザが、Content-Typeで内容を決めずにコンテンツの中身を調べて動作させる内容を判断しないようにする。MIMEタイプが一致しない場合、Scriptが実行されることを制限する。
+   * - | \ ``Strict-Transport-Security``\ 
+     - | セキュアなページにHTTPSでアクセスされることを期待しているにも関わらず、HTTPでアクセスされた際に、HTTP由来の攻撃を受ける可能性がある。(例: 中間攻撃者がユーザーのHTTPリクエストを傍受し、悪意のあるサイトへリダイレクトさせる。)
+     - | 一度正規のWebサイトへHTTPSでアクセスすれば、ブラウザは自動的にHTTPSのみを用いるよう理解して、悪意のあるサイトへ誘導されるという中間者攻撃の実行を防ぐ。
+   * - | \ ``X-Frame-Options``\ 
+     - | 悪意あるWebサイトAの画面を透過処理で見えなくし、代わりに\ ``<iframe>``\ タグで他の正常なサイトBを埋め込むと、攻撃者はユーザにサイトBのつもりでサイトAにアクセスさせることができる。
+       | この状況において、サイトAの送信ボタンとサイトBのリンクの位置を重ねると、攻撃者はユーザーに、正常なサイトBのリンクをクリックしたつもりでサイトAによる悪意のあるリクエストを送信させることができる。(\ `Clickjacking <https://www.owasp.org/index.php/Clickjacking>`_\ )
+     - | 自身の作成したWebサイト(=サイトB)が他のWebサイト(=サイトA)に\ ``<iframe>``\ タグを利用して読み込まれないようにする。
+   * - | \ ``X-XSS-Protection``\ 
+     - | ブラウザに実装されているXSSフィルターによる有害スクリプトの判定が無効化される。
+     - | ブラウザに実装されているXSSフィルターが、有害なスクリプトとを判断して実行するかどうかをユーザに問い合わせる、または無効にする(挙動はブラウザによって異なる)。
 
-    * https://www.owasp.org/index.php/HTTP_Strict_Transport_Security (Strict-Transport-Security)
-    * https://www.owasp.org/index.php/Clickjacking_Defense_Cheat_Sheet (X-Frame-Options)
-    * https://www.owasp.org/index.php/List_of_useful_HTTP_headers (X-Content-Type-Options, X-XSS-Protection)
 
 
-これらは以下の(1)から(5)のように個別設定も可能である。必要に応じて取捨選択されたい。
+上記設定は以下の(1)から(5)のように個別設定も可能である。必要に応じて取捨選択されたい。
 
 .. code-block:: xml
 
@@ -220,36 +238,6 @@ Appendix
       </sec:headers>
       <!-- omitted -->
     </sec:http>
-
-.. tabularcolumns:: |p{0.1\linewidth}|p{0.45\linewidth}||p{0.45\linewidth}|
-.. list-table:: 未設定時に想定される問題と設定時に想定される動作
-   :header-rows: 1
-   :widths: 10 45 45
-
-   * - 項番
-     - 未設定時に想定される問題
-     - 設定時に想定される動作
-   * - | (1)
-     - | キャッシュが有効であると開発者がサーバ上では変更を実施済みであるが、利用者はキャッシュが表示されるばかりで更新したことが反映されないということがある。
-     - | キャッシュしないように指示をして、サーバの情報を常に取得するようにする。
-   * - | (2)
-     - | Content-Typeで内容を決めずにコンテントの中身を調べて動作させる内容を決めてしまい、想定しないScriptが実行される。
-     - | Content-Typeで内容を決めずにコンテントの中身を調べて動作させる内容を決めてしまうということを排除する。MIMEタイプが一致しない場合、Scriptが実行されることを制限する。
-   * - | (3)
-     - | 中間攻撃者によってHTTPリクエストを傍受し、リダイレクトによって悪意のあるサイトへ誘導される。
-     - | 一度正規のWebサイトへHTTPSでアクセスすれば、ブラウザは自動的にHTTPSのみを用いるよう理解して、悪意のあるサイトへ誘導されるという中間者攻撃の実行を防ぐ。
-   * - | (4)
-     - | 悪意あるWebサイトAを閲覧した際に“iframe”というHTMLタグを使い、他の「サイトB」を配置し、ユーザに見えないように透過処理をする。ユーザは、「サイトB」の存在を見た目で知ることはできない。
-       | 例えば、この「サイトB」が、投稿サイトに悪意ある文言を自動的に送信するように仕込まれ、クリックしただけであたかもユーザが投稿したように見せかけることができる。
-     - | 自身の作成したWebサイトが他のWebサイトに“iframe”を利用して読み込まれないようにする。
-   * - | (5)
-     - | 無害なWebサイトが改竄されて悪意のあるコードやスクリプトが埋め込まれることにより、入力した情報である例えばログイン情報などが悪意をもった第三者によって漏洩する可能性がある。
-       | ユーザが認識せずに他サイトのスクリプトを呼び出し実行するよう仕向けることが可能なでサイトを横断するという意味で「クロスサイト」との名前がついている。
-       | Cookieデータの盗聴や改竄が可能であるため、ショッピングサイトで利用したCookieを横取りして、本人になりすまし、物品購入を行ったり、Cookieを認証やセッション管理に使っているサイトに侵入し、深刻な損害を与える可能性がある。
-       | 利用者がとれる根本対策はほとんど無い。（安全であることがわかっているサイト以外は利用しないというほとんど実現不可能と思える対策を実施するしかない。）
-     - | ブラウザに実装されているXSSフィルターによって、有害なスクリプトと判断された場合に、実行するかどうかをユーザに問い合わせるか、無効にされる。
-
-|
 
 .. tabularcolumns:: |p{0.05\linewidth}|p{0.45\linewidth}|p{0.40\linewidth}|p{0.10\linewidth}|
 .. list-table:: Spring Security によるHTTPヘッダー付与
@@ -317,6 +305,15 @@ Appendix
      - | \ ``false``\ を指定して、XSSフィルターを無効にすることが可能となるが、有効化を推奨する。
      - | \ ``<sec:xss-protection enabled="false" block="false" />``\ 
      - | \ ``X-XSS-Protection:0``\ 
+
+
+.. note::
+
+    これらのヘッダに対する処理は、一部のブラウザではサポートされていない。ブラウザの公式サイトまたは以下のページを参照されたい。
+
+    * https://www.owasp.org/index.php/HTTP_Strict_Transport_Security (Strict-Transport-Security)
+    * https://www.owasp.org/index.php/Clickjacking_Defense_Cheat_Sheet (X-Frame-Options)
+    * https://www.owasp.org/index.php/List_of_useful_HTTP_headers (X-Content-Type-Options, X-XSS-Protection)
 
 
 詳細については\ `公式リファレンス <http://docs.spring.io/spring-security/site/docs/3.2.4.RELEASE/reference/htmlsingle/#default-security-headers>`_\ を参照されたい。

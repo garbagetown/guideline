@@ -569,18 +569,18 @@ Javaクラスで\ ``UserDetails``\ オブジェクトを利用する
 \ ``SecurityContextHolder``\ から\ ``UserDetails``\ オブジェクトを取得する方法は、どこからでもstaticメソッドで利用可能であり、
 便利な反面、モジュール結合度を高めてしまう。テストも実施しづらい。
 
-\ ``UserDetails``\ オブジェクトは\ ``java.security.Principal``\ オブジェクトからも取得可能であるため、Spring MVCのController内では以下のように\ ``SecurityContextHolder``\ を使用せずに\ ``UserDetails``\ オブジェクトを取得できる。
+\ ``UserDetails``\ オブジェクトは\ ``@AuthenticationPrincipal``\ を利用することで取得可能であるため、Spring MVCのController内では以下のように\ ``SecurityContextHolder``\ を使用せずに\ ``UserDetails``\ オブジェクトを取得できる。
 
 .. code-block:: java
 
-  @RequestMapping(method = RequestMethod.GET)
-  public String view(Principal principal, Model model) {
-      // get Authentication 
-      Authentication authentication = (Authentication) principal; // (1)
-      // get UserDetails
-      UserDetails userDetails = (UserDetails) authentication.getPrincipal(); // (2)
-      // omitted ...
-  }
+    @RequestMapping(method = RequestMethod.GET)
+    public String view(@AuthenticationPrincipal SampleUserDetails userDetails, // (1)
+            Model model) {
+        // get account object
+        Account account = userDetails.getAccount(); // (2)
+        model.addAttribute(account);
+        return "account/view";
+    }
 
 .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
 .. list-table::
@@ -590,9 +590,16 @@ Javaクラスで\ ``UserDetails``\ オブジェクトを利用する
    * - 項番
      - 説明
    * - | (1)
-     - | \ ``java.security.Principal``\ オブジェクトを\ ``org.springframework.security.core.Authentication``\ クラスにキャストする。
+     - | \ ``@AuthenticationPrincipal``\ を利用してログインしているユーザ情報を取得する。
    * - | (2)
-     - | \ ``Authentication``\ オブジェクトから\ ``UserDetails``\ オブジェクトを取得する。
+     - | \ ``SampleUserDetails``\ から\ アカウント情報を取得する。
+
+.. note::
+
+   | \ ``@AuthenticationPrincipal``\を利用した際は\ ``UserDetails``\型を継承したクラスを使用する必要がある。
+   | ``UserDetails``\型とした場合は、、\ ``org.springframework.security.core.userdetails.User``\の情報を取得することは可能である。
+   | しかし、通常は\ ``User``\型の他にもユーザ情報を保持している場合や、ユーザ情報をまとめる場合が多いと想定されるため、\ ``UserDetails``\を拡張した例とした。
+   | \ ``SampleUserDetails``\は\ ``UserDetails``\を拡張したクラスであり、詳細は :ref:`Tutorial_CreateAuthService` を参照されたい。
 
 \ **Controller内でUserDetailsオブジェクトにアクセスする場合はこちらの方法を推奨する**\ 。
 
@@ -600,7 +607,7 @@ Javaクラスで\ ``UserDetails``\ オブジェクトを利用する
 
   ServiceクラスではControllerが取得した\ ``UserDetails``\ オブジェクトの情報を使用し、\ ``SecurityContextHolder``\ は使用しないことを推奨する。
 
-  \ ``SecurityContextHolder``\ は\ ``java.security.Principal``\ オブジェクトにアクセスできないメソッド内でのみ利用することが望ましい。
+  \ ``SecurityContextHolder``\ は\ ``@AuthenticationPrincipal``\ を利用できないメソッド内でのみ利用することが望ましい。
 
 JSPで\ ``UserDetails``\ にアクセスする
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

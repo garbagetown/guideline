@@ -569,7 +569,25 @@ Javaクラスで\ ``UserDetails``\ オブジェクトを利用する
 \ ``SecurityContextHolder``\ から\ ``UserDetails``\ オブジェクトを取得する方法は、どこからでもstaticメソッドで利用可能であり、
 便利な反面、モジュール結合度を高めてしまう。テストも実施しづらい。
 
-\ ``UserDetails``\ オブジェクトは\ ``@AuthenticationPrincipal``\ を利用することで取得可能であるため、Spring MVCのController内では以下のように\ ``SecurityContextHolder``\ を使用せずに\ ``UserDetails``\ オブジェクトを取得できる。
+| \ ``UserDetails``\ オブジェクトは\ ``@AuthenticationPrincipal``\ を利用することで取得可能である。
+| \ ``@AuthenticationPrincipal``\を利用するためには\ ``org.springframework.security.web.bind.support.AuthenticationPrincipalArgumentResolver``\ を\ ``<mvc:argument-resolvers>``\ に設定する必要がある。
+
+- :file:`spring-mvc.xml`
+
+.. code-block:: xml
+   :emphasize-lines: 5-6
+
+    <mvc:annotation-driven>
+        <mvc:argument-resolvers>
+            <bean
+                class="org.springframework.data.web.PageableHandlerMethodArgumentResolver" />
+            <bean
+                class="org.springframework.security.web.bind.support.AuthenticationPrincipalArgumentResolver" />
+        </mvc:argument-resolvers>
+    </mvc:annotation-driven>
+
+
+Spring MVCのController内では以下のように\ ``SecurityContextHolder``\ を使用せずに\ ``UserDetails``\ オブジェクトを取得できる。
 
 .. code-block:: java
 

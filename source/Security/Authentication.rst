@@ -614,10 +614,10 @@ Spring MVCのController内では以下のように\ ``SecurityContextHolder``\ �
 
 .. note::
 
-   | \ ``@AuthenticationPrincipal``\を利用した際は\ ``UserDetails``\型を継承したクラスを使用する必要がある。
-   | ``UserDetails``\型とした場合は、、\ ``org.springframework.security.core.userdetails.User``\の情報を取得することは可能である。
-   | しかし、通常は\ ``User``\型の他にもユーザ情報を保持している場合や、ユーザ情報をまとめる場合が多いと想定されるため、\ ``UserDetails``\を拡張した例とした。
-   | \ ``SampleUserDetails``\は\ ``UserDetails``\を拡張したクラスであり、詳細は :ref:`Tutorial_CreateAuthService` を参照されたい。
+    \ ``@AuthenticationPrincipal``\アノテーションをつける引数の型は\ ``UserDetails``\型を継承したクラスである必要がある。
+    通常は\ :ref:`extendsuserdetailsservice`\ で作成する\ ``UserDetails``\継承クラスを使用すればよい。
+
+    \ ``SampleUserDetails``\ クラスは\ :doc:`Tutorial`\ で作成するクラスである。詳細は\ :ref:`Tutorial_CreateAuthService`\ を参照されたい。
 
 \ **Controller内でUserDetailsオブジェクトにアクセスする場合はこちらの方法を推奨する**\ 。
 
@@ -625,7 +625,7 @@ Spring MVCのController内では以下のように\ ``SecurityContextHolder``\ �
 
   ServiceクラスではControllerが取得した\ ``UserDetails``\ オブジェクトの情報を使用し、\ ``SecurityContextHolder``\ は使用しないことを推奨する。
 
-  \ ``SecurityContextHolder``\ は\ ``@AuthenticationPrincipal``\ を利用できないメソッド内でのみ利用することが望ましい。
+  \ ``SecurityContextHolder``\ は\ ``UserDetails``\ オブジェクトを引数で渡せないメソッド内でのみ利用することが望ましい。
 
 JSPで\ ``UserDetails``\ にアクセスする
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

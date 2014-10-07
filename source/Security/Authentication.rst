@@ -569,18 +569,36 @@ Javaクラスで\ ``UserDetails``\ オブジェクトを利用する
 \ ``SecurityContextHolder``\ から\ ``UserDetails``\ オブジェクトを取得する方法は、どこからでもstaticメソッドで利用可能であり、
 便利な反面、モジュール結合度を高めてしまう。テストも実施しづらい。
 
-\ ``UserDetails``\ オブジェクトは\ ``java.security.Principal``\ オブジェクトからも取得可能であるため、Spring MVCのController内では以下のように\ ``SecurityContextHolder``\ を使用せずに\ ``UserDetails``\ オブジェクトを取得できる。
+| \ ``UserDetails``\ オブジェクトは\ ``@AuthenticationPrincipal``\ を利用することで取得可能である。
+| \ ``@AuthenticationPrincipal``\を利用するためには\ ``org.springframework.security.web.bind.support.AuthenticationPrincipalArgumentResolver``\ を\ ``<mvc:argument-resolvers>``\ に設定する必要がある。
+
+- :file:`spring-mvc.xml`
+
+.. code-block:: xml
+   :emphasize-lines: 5-6
+
+    <mvc:annotation-driven>
+        <mvc:argument-resolvers>
+            <bean
+                class="org.springframework.data.web.PageableHandlerMethodArgumentResolver" />
+            <bean
+                class="org.springframework.security.web.bind.support.AuthenticationPrincipalArgumentResolver" />
+        </mvc:argument-resolvers>
+    </mvc:annotation-driven>
+
+
+Spring MVCのController内では以下のように\ ``SecurityContextHolder``\ を使用せずに\ ``UserDetails``\ オブジェクトを取得できる。
 
 .. code-block:: java
 
-  @RequestMapping(method = RequestMethod.GET)
-  public String view(Principal principal, Model model) {
-      // get Authentication 
-      Authentication authentication = (Authentication) principal; // (1)
-      // get UserDetails
-      UserDetails userDetails = (UserDetails) authentication.getPrincipal(); // (2)
-      // omitted ...
-  }
+    @RequestMapping(method = RequestMethod.GET)
+    public String view(@AuthenticationPrincipal SampleUserDetails userDetails, // (1)
+            Model model) {
+        // get account object
+        Account account = userDetails.getAccount(); // (2)
+        model.addAttribute(account);
+        return "account/view";
+    }
 
 .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
 .. list-table::
@@ -590,9 +608,16 @@ Javaクラスで\ ``UserDetails``\ オブジェクトを利用する
    * - 項番
      - 説明
    * - | (1)
-     - | \ ``java.security.Principal``\ オブジェクトを\ ``org.springframework.security.core.Authentication``\ クラスにキャストする。
+     - | \ ``@AuthenticationPrincipal``\ を利用してログインしているユーザ情報を取得する。
    * - | (2)
-     - | \ ``Authentication``\ オブジェクトから\ ``UserDetails``\ オブジェクトを取得する。
+     - | \ ``SampleUserDetails``\ から\ アカウント情報を取得する。
+
+.. note::
+
+    \ ``@AuthenticationPrincipal``\アノテーションをつける引数の型は\ ``UserDetails``\型を継承したクラスである必要がある。
+    通常は\ :ref:`extendsuserdetailsservice`\ で作成する\ ``UserDetails``\継承クラスを使用すればよい。
+
+    \ ``SampleUserDetails``\ クラスは\ :doc:`Tutorial`\ で作成するクラスである。詳細は\ :ref:`Tutorial_CreateAuthService`\ を参照されたい。
 
 \ **Controller内でUserDetailsオブジェクトにアクセスする場合はこちらの方法を推奨する**\ 。
 
@@ -600,7 +625,7 @@ Javaクラスで\ ``UserDetails``\ オブジェクトを利用する
 
   ServiceクラスではControllerが取得した\ ``UserDetails``\ オブジェクトの情報を使用し、\ ``SecurityContextHolder``\ は使用しないことを推奨する。
 
-  \ ``SecurityContextHolder``\ は\ ``java.security.Principal``\ オブジェクトにアクセスできないメソッド内でのみ利用することが望ましい。
+  \ ``SecurityContextHolder``\ は\ ``UserDetails``\ オブジェクトを引数で渡せないメソッド内でのみ利用することが望ましい。
 
 JSPで\ ``UserDetails``\ にアクセスする
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

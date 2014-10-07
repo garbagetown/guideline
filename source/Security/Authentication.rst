@@ -1040,48 +1040,48 @@ spring-security.xml
 
 .. note::
 
-   \ :doc:`./CSRF`\ で説明している\ ``<sec:csrf>``\ を利用している場合は、CSRFトークンチェックが行われるため、ログアウトをPOSTで実施する必要がある。
-   CSRFトークンを埋め込む方法を以下に記述する。
+    \ :doc:`./CSRF`\ で説明している\ ``<sec:csrf>``\ を利用している場合は、CSRFトークンチェックが行われるため、\ **ログアウトのリクエストをPOSTで送信し、CSRFトークンも送信する必要がある**\ 。
+    CSRFトークンを埋め込む方法を以下に記述する。
 
-   * \ :ref:`csrf_formformtag-use`\
-   
-    .. code-block:: jsp
+    * \ :ref:`csrf_formformtag-use`\
 
-        <form:form method="POST"
-          action="${pageContext.request.contextPath}/logout">
-          <input type="submit" value="Logout" />
-        </form:form>
+        .. code-block:: jsp
+           :emphasize-lines: 1,4
 
-   * 出力されるHTML例
-     CSRFトークンがhiddenで設定されている。
+            <form:form method="POST"
+              action="${pageContext.request.contextPath}/logout">
+              <input type="submit" value="Logout" />
+            </form:form>
 
-    .. code-block:: html
+        この場合は以下のようなHTMLが出力される。CSRFトークンがhiddenで設定されている。
 
-        <form id="command" action="/first-springsecurity-web/logout" method="POST">
-          <input type="submit" value="Logout" />
-          <input type="hidden" name="_csrf" value="5826038f-0a84-495b-a851-c363e501b73b" />
-        </form>
+        .. code-block:: html
 
-   * \ :ref:`csrf_formtag-use`\
+            <form id="command" action="/your-context-path/logout" method="POST">
+              <input type="submit" value="Logout" />
+              <input type="hidden" name="_csrf" value="5826038f-0a84-495b-a851-c363e501b73b" />
+            </form>
 
-    .. code-block:: jsp
+    * \ :ref:`csrf_formtag-use`\
 
-        <form  method="POST"
-          action="${pageContext.request.contextPath}/logout">
-          <sec:csrfInput/>
-          <input type="submit" value="Logout" />
-        </form>
+        .. code-block:: jsp
+           :emphasize-lines: 3
 
-   * 出力されるHTML例
-     CSRFトークンがhiddenで設定されている。
+            <form  method="POST"
+              action="${pageContext.request.contextPath}/logout">
+              <sec:csrfInput/>
+              <input type="submit" value="Logout" />
+            </form>
 
-    .. code-block:: html
+        この場合も同様に以下のようなHTMLが出力される。CSRFトークンがhiddenで設定されている。
 
-        <form  method="POST"
-          action="/first-springsecurity-web/logout">
-          <input type="hidden" name="_csrf" value="5826038f-0a84-495b-a851-c363e501b73b" />
-          <input type="submit" value="Logout" />
-        </form>
+        .. code-block:: html
+
+            <form  method="POST"
+              action="/your-context-path/logout">
+              <input type="hidden" name="_csrf" value="5826038f-0a84-495b-a851-c363e501b73b" />
+              <input type="submit" value="Logout" />
+            </form>
 
 
 

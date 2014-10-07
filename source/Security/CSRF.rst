@@ -428,11 +428,11 @@ AjaxによるCSRFトークンの送信
    * - 項番
      - 説明
    * - | (1)
-     - | \ ``<sec:csrfMetaTags />``\ タグを設定することにより、\ ``<meta name="_csrf_parameter" content="_csrf" /><meta name="_csrf_header" content="X-CSRF-TOKEN" /><meta name="_csrf" content="**csrf token key**" />``\ が設定される。
+     - | \ ``<sec:csrfMetaTags />``\ タグを設定することにより、デフォルトでは\ ``<meta name="_csrf_parameter" content="_csrf" /><meta name="_csrf_header" content="X-CSRF-TOKEN" /><meta name="_csrf" content="**CSRF Token**" />``\ が設定される。
    * - | (2)
-     - | \ ``<meta>``\ タグに設定されたCSRFトークンを取得する。
+     - | \ ``<meta name="_csrf ...>``\ タグに設定されたCSRFトークンを取得する。
    * - | (3)
-     - | \ ``<meta>``\ タグに設定されたCSRFヘッダ名を取得する。
+     - | \ ``<meta name="_csrf_header" ...>``\ タグに設定されたCSRFヘッダ名を取得する。
    * - | (4)
      - | リクエストヘッダーに、\ ``<meta>``\ タグから取得したヘッダ名(デフォルト:X-CSRF-TOKEN)、CSRFトークンの値を設定する。
    * - | (5)

@@ -712,8 +712,10 @@ Ajaxを使ってフォームのデータをPOSTし、処理結果を取得する
 
  .. tip::
 
-    上記例では\ ``<sec:csrfMetaTags />``\ を利用して、CSRFトークン値( ``${_csrf.token}`` )とCSRFトークンヘッダー名( ``${_csrf.headerName}`` ) をHTMLの ``<meta>`` 要素に設定しておくことで、
+    上記例では\ ``<sec:csrfMetaTags />``\ を利用して、CSRFトークン値とCSRFトークンヘッダー名をHTMLの ``<meta>`` 要素に設定しておくことで、
     JavaScriptのコードからJSPのコードを排除している。\ :ref:`csrf_ajax-token-setting`\ を参照されたい。
+
+    尚、CSRFトークン値とCSRFトークンヘッダー名はそれぞれ\ ``${_csrf.token}``\ と\ ``${_csrf.headerName}``\ を用いても取得可能である。
 
 |
 

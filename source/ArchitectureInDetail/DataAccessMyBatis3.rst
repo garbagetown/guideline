@@ -1558,7 +1558,12 @@ MyBatis3では、検索結果(\ ``ResultSet``\)のカラムとJavaBeanのプロ�
 | ここでは、手動マッピングの使用方法を示す事が目的なので、自動マッピングでもマッピング可能なもっともシンプルなパターンを例に、説明を行う。
 
 実践的なマッピングの実装例については、
-「\ `MyBatis 3 REFERENCE DOCUMENTATION(Mapper XML Files-Advanced Result Maps-) <http://mybatis.github.io/mybatis-3/sqlmap-xml.html#Advanced_Result_Maps>`_ \」を参照されたい。
+
+* 「\ `MyBatis 3 REFERENCE DOCUMENTATION(Mapper XML Files-Advanced Result Maps-) <http://mybatis.github.io/mybatis-3/sqlmap-xml.html#Advanced_Result_Maps>`_ \」
+* 「:ref:`DataAccessMyBatis3AppendixAcquireRelatedObjectsAtOnce`」
+* 「:ref:`DataAccessMyBatis3AppendixNestedSelect`」
+
+を参照されたい。
 
 - XxxRepository.xml
 

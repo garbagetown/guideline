@@ -4932,14 +4932,14 @@ MyBatis3では、CLOBを\ ``java.lang.String``\にマッピングするための
     * - (1)
       - MyBatis3から提供されている\ ``BaseTypeHandler``\を親クラスに指定する。
 
-        その際、\ ``BaseTypeHandler``\のジェネリック型には、\ ``InputStream``\を指定する。
+        その際、\ ``BaseTypeHandler``\のジェネリック型には、\ ``Reader``\を指定する。
     * - (2)
-      - \ ``InputStream``\を\ ``PreparedStatement``\に設定する処理を実装する。
+      - \ ``Reader``\を\ ``PreparedStatement``\に設定する処理を実装する。
     * - (3)
-      - \ ``ResultSet``\又は\ ``CallableStatement``\から取得した\ ``Blob``\から\ ``InputStream``\を取得し、返り値として返却する。
+      - \ ``ResultSet``\又は\ ``CallableStatement``\から取得した\ ``Clob``\から\ ``Reader``\を取得し、返り値として返却する。
     * - (4)
-      - \ ``null``\を許可するカラムの場合、取得した\ ``Blob``\が\ ``null``\になる可能性があるため、
-        \ ``null``\チェックを行ってから\ ``InputStream``\を取得する必要がある。
+      - \ ``null``\を許可するカラムの場合、取得した\ ``Clob``\が\ ``null``\になる可能性があるため、
+        \ ``null``\チェックを行ってから\ ``Reader``\を取得する必要がある。
 
         上記実装例では、3つのメソッドで同じ処理が必要になるため、privateメソッドを作成している。
 

@@ -4738,13 +4738,6 @@ SQL文(又はSQL文の一部)を共有する事ができる。
         \ ``refid``\属性には、インクルードするSQLのID(\ ``sql``\要素の\ ``id``\属性に指定した値)を指定する。
 
 
- .. tip:: **SQLの定義順について**
-
-    共有されるSQLの定義(\ ``sql``\要素)は、
-    インクルードする側のSQLの定義(\ ``select``\、\ ``insert``\、\ ``update``\、\ ``delete``\要素)より前に記述する必要がある。
-
-|
-
 |
 
 .. _DataAccessMyBatis3HowToExtendTypeHandler:

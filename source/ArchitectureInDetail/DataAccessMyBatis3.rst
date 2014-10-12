@@ -695,6 +695,81 @@ MyBatis3の設定
 
 |
 
+.. _DataAccessMyBatis3HowToUseSettingsExecutorType:
+
+SQL実行モードの設定
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+MyBatis3では、SQLを実行するモードとして以下の3種類を用意している。
+
+| どのモードを使用するかは、各モードの特性と制約、及び性能要件を考慮して決定して頂きたい。
+| 実行モードの設定方法などについては、「:ref:`DataAccessMyBatis3HowToExtendExecutorType`」を参照されたい。
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.15\linewidth}|p{0.65\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 15 65
+
+    * - 項番
+      - モード
+      - 説明
+    * - (1)
+      - SIMPLE
+      - SQL実行毎に新しい\ ``PreparedStatement``\を作成する。
+
+        MyBatisのデフォルトの動作であり、ブランクプロジェクトも\ ``SIMPLE``\モードとなっている。
+    * - (2)
+      - REUSE
+      - ``PreparedStatement``\をキャッシュし再利用する。
+
+        同一トランザクション内で同じSQLを複数回実行する場合は、
+        \ ``REUSE``\モードで実行すると、\ ``SIMPLE``\モードと比較して性能向上が期待できる。
+
+        これは、SQLを解析して\ ``PreparedStatement``\を生成する処理の実行回数を減らす事ができるためである。
+    * - (3)
+      - BATCH
+      - 更新系のSQLをバッチ実行する。(\ ``java.sql.Statement#executeBatch()``\を使ってSQLを実行する)。
+
+        同一トランザクション内で更新系のSQLを連続して大量に実行する場合は、\ ``BATCH``\モードで実行すると、
+        \ ``SIMPLE``\モードや\ ``REUSE``\モードと比較して性能向上が期待できる。
+
+        これは、
+
+        * SQLを解析して\ ``PreparedStatement``\を生成する処理の実行回数
+        * サーバと通信する回数
+
+        を減らす事ができるためである。
+
+        ただし、\ ``BATCH``\モードを使用する場合は、MyBatisの動きが\ ``SIMPLE``\モードや\ ``SIMPLE``\モードと異なる部分がある。
+        具体的な違いと注意点については、「:ref:`DataAccessMyBatis3HowToExtendExecutorTypeBatchNotes`」を参照されたい。
+
+|
+
+.. _DataAccessMyBatis3HowToUseSettingsCache:
+
+キャッシュの設定
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+MyBatis3では、検索処理の処理性能を向上させるために、
+
+* 検索結果(JavaBean)をトランザクション又はステートメント単位でキャッシュするローカルキャッシュ
+* 検索結果(JavaBean)をグローバルな領域にキャッシュする2次キャッシュ
+
+の仕組みを提供している。
+
+キャッシュの設定は、性能要件などを考慮し、
+
+* ローカルキャッシュのスコープ
+* 2次キャッシュの利用有無
+* 2次キャッシュを利用する場合は、キャッシュ対象のEntityの選定と使用するアルゴリズム
+
+を決定して頂きたい。
+
+キャッシュの利用方法については、「:ref:`DataAccessMyBatis3HowToExtendCache`」を参照されたい。
+
+|
+
+
 .. _DataAccessMyBatis3HowToUseSettingsTypeAlias:
 
 TypeAliasの設定
@@ -3228,18 +3303,136 @@ Entityを1件更新する際の実装例を以下に示す。
     データベースの状態とEntityの状態を一致させておかないと、
     データ不整合が発生し、アプリケーションが期待通りの動作しない事になる。
 
+    この処理は、Plugin機能を使って透過的に実現する事もできる。
+    実装方法については、「:ref:`DataAccessMyBatis3AppendixPluginVersion`」を参照されたい。
+
 |
 
 .. _DataAccessMyBatis3HowToUseUpdateMultiple:
 
-[WIP] Entityの一括更新
+Entityの一括更新
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
- .. todo::
+Entityを一括で更新する際の実装例を以下に示す。
 
-    あとで、記載する。
+Entityを一括で更新する場合は、
+
+* 複数のレコードを同時に更新するUPDATE文を発行する
+
+* JDBCのバッチ更新機能を使用する
+
+方法がある。
+
+JDBCのバッチ更新機能を使用する方法については、「:ref:`DataAccessMyBatis3HowToExtendExecutorTypeBatch`」を参照されたい。
 
 |
+
+ここでは、複数のレコードを同時に更新するUPDATE文を発行する方法について説明する。
+
+* Repositoryインタフェースにメソッドを定義する。
+
+ .. code-block:: java
+
+    package com.example.domain.repository.todo;
+
+    import com.example.domain.model.Todo;
+    import org.apache.ibatis.annotations.Param;
+
+    import java.util.List;
+
+    public interface TodoRepository {
+
+        // (1)
+        int updateFinishedByTodIds(@Param("finished") boolean finished,
+                                   @Param("todoIds") List<String> todoIds);
+
+    }
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (1)
+      - 上記例では、引数に指定されたIDのリストに該当するレコードの\ ``finished``\カラムを更新するためのメソッドとして、
+        \ ``updateFinishedByTodIds``\メソッドを定義している。
+
+ .. note:: **Entityを一括更新するメソッドの返り値について**
+
+    Entityを一括更新するメソッドの返り値は、数値型(\ ``int``\又は\ ``long``\)でよい。
+    数値型にすると、更新されたレコード数を取得する事ができる。
+
+|
+
+* マッピングファイルにSQLを定義する。
+
+ .. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="com.example.domain.repository.todo.TodoRepository">
+
+        <update id="updateFinishedByTodIds">
+            UPDATE
+                t_todo
+            SET
+                finished = #{finished},
+                /* (2) */
+                version = version + 1
+            WHERE
+                /* (3) */
+                <foreach item="todoId" collection="todoIds"
+                         open="todo_id IN (" separator="," close=")">
+                    #{todoId}
+                </foreach>
+        </update>
+
+    </mapper>
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.10\linewidth}|p{0.70\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 10 70
+
+    * - 項番
+      - 属性
+      - 説明
+    * - (2)
+      - \-
+      - バージョンカラムを使用して楽観ロックを行う場合は、バージョンカラムを更新する。
+
+        更新しないと、楽観ロック制御が正しく動作しなくなる。
+        排他制御の詳細については、「:doc:`ExclusionControl`」を参照されたい。
+    * - (3)
+      - \-
+      - WHERE句に複数レコードを更新するための更新条件を指定する。
+    * -
+      - \-
+      - \ ``foreach``\要素を使用して、引数で渡されたIDのリストに対して繰り返し処理を行う。
+
+        上記例では、引数で渡されたIDのリストより、IN句を生成している。
+
+        \ ``foreach``\の詳細については、
+        「`MyBatis3 REFERENCE DOCUMENTATION (Dynamic SQL-foreach-) <http://mybatis.github.io/mybatis-3/dynamic-sql.html#foreach>`_\」を参照されたい。
+    * -
+      - collection
+      - 処理対象のコレクションを指定する。
+
+        上記例では、Repositoryのメソッド引数のIDのリスト(\ ``todoIds``\)に対して繰り返し処理を行っている。
+    * -
+      - item
+      - リストの中の1要素を保持するローカル変数名を指定する。
+    * -
+      - separator
+      - リスト内の要素間を区切るための文字列を指定する。
+
+        上記例では、IN句の区切り文字である\ ``","``\を指定している。
+
+|
+
 
 .. _DataAccessMyBatis3HowToUseDelete:
 
@@ -3420,13 +3613,96 @@ Entityを1件削除する際の実装例を以下に示す。
 .. _DataAccessMyBatis3HowToUseDeleteMultiple:
 
 
-[WIP] Entityの一括削除
+Entityの一括削除
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 
- .. todo::
+Entityを一括で削除する際の実装例を以下に示す。
 
-    あとで、記載する。
+Entityを一括で削除する場合は、
+
+* 複数のレコードを同時に削除するDELETE文を発行する
+
+* JDBCのバッチ更新機能を使用する
+
+方法がある。
+
+JDBCのバッチ更新機能を使用する方法については、「:ref:`DataAccessMyBatis3HowToExtendExecutorTypeBatch`」を参照されたい。
+
+|
+
+ここでは、複数のレコードを同時に削除するDELETE文を発行する方法について説明する。
+
+* Repositoryインタフェースにメソッドを定義する。
+
+ .. code-block:: java
+
+    package com.example.domain.repository.todo;
+
+    public interface TodoRepository {
+
+        // (1)
+        int deleteOlderFinishedTodo(Date criteriaDate);
+
+    }
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (1)
+      - 上記例では、基準日より前に作成され完了済みのレコードを削除するためのメソッドとして、
+        \ ``deleteOlderFinishedTodo``\メソッドを定義している。
+
+ .. note:: **Entityを一括削除するメソッドの返り値について**
+
+    Entityを一括削除するメソッドの返り値は、数値型(\ ``int``\又は\ ``long``\)でよい。
+    数値型にすると、削除されたレコード数を取得する事ができる。
+
+|
+
+* マッピングファイルにSQLを定義する。
+
+ .. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="com.example.domain.repository.todo.TodoRepository">
+
+        <delete id="deleteOlderFinishedTodo" parameterType="date">
+            <![CDATA[
+            DELETE FROM
+                t_todo
+            /* (2) */
+            WHERE
+                finished = TRUE
+            AND
+                created_at  < #{criteriaDate}
+            ]]>
+        </delete>
+
+    </mapper>
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (3)
+      - WHERE句に複数レコードを更新するための削除条件を指定する。
+
+        上記例では、
+
+        * 完了済み(\ ``finished``\が\ ``TRUE``\)
+        * 基準日より前に作成された(\ ``created_at``\が基準日より前)
+
+        を削除条件として指定している。
 
 |
 
@@ -4021,247 +4297,146 @@ bind要素の実装例
 
 .. _DataAccessMyBatis3HowToUseLikeEscape:
 
-[WIP] LIKE検索時のエスケープ
+LIKE検索時のエスケープ
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. todo::
+LIKE検索を行う場合は、検索条件として使用する値をLIKE検索用にエスケープする必要がある。
 
-    現在チェック中。
+LIKE検索用のエスケープ処理は、
+共通ライブラリから提供している\ ``org.terasoluna.gfw.common.query.QueryEscapeUtils`` \クラスのメソッドを使用することで実現する事ができる。
 
-
-| LIKE検索を行う場合は、検索条件として使用する値を、LIKE検索用にエスケープする
-  必要がある。
-| LIKE検索用のエスケープ処理は、共通ライブラリから提供している
-  \ ``org.terasoluna.gfw.common.query.QueryEscapeUtils`` \クラスのメソッドを使
-  用することで、実現できる。
-| 共通ライブラリから提供しているエスケープ処理の仕様については、
-  \ :doc:`DataAccessCommon` \の
-  \ :ref:`data-access-common_appendix_like_escape` \を参照されたい。
-| 以下に、共通ライブラリから提供しているエスケープ処理の、使用方法について説明
-  する。
-
-
-一致方法をQuery側で指定する場合の使用方法
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-| 一致方法(前方一致、後方一致、部分一致)の指定をJPQLとして指定する場合は、エス
-  ケープのみ行うメソッドを使用する。
-
-- XxxRepository.xml
+共通ライブラリから提供しているエスケープ処理の仕様については、
+「:ref:`data-access-common_appendix_like_escape`」を参照されたい。
 
  .. code-block:: xml
 
-    <!-- (1) (2) -->
-    <select id="findAllByWord" parameterType="String" resultMap="resultMap_Article">
-      SELECT
-        *
-      FROM
-        article
-      WHERE
-        title LIKE '%' || #{word} || '%' ESCAPE '~'
-      OR
-        overview LIKE '%' || #{word} || '%' ESCAPE '~'
+    <select id="findAllByCriteria" parameterType="TodoCriteria" resultType="Todo">
+        <!-- (1) -->
+        <bind name="todoTitleContainingCondition"
+              value="@org.terasoluna.gfw.common.query.QueryEscapeUtils@toContainingCondition(todoTitle)" />
+        SELECT
+            todo_id,
+            todo_title,
+            finished,
+            created_at,
+            version
+        FROM
+            t_todo
+        WHERE
+            /* (2) (3) */
+            todo_title LIKE #{todoTitleContainingCondition} ESCAPE '~'
+        ORDER BY
+            todo_id
     </select>
+
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
  .. list-table::
-    :widths: 10 80
     :header-rows: 1
+    :widths: 10 80
 
     * - 項番
       - 説明
     * - (1)
-      - SQL内に、LIKE検索用のワイルドカード(\ ``"%"`` \または\ ``"_"`` \)を指定
-        する。上記例では、引数\ ``word`` \の前後に、ワイルドカード(\ ``"%"`` \)
-        を指定することで、一致方法を部分一致にしている。
+      - \ ``bind``\要素(OGNL式)を使用して、共通ライブラリから提供しているLIKE検索用のエスケープ処理メソッドを呼び出す。
+
+        上記例では、部分一致用のエスケープ処理を行い\ ``todoTitleContainingCondition``\という変数に格納している。
+        \ ``QueryEscapeUtils@toContainingCondition(String)``\メソッドは、エスケープした文字列の前後に\ "``%``"\を付与するメソッドである。
     * - (2)
-      - 共通ライブラリから提供しているエスケープ処理は、エスケープ文字として
-        \ ``"~"`` \を使用しているため、 LIKE句の後ろに\ ``"ESCAPE '~'"`` \を指
-        定する。
-
-
-- Service
-
- .. code-block:: java
-
-    @Inject
-    XxxRepository xxxRepository;
-
-    @Transactional(readOnly = true)
-    public Page<Article> searchArticle(ArticleSearchCriteria criteria,
-            Pageable pageable) {
-
-        // (3)
-        String escapedWord = QueryEscapeUtils.toLikeCondition(criteria.getWord());
-
-        long total = xxxRepository.countByWord(escapedWord);
-        List<Article> contents = null;
-        if (0 < total) {
-            RowBounds rowBounds =
-                new RowBounds(pageable.getOffset(), pageable.getPageSize());
-            // (4)
-            contents = xxxRepository.findAllByWord(
-                    rowBounds, escapedWord);
-        } else {
-            contents = Collections.emptyList();
-        }
-        return new PageImpl<Article>(contents, pageable, total);
-    }
-
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
- .. list-table::
-    :widths: 10 80
-    :header-rows: 1
-
-    * - 項番
-      - 説明
+      - 部分一致用のエスケープを行った文字列を、LIKE句のバインド変数として指定する。
     * - (3)
-      - LIKE検索の一致方法をQuery側で指定する場合は、
-        \ ``QueryEscapeUtils#toLikeCondition(String)`` \メソッドを呼び出し、
-        LIKE検索用のエスケープのみ行う。
-    * - (4)
-      - LIKE検索用にエスケープされた値を、\ ``Repository`` \のバインドパラメー
-        タに渡す。同時に渡されるRowBoundsはMyBatisにより取得範囲条件として使用
-        される。
+      - ESCAPE句にエスケープ文字を指定する。
 
+        共通ライブラリから提供しているエスケープ処理では、
+        エスケープ文字として\ ``"~"``\を使用しているため、ESCAPE句に\ ``'~'``\を指定している。
 
-一致方法をロジック側で指定する場合の使用方法
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+ .. tip::
 
-| 一致方法(前方一致、後方一致、部分一致)をロジック側で判定する場合は、エスケー
-  プされた値にワイルドカードを付与するメソッドを使用する。
+     上記例では、部分一致用のエスケープ処理を行うメソッドを呼び出しているが、
 
-- XxxRepository.xml
+     * 前方一致用のエスケープ(\ ``QueryEscapeUtils@toStartingWithCondition(String)``\)
+     * 後方一致用のエスケープ(\ ``QueryEscapeUtils@toEndingWithCondition(String)``\)
+     * エスケープのみ(\ ``QueryEscapeUtils@toLikeCondition(String)``\)
 
- .. code-block:: xml
+     を行うメソッドも用意されている。
 
-    <!-- (1) -->
-    <select id="findAllByWord" parameterType="String" resultMap="resultMap_Article">
-      SELECT
-        *
-      FROM
-        article
-      WHERE
-        title LIKE #{word} ESCAPE '~'
-      OR
-        overview LIKE #{word} ESCAPE '~'
-    </select>
+     詳細は「:ref:`data-access-common_appendix_like_escape`」を参照されたい。
 
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
- .. list-table::
-    :widths: 10 80
-    :header-rows: 1
+ .. note::
 
-    * - 項番
-      - 説明
-    * - (1)
-      - SQL内に、LIKE検索用のワイルドカードは、指定しない。
+     上記例では、マッピングファイル内でエスケープ処理を行うメソッドを呼び出しているが、
+     Repositoryのメソッドを呼び出す前に、Serviceの処理としてエスケープ処理を行う方法もある。
 
+     コンポーネントの役割としては、マッピングファイルでエスケープ処理を行う方が適切なため、
+     本ガイドラインとしては、マッピングファイル内でエスケープ処理を行う事を推奨する。
 
-- Service
-
- .. code-block:: java
-
-    @Inject
-    XxxRepository xxxRepository;
-
-    @Transactional(readOnly = true)
-    public Page<Article> searchArticle(ArticleSearchCriteria criteria,
-            Pageable pageable) {
-
-        // (2)
-        String escapedWord  = QueryEscapeUtils
-                .toContainingCondition(criteria.getWord());
-
-        long total = xxxRepository.countByWord(escapedWord);
-        List<Article> contents = null;
-        if (0 < total) {
-            RowBounds rowBounds =
-                new RowBounds(pageable.getOffset(), pageable.getPageSize());
-            // (3)
-            contents = xxxRepository.findAllByWord(
-                    rowBounds, escapedWord);
-        } else {
-            contents = Collections.emptyList();
-        }
-        return new PageImpl<Article>(contents, pageable, total);
-    }
-
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
- .. list-table::
-    :widths: 10 80
-    :header-rows: 1
-
-    * - 項番
-      - 説明
-    * - (2)
-      - ロジック側で一致方法を指定する場合は、以下の何れかのメソッドを呼び出し、
-        LIKE検索用のエスケープとLIKE検索用のワイルドカードを付与する。
-        \ ``QueryEscapeUtils#toStartingWithCondition(String)`` \、
-        \ ``QueryEscapeUtils#toEndingWithCondition(String)`` \、
-        \ ``QueryEscapeUtils#toContainingCondition(String)`` \
-    * - (3)
-      - LIKE検索用にエスケープ＋ワイルドカードが付与された値を、
-        \ ``Repository`` \のバインドパラメータに渡す。同時に渡されるRowBoundsは
-        MyBatisにより取得範囲条件として使用される。
+|
 
 .. _DataAccessMyBatis3HowToUseSqlInjectionCountermeasure:
 
-[WIP] SQL Injection対策
+SQL Injection対策
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. todo::
+SQLを組み立てる際は、SQL Injectionが発生しないように注意する必要がある。
 
-    現在チェック中。
+MyBatis3では、SQLに値を埋め込む仕組みとして、以下の2つの方法を提供している。
 
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.20\linewidth}|p{0.60\linewidth}|
+ .. list-table::
+     :header-rows: 1
+     :widths: 10 20 60
 
-| SQLを組み立てる際は、SQL Injectionが発生しないように、注意する必要がある。
-| Mybatis3では、SQLに値を埋め込む仕組みを、2つ提供している。
+     * - 項番
+       - 方法
+       - 説明
+     * - (1)
+       -  バインド変数を使用して埋め込む
+       - この方法を使用すると、 SQL組み立て後に\ ``java.sql.PreparedStatement`` \を使用して値が埋め込められるため、
+         **安全に値を埋め込むことができる。**
 
-* | バインド変数を使って埋め込む方法。
-  | この方法を使用すると、 SQL組み立て後に\ ``java.sql.PreparedStatement`` \を
-    使用して、値が埋め込められるため、安全に値を埋め込むことができる。
-  | **ユーザからの入力値をSQLに埋め込む場合は、原則バインド変数を使用すること。**
-
-* | 置換変数を使って埋め込む方法。
-  | この方法を使用すると、SQLを組み立てるタイミングで、文字列として置換されてし
-    まうため、安全な値の埋め込みは、保証されない。
+         **ユーザからの入力値をSQLに埋め込む場合は、原則バインド変数を使用すること。**
+     * - (2)
+       -  置換変数を使用して埋め込む
+       - この方法を使用すると、SQLを組み立てるタイミングで文字列として置換されてしまうため、
+         **安全な値の埋め込みは保証されない。**
 
  .. warning::
 
-    ユーザからの入力値を置換変数を使って埋め込むと、SQL Injectionが発生する危険
-    性が高くなることを意識すること。ユーザからの入力値を置換変数を使って埋め込
-    む必要がある場合は、かならずSQL Injectionが発生しないことを保障するための、
-    入力チェックを実施すること。
+    ユーザからの入力値を置換変数を使って埋め込むと、
+    SQL Injectionが発生する危険性が高くなることを意識すること。
+
+    ユーザからの入力値を置換変数を使って埋め込む必要がある場合は、
+    SQL Injectionが発生しないことを保障するために、かならず入力チェックを行うこと。
 
     基本的には、 **ユーザからの入力値はそのまま使わないことを強く推奨する。**
 
+|
 
 バインド変数を使って埋め込む方法
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-| バインド変数を使用する場合は、 Inline Parametersを使用する。
-| Inline Parametersの使用例は、以下の通り。
+バインド変数の使用例を以下に示す。
 
  .. code-block:: xml
 
-    <insert id="insert" parameterType="Todo">
-      INSERT INTO todo
+    <insert id="create" parameterType="Todo">
+        INSERT INTO
+            t_todo
         (
-          todo_id,
-          todo_title,
-          finished,
-          created_at,
-          version
+            todo_id,
+            todo_title,
+            finished,
+            created_at,
+            version
         )
-      VALUES
+        VALUES
         (
-          <!-- (3) -->
-          #{todoId},
-          #{todoTitle},
-          #{finished},
-          #{createdAt},
-          1
+            /* (1) */
+            #{todoId},
+            #{todoTitle},
+            #{finished},
+            #{createdAt},
+            #{version}
         )
     </insert>
 
@@ -4272,29 +4447,71 @@ bind要素の実装例
 
     * - 項番
       - 説明
-    * - (3)
+    * - (1)
       - バインドする値が格納されているプロパティのプロパティ名を、
         \ ``#{`` \と\ ``}`` \で囲み、バインド変数として指定する。
 
+ .. tip::
+
+     バインド変数には、いくつかの属性を指定する事が出来る。
+
+     指定できる属性としては、
+
+     * javaType
+     * jdbcType
+     * typeHandler
+     * numericScale
+     * mode
+     * resultMap
+     * jdbcTypeName
+
+     がある。
+
+     基本的には、単純にプロパティ名を指定するだけで、MyBatisが適切な振る舞いを選択してくれる。
+     上記属性は、MyBatisが適切な振る舞いを選択してくれない時に指定すればよい。
+
+     属性の使い方については、
+     「\ `REFERENCE DOCUMENTATION(Mapper XML Files-Parameters-) <http://mybatis.github.io/mybatis-3/sqlmap-xml.html#Parameters>`_ 」を参照されたい。
+
+
+
+|
 
 置換変数を使って埋め込む方法
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-| バインド変数を使用する場合の使用例を、以下に示す。
+置換変数の使用例を以下に示す。
+
+
+* Repositoryインタフェースにメソッドを定義する。
+
+ .. code-block:: java
+
+    public interface TodoRepository {
+        List<Todo> findAllByCriteria(@Param("criteria") TodoCriteria criteria,
+                                     @Param("direction") String direction);
+    }
+
+* マッピングファイルにSQLを実装する。
 
  .. code-block:: xml
 
-    <select id="findByFinished"
-        parameterType="..." resultMap="resultMap_Todo">
-      SELECT
-        *
-      FROM
-        todo
-      WHERE
-        finished = #{finished}
-      ORDER BY
-        <!-- (4) -->
-        created_at ${direction}
+    <select id="findAllByCriteria" parameterType="TodoCriteria" resultType="Todo">
+        <bind name="todoTitleContainingCondition"
+              value="@org.terasoluna.gfw.common.query.QueryEscapeUtils@toContainingCondition(criteria.todoTitle)" />
+        SELECT
+            todo_id,
+            todo_title,
+            finished,
+            created_at,
+            version
+        FROM
+            t_todo
+        WHERE
+            todo_title LIKE #{todoTitleContainingCondition} ESCAPE '~'
+        ORDER BY
+            /* (1) */
+            todo_id ${direction}
     </select>
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
@@ -4304,35 +4521,73 @@ bind要素の実装例
 
     * - 項番
       - 説明
-    * - (4)
+    * - (1)
       - 置換する値が格納されているプロパティのプロパティ名を\ ``${`` \と
         \ ``}`` \で囲み、置換変数として指定する。上記例では、\ ``${direction}`` \
         の部分は、\ ``"DESC"`` \または\ ``"ASC"`` \で置換される。
 
  .. warning::
 
-    置換変数による埋め込みは、必ずアプリケーションとして安全な値であることを担
-    保した上で、テーブル名、カラム名、ソート条件などに限定して、使用することを
-    推奨する。
+    **置換変数による埋め込みは、必ずアプリケーションとして安全な値であることを担保した上で、**
+    **テーブル名、カラム名、ソート条件などに限定して使用することを推奨する。**
 
-    例えば、以下のようにコード値と実際に使用する安全な値をペアでMapに格納し、
-
-      .. code-block:: java
-
-        Map<String, String> safeValueMap = new HashMap<String, String>();
-        safeValueMap.put("1", "ASC");
-        safeValueMap.put("2", "DESC");
-
-    実際の入力はコード値になるようにして、SQLを実行する処理中で変換することが望
-    ましい。
+    例えば以下のように、コード値とSQLに埋め込むための値のペアを\ ``Map``\に格納しておき、
 
       .. code-block:: java
 
-        String direction = safeValueMap.get(input.getDirection());
+        Map<String, String> directionMap = new HashMap<String, String>();
+        directionMap.put("1", "ASC");
+        directionMap.put("2", "DESC");
 
-    \ :doc:`Codelist` \を使用しても良い。
+    入力値はコード値として扱い、SQLを実行する処理の中で安全な値に変換することが望ましい。
 
+      .. code-block:: java
 
+        String direction = directionMap.get(directionCode);
+        todoRepository.findAllByCriteria(criteria, direction);
+
+    上記例では\ ``Map``\を使用しているが、
+    共通ライブラリから提供している「\ :doc:`Codelist` \」を使用しても良い。
+    「\ :doc:`Codelist` \」を使用すると、入力チェックと連動する事ができるため、
+    より安全に値の埋め込みを行う事ができる。
+
+    - [projectName]-codelist.xml
+
+      .. code-block:: xml
+
+        <?xml version="1.0" encoding="UTF-8"?>
+        <beans xmlns="http://www.springframework.org/schema/beans"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+            <bean id="CL_DIRECTION" class="org.terasoluna.gfw.common.codelist.SimpleMapCodeList">
+                <property name="map">
+                    <map>
+                        <entry key="1" value="ASC" />
+                        <entry key="2" value="DESC" />
+                    </map>
+                </property>
+            </bean>
+        </beans>
+
+    - Serviceクラス
+
+      .. code-block:: java
+
+        @Inject
+        @Named("CL_DIRECTION")
+        CodeList directionCodeList;
+
+        // ...
+
+        public List<Todo> searchTodos(TodoCriteria criteria, String directionCode){
+            String direction = directionCodeList.asMap().get(directionCode);
+            List<Todo> todos = todoRepository.findAllByCriteria(criteria, direction);
+            return todos;
+        }
+
+|
 
 .. _DataAccessMyBatis3HowToExtend:
 
@@ -4725,126 +4980,114 @@ Joda-Time用のTypeHandlerの実装
 
 .. _DataAccessMyBatis3HowToExtendResultHandler:
 
-[WIP] ResultHandlerの実装
+ResultHandlerの実装
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. todo::
+MyBatis3では、検索結果を1件単位で処理する仕組みを提供している。
 
-    現在チェック中。
+この仕組みを利用すると、
 
+* DBより取得した値をJavaの処理で加工する
+* DBより取得した値などをJavaの処理として集計する
 
-| 検索結果が大量データの場合で、全データ取得後に業務ロジックを実行するとリソー
-  ス問題が発生する場合がある。
-| この時、検索結果のCSV出力など1件ごとに処理することが可能であればResultHandler
-  を使用することでリソースの消費量を抑えることができる。
+といった処理を行う際に、同時に消費するメモリの容量を最小限に抑える事ができる。
 
-- TodoRepository.xml
+例えば、検索結果をCSV形式のデータとしてダウンロードするような処理を実装する場合は、
+検索結果を1件単位で処理する仕組みを使用するとよい。
 
- .. code-block:: xml
+ .. note::
 
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-    <!-- (1) -->
-    <mapper namespace="todo.domain.repository.todo.TodoRepository">
-        <resultMap id="todoResultMap" type="Todo">
-            <result property="todoId" column="todo_id" />
-            <result property="todoTitle" column="todo_title" />
-            <result property="finished" column="finished" />
-            <result property="createAt" column="create_at" />
-        </resultMap>
+    **検索結果が大量になる可能性があり、且つJavaの処理で検索結果を1件ずつ処理する必要がある場合は、**
+    **この仕組みを使用することを強く推奨する。**
 
-        <!-- (2) -->
-        <select id="createCsvFile" resultMap="todoResultMap">
-          SELECT
-            todo_id,
-            todo_title,
-            finished,
-            create_at
-          FROM
-            todo
-        </select>
+    検索結果を1件単位で処理する仕組みを使用しない場合、
+    検索結果の全データ「1データのサイズ * 検索結果件数」をメモリ上に同時に確保することになり、
+    全てのデータに対して処理が終了するまでGC候補になることはない。
 
-    </mapper>
+    一方、検索結果を1件単位で処理する仕組みを使用した場合、
+    基本的には「1データのサイズ」をメモリ上に確保するだけであり、
+    1データの処理を終えた時点でGC候補となる。
 
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 10 80
+    例えば「1データのサイズ」が\ ``2KB``\で「検索結果件数」が\ ``10,000``\件だった場合、
 
-    * - 項番
-      - 説明
-    * - (1)
-      - namespace属性に、SQL処理とマッピングするJavaインタフェースクラスを指定
-        する。
-    * - (2)
-      - id属性とメソッド名、resultMap属性と戻り値クラスが対応する。
+    * まとめて処理を行う場合は、\ ``20MB``\のメモリ
+    * 1件単位で処理を行う場合は、\ ``2KB``\のメモリ
 
-- TodoResultHandler.java
+    が同時に消費される。シングルスレッドで動くアプリケーションであれば問題になる事はないが、
+    Webアプリケーションの様なマルチスレッドで動くアプリケーションの場合は、問題になる事がある。
 
- .. code-block:: java
+    仮に100スレッドで同時に処理を行った場合、
 
-    package todo.domain.service.todo;
+    * まとめて処理を行う場合は、\ ``2GB``\のメモリ
+    * 1件単位で処理を行う場合は、\ ``200KB``\のメモリ
 
-    import java.io.PrintWriter;
-    import todo.domain.model.Todo;
+    が同時に消費される。
 
-    // (1)
-    public class TodoResultHandler implements ResultHandler, AutoCloseable {
+    結果として、
 
-        private PrintWriter printWriter = null;
+    * まとめて処理を行う場合は、ヒープの最大サイズの指定によっては、メモリ枯渇によるシステムダウンやフルGCの頻発による性能劣化などが起こる可能性が高まる。
+    * 1件単位で処理を行う場合は、メモリ枯渇やコストの高いGC処理が発生する可能性を抑える事ができる。
 
-        TodoResultHandler(PrintWriter printWriter) {
-            this.printWriter = printWriter;
-        }
+    上記に挙げた数字は目安であり、実際の計測値ではないという点を補足しておく。
 
-        // (2)
-        @Override
-        public void handleResult(ResultContext context) {
-            Todo todo = (Todo) context.getResultObject();
+|
 
-            if (printWriter != null) {
-                printWriter.printf("%s,%s,%s,%s\n", todo.getTodoId(),
-                    todo.getTodoTitle(), todo.getFinished(),
-                    LocalDate.formDateFields(
-                        todo.getCreateAt()).toString("yyyy/MM/dd"));
-            }
-        }
+以下に、検索結果をCSV形式のデータとしてダウンロードする処理の実装例を示す。
 
-        @Override
-        public void close() {
-            printWriter.close();
-        }
-    }
-
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 10 80
-
-    * - 項番
-      - 説明
-    * - (1)
-      - ResultHandlerインタフェースクラスを実装する。
-    * - (2)
-      - レコード毎に処理されるhandleResultメソッドをオーバーライドし処理を実装
-        する。
-
-- TodoRepository.java
+* Repositoryインタフェースにメソッドを定義する。
 
  .. code-block:: java
-
-    package todo.domain.repository.todo;
-
-    import todo.domain.model.Todo;
-    import todo.domain.service.todo.TodoResultHandler;
 
     public interface TodoRepository {
 
-        // (3)
-        List<Todo> createCsvFile(TodoResultHandler handler);
+        // (1) (2)
+        void collectAllByCriteria(TodoCriteria criteria, ResultHandler resultHandler);
 
     }
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (1)
+      - メソッドの引数として、  \ ``org.apache.ibatis.session.ResultHandler``\を指定する。
+    * - (2)
+      - メソッドの返り値は、\ ``void``\型を指定する。
+
+        \ ``void``\以外を指定すると、\ ``ResultHandler``\が呼び出されなくなるので、注意すること。
+
+|
+
+* マッピングファイルにSQLを定義する。
+
+ .. code-block:: xml
+
+    <!-- (3) -->
+    <select id="collectAllByCriteria" parameterType="TodoCriteria" resultType="Todo">
+        SELECT
+            todo_id,
+            todo_title,
+            finished,
+            created_at,
+            version
+        FROM
+            t_todo
+        <where>
+            <if test="title != null">
+                <bind name="titleContainingCondition"
+                      value="@org.terasoluna.gfw.common.query.QueryEscapeUtils@toContainingCondition()" />
+                todo_titile LIKE #{titleContainingCondition} ESCAPE '~'
+            </if>
+            <if test="createdAt != null">
+                <![CDATA[
+                AND created_at < #{createdAt}
+                ]]>
+            </if>
+        </where>
+    </select>
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
  .. list-table::
@@ -4854,20 +5097,51 @@ Joda-Time用のTypeHandlerの実装
     * - 項番
       - 説明
     * - (3)
-      - メソッド名、メソッド戻り値をSQL定義と対応させる。この時、メソッド引数に
-        実装したResultHandlerクラスを指定することで、レコード毎にhandleResultが
-        処理される。
+      - マッピングファイルの実装は、通常の検索処理と同じである。
 
-- TodoService.java
+|
+
+* ServiceクラスにRepositoryをDIし、Repositoryインターフェースのメソッドを呼び出す。
 
  .. code-block:: java
 
-    package todo.domain.service.todo;
+    public class TodoServiceImpl implements TodoService {
 
-    public interface TodoService {
+        private static final DateTimeFormatter DATE_FORMATTER =
+            DateTimeFormat.forPattern("yyyy/MM/dd");
 
-        // (4)
-        void createCsvFile();
+        @Inject
+        TodoRepository todoRepository;
+
+        public void downloadTodos(TodoCriteria criteria,
+            final BufferedWriter downloadWriter) {
+
+            // (4)
+            ResultHandler handler = new ResultHandler() {
+                @Override
+                public void handleResult(ResultContext context) {
+                    Todo todo = (Todo) context.getResultObject();
+                    StringBuilder sb = new StringBuilder();
+                    try {
+                        sb.append(todo.getTodoId());
+                        sb.append(",");
+                        sb.append(todo.getTodoTitle());
+                        sb.append(",");
+                        sb.append(todo.isFinished());
+                        sb.append(",");
+                        sb.append(DATE_FORMATTER.print(todo.getCreatedAt().getTime()));
+                        downloadWriter.write(sb.toString());
+                        downloadWriter.newLine();
+                    } catch (IOException e) {
+                        throw new SystemException("e.xx.fw.9001", e);
+                    }
+                }
+            };
+
+            // (5)
+            todoRepository.collectAllByCriteria(criteria, handler);
+
+        }
 
     }
 
@@ -4879,31 +5153,95 @@ Joda-Time用のTypeHandlerの実装
     * - 項番
       - 説明
     * - (4)
-      - Controllerから呼ばれるServiceのメソッド名を定義する。
+      - \ ``ResultHandler``\のインスタンスを生成する。
 
-- TodoServiceImpl.java
+        \ ``ResultHandler``\の\ ``handleResult``\メソッドの中に、1件毎に行う処理を実装する。
 
- .. code-block:: java
+        上記例では、\ ``ResultHandler``\の実装クラスは作らず、無名オブジェクトとして\ ``ResultHandler``\の実装を行っている。
+        実装クラスを作成してもよいが、複数の処理で共有する必要がない場合は、無理に実装クラスを作成する必要はない。
+    * - (5)
+      - Repositoryインタフェースのメソッドを呼び出す。
 
-    package todo.domain.service.todo;
+        メソッドを呼び出す際に、(4)で生成した\ ``ResultHandler``\のインスタンスを引数に指定する。
 
-    // (5)
-    @Inject
-    TodoRepository todoRepository;
+        \ ``ResultHandler``\を使用した場合、MyBatisは以下の処理を検索結果の件数分繰り返す。
 
-    public class TodoServiceImpl implements TodoService {
+        * 検索結果からレコードを取得し、JavaBeanにマッピングを行う。
+        * \ ``ResultHandler``\インスタンスの\ ``handleResult(ResultContext)``\メソッドを呼び出す。
 
-        public void createCsvFile() {
-            tempFile = File.createTempFile("TodoList", ".csv");
-            PrintWriter printWriter = new PrintWriter(
-                new BufferedWriter(new FileWriter(tempFile)));
-            // (6)
-            try (TodoResultHandler handler = new TodoResultHandler(printWriter)) {
-                todoRepository.createCsvFile(handler);
-            }
-        }
+ .. warning:: **ResultHandler使用時の注意点**
 
-    }
+    \ ``ResultHandler``\を使用する場合、以下の２点に注意すること。
+
+    * MyBatis3では、検索処理の性能向上させる仕組みとして、検索結果をローカルキャッシュ及びグローバルな2次キャッシュに保存する仕組みを提供しているが、\ ``ResultHandler``\を引数に取るメソッドから返されるデータはキャッシュされない。
+    * 手動マッピングを使用して複数行のデータを一つのJavaオブジェクトにマッピングするステートメントに対して\ ``ResultHandler``\を使用した場合、不完全な状態(関連Entityのオブジェクトがマッピングされる前の状態)のオブジェクトが渡されるケースがある。
+
+ .. tip:: **ResultContextのメソッドについて**
+
+    \ ``ResultHandler#handleResult``\メソッドの引数である\ ``ResultContext``\には、以下のメソッドが用意がされている。
+
+     .. tabularcolumns:: |p{0.10\linewidth}|p{0.15\linewidth}|p{0.65\linewidth}|
+     .. list-table::
+         :header-rows: 1
+         :widths: 10 15 65
+
+         * - 項番
+           - メソッド
+           - 説明
+         * - (1)
+           - getResultObject
+           - \ ``select``\要素の  \ ``resultType``\属性で指定したJavaクラスのオブジェクトを取得するためのメソッド。
+         * - (2)
+           - getResultCount
+           - \ ``ResultHandler#handleResult``\メソッドの呼び出し回数を取得するためのメソッド。
+         * - (3)
+           - stop
+           - 以降のレコードに対する処理を中止するようにMyBatis側に通知するためのメソッド。
+             このメソッドは、以降のレコードを全て破棄したい場合に使用するとよい。
+
+    \ ``ResultContext``\には\ ``isStopped``\というメソッドもあるが、これはMyBatis側が使用するメソッドなので、説明は割愛する。
+
+|
+
+.. _DataAccessMyBatis3HowToExtendExecutorType:
+
+SQL実行モードの利用
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+MyBatis3では、SQLを実行するモードとして以下の3種類を用意しており、デフォルトは\ ``SIMPLE``\である。
+
+ここでは、
+
+* 実行モードの使用方法
+* バッチモードのRepository利用時の注意点
+
+| について説明を行う。
+| 実行モードの説明については、「:ref:`DataAccessMyBatis3HowToUseSettingsExecutorType`」を参照されたい。
+
+.. _DataAccessMyBatis3HowToExtendExecutorTypeReuse:
+
+PreparedStatement再利用モードの利用
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+実行モードを\ ``SIMPLE``\から\ ``REUSE``\に変更した場合、MyBatis内部の\ ``PreparedStatement``\の扱い方は変わるが、
+MyBatisの動作(使い方)は変わらない。
+
+実行モードをデフォルト(\ ``SIMPLE``\)から\ ``REUSE``\に変更する方法を、以下に示す。
+
+* mybatis-config.xml に設定を追加する。
+
+ .. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <!DOCTYPE configuration
+            PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+            "http://mybatis.org/dtd/mybatis-3-config.dtd">
+    <configuration>
+        <settings>
+            <!-- (1) -->
+            <setting name="defaultExecutorType" value="REUSE"/>
+        </settings>
+    </configuration>
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
  .. list-table::
@@ -4912,68 +5250,131 @@ Joda-Time用のTypeHandlerの実装
 
     * - 項番
       - 説明
-    * - (5)
-      - Injectにより、SQL処理とマッピングされたRepositoryインスタンスが注入され
-        る。
-    * - (6)
-      - メソッドの実行により、SQL処理が実行され、ResultHandler処理が実行され
-        る。
+    * - (1)
+      - \ ``defaultExecutorType``\に\ ``REUSE``\に変更する。
 
+        上記設定を行うと、デフォルト動作がPreparedStatement再利用モードになる。
 
 |
 
-.. _DataAccessMyBatis3HowToExtendBatchMode:
+.. _DataAccessMyBatis3HowToExtendExecutorTypeBatch:
 
-[WIP] バッチモードの使用
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+バッチモードの利用
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-.. todo::
+Mapperインタフェースの更新系メソッドの呼び出しを、全てバッチモードで実行する場合は、
+「:ref:`DataAccessMyBatis3HowToExtendExecutorTypeReuse`」と同じ方法で、
+実行モードを\ ``BATCH``\モードに変更すればよい。
 
-    現在チェック中。
+ただし、バッチモードはいくつかの制約事項があるため、
+実際のアプリケーション開発では\ ``SIMPLE``\又は\ ``REUSE``\モードと共存して使用するケースが想定される。
 
-| SQLを実行する場合に、性能向上を目的としたバッチモードが存在する。
-| バッチモードは、Preparedステートメントを使用して、同じSQL文でパラメータのみが
-  異なる処理を大量に実施する場合に性能向上を期待できる。
+例えば、
 
- .. warning:: **バッチモード時の注意点**
+* 大量のデータ更新を伴い性能要件を充たす事が最優先される処理では、バッチモードを使用する。
+* 楽観ロックの制御などデータの一貫性を保つために更新結果の判定が必要な処理では、\ ``SIMPLE``\又は\ ``REUSE``\モードを使用する。
 
-    バッチモードはinsert、update、delete等、戻り値に検索結果を返さない処理で使
-    用することができる。また、通常はinsert、update、deleteを実行した場合、処理
-    件数を戻り値として受け取ることができる。しかし、バッチモードで実行された場
-    合、Jdbcの仕様により正確な処理件数を返さない。そのため、取得した処理件数を
-    ロジックの分岐条件などに使用する事はできない。バッチモードを使用する場合
-    は、上記を仕様を考慮したうえで設計する必要がある。
+等の使い分けを行う場合である。
 
-| SQLの実行をバッチ実行する場合、SqlSessionDaoSupportの派生クラスをRepositoryと
-  して実装し、作成したRepositoryクラスをBean定義してバッチモードを適用する。
+ .. warning:: **実行モードを共存して使用する際の注意点**
 
-- [projectname]-infra.xml
+    アプリケーション内で複数の実行モードを使用する場合は、
+    **同一トランザクション内で実行モードを切り替える事が出来ないという点に注意すること。**
+
+    仮に同一トランザクション内で複数の実行モードを使用した場合は、MyBatisが矛盾を検知しエラーとなる。
+
+    これは、同一トランザクション内の処理において、
+
+    * XxxRepositoryのメソッド呼び出しは\ ``BATCH``\モードで実行する
+    * YyyRepositoryのメソッド呼び出しは\ ``REUSE``\モードで実行する
+
+    といった事が出来ないという事を意味する。
+
+    本ガイドラインをベースに作成するアプリケーションのトランザクション境界は、
+    Service又はRepositoryとなる。
+    そのため、**アプリケーション内で複数の実行モードを使用する場合は、**
+    **ServiceやRepositoryの設計を行う際に、実行モードを意識する必要がある。**
+
+    トランザクションを分離させたい場合は、ServiceやRepositoryのメソッドアノテーションとして、
+    \ ``@Transactional(propagation = Propagation.REQUIRES_NEW)``\を指定する事で実現する事ができる。
+    トランザクション管理の詳細については、「:ref:`service_transaction_management`」を参照されたい。
+
+|
+
+以降では、
+
+* 複数の実行モードを共存させるための設定方法
+* アプリケーションの実装例
+
+について説明を行う。
+
+|
+
+.. _DataAccessMyBatis3HowToExtendExecutorTypeBatchIndividualSetting:
+
+個別にバッチモードのRepositoryを作成するための設定
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+特定のRepositoryに対してバッチモードのRepositoryを作成したい場合は、
+MyBatis-Springから提供されている\ ``org.mybatis.spring.mapper.MapperFactoryBean``\を使用して、
+RepositoryのBean定義を行えばよい。
+
+下記の設定例では、
+
+* 通常使用するRepositoryとして\ ``REUSE``\モードのRepository
+* 特定のRepositoryに対して\ ``BATCH``\モードのRepository
+
+をBean登録している。
+
+- [projectname]-infra.xml にBean定義を追加する。
 
  .. code-block:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <beans xmlns="http://www.springframework.org/schema/beans"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-        xmlns:util="http://www.springframework.org/schema/util"
-        xsi:schemaLocation="http://www.springframework.org/schema/beans
-            http://www.springframework.org/schema/beans/spring-beans.xsd
-            http://www.springframework.org/schema/util
-            http://www.springframework.org/schema/util/spring-util.xsd
-            http://www.springframework.org/schema/data/jpa
-            http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:context="http://www.springframework.org/schema/context"
+           xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+           xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://mybatis.org/schema/mybatis-spring
+           http://mybatis.org/schema/mybatis-spring.xsd">
+
+        <bean id="sqlSessionFactory"
+              class="org.mybatis.spring.SqlSessionFactoryBean">
+            <property name="dataSource" ref="dataSource"/>
+            <property name="configLocation"
+                      value="classpath:META-INF/mybatis/mybatis-config.xml"/>
+        </bean>
 
         <!-- (1) -->
+        <bean id="sqlSessionTemplate"
+              class="org.mybatis.spring.SqlSessionTemplate">
+            <constructor-arg index="0" ref="sqlSessionFactory"/>
+            <constructor-arg index="1" value="REUSE"/>
+        </bean>
+
+        <mybatis:scan base-package="com.example.domain.repository"
+                      template-ref="sqlSessionTemplate"/> <!-- (2) -->
+
+        <!-- (3) -->
+        <bean id="batchSqlSessionTemplate"
+              class="org.mybatis.spring.SqlSessionTemplate">
+            <constructor-arg index="0" ref="sqlSessionFactory"/>
+            <constructor-arg index="1" value="BATCH"/>
+        </bean>
+
+        <!-- (4) -->
         <bean id="todoBatchRepository"
-            class="todo.domain.repository.todo.TodoBatchRepositoryImpl">
-            <!-- (2) -->
-            <property name="sqlSessionTemplate">
-                <bean class="org.mybatis.spring.SqlSessionTemplate">
-                    <constructor-arg index="0" ref="sqlSessionFactory" />
-                    <!-- (3) -->
-                    <constructor-arg index="1" value="BATCH" />
-                </bean>
-            </property>
+              class="org.mybatis.spring.mapper.MapperFactoryBean">
+            <!-- (5) -->
+            <property name="mapperInterface"
+                      value="com.example.domain.repository.todo.TodoRepository"/>
+            <!-- (6) -->
+            <property name="sqlSessionTemplate" ref="batchSqlSessionTemplate"/>
         </bean>
 
     </beans>
@@ -4986,151 +5387,99 @@ Joda-Time用のTypeHandlerの実装
     * - 項番
       - 説明
     * - (1)
-      - 作成したSqlSessionDaoSupport派生クラスをbean定義する。
+      - 通常使用するRepositoryで利用するための\ ``SqlSessionTemplate``\をBean定義する。
     * - (2)
-      - Repository実装クラスに、バッチモードを適用したSqlSessionTemplateを設定
-        する。
+      - 通常使用するRepositoryをスキャンしBean登録する。
+
+        \ ``template-ref``\属性に、(1)で定義した\ ``SqlSessionTemplate``\を指定する。
     * - (3)
-      - SqlSessionTemplateの第2引数にBATCHを指定することで、このRepositoryで実
-        行されるSQLのみがBATCHモードとなる。
+      - バッチモードのRepositoryで利用するための\ ``SqlSessionTemplate``\をBean定義する。
+    * - (4)
+      - バッチモード用のRepositoryをBean定義する。
 
+        \ ``id``\属性には、(2)でスキャンしたRepositoryのBean名と重複しない値を指定する。
+        (2)でスキャンされたRepositoryのBean名は、インタフェース名を「lowerCamelCase」にした値にとなる。
 
-複数件挿入(バッチ実行)
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-| 複数件のデータの挿入をバッチ実行する場合、以下のような実装となる。
-| 基本的には1件挿入と同じだが、SQL実行時にSqlSessionDaoSupportの派生クラスとし
-  て実装し、バッチモードを有効にしたRepositoryで行う。
-
-- TodoRepository.xml
-
- .. code-block:: xml
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-    <!-- (1) -->
-    <mapper namespace="todo.domain.repository.todo.TodoRepository">
-
-        <!-- (2) -->
-        <insert id="insert" parameterType="Todo" resultType="_int">
-          INSERT INTO
-            todo (
-              todo_id,
-              todo_title,
-              finished,
-              create_at
-            )
-          VALUES (
-            #{todo_id},
-            #{todo_title},
-            #{finished},
-            #{create_at}
-          )
-        </insert>
-
-    </mapper>
-
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.10\linewidth}|p{0.70\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 10 10 70
-
-    * - 項番
-      - 属性
-      - 説明
-    * - (1)
-      - namespace
-      - 定義したSQLとマッピングするJavaインタフェースクラスを指定する。
-    * - (2)
-      - id
-      - マッピングするJavaインタフェースクラスのメソッド名と対応させる。
-    * -
-      - parameterType
-      - 引数となるJavaクラスを指定する。
-    * -
-      - resultType
-      - 戻り値となるJavaクラスを指定する。
-
-- TodoRepository.java
-
- .. code-block:: java
-
-    package todo.domain.repository.todo;
-
-    import todo.domain.model.Todo;
-
-    public interface TodoRepository {
-
-        // (3)
-        int insert(Todo insertTodo);
-
-    }
-
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 10 80
-
-    * - 項番
-      - 説明
-    * - (3)
-      - メソッド名、メソッド引数、メソッド戻り値をSQL定義と対応させる。
+        上記例では、バッチモード用の\ ``TodoRepository``\が\ ``todoBatchRepository``\という名前のBeanでBean登録される。
+    * - (5)
+      - \ ``mapperInterface``\プロパティには、
+        バッチモードを利用するRepositoryのインタフェース名(FQCN)を指定する。
+    * - (6)
+      - \ ``sqlSessionTemplate``\プロパティには、
+        (3)で定義したバッチモード用の\ ``SqlSessionTemplate``\を指定する。
 
  .. note::
 
-    バッチモードでSQLを実行する場合、SqlSessionDaoSupportの派生クラスが
-    Repository本体となるが内部でMapperを使用するためのSQL定義ファイルとマッピン
-    グするインタフェースクラスを作成する。
+    ``SqlSessionTemplate``\をBean定義すると、アプリケーション終了時に以下の様なWARNログが出力される。
 
- .. warning::
+    これは、\ ``SqlSession``\インタフェースが\ ``java.io.Closeable``\を継承しているため、
+    SpringのApplicationContextの終了処理時に\ ``close``\メソッドが呼び出されている事が原因である。
 
-    insert処理の結果としてint値を取得する事ができるが、バッチモードで実行した場
-    合、この返却値はinsert件数とはならないため使用する事はできない。
+     .. code-block:: text
 
-- TodoBatchRepository.java
+        21:12:35.999 [Thread-2] WARN  o.s.b.f.s.DisposableBeanAdapter - Invocation of destroy method 'close' failed on bean with name 'sqlSessionTemplate'
+        java.lang.UnsupportedOperationException: Manual close is not allowed over a Spring managed SqlSession
+            at org.mybatis.spring.SqlSessionTemplate.close(SqlSessionTemplate.java:310) ~[mybatis-spring-1.2.2.jar:1.2.2]
+            at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_20]
+            at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_20]
+            at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_20]
+            at java.lang.reflect.Method.invoke(Method.java:483) ~[na:1.8.0_20]
+
+    上記ログが出力されても、アプリケーションの動作に影響はないため、システム運用上問題がなければ対策は不要である。
+
+    ただし、ログ監視などシステム運用上問題がある場合は、
+    SpringのApplicationContextの終了処理時に呼び出されるメソッド(\ ``destroy-method``\属性)を指定する事で、
+    ログ出力を抑止する事ができる。
+
+    下記例では、\ ``getExecutorType``\メソッドを呼び出すように指定している。
+    \ ``getExecutorType``\メソッドは、コンストラクタ引数で指定した実行モードを返却するだけのメソッドであり、
+    このメソッドを呼び出しても他への副作用はない。
+
+     .. code-block:: xml
+        :emphasize-lines: 3
+
+        <bean id="batchSqlSessionTemplate"
+              class="org.mybatis.spring.SqlSessionTemplate"
+              destroy-method="getExecutorType">
+            <constructor-arg index="0" ref="sqlSessionFactory"/>
+            <constructor-arg index="1" value="BATCH"/>
+        </bean>
+
+|
+
+.. _DataAccessMyBatis3HowToExtendExecutorTypeBatchBulkSetting:
+
+一括でバッチモードのRepositoryを作成するための設定
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+一括でバッチモードのRepositoryを作成したい場合は、
+MyBatis-Springから提供されているスキャン機能(\ ``mybatis:scan``\要素)を使用して、
+RepositoryのBean定義を行えばよい。
+
+下記の設定例では、全てのRepositoryに対して、\ ``REUSE``\モードと\ ``BATCH``\モードのRepositoryをBean登録している。
+
+* \ ``BeanNameGenerator``\を作成する。
 
  .. code-block:: java
 
-    package todo.domain.repository.todo;
+    package com.example.domain.repository;
 
-    import todo.domain.model.Todo;
+    import org.springframework.beans.factory.config.BeanDefinition;
+    import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+    import org.springframework.beans.factory.support.BeanNameGenerator;
+    import org.springframework.util.ClassUtils;
 
-    public interface TodoBatchRepository {
+    import java.beans.Introspector;
 
-        // (4)
-        int insert(Todo insertTodo);
-
-    }
-
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 10 80
-
-    * - 項番
-      - 説明
-    * - (4)
-      - Serviceから呼ばれるRepositoryのメソッド名を定義する。
-
-- TodoBatchRepositoryImpl.java
-
- .. code-block:: java
-
-    package todo.domain.repository.todo;
-
-    import todo.domain.model.Todo;
-
-    public class TodoBatchRepositoryImpl extends SqlSessionDaoSupport
-            implements TodoBatchRepository {
-
+    // (1)
+    public class BachRepositoryBeanNameGenerator implements BeanNameGenerator {
+        // (2)
         @Override
-        int insert(Todo insertTodo) {
-            // (5)
-            getSqlSession().getMapper(
-                TodoRepository.class).insert(insertTodo);
+        public String generateBeanName(BeanDefinition definition, BeanDefinitionRegistry registry) {
+            String defaultBeanName = Introspector.decapitalize(ClassUtils.getShortName(definition
+                    .getBeanClassName()));
+            return defaultBeanName.replaceAll("Repository", "BatchRepository");
         }
-
     }
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
@@ -5140,238 +5489,118 @@ Joda-Time用のTypeHandlerの実装
 
     * - 項番
       - 説明
-    * - (5)
-      - この例では、bean定義でバッチモードを設定する際にMapperScannerConfigure
-        の有効外のSqlSessionを使用する設定となっているため、Repositoryの自動
-        マッピングが行われない。そのため直接マッピングされたインスタンスを取得
-        しメソッドを実行している。
+    * - (1)
+      - SpringのApplicationContextに登録するBean名を生成するクラスを作成する。
 
-- TodoBatchService.java
+        このクラスは、通常使用する\ ``REUSE``\モードのRepositoryのBean名と、
+        \ ``BATCH``\モードのBean名が重複しないようにするために必要なクラスである。
+    * - (2)
+      - Bean名を生成するためのメソッドを実装する。
 
- .. code-block:: java
+        上記例では、Bean名のsuffixを\ ``BatchRepository``\とする事で、
+        通常使用される\ ``REUSE``\モードのRepositoryのBean名と重複しないようにしている。
 
-    package todo.domain.service.todo;
+|
 
-    public interface TodoBatchService {
-
-        // (6)
-        void insert();
-
-    }
-
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 10 80
-
-    * - 項番
-      - 説明
-    * - (6)
-      - Controllerから呼ばれるServiceのメソッド名を定義する。
-
-- TodoBatchServiceImpl.java
-
- .. code-block:: java
-
-    package todo.domain.service.todo;
-
-    // (7)
-    @Inject
-    DateFactory dateFactory;
-
-    // (8)
-    @Inject
-    TodoBatchRepository todoBatchRepository;
-
-    public class TodoBatchServiceImpl implements TodoBatchService {
-
-        public void insert() {
-            for (int idx=0; idx<10; idx++) {
-                Todo insertTodo = new Todo();
-                insertTodo.setTodoId(String.valueOf(idx));
-                insertTodo.setTodoTitle("TodoTitle" : String.valueOf(idx));
-                insertTodo.setFinished(false);
-                insertTodo.setCreateAt(dateFactory.newDate());
-                // (9)
-                todoBatchRepository.insert(insertTodo);
-            }
-        }
-
-    }
-
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 10 80
-
-    * - 項番
-      - 説明
-    * - (7)
-      - この例では日付を取得するためにDateFactoryを使用している。詳細は
-        \ :doc:`SystemDate` \を参照されたい。
-    * - (8)
-      - Injectにより、SQL処理とマッピングされたバッチモードのRepositoryインスタ
-        ンスが注入される。
-    * - (9)
-      - メソッドの実行により、SQL処理が実行される。この時SQLがバッチ実行され
-        る。
-
-
-複数件更新(バッチ実行)
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-| 複数件のデータの更新をバッチ実行する場合、以下のような実装となる。
-| 基本的には1件更新と同じだが、SQL実行時にSqlSessionDaoSupportの派生クラスとし
-  て実装し、バッチモードを有効にしたRepositoryで行う。
-
-- TodoRepository.xml
+* :file:`[projectname]-infra.xml`\にBean定義を追加する。
 
  .. code-block:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-    <!-- (1) -->
-    <mapper namespace="todo.domain.repository.todo.TodoRepository">
+    <beans xmlns="http://www.springframework.org/schema/beans"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:context="http://www.springframework.org/schema/context"
+           xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+           xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://mybatis.org/schema/mybatis-spring
+           http://mybatis.org/schema/mybatis-spring.xsd">
 
-        <!-- (2) -->
-        <update id="update" parameterType="Todo" resultType="_int">
-          UPDATE
-            todo
-          SET
-            finished = #{finished}
-          WHERE
-            todo_id = #{todoId}
-        </update>
+        <bean id="sqlSessionFactory"
+              class="org.mybatis.spring.SqlSessionFactoryBean">
+            <property name="dataSource" ref="dataSource"/>
+            <property name="configLocation"
+                      value="classpath:META-INF/mybatis/mybatis-config.xml"/>
+        </bean>
 
-    </mapper>
+        <!-- ... -->
 
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.10\linewidth}|p{0.70\linewidth}|
+        <bean id="batchSqlSessionTemplate"
+              class="org.mybatis.spring.SqlSessionTemplate">
+            <constructor-arg index="0" ref="sqlSessionFactory"/>
+            <constructor-arg index="1" value="BATCH"/>
+        </bean>
+
+        <!-- (3) -->
+        <mybatis:scan base-package="com.example.domain.repository"
+            template-ref="batchSqlSessionTemplate"
+            name-generator="com.example.domain.repository.BatchRepositoryBeanNameGenerator"/>
+
+    </beans>
+
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.15\linewidth}|p{0.65\linewidth}|
  .. list-table::
     :header-rows: 1
-    :widths: 10 10 70
+    :widths: 10 15 65
 
     * - 項番
       - 属性
       - 説明
-    * - (1)
-      - namespace
-      - 定義したSQLとマッピングするJavaインタフェースクラスを指定する。
-    * - (2)
-      - id
-      - マッピングするJavaインタフェースクラスのメソッド名と対応させる。
-    * -
-      - parameterType
-      - 引数となるJavaクラスを指定する。
-    * -
-      - resultType
-      - 戻り値となるJavaクラスを指定する。
-
-- TodoRepository.java
-
- .. code-block:: java
-
-    package todo.domain.repository.todo;
-
-    import todo.domain.model.Todo;
-
-    public interface TodoRepository {
-
-        // (3)
-        int update(Todo updateTodo);
-
-    }
-
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 10 80
-
-    * - 項番
-      - 説明
     * - (3)
-      - メソッド名、メソッド引数、メソッド戻り値をSQL定義と対応させる。
+      - \-
+      - \ ``mybatis:scan``\要素を使用して、バッチモードのRepositoryをBean登録する。
+    * -
+      - base-package
+      - Repositoryをスキャンするベースパッケージを指定する。
 
- .. note::
+        指定パッケージの配下に存在するRepositoryインタフェースがスキャンされ、
+        SpringのApplicationContextにBean登録される。
+    * -
+      - template-ref
+      - バッチモード用の\ ``SqlSessionTemplate``\のBeanを指定する。
+    * -
+      - name-generator
+      - スキャンしたRepositoryのBean名を生成するためのクラスを指定する。
 
-    バッチモードでSQLを実行する場合、SqlSessionDaoSupportの派生クラスが
-    Repository本体となるが内部でMapperを使用するためのSQL定義ファイルとマッピン
-    グするインタフェースクラスを作成する。
+        具体的には、(1)で作成したクラスのクラス名(FQCN)を指定する。
 
- .. warning::
+        この指定を省略した場合、Bean名が重複するため、
+        バッチモードのRepositoryはSpringのApplicationContextに登録されない。
 
-    insert処理の結果としてint値を取得する事ができるが、バッチモードで実行した場
-    合、この返却値はinsert件数とはならないため使用する事はできない。
+|
 
-- TodoBatchRepository.java
+.. _DataAccessMyBatis3HowToExtendExecutorTypeBatchUsage:
 
- .. code-block:: java
+バッチモードのRepositoryの使用例
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-    package todo.domain.repository.todo;
-
-    import todo.domain.model.Todo;
-
-    public interface TodoBatchRepository {
-
-        // (4)
-        int update(Todo updateTodo);
-
-    }
-
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 10 80
-
-    * - 項番
-      - 説明
-    * - (4)
-      - Serviceから呼ばれるRepositoryのメソッド名を定義する。
-
-- TodoBatchRepositoryImpl.java
+以下に、バッチモードのRepositoryを使用してデータベースにアクセスするための実装例を示す。
 
  .. code-block:: java
 
-    package todo.domain.repository.todo;
+    @Transactional
+    @Service
+    public class TodoServiceImpl implements TodoService {
 
-    import todo.domain.model.Todo;
-
-    public class TodoBatchRepositoryImpl implements TodoBatchRepository {
+        // (1)
+        @Inject
+        @Named("todoBatchRepository")
+        TodoRepository todoBatchRepository;
 
         @Override
-        int update(Todo updateTodo) {
-            // (5)
-            return getSqlSession().getMapper(
-                TodoRepository.class).update(updateTodo);
+        public void updateTodos(List<Todo> todos) {
+            for (Todo todo : todos) {
+                // (2)
+                todoBatchRepository.update(todo);
+            }
         }
 
     }
 
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 10 80
-
-    * - 項番
-      - 説明
-    * - (5)
-      - bean定義で個別にバッチモードを設定したRepositoryでは、
-        MapperScannerConfigureの設定が適用されていないため、自動でマッピングが
-        行われない。そのためマッピングされたインスタンスを取得しメソッドを実行
-        している。
-
-- TodoBatchService.java
-
- .. code-block:: java
-
-    package todo.domain.service.todo;
-
-    public interface TodoBatchService {
-
-        // (6)
-        void update();
-
-    }
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
  .. list-table::
@@ -5380,28 +5609,102 @@ Joda-Time用のTypeHandlerの実装
 
     * - 項番
       - 説明
-    * - (6)
-      - Controllerから呼ばれるServiceのメソッド名を定義する。
+    * - (1)
+      - バッチモードのRepositoryをインジェクションする。
+    * - (2)
+      - バッチモードのRepositoryのメソッドを呼び出し、Entityの更新を行う。
 
-- TodoBatchServiceImpl.java
+        バッチモードのRepositoryの場合は、メソッドを呼び出したタイミングでSQLが実行されないため、
+        メソッドから返却される更新結果は無視する必要がある。
+
+        Entityを更新するためのSQLは、トランザクションがコミットされる直前にバッチ実行され、
+        エラーがなければコミットされる。
+
+ .. note:: **バッチ実行のタイミングについて**
+
+    SQLがバッチ実行されるタイミングは、基本的には以下の場合である。
+
+    * トランザクションがコミットされる直前
+    * クエリ(SELECT)を実行する直前
+
+|
+
+.. _DataAccessMyBatis3HowToExtendExecutorTypeBatchNotes:
+
+バッチモードのRepository利用時の注意点
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+バッチモードのRepositoryを利用する場合、Serviceクラスの実装として、
+以下の点に注意する必要がある。
+
+* :ref:`DataAccessMyBatis3HowToExtendExecutorTypeBatchNotesUpdateResult`
+* :ref:`DataAccessMyBatis3HowToExtendExecutorTypeBatchNotesDuplicate`
+* :ref:`DataAccessMyBatis3HowToExtendExecutorTypeBatchNotesMethodCallOrder`
+
+.. _DataAccessMyBatis3HowToExtendExecutorTypeBatchNotesUpdateResult:
+
+更新結果の判定
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+バッチモードのRepositoryを使用した場合、更新結果の妥当性をチェックする事ができない。
+
+バッチモードを使用する場合、Mapperインタフェースのメソッドから返却される更新結果は、
+
+* 返り値が数値(\ ``int``\や\ ``long``\)の場合は、\ ``0``\
+* 返り値が\ ``boolean``\の場合は、\ ``false``\
+
+が返却される。
+
+これは、Mapperインタフェースのメソッドを呼び出したタイミングではSQLが発行されず、
+バッチ実行用にキューイング(\ ``java.sql.Statement#addBatch()``\)される仕組みになっているためである。
+
+**つまり、更新結果の妥当性をチェックする必要がある場合(楽観ロックによる排他制御処理など)では、**
+**バッチモードを使用する事はできない。**
+
+ .. tip::
+
+    MyBatis3自体の機能としては、
+    \ ``org.apache.ibatis.session.SqlSession``\インタフェースのメソッド(\ ``flushStatements``\)を使用すると、
+    バッチ実行用にキューイングされているSQLを実行し、更新結果を受け取る事ができる。
+    ただし、本ガイドラインでは\ ``SqlSession``\を直接使用する前提ではないため、
+    可能な限り\ ``SqlSession``\を直接使用しないようにする事を推奨する。
+
+    どうしても\ ``SqlSession``\インタフェースのメソッドを直接呼び出す必要がある場合は、
+    「`MyBatis-Spring REFERENCE DOCUMENTATION(Using an SqlSession) <http://mybatis.github.io/spring/sqlsession.html>`_\」
+    を参照されたい。
+    MyBatis-Springが提供している\ ``org.mybatis.spring.SqlSessionTemplate``\を使用するという点がポイントである。
+    実装例については、「:ref:`DataAccessMyBatis3AppendixSqlSession`」を参照されたい。
+
+ .. warning:: **バッチモード使用時のJDBCドライバの動作について**
+
+    \ ``SqlSession``\インタフェースを使用するとバッチ実行時の更新結果を受け取る事ができると前述したが、
+    JDBCドライバから返却される更新結果が「処理したレコード数」になる保証はない。
+
+    これは、使用するJDBCドライバの実装にも依存する部分なので、
+    使用するJDBCドライバの仕様を確認しておく必要がある。
+
+|
+
+これは、以下の様な実装が出来ないことを意味している。
 
  .. code-block:: java
 
-    package todo.domain.service.todo;
+    @Transactional
+    @Service
+    public class TodoServiceImpl implements TodoService {
 
-    // (7)
-    @Inject
-    TodoBatchRepository todoBatchRepository;
+        @Inject
+        @Named("todoBatchRepository")
+        TodoRepository todoBatchRepository;
 
-    public class TodoBatchServiceImpl implements TodoBatchService {
-
-        public void insert() {
-            for (int idx=0; idx<10; idx++) {
-                Todo insertTodo = new Todo();
-                insertTodo.setTodoId(String.valueOf(idx));
-                insertTodo.setFinished(true);
-                // (8)
-                todoRepository.update(updateTodo);
+        @Override
+        public void updateTodos(List<Todo> todos) {
+            for (Todo todo : todos) {
+                boolean updateSuccess = todoBatchRepository.update(todo);
+                // (1)
+                if (!updateSuccess) {
+                    // ...
+                }
             }
         }
 
@@ -5414,244 +5717,516 @@ Joda-Time用のTypeHandlerの実装
 
     * - 項番
       - 説明
-    * - (7)
-      - Injectにより、SQL処理とマッピングされたバッチモードのRepositoryインスタ
-        ンスが注入される。
-    * - (8)
-      - メソッドの実行により、SQL処理が実行される。この時SQLがバッチ実行され
-        る。
+    * - (1)
+      - 上記例のように実装した場合、更新結果は常に\ ``false``\になるため、
+        必ず更新失敗時の処理が実行されてしまう。
+
+|
+
+.. _DataAccessMyBatis3HowToExtendExecutorTypeBatchNotesDuplicate:
+
+一意制約違反の検知方法
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+バッチモードのRepositoryを使用した場合、
+一意制約違反などのデータベースエラーをServiceの処理として検知する事が出来ないケースがある。
+
+これは、Mapperインタフェースのメソッドを呼び出したタイミングではSQLが発行されず、
+バッチ実行用にキューイング(\ ``java.sql.Statement#addBatch()``\)される仕組みになっているためであり、
+以下の様な実装が出来ないことを意味している。
+
+ .. code-block:: java
+
+    @Transactional
+    @Service
+    public class TodoServiceImpl implements TodoService {
+
+        @Inject
+        @Named("todoBatchRepository")
+        TodoRepository todoBatchRepository;
+
+        @Override
+        public void storeTodos(List<Todo> todos) {
+            for (Todo todo : todos) {
+                try {
+                    todoBatchRepository.create(todo);
+                // (1)
+                } catch (DuplicateKeyException e) {
+                    // ....
+                }
+            }
+        }
+
+    }
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (1)
+      - 上記例のように実装した場合、
+        このタイミングで\ ``org.springframework.dao.DuplicateKeyException``\が発生することはないため、
+        \ ``DuplicateKeyException``\補足後の処理が実行される事はない。
+
+        これは、SQLがバッチ実行されるタイミングが、
+        Serviceの処理が終わった後(トランザクションがコミットされる直前)に行われるためである。
+
+|
+
+.. _DataAccessMyBatis3HowToExtendExecutorTypeBatchNotesMethodCallOrder:
+
+Repositoryのメソッドの呼び出し順番
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+バッチモードを使用する目的は更新処理の性能向上であるが、
+Repositoryのメソッドの呼び出し順番を間違えると、性能向上につながらないケースがある。
+
+バッチモードを使用して性能向上させるためには、以下のMyBatisの仕様を理解しておく必要がある。
+
+* クエリ(SELECT)を実行すると、それまでキューイングされていたSQLがバッチ実行される。
+* 連続して呼び出された更新処理(Repositoryのメソッド)毎に\ ``PreparedStatement``\が生成され、SQLをキューイングする。
+
+これは、以下の様な実装をすると、バッチモードを利用するメリットがない事を意味している。
+
+* 例１
+
+ .. code-block:: java
+
+    @Transactional
+    @Service
+    public class TodoServiceImpl implements TodoService {
+
+        @Inject
+        @Named("todoBatchRepository")
+        TodoRepository todoBatchRepository;
+
+        @Override
+        public void storeTodos(List<Todo> todos) {
+            for (Todo todo : todos) {
+                // (1)
+                Todo currentTodo = todoBatchRepository.findOne(todo.getTodoId());
+                if (currentTodo == null) {
+                    todoBatchRepository.create(todo);
+                } else{
+                    todoBatchRepository.update(todo);
+                }
+            }
+        }
+
+    }
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (1)
+      - 上記例のように実装した場合、繰返し処理の先頭にクエリを発行しているため、
+        1件毎にSQLがバッチ実行される事になってしまう。
+        これはほぼ、シンプルモード(\ ``SIMPLE``\)で実行しているのと同義である。
+
+        上記のような処理が必要な場合は、
+        PreparedStatement再利用モード(\ ``REUSE``\)のRepositoryを使用した方が効率的である。
+
+* 例２
+
+ .. code-block:: java
+
+    @Transactional
+    @Service
+    public class TodoServiceImpl implements TodoService {
+
+        @Inject
+        @Named("todoBatchRepository")
+        TodoRepository todoBatchRepository;
+
+        @Override
+        public void storeTodos(List<Todo> todos) {
+            for (Todo todo : todos) {
+                // (2)
+                todoBatchRepository.create(todo);
+                todoBatchRepository.createHistory(todo);
+            }
+        }
+
+    }
 
 
-複数件削除(バッチ実行)
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (2)
+      - 上記のような処理が必要な場合は、Repositoryのメソッドが交互に呼び出されているため、
+        1件毎に\ ``PreparedStatement``\が生成されてしまう。
+        これはほぼ、シンプルモード(\ ``SIMPLE``\)で実行しているのと同義である。
+
+        上記のような処理が必要な場合は、
+        PreparedStatement再利用モード(\ ``REUSE``\)のRepositoryを使用した方が効率的である。
+
+
+|
+
+.. _DataAccessMyBatis3HowToExtendCache:
+
+キャッシュの利用
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+| MyBatis3から提供されているキャッシュの利用方法について説明を行う。
+| MyBatis3のキャッシュの説明については、「:ref:`DataAccessMyBatis3HowToUseSettingsCache`」を参照されたい。
+
+.. _DataAccessMyBatis3HowToExtendCacheLocal:
+
+ローカルキャッシュの利用
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-| 複数件のデータの削除をバッチ実行する場合、以下のような実装となる。
-| 基本的には1件削除と同じだが、SQL実行時にバッチモードを有効にしたRepositoryで
-  行う。
+MyBatis3のデフォルトでは、
+トランザクション単位で検索結果(JavaBean)をキャッシュするローカルキャッシュのみが有効になっている。
 
-- TodoRepository.xml
+ローカルキャッシュは、MyBatisのマッピング処理を効率的に実行する際にも利用されており、
+ローカルキャッシュを無効にする事はできない。
+
+ローカルキャッシュのスコープは、
+
+* トランザクション単位（デフォルト）
+* ステートメント単位
+
+| の2種類が用意されており、MyBatis設定ファイル(:file:`mybatis-config.xml`)で変更する事ができる。
+| それぞれの特徴を理解し、使用するスコープを選択すること。
+
+ .. note:: **トランザクション単位のローカルキャッシュの特徴**
+
+    キャッシュに存在するEntityは、SQLの実行は行わずにキャッシュ内のEntityインスタンスをそのまま返却する。
+    このスコープはSQLの発行回数を必要最小限に押さえる事が出来るため、性能劣化の要因が少なくなる。
+    加えて、MyBatisが検索結果(\ ``ResultSet``\)をJavaBeanにマッピングする際にもキャッシュが利用されるため、
+    マッピング処理が最適化される。
+
+    ただし、Repositoryのメソッドを同じパラメータで呼び出した場合、
+    同じインスタンスが返却されるという点を意識して実装する必要がある。
+
+    具体的には、
+
+    * 同一トランザクション内のメソッドAにて、Repositoryの\ ``findOne``\メソッドから返却されたインスタンスの状態を変更
+    * 同一トランザクション内のメソッドBにて、Repositoryの\ ``findOne``\メソッドから返却されたインスタンスにアクセス
+
+    した場合、メソッドBで取得したEntityは、メソッドAで行った変更が反映された状態になっている。
+    この挙動を把握して実装を行わないと、想定外の動作になる可能性がある。
+
+ .. note:: **ステートメント単位のローカルキャッシュの特徴**
+
+    ステートメント単位でキャッシュがクリアされるため、SQLは毎回実行されるが、
+    トランザクション単位のスコープを使用する時と同様にマッピング処理は最適化される。
+
+    また、Repositoryのメソッドを同じパラメータで呼び出した場合、
+    それぞれ別のインスタンスが返却されるという点を意識して実装する必要がある。
+    これは、スコープをトランザクション単位にした場合と動作が異なる部分であり、
+    この挙動を把握して実装を行わないと、想定外の動作になる可能性がある。
+
+|
+
+ローカルキャッシュのスコープを変更する場合は、以下のような設定を行う。
+
+* mybatis-config.xml
 
  .. code-block:: xml
 
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-    <!-- (1) -->
-    <mapper namespace="todo.domain.repository.todo.TodoRepository">
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <!DOCTYPE configuration
+            PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+            "http://mybatis.org/dtd/mybatis-3-config.dtd">
+    <configuration>
+        <settings>
+            <!-- (1) -->
+            <setting name="localCacheScope" value="STATEMENT"/>
+        </settings>
+    </configuration>
 
-        <!-- (2) -->
-        <delete id="deleteByTodoId" parameterType="String">
-          DELETE FROM
-            todo
-          WHERE
-            todo_id = #{todoId}
-        </delete>
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (1)
+      - ローカルキャッシュのスコープを\ ``localCacheScope``\に指定する。
+
+        * \ ``SESSION``\ : トランザクション単位（デフォルト）
+        * \ ``STATEMENT``\ : ステートメント単位
+
+|
+
+.. _DataAccessMyBatis3HowToExtendCache2nd:
+
+2次キャッシュの利用
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+MyBatis3のデフォルトでは、
+グローバルな領域に検索結果(JavaBean)をキャッシュする2次キャッシュは、無効の状態になっている。
+
+MyBatis3の2次キャッシュは、MyBatis3の組込み実装として、
+
+* LRU(Least Recently Used)
+* FIFO(First In First Out)
+* SOFT(Soft Reference)
+* WEAK(Weak Reference)
+
+の4つのアルゴリズムが提供されており、「フラッシュ間隔」「キャッシュサイズ」「読み取り専用フラグ」をカスタマイズする事ができる。
+
+また、組込み実装以外にも、
+
+* 自作のキャッシュを実装
+* MyBatis3の姉妹プロジェクトから提供されている3rdパーティのキャッシュソリューションとのアダプタを利用
+
+する事で、キャッシュの挙動を完全にカスタマイズする事も可能である。
+
+ .. tip:: **3rdパーティのキャッシュソリューションとのアダプタについて**
+
+    MyBatis3の姉妹プロジェクトとして、以下の4つのアダプタが存在する。
+
+    * Memcached(`org.mybatis.caches:mybatis-memcached <http://mybatis.github.io/memcached-cache>`_\)
+    * Hazelcast(`org.mybatis.caches:mybatis-hazelcast <http://mybatis.github.io/hazelcast-cache>`_\)
+    * Ehcache(`org.mybatis.caches:mybatis-ehcache <http://mybatis.github.io/ehcache-cache>`_\)
+    * OSCache(`org.mybatis.caches:mybatis-oscache <http://mybatis.github.io/oscache-cache>`_\)
+
+    2次キャッシュとして3rdパーティのキャッシュソリューションを使用する場合は、
+    MyBatisの姉妹プロジェクトのドキュメント及び各キャッシュソリューションのドキュメントを参照されたい。
+
+    MyBatisの姉妹プロジェクトのドキュメントにも記載されているが、OSCacheは今後のメンテナンスが望めないため、
+    基本的には使用しない方がよい。
+
+|
+
+以下に、2次キャッシュを有効にする最もシンプルな方法について説明を行う。
+
+* マッピングファイル
+
+ .. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+            "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+    <mapper namespace="com.example.domain.repository.todo.TodoRepository">
+
+        <!-- (1) -->
+        <cache />
+
+        <!-- ... -->
 
     </mapper>
 
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.10\linewidth}|p{0.70\linewidth}|
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
  .. list-table::
     :header-rows: 1
-    :widths: 10 10 70
+    :widths: 10 80
 
     * - 項番
-      - 属性
       - 説明
     * - (1)
-      - namespace
-      - 定義したSQLとマッピングするJavaインタフェースクラスを指定する。
+      - 2次キャッシュ対象のEntityを操作するRepositoryのマッピングファイルに、\ ``cache``\要素を追加する。
+
+        上記例では、MyBatis3の組込み実装の2次キャッシュを、
+        デフォルトの状態(LRU)で有効化している。
+
+        2次キャッシュの詳細については、
+        「`MyBatis3 REFERENCE DOCUMENTATION(Mapper XML Files-cache-) <http://mybatis.github.io/mybatis-3/sqlmap-xml.html#cache>`_\」を参照されたい。
+
+|
+
+.. _DataAccessMyBatis3HowToExtendCacheControl:
+
+キャッシュのライフサイクル制御
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+キャッシュのライフサイクルは、
+
+* ローカルキャッシュはMyBatisのグローバル設定
+* 2次キャッシュは\ ``cache``\要素の指定によるRepository単位の設定
+
+によって制御されるが、ステートメント単位で制御する事も可能である。
+
+ステートメント単位で制御する事ができるのは、以下の2点である。
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.15\linewidth}|p{0.65\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 15 65
+
+    * - 項番
+      - 制御内容
+      - 説明
+    * - (1)
+      - キャッシュ対象からの除外
+      - 2次キャッシュを有効化した場合、MyBatisのデフォルト動作では、
+        取得したEntityは2次キャッシュに保存される。
+
+        検索結果を2次キャッシュに保存させたくない場合は、
+        \ ``select``\要素の\ ``useCache``\を\ ``false``\を指定すればよい。
     * - (2)
-      - id
-      - マッピングするJavaインタフェースクラスのメソッド名と対応させる。
-    * -
-      - parameterType
-      - 引数となるJavaクラスを指定する。
+      - キャッシュのクリア
+      - ローカルキャッシュ及び2次キャッシュを明示的にクリアしたい場合は、
+        \ ``select``\要素の\ ``flushCache``\属性を\ ``true``\にすればよい。
 
-- TodoRepository.java
+        更新系のステートメント（\ ``insert``\要素、\ ``update``\要素、\ ``delete``\要素）を実行すると、
+        ローカルキャッシュ及び2次キャッシュは透過的にクリアされる。
+        これは、更新系のステートメントの\ ``flushCache``\属性のデフォルトに\ ``true``\が指定されているためである。
 
- .. code-block:: java
-
-    package todo.domain.repository.todo;
-
-    import todo.domain.model.Todo;
-
-    public interface TodoRepository {
-
-        // (3)
-        void delete(String todoId);
-
-    }
-
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 10 80
-
-    * - 項番
-      - 説明
-    * - (3)
-      - メソッド名、メソッド引数、メソッド戻り値をSQL定義と対応させる。
-
-- TodoBatchRepository.java
-
- .. code-block:: java
-
-    package todo.domain.repository.todo;
-
-    import todo.domain.model.Todo;
-
-    public interface TodoBatchRepository {
-
-        // (4)
-        void delete(String todoId);
-
-    }
-
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 10 80
-
-    * - 項番
-      - 説明
-    * - (4)
-      - Serviceから呼ばれるRepositoryのメソッド名を定義する。
-
-- TodoBatchRepositoryImpl.java
-
- .. code-block:: java
-
-    package todo.domain.repository.todo;
-
-    import todo.domain.model.Todo;
-
-    public class TodoBatchRepositoryImpl implements TodoBatchRepository {
-
-        @Override
-        void delete(String todoId) {
-            // (5)
-            getSqlSession().getMapper(TodoRepository.class).delete(todoId);
-        }
-
-    }
-
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 10 80
-
-    * - 項番
-      - 説明
-    * - (5)
-      - bean定義で個別にバッチモードを設定したRepositoryでは、
-        MapperScannerConfigureの設定が適用されていないため、自動でマッピングが
-        行われない。そのためマッピングされたインスタンスを取得しメソッドを実行
-        している。
-
-- TodoBatchService.java
-
- .. code-block:: java
-
-    package todo.domain.service.todo;
-
-    public interface TodoBatchService {
-
-        // (6)
-        void delete();
-
-    }
-
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 10 80
-
-    * - 項番
-      - 説明
-    * - (6)
-      - Controllerから呼ばれるServiceのメソッド名を定義する。
-
-- TodoBatchServiceImpl.java
-
- .. code-block:: java
-
-    package todo.domain.service.todo;
-
-    // (7)
-    @Inject
-    TodoBatchRepository todoBatchRepository;
-
-    public class TodoBatchServiceImpl implements TodoBatchService {
-
-        public void delete() {
-            for (int idx=0; idx<10; idx++) {
-                // (8)
-                todoRepository.delete(String.valueOf(idx));
-            }
-        }
-
-    }
-
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 10 80
-
-    * - 項番
-      - 説明
-    * - (7)
-      - Injectにより、SQL処理とマッピングされたバッチモードのRepositoryインスタ
-        ンスが注入される。
-    * - (8)
-      - メソッドの実行により、SQL処理が実行される。この時SQLがバッチ実行され
-        る。
 
 |
 
 .. _DataAccessMyBatis3HowToExtendStoredProcedure:
 
-[WIP] ストアドプロシージャの実行方法
+ストアドプロシージャの実装
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. todo::
+データベースに登録されているストアドプロシージャやファンクションを、
+MyBatis3から呼び出す方法について説明を行う。
 
-    現在チェック中。
+以下で説明する実装例では、PostgreSQLに登録されているファンクションを呼び出している。
 
-| プロシージャの実行は通常のSQL実行と方法は同じで、使用しているデータベースの呼
-  出し書式に合わせプロシージャを実行する。
+* ストアードプロシージャ（ファンクション）を登録する。
 
-- XxxRepository.xml
+ .. code-block:: plpgsql
+
+    /* (1) */
+    CREATE FUNCTION findTodo(pTodoId CHAR)
+    RETURNS TABLE(
+        todo_id CHAR,
+        todo_title VARCHAR,
+        finished BOOLEAN,
+        created_at TIMESTAMP,
+        version BIGINT
+    ) AS $$ BEGIN RETURN QUERY
+    SELECT
+        t.todo_id,
+        t.todo_title,
+        t.finished,
+        t.created_at,
+        t.version
+    FROM
+        t_todo t
+    WHERE
+        t.todo_id = pTodoId;
+    END;
+    $$ LANGUAGE plpgsql;
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (1)
+      - このファンクションは、指定されたIDのレコードを取得するファンクションである。
+
+|
+
+* Repositoryインタフェースにメソッドを定義する。
+
+ .. code-block:: java
+
+    // (2)
+    public interface TodoRepository extends Repository {
+        Todo findOne(String todoId);
+    }
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (2)
+      - SQLを発行する際と同じインタフェースでよい。
+
+|
+
+* マッピングファイルにストアドプロシージャの呼び出し処理を実装する。
 
  .. code-block:: xml
 
-    <?xml version="1.0" encoding="UTF-8"?>
+    <?xml version="1.0" encoding="UTF-8" ?>
     <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-    <mapper namespace="xxx.yyy.zzz.domain.repository.XxxRepository">
+            "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+    <mapper namespace="com.example.domain.repository.todo.TodoRepository">
 
-        <!-- (1) -->
-        <update id="execProcedure">
-          CALL PROCEDURE_NAME()
-        </update>
+        <!-- (3) -->
+        <select id="findOne" parameterType="string" resultType="Todo"
+                statementType="CALLABLE">
+            <!-- (4) -->
+            {call findTodo(#{todoId})}
+        </select>
 
     </mapper>
 
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.10\linewidth}|p{0.70\linewidth}|
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
  .. list-table::
     :header-rows: 1
-    :widths: 10 10 70
+    :widths: 10 80
 
     * - 項番
-      - 属性
       - 説明
-    * - (1)
-      -
-      - 使用しているRDBMSの書式に合わせプロシージャの実行SQLを記述する。
-    * -
-      - id
-      - マッピングするJavaインタフェースクラスのメソッド名と対応させる。
+    * - (3)
+      - ストアドプロシージャを呼び出すステートメントを実装する。
+
+        ストアドプロシージャを呼び出す場合は、\ ``statementType``\属性に\ ``CALLABLE``\を指定する。
+        \ ``CALLABLE``\を指定すると、
+        \ ``java.sql.CallableStatement``\を使用してストアドプロシージャが呼び出される。
+
+        OUTパラメータをJavaBeanにマッピングするために、
+        \ ``resultType``\属性又は\ ``resultMap``\属性を指定する。
+    * - (4)
+      - ストアドプロシージャを呼び出す。
+
+        ストアドプロシージャ（ファクション）を呼び出す場合は、
+
+        * \ ``{call Procedure or Function名(INパラメータ...)}``\
+
+        形式で指定する。
+
+        上記例では、\ ``findTodo``\という名前のファンクションに対して、
+        INパラメータにIDを指定して呼び出している。
 
 |
+
+.. _DataAccessMyBatis3HowToExtendPlugin:
+
+共通処理の実装
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+MyBatis3では、ステートメントを実行する際に、
+いくつかのタイミングでMyBatisの処理をインターセプトできる仕組み（Plugin機能）を提供している。
+
+Plugin機能を利用すると、MyBatisのコアな処理に対して、共通的な処理を透過的に実行する事ができる。
+Plugin機能の詳細については、
+「`MyBatis3 REFERENCE DOCUMENTATION(Configuration-plugins-) <http://mybatis.github.io/mybatis-3/configuration.html#plugins>`_\」を参照されたい。
+
+ .. warning::
+
+    MyBatis3のドキュメントにも記載されているが、
+    **Plugin機能はMyBatisのコアな処理に影響を与える可能性があるという点に注意すること。**
+
+    本ガイドラインでは、AppendixとしてPlugin機能の実装例を紹介するが、
+    **実装例で紹介するサンプルコードを流用する場合は、必ず網羅的なテストを実施し、**
+    **MyBatisのコアな処理に影響がない事を確認すること。**
+
+    サンプルコードは簡単な動作確認は行っているが、網羅的な確認を行っていない。
+    そのため、使い方によっては想定外の動作になる可能性があるという点を補足しておく。
+
+    Plugin機能の実装例については、「:ref:`DataAccessMyBatis3AppendixPlugin`」を参照されたい。
+
+
+|
+
 
 .. _DataAccessMyBatis3Appendix:
 
@@ -5907,42 +6482,64 @@ TypeAliasを設定したいクラスに\ ``@org.apache.ibatis.type.Alias`` \ア�
     
     の優先順で適用される。
 
+
 |
 
 .. _DataAccessMyBatis3AppendixSwitchingSqlByDatabase:
 
-[WIP] データベースによるSQL切替の実装
+データベースによるSQL切替について
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. todo::
+MyBatis3では、JDBCドライバから接続しているデータベースのベンダー情報を取得して、
+使用するSQLを切り替える仕組み(\ ``VendorDatabaseIdProvider``\)を提供している。
 
-    現在チェック中。
+この仕組みは、動作環境として複数のデータベースをサポートするようなアプリケーションを構築する際に有効である。
 
-MyBatis3では、接続に指定しているJDBCドライバからデータベースのベンダー情報を取得して、
-実行するSQLを切り替える仕組みを提供している。
+ .. note::
 
-この仕組みは、動作環境として複数のデータベースをサポートするようなアプリケーションを構築する際に、
-有効である。
+    本ガイドラインでは、環境依存するコンポーネントや設定ファイルについては、
+    [projectName]-envというサブプロジェクトで管理し、
+    ビルド時に実行環境にあったコンポーネントや設定ファイル作成を選択するスタイルを推奨している。
 
-- [projectname]-infra.xml
+    [projectName]-envは、
+
+    * 開発環境(ローカルのPC環境)
+    * 各種試験環境
+    * 商用環境
+
+    毎の差分を吸収するためのサブプロジェクトであり、
+    複数のデータベースをサポートするアプリケーションの開発でも利用する事ができる。
+
+    基本的には、環境依存するコンポーネントや設定ファイルは、
+    [projectName]-envというサブプロジェクトで管理する事を推奨するが、
+    SQLのちょっとした違いを吸収したい場合は、本仕組みを使用してもよい。
+
+    **アーキテクトは、データベースの違いによるSQLの環境依存をどのように実装するかの指針を明確に示すことで、**
+    **アプリケーション全体として統一された実装となるように心がけてほしい。**
+
+|
+
+- [projectName]-infra.xmlにBean定義を追加する。
 
  .. code-block:: xml
 
     <?xml version="1.0" encoding="UTF-8"?>
     <beans xmlns="http://www.springframework.org/schema/beans"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-        xmlns:util="http://www.springframework.org/schema/util"
-        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+        xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans.xsd
-            http://www.springframework.org/schema/util
-            http://www.springframework.org/schema/util/spring-util.xsd
-            http://www.springframework.org/schema/data/jpa
-            http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+            http://mybatis.org/schema/mybatis-spring
+            http://mybatis.org/schema/mybatis-spring.xsd
+        ">
+
+        <import resource="classpath:/META-INF/spring/projectName-env.xml" />
 
         <!-- (1) -->
-        <bean id="vendorProperties"
-            class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <bean id="databaseIdProvider"
+              class="org.apache.ibatis.mapping.VendorDatabaseIdProvider">
+            <!-- (2) -->
             <property name="properties">
                 <props>
                     <prop key="H2">h2</prop>
@@ -5951,21 +6548,19 @@ MyBatis3では、接続に指定しているJDBCドライバからデータベ�
             </property>
         </bean>
 
-        <!-- (2) -->
-        <bean id="databaseIdProvider"
-            class="org.apache.ibatis.mapping.VendorDatabaseIdProvider">
-            <property name="properties" ref="vendorProperties" />
-        </bean>
-
         <bean id="sqlSessionFactory"
             class="org.mybatis.spring.SqlSessionFactoryBean">
             <property name="dataSource" ref="dataSource" />
-            <property name="databaseIdProvider" ref="databaseIdProvider" />
+            <!-- (3) -->
+            <property name="databaseIdProvider" ref="databaseIdProvider"/>
             <property name="configLocation"
-                value="classpath:META-INF/mybatis/mybatis-config.xml" />
+                value="classpath:/META-INF/mybatis/mybatis-config.xml" />
         </bean>
 
-    </mapper>
+        <mybatis:scan base-package="com.example.domain.repository" />
+
+    </beans>
+
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
  .. list-table::
@@ -5975,71 +6570,222 @@ MyBatis3では、接続に指定しているJDBCドライバからデータベ�
     * - 項番
       - 説明
     * - (1)
-      - Jdbcドライバから取得したベンダ情報に含まれるキーと任意の文字列のマッピ
-        ングを設定する。
-    * - (2)
-      - SQL内で変数_databaseIdを取得できるようにdatabaseIdProviderにマッピング
-        情報を設定する。
+      - MyBatis3から提供されている\ ``VendorDatabaseIdProvider``\をBean定義する。
 
-- XxxRepository.xml
+        \ ``VendorDatabaseIdProvider``\は、
+        JDBCドライバから取得したデータベースのプロダクト名(\ ``java.sql.DatabaseMetaData#getDatabaseProductName()``\)をデータベースIDとして扱うためのクラスである。
+    * - (2)
+      - \ ``properties``\プロパティには、JDBCドライバから取得したデータベースのプロダクト名とデータベースIDのマッピングを指定する。
+
+        マッピング仕様ついては、「`MyBatis3 REFERENCE DOCUMENTATION(Configuration-databaseIdProvider-) <http://mybatis.github.io/mybatis-3/configuration.html#databaseIdProvider>`_\」を参照されたい。
+    * - (3)
+      - データベースIDを使用する\ ``SqlSessionFactoryBean``\の\ ``databaseIdProvider``\プロパティ対して、
+        (1)で定義した\ ``DatabaseIdProvider``\を指定する。
+
+        この指定を行うと、マッッピングファイルからデータベースIDを参照する事が可能となる。
+
+ .. note::
+
+    本ガイドラインでは、\ ``properties``\プロパティを指定して、
+    データベースのプロダクト名とデータベースIDをマッピングする方式を推奨する。
+
+    理由は、JDBCドライバから取得したデータベースのプロダクト名は、
+    JDBCのバージョンによって変わる可能性があるためである。
+    \ ``properties``\プロパティを使用すると、使用するバージョン毎のプロダクト名の違いを、
+    一箇所で管理する事ができる。
+
+|
+
+- マッピングファイルの実装を行う。
 
  .. code-block:: xml
 
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-    <mapper namespace="xxx.yyy.zzz.TodoRepository">
+    <insert id="create" parameterType="Todo">
+        <!-- (1) -->
+        <selectKey keyProperty="todoId" resultType="string" order="BEFORE"
+                   databaseId="h2">
+            SELECT RANDOM_UUID()
+        </selectKey>
+        <selectKey keyProperty="todoId" resultType="string" order="BEFORE"
+                   databaseId="postgresql">
+            SELECT UUID_GENERATE_V4()
+        </selectKey>
 
-        <update id="callProcedure">
-          <if test="_databaseId == 'h2'">
-            CALL PROCEDURE_NAME()
-          </if>
-          <if test="_databaseId == 'postgresql'">
-            SELECT PROCEDURE_NAME()
-          </if>
-        </update>
+        INSERT INTO
+          t_todo
+        (
+            todo_id
+            ,todo_title
+            ,finished
+            ,created_at
+            ,version
+        )
+        VALUES
+        (
+            #{todoId}
+            ,#{todoTitle}
+            ,#{finished}
+            ,#{createdAt}
+            ,#{version}
+        )
+    </insert>
 
-    </mapper>
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (1)
+      - ステートメント要素(\ ``select``\要素、\ ``update``\要素、\ ``sql``\要素など)をデータベース毎に切り替えたい場合は、
+        各要素の\ ``databaseId``\属性にデータベースIDを指定する。
+
+        \ ``databaseId``\属性を指定すると、データベースIDが一致するステートメント要素が使用される。
+
+        上記例では、データベース固有のUUID生成関数を呼び出して、IDを生成している。
+
+ .. tip::
+
+    上記例では、PostgreSQLのUUID生成関数として\ ``UUID_GENERATE_V4()``\を呼び出しているが、
+    この関数は、`uuid-ossp <http://www.postgresql.org/docs/9.3/static/uuid-ossp.html>`_\と呼ばれるサブモジュールの関数である。
+
+    この関数を使用したい場合は、uuid-osspモジュールを有効にする必要がある。
+
+ .. tip::
+
+    データベースIDは、OGNLベースの式（Expression言語）内でも参照する事ができる。
+
+    これは、データベースIDを動的SQLの条件として使用できる事を意味している。
+    以下に実装例を紹介する。
+
+     .. code-block:: xml
+
+        <select id="findAllByCreatedAtBefore" parameterType="_int" resultType="Todo">
+            SELECT
+                todo_id,
+                todo_title,
+                finished,
+                created_at,
+                version
+            FROM
+                t_todo
+            WHERE
+                <choose>
+                    <!-- (2) -->
+                    <when test="_databaseId == 'h2'">
+                        <bind name="criteriaDate"
+                              value="'DATEADD(\'DAY\',#{days} * -1,#{currentDate})'"/>
+                    </when>
+                    <when test="_databaseId == 'postgresql'">
+                        <bind name="criteriaDate"
+                              value="'#{currentDate}::DATE - (#{days} * INTERVAL \'1 DAY\')'"/>
+                    </when>
+                </choose>
+                <![CDATA[
+                    created_at < ${criteriaDate}
+                ]]>
+        </select>
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (2)
+      - OGNLベースの式（Expression言語）内では、
+        \ ``_databaseId``\という特別な変数にデータベースIDが格納されている。
+
+        上記例では、「システム日付 - 指定日」より前に作成されたレコードを抽出するための条件を、
+        データベースの関数を利用して指定している。
+
 
 |
 
 .. _DataAccessMyBatis3AppendixAcquireRelatedObjectsAtOnce:
 
-[WIP] 関連オブジェクトを１回のSQLで取得する実装例
+関連Entityを１回のSQLで取得する方法について
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. todo::
+主Entityと関連Entityを1回のSQLでまとめて取得する方法について説明する。
 
-    現在チェック中。
+主Entityと関連Entityをまとめて取得する仕組みを使用すると、
+ServiceクラスでEntity(JavaBean)の組み立て処理を行う必要がなくなり、
+Serviceクラスは業務ロジック(ビジネスルール)の実装に集中する事ができる。
+
+| また、この方法は、N+1問題を回避する手段としても使用される。
+| N+1問題については、「:ref:`data-access-common_howtosolve_n_plus_1`」を参照されたい。
+
+ .. warning::
+
+    主Entityと関連Entityをまとめて取得する場合は、以下の点に注意して使用すること。
+
+    * 以下の説明では全ての関連Entityを1回のSQLでまとめて取得しているが、
+      実際のプロジェクトで使用する場合は、
+      処理で必要となる関連Entityのみ取得するようにした方がよいケースがある。
+      使用しない関連Entityを同時に取得すると、
+      無駄なオブジェクト生成やマッピング処理が行われるため性能劣化の要因となる事がある。
+      **特に、一覧検索を行うSQLでは、必要な関連Entityのみ取得するようにした方がよいケースが多い。**
+
+    \
+
+    * 使用頻度の低い関連Entityについては、
+      まとめて取得せず必要なときに個別に取得する方法を採用した方がよいケースがある。
+      使用頻度の低い関連Entityを同時に取得すると、
+      無駄なオブジェクト生成やマッピング処理が行われるため性能劣化の要因となる事がある。
+
+    \
+
+    * 1:Nの関係となる関連Entityが複数含まれる場合、
+      主Entityと関連Entityを別々に取得する方法を採用した方がよいケースがある。
+      1:Nの関係となる関連Entityが複数ある場合、
+      無駄なデータをDBから取得する必要があるため、性能劣化の要因となる事がある。
+      主Entityと関連Entityを別々に取得する方法の一例については、
+      「:ref:`data-access-common_howtosolve_n_plus_1`」を参照されたい。
+
+ .. tip::
+
+    使用頻度の低い関連Entityを必要になった時に個別に取得する方法としては、
+
+    * Serviceクラスの処理で関連Entityを取得するメソッド(SQL)を呼び出して取得する。
+    * 関連Entityを"Lazy Load"対象にし、Getterメソッドが呼び出された際にSQLを透過的に実行して取得する。
+
+    方法がある。
+
+    "Lazy Load"の仕組みを使用すると、
+    ServiceクラスでEntity(JavaBean)の組み立て処理を行う必要がなくなり、
+    Serviceクラスは業務ロジック(ビジネスルール)の実装に集中する事ができる。
+
+    **一覧検索を行うSQLで"Lazy Load"を使用するとN+1問題を引き起こすので、使用する際は注意すること。**
+
+    "Lazy Load"の使用方法については、「:ref:`DataAccessMyBatis3AppendixNestedSelectLazySetting`」を参照されたい。
 
 
-| テーブル毎にEntityのようなJavaBeanを用意して、データベースにアクセスする際
-  に、関連オブジェクトを、1回のSQLでまとめて取得する方法について説明する。
-| この方法は、N+1問題を回避する手段としても使用される。
+|
 
-.. warning::
+ここからは、ショッピングサイトで扱う注文データを、
+1回のSQLでまとめて取得し、主Entity及び関連Entityにマッピングする実装例について説明を行う。
 
-  以下の点に注意して、使用すること。
+ここで説明する実装方法は、あくまで一例である。
+MyBatis3では、本節で説明していない機能も多く提供しており、より高度なマッピングを行う事も可能である。
 
-  * 本例では、使い方を説明するために、すべての関連オブジェクトを、1回のSQLでま
-    とめて取得している。しかしながら、実際のプロジェクトで使用する場合は、処理
-    で必要となる関連オブジェクトのみ取得するようにすること。なぜなら、使用しな
-    い関連オブジェクトを、同時に取得してしまった場合、性能劣化の原因となるケー
-    スがあるからである。
-  * 使用頻度の低い、1:Nの関係をもつ関連オブジェクトについては、まとめて取得しな
-    い。必要なときに、個別に取得する方法を採用した方がよいケースがある。性能要
-    件を満たせる場合は、まとめて取得してもよい。
-  * 1:Nの関係となる関連オブジェクトが、多く含まれる場合、まとめて取得すると、
-    マッピング処理に使用されない無駄なデータの取得が行われ、性能劣化の原因とな
-    るケースがある。性能要件を満たせる場合は、まとめて取得してもよいが、他の方
-    法を検討した方がよい。
+MyBatis3のマッピング機能の詳細については、
+「\ `MyBatis3 REFERENCE DOCUMENTATION(Mapper XML Files-Result Maps-) <http://mybatis.github.io/mybatis-3/sqlmap-xml.html#Result_Maps>`_ \」を参照されたい。
 
-| 以降では、注文テーブルを使って、具体的に実装例について説明する。
-| 説明で使用するテーブルは、以下の通りである。
+|
 
- .. figure:: images/dataaccess_er.png
+.. _DataAccessMyBatis3AppendixAcquireRelatedObjectsAtOnceTable:
+
+テーブルレイアウトとデータ
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+説明で使用するテーブルは、以下の通り。
+
+ .. figure:: ../ImplementationAtEachLayer/images/service_entity_table_layout.png
     :alt: ER diagram
-    :width: 90%
+    :width: 100%
     :align: center
 
     **Picture - ER diagram**
@@ -6056,18 +6802,22 @@ MyBatis3では、接続に指定しているJDBCドライバからデータベ�
     * - (1)
       - トランザクション系
       - t_order
-      - 注文を保持するテーブル。１つの注文に対して、1レコードが格納される。
+      - 注文データを保持するテーブル。
+
+        １つの注文に対して、1レコードが格納される。
     * - (2)
       -
       - t_order_item
-      - １つの注文で購入された商品を保持するテーブル。1つの注文で、複数の商品が
-        購入された場合は、商品数分レコードが格納される。
+      - １つの注文で購入された商品データを保持するテーブル。
+
+        1つの注文で複数の商品が購入された場合は、商品数分レコードが格納される。
     * - (3)
       -
       - t_order_coupon
-      - １つの注文で使用されたクーポンを保持するテーブル。1つの注文で、複数の
-        クーポンが使用された場合は、クーポン数分レコードが格納される。クーポン
-        を使用しなかった場合は、レコードは格納されない。
+      - １つの注文で使用されたクーポンのデータを保持するテーブル。
+
+        1つの注文で、複数のクーポンが使用された場合は、クーポン数分レコードが格納される。
+        クーポンを使用しなかった場合は、レコードは格納されない。
     * - (4)
       - マスタ系
       - m_item
@@ -6075,13 +6825,14 @@ MyBatis3では、接続に指定しているJDBCドライバからデータベ�
     * - (5)
       -
       - m_category
-      - カテゴリを定義するマスタテーブル。
+      - 商品のカテゴリを定義するマスタテーブル。
     * - (6)
       -
       - m_item_category
-      - 商品が所属するカテゴリを定義するマスタテーブル。商品とカテゴリのマッピ
-        ングを保持している。1つの商品は、複数のカテゴリに属すことができるモデル
-        となっている。
+      - 商品が所属するカテゴリを定義するマスタテーブル。
+
+        商品とカテゴリのマッピングを保持している。
+        1つの商品は、複数のカテゴリに属すことができるモデルとなっている。
     * - (7)
       -
       - m_coupon
@@ -6091,160 +6842,131 @@ MyBatis3では、接続に指定しているJDBCドライバからデータベ�
       - c_order_status
       - 注文ステータスを定義するコードテーブル。
 
+|
 
-| トランザクション系テーブルのレイアウトと、格納されているレコードは、
-  以下の通りである。
+説明で使用するテーブルレイアウトと格納データを作成するためのSQL(DDLとDML)を以下に示す。
+(SQLはH2 Database用である)
 
- **t_order**
+* マスタ系テーブル作成用のDDL
 
- .. tabularcolumns:: |p{0.20\linewidth}|p{0.20\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 20 20
+ .. code-block:: sql
 
-    * - id(PK)
-      - status_code
-    * - 1
-      - accepted
-    * - 2
-      - checking
+    CREATE TABLE m_item (
+        code CHAR(10),
+        name NVARCHAR(256),
+        price INTEGER,
+        CONSTRAINT m_item_pk PRIMARY KEY(code)
+    );
 
- **t_order_item**
+    CREATE TABLE m_category (
+        code CHAR(10),
+        name NVARCHAR(256),
+        CONSTRAINT m_category_pk PRIMARY KEY(code)
+    );
 
- .. tabularcolumns:: |p{0.20\linewidth}|p{0.20\linewidth}|p{0.20\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 20 20 20
+    CREATE TABLE m_item_category (
+        item_code CHAR(10),
+        category_code CHAR(10),
+        CONSTRAINT m_item_category_pk PRIMARY KEY(item_code, category_code),
+        CONSTRAINT m_item_category_fk1 FOREIGN KEY(item_code) REFERENCES m_item(code),
+        CONSTRAINT m_item_category_fk2 FOREIGN KEY(category_code) REFERENCES m_category(code)
+    );
 
-    * - order_id(PK)
-      - item_code(PK)
-      - quantity
-    * - 1
-      - ITM0000001
-      - 10
-    * - 1
-      - ITM0000002
-      - 20
-    * - 2
-      - ITM0000001
-      - 30
-    * - 2
-      - ITM0000002
-      - 40
+    CREATE TABLE m_coupon (
+        code CHAR(10),
+        name NVARCHAR(256),
+        price INTEGER,
+        CONSTRAINT m_coupon_pk PRIMARY KEY(code)
+    );
 
+* コード系テーブル作成用のDDL
 
- **t_order_coupon**
+ .. code-block:: sql
 
- .. tabularcolumns:: |p{0.20\linewidth}|p{0.20\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 20 20
+    CREATE TABLE c_order_status (
+        code VARCHAR(10),
+        name NVARCHAR(256),
+        CONSTRAINT c_order_status_pk PRIMARY KEY(code)
+    );
 
-    * - order_id(PK)
-      - coupon_code(PK)
-    * - 1
-      - CPN0000001
-    * - 1
-      - CPN0000002
+* トランザクション系テーブル作成用のDDL
 
-| マスタ系テーブルのレイアウトと、格納されているレコードは、以下の通りである。
+ .. code-block:: sql
 
- **m_item**
+    CREATE TABLE t_order (
+        id INTEGER,
+        status_code VARCHAR(10),
+        CONSTRAINT t_order_pk PRIMARY KEY(id),
+        CONSTRAINT t_order_fk FOREIGN KEY(status_code) REFERENCES c_order_status(code)
+    );
 
- .. tabularcolumns:: |p{0.20\linewidth}|p{0.20\linewidth}|p{0.20\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 20 20 20
+    CREATE TABLE t_order_item (
+        order_id INTEGER,
+        item_code CHAR(10),
+        quantity INTEGER,
+        CONSTRAINT t_order_item_pk PRIMARY KEY(order_id, item_code),
+        CONSTRAINT t_order_item_fk1 FOREIGN KEY(order_id) REFERENCES t_order(id),
+        CONSTRAINT t_order_item_fk2 FOREIGN KEY(item_code) REFERENCES m_item(code)
+    );
 
-    * - code(PK)
-      - name
-      - price
-    * - ITM0000001
-      - Orange juice
-      - 100
-    * - ITM0000002
-      - NotePC
-      - 100000
+    CREATE TABLE t_order_coupon (
+        order_id INTEGER,
+        coupon_code CHAR(10),
+        CONSTRAINT t_order_coupon_pk PRIMARY KEY(order_id, coupon_code),
+        CONSTRAINT t_order_coupon_fk1 FOREIGN KEY(order_id) REFERENCES t_order(id),
+        CONSTRAINT t_order_coupon_fk2 FOREIGN KEY(coupon_code) REFERENCES m_coupon(code)
+    );
+
+* データ投入用のDML
+
+ .. code-block:: sql
+
+    -- Setup master tables
+    INSERT INTO m_item VALUES ('ITM0000001','Orange juice',100);
+    INSERT INTO m_item VALUES ('ITM0000002','NotePC',100000);
+
+    INSERT INTO m_category VALUES ('CTG0000001','Drink');
+    INSERT INTO m_category VALUES ('CTG0000002','PC');
+    INSERT INTO m_category VALUES ('CTG0000003','Hot selling');
+
+    INSERT INTO m_item_category VALUES ('ITM0000001','CTG0000001');
+    INSERT INTO m_item_category VALUES ('ITM0000002','CTG0000002');
+    INSERT INTO m_item_category VALUES ('ITM0000002','CTG0000003');
+
+    INSERT INTO m_coupon VALUES ('CPN0000001','Join coupon',3000);
+    INSERT INTO m_coupon VALUES ('CPN0000002','PC coupon',30000);
+
+    -- Setup code tables
+    INSERT  INTO  c_order_status VALUES ('accepted','Order accepted');
+    INSERT  INTO  c_order_status VALUES ('checking','Stock checking');
+    INSERT  INTO  c_order_status VALUES ('shipped','Item Shipped');
+
+    -- Setup transaction tables
+    INSERT INTO t_order VALUES (1,'accepted');
+    INSERT INTO t_order VALUES (2,'checking');
+
+    INSERT INTO t_order_item VALUES (1,'ITM0000001',1);
+    INSERT INTO t_order_item VALUES (1,'ITM0000002',2);
+    INSERT INTO t_order_item VALUES (2,'ITM0000001',3);
+    INSERT INTO t_order_item VALUES (2,'ITM0000002',4);
+
+    INSERT INTO t_order_coupon VALUES (1,'CPN0000001');
+    INSERT INTO t_order_coupon VALUES (1,'CPN0000002');
+
+    COMMIT;
 
 |
 
- **m_category**
+.. _DataAccessMyBatis3AppendixAcquireRelatedObjectsAtOnceEntity:
 
- .. tabularcolumns:: |p{0.20\linewidth}|p{0.20\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 20 20
+Entityのクラス図
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-    * - code(PK)
-      - name
-    * - CTG0000001
-      - Drink
-    * - CTG0000002
-      - PC
-    * - CTG0000003
-      - Hot selling
-
-|
-
- **m_item_category**
-
- .. tabularcolumns:: |p{0.20\linewidth}|p{0.20\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 20 20
-
-    * - item_code(PK)
-      - category_code(PK)
-    * - ITM0000001
-      - CTG0000001
-    * - ITM0000002
-      - CTG0000002
-    * - ITM0000002
-      - CTG0000003
-
-|
-
- **m_coupon**
-
- .. tabularcolumns:: |p{0.20\linewidth}|p{0.20\linewidth}|p{0.20\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 20 20 20
-
-    * - code(PK)
-      - name
-      - price
-    * - CPN0000001
-      - Join coupon
-      - 3000
-    * - CPN0000002
-      - PC coupon
-      - 30000
-
-| コード系テーブルのレイアウトと、格納されているレコードは、以下の通りである。
-
- **c_order_status**
-
- .. tabularcolumns:: |p{0.20\linewidth}|p{0.20\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 20 20
-
-    * - code(PK)
-      - name
-    * - accepted
-      - Order accepted
-    * - checking
-      - Stock checking
-    * - shipped
-      - Item Shipped
-
-| 以降で説明する実装例では、上記テーブルに格納されているデータを、以下の
-  JavaBeanにマッピングして、取得する。
+実装例では、上記テーブルに格納されているレコードを、以下のEntity(JavaBean)にマッピングする。
 
  .. figure:: images/dataaccess_entity.png
     :alt: Class(JavaBean) diagram
-    :width: 90%
+    :width: 100%
     :align: center
 
     **Picture - Class(JavaBean) diagram**
@@ -6259,190 +6981,227 @@ MyBatis3では、接続に指定しているJDBCドライバからデータベ�
       - 説明
     * - (1)
       - Order
-      - t_orderテーブルの1レコードを表現するJavaBean。関連オブジェクトとして、
-        \ ``OrderStatus`` \と\ ``OrderItem`` \および\ ``OrderCoupon`` \を複数保
-        持する。
+      - t_orderテーブルの1レコードを表現するJavaBean。
+
+        関連Entityとして、\ ``OrderStatus``\を1件、\ ``OrderItem``\および\ ``OrderCoupon``\を複数保持する。
+
+         .. code-block:: java
+
+            public class Order implements Serializable {
+                private static final long serialVersionUID = 1L;
+                private int id;
+                private OrderStatus orderStatus;
+                List<OrderItem> orderItems;
+                List<OrderCoupon> orderCoupons;
+                // ...
+            }
+
     * - (2)
       - OrderItem
-      - t_order_itemテーブルの1レコードを表現するJavaBean。関連オブジェクトとし
-        て、\ ``Item`` \を保持する。
+      - t_order_itemテーブルの1レコードを表現するJavaBean。
+
+        関連Entityとして、\ ``Item``\を保持する。
+
+         .. code-block:: java
+
+            public class OrderItem implements Serializable {
+                private static final long serialVersionUID = 1L;
+                private int orderId;
+                private Item item;
+                private int quantity;
+                // ...
+            }
+
     * - (3)
       - OrderCoupon
-      - t_order_couponテーブルの1コードを表現するJavaBean。関連オブジェクトとし
-        て、\ ``Coupon`` \を保持する。
+      - t_order_couponテーブルの1コードを表現するJavaBean。
+
+        関連Entityとして、\ ``Coupon``\を保持する。
+
+         .. code-block:: java
+
+            public class OrderCoupon implements Serializable {
+                private static final long serialVersionUID = 1L;
+                private int orderId;
+                private Coupon coupon;
+                // ...
+            }
+
     * - (4)
       - Item
-      - m_itemテーブルの1コードを表現するJavaBean。関連オブジェクトとして、所属
-        している\ ``Category`` \を複数保持する。\ ``Item`` \と\ ``Category`` \
-        の紐づけは、m_item_categoryテーブルによって行われる。
+      - m_itemテーブルの1コードを表現するJavaBean。
+
+        関連オブジェクトとして、所属している\ ``Category``\を複数保持する。
+        \ ``Category``\との紐づけは、m_item_categoryテーブルによって行われる。
+
+         .. code-block:: java
+
+            public class Item implements Serializable {
+                private static final long serialVersionUID = 1L;
+                private String code;
+                private String name;
+                private int price;
+                private List<Category> categories;
+                // ...
+            }
+
     * - (5)
       - Category
       - m_categoryテーブルの1レコードを表現するJavaBean。
+
+         .. code-block:: java
+
+            public class Category implements Serializable {
+                private static final long serialVersionUID = 1L;
+                private String code;
+                private String name;
+                // ...
+            }
+
     * - (6)
       - Coupon
       - m_couponテーブルの1レコードを表現するJavaBean。
+
+         .. code-block:: java
+
+            public class Coupon implements Serializable {
+                private static final long serialVersionUID = 1L;
+                private String code;
+                private String name;
+                private int price;
+                // ...
+            }
+
     * - (7)
       - OrderStatus
       - c_order_statusテーブルの1レコードを表現するJavaBean。
 
+         .. code-block:: java
 
-| JavaBeanのプロパティ定義は、以下の通りである。
+            public class OrderStatus implements Serializable {
+                private static final long serialVersionUID = 1L;
+                private String code;
+                private String name;
+                // ...
+            }
 
-- Order.java
 
- .. code-block:: java
+|
 
-    public class Order implements Serializable {
-        private int id;
-        private List<OrderItem> orderItemList;
-        private List<OrderCoupon> orderCouponList;
-        private OrderStatus status;
-    }
+.. _DataAccessMyBatis3AppendixAcquireRelatedObjectsAtOnceRepository:
 
-- OrderItem.java
+Repositoryインタフェースの実装
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
- .. code-block:: java
+実装例では、
 
-    public class OrderItem implements Serializable {
-        private int orderId;
-        // (1)
-        private String itemCode;
-        private Item item;
-        private int quantity;
-    }
+* Orderオブジェクトを1件取得するメソッド(\ ``findOne``\)
+* 該当ページのOrderオブジェクトを取得するメソッド(\ ``findPage``\)
 
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 10 80
-
-    * - 項番
-      - 説明
-    * - (1)
-      - 保持する値が、直後の変数\ ``item`` \の\ ``code`` \プロパティと重複す
-        る。これは、後述するresultMap要素の、id要素によるレコードの、グルーピン
-        グを行う際に必要になるため、定義している。
-
-- OrderCoupon.java
+を実装する。
 
  .. code-block:: java
 
-    public class OrderCoupon implements Serializable {
-        private int orderId;
-        // (1)
-        private String couponCode;
-        private Coupon coupon;
+    package com.example.domain.repository.order;
+
+    import com.example.domain.model.Order;
+
+    import java.util.List;
+
+    public interface OrderRepository {
+
+        Order findOne(int id);
+
+        List<Order> findPage(@Param("pageable") Pageable pageable);
+
     }
 
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 10 80
+|
 
-    * - 項番
-      - 説明
-    * - (1)
-      - 保持する値が、直後の変数\ ``Coupon`` \の\ ``code`` \プロパティと重複す
-        る。これは、後述するresultMap要素の、id要素によるレコードの、グルーピン
-        グを行う際に必要になるため、定義している。
+.. _DataAccessMyBatis3AppendixAcquireRelatedObjectsAtOnceSql:
 
-- Item.java
+SQLの実装
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
- .. code-block:: java
-
-    public class Item implements Serializable {
-        private String code;
-        private String name;
-        private int price;
-        private List<Category> categoryList;
-    }
-
-- Category.java
-
- .. code-block:: java
-
-    public class Category implements Serializable {
-        private String code;
-        private String name;
-    }
-
-- Coupon.java
-
- .. code-block:: java
-
-    public class Coupon implements Serializable {
-        private String code;
-        private String name;
-        private int price;
-    }
-
-- OrderStatus.java
-
- .. code-block:: java
-
-    public class OrderStatus implements Serializable {
-        private String code;
-        private String name;
-    }
-
-
-| SQLマッピングを実装する。
-| 関連するオブジェクトを、1回のSQLでまとめて取得する場合、取得したいテーブルを
-  JOINして、マッピングに必要なすべてのレコードを取得する。
-| 取得したレコードは、resultMap要素にマッピング定義を行い、JavaBeanにマッピング
-  する。
-
-| 以下では、1件のOrderを取得するSQL(findOne)と、すべてのOrderを取得する
-  SQL(findAll)の実装例となっている。
-
-| 共通SQL定義は以下の通り
-
-- XxxRepository.xml
+関連Entityを1回のSQLでまとめて取得する場合は、
+取得対象のテーブルをJOINしてマッピングに必要な全てのレコードを取得する。
 
  .. code-block:: xml
 
-    <!-- (1) -->
-    <sql id="selectFormJoin">
-      <!-- (2) -->
-      SELECT
-        o.id AS order_id,
-        os.code AS status_code,
-        os.name AS status_name,
-        oi.quantity,
-        i.code AS item_code,
-        i.name AS item_name,
-        i.price AS item_price,
-        ct.code AS category_code,
-        ct.name AS category_name,
-        cp.code AS coupon_code,
-        cp.name AS coupon_name,
-        cp.price AS coupon_price
-      FROM
-        t_order o
-      <!-- (3) -->
-      INNER JOIN
-        c_order_status os
-          ON os.code = o.status_code
-      INNER JOIN
-        t_order_item oi
-          ON oi.order_id = o.id
-      INNER JOIN
-        m_item i
-          ON i.code = oi.item_code
-      INNER JOIN
-        m_item_category ic
-          ON ic.item_code = i.code
-      INNER JOIN
-        m_category ct
-          ON ct.code = ic.category_code
-      <!-- (4) -->
-      LEFT JOIN
-        t_order_coupon oc
-          ON oc.order_id = o.id
-      LEFT JOIN
-        m_coupon cp
-          ON cp.code = oc.coupon_code
-    </sql>
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+            "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+    <mapper namespace="com.example.domain.repository.order.OrderRepository">
+
+        <!-- (1) -->
+        <sql id="selectFromJoin">
+            SELECT
+                /* (2) */
+                o.id,
+                /* (3) */
+                o.status_code,
+                os.name AS status_name,
+                /* (4) */
+                oi.quantity,
+                i.code AS item_code,
+                i.name AS item_name,
+                i.price AS item_price,
+                /* (5) */
+                ct.code AS category_code,
+                ct.name AS category_name,
+                /* (6) */
+                cp.code AS coupon_code,
+                cp.name AS coupon_name,
+                cp.price AS coupon_price
+            FROM
+                ${orderTable} o
+            /* (7) */
+            INNER JOIN c_order_status os ON os.code = o.status_code
+            INNER JOIN t_order_item oi ON oi.order_id = o.id
+            INNER JOIN m_item i ON i.code = oi.item_code
+            INNER JOIN m_item_category ic ON ic.item_code = i.code
+            INNER JOIN m_category ct ON ct.code = ic.category_code
+            /* (8) */
+            LEFT JOIN t_order_coupon oc ON oc.order_id = o.id
+            LEFT JOIN m_coupon cp ON cp.code = oc.coupon_code
+        </sql>
+
+        <!-- (9) -->
+        <select id="findOne" parameterType="_int" resultMap="orderResultMap">
+            <bind name="orderTable" value="'t_order'" />
+            <include refid="selectFromJoin"/>
+            WHERE
+                o.id = #{id}
+            ORDER BY
+                item_code ASC,
+                category_code ASC,
+                coupon_code ASC
+        </select>
+
+        <!-- (10) -->
+        <select id="findPage" resultMap="orderResultMap">
+            <bind name="orderTable" value="
+                '(
+                  SELECT
+                      *
+                  FROM
+                      t_order
+                  ORDER BY
+                      id DESC
+                  LIMIT #{pageable.pageSize}
+                  OFFSET #{pageable.offset}
+                  )'" />
+            <include refid="selectFromJoin"/>
+            ORDER BY
+                id DESC,
+                item_code ASC,
+                category_code ASC,
+                coupon_code ASC
+        </select>
+
+        <!-- ... -->
+
+    </mapper>
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
  .. list-table::
@@ -6452,177 +7211,143 @@ MyBatis3では、接続に指定しているJDBCドライバからデータベ�
     * - 項番
       - 説明
     * - (1)
-      - findOneと、findAllでSELECT句、FROM句、JOIN句を共有するためのsql要素。
-        findOneとfindAllで、多くの共通部分があったので共通化している。
+      - \ ``findOne``\メソッドと\ ``findPage``\メソッド用のSELECT句、FROM句、JOIN句を実装する。
+
+        上記例では、\ ``findOne``\メソッドと\ ``findPage``\メソッドの共通箇所を共通化している。
     * - (2)
-      - 関連オブジェクトを生成するために、必要なデータをすべて取得する。カラム
-        名は、重複しないようにする必要がある。上記例では、\ ``code`` \,
-        \ ``name`` \, \ ``price`` \が重複するため、AS句で別名を指定している。
+      - Orderオブジェクトを生成するために必要なデータを取得する。
     * - (3)
-      - 関連オブジェクトを生成するために、必要なデータが格納されているテーブル
-        を結合する。
+      - OrderStatusオブジェクトを生成するために必要なデータを取得する。
+
+        取得するカラム名は重複しないようにする必要がある。
+        上記例では、\ ``name``\カラムが重複するため、
+        AS句を使用して別名(\ ``status_``\プレフィックス)を指定している。
     * - (4)
-      - データが格納されない可能性のあるテーブルについては、外部結合とする。
-        クーポンを使用しない場合、t_group_couponにレコードが格納されないので外
-        部結合にする必要がある。t_group_couponと結合するt_couponも同様である。
+      - OrderItemオブジェクトとItemオブジェクトを生成するために必要なデータを取得する。
 
-
-１件取得SQL定義は以下の通り。
-
-- XxxRepository.xml
-
- .. code-block:: xml
-
-    <!-- (1) -->
-    <select id="findOne"
-        parameterType="int" resultMap="orderResultMap">
-      <!-- (2) -->
-      <include refid="selectFormJoin"/>
-      WHERE
-        <!-- (3) -->
-        o.id = #{id}
-      <!-- (4) -->
-      ORDER BY
-        <!-- (5) -->
-        item_code ASC,
-        <!-- (6) -->
-        category_code ASC,
-        <!-- (7) -->
-        coupon_code ASC
-    </select>
-
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 10 80
-
-    * - 項番
-      - 説明
-    * - (1)
-      - 指定された注文IDの、\ ``Order`` \オブジェクトおよび関連オブジェクトを取
-        得するためのSQL。
-    * - (2)
-      - findAllと共有するSELECT句、FROM句、JOIN句が実装されたSQLを、インクルー
-        ドしている。
-    * - (3)
-      - バインド値で渡された注文IDを、WHERE句に指定する。
-    * - (4)
-      - 1:Nの関係の関連オブジェクトがある場合は、リスト内の並び順を制御するため
-        の、ORDER BY句を指定する。並び順を意識する必要がない場合は、指定は不要
-        である。
+        取得するカラム名は重複しないようにする必要がある。
+        上記例では、\ ``code``\,\ ``name``\, \ ``price``\が重複するため、
+        AS句を使用して別名(\ ``item_``\プレフィックス)を指定している。
     * - (5)
-      - \ ``Order#orderItems`` \のリストを、t_itemテーブルのcodeカラムの昇順に
-        するための指定。
+      - Categoryオブジェクトを生成するために必要なデータを取得する。
+
+        取得するカラム名は重複しないようにする必要がある。
+        上記例では、\ ``code``\,\ ``name``\が重複するため、
+        AS句を使用して別名(\ ``category_``\プレフィックス)を指定している。
     * - (6)
-      - \ ``Item#categories`` \のリストを、t_categoryテーブルのcodeカラムの昇順
-        にするための指定。
+      - OrderCouponオブジェクトとCouponオブジェクトを生成するために必要なデータを取得する。
+
+        取得するカラム名は重複しないようにする必要がある。
+        上記例では、\ ``code``\,\ ``name``\, \ ``price``\が重複するため、
+        AS句を使用して別名(\ ``coupon_``\プレフィックス)を指定している。
     * - (7)
-      - \ ``Order#orderCoupons`` \のリストを、t_couponのcodeの昇順にするための
-        指定。
+      - 関連オブジェクトを生成するために必要なデータが格納されているテーブルを結合する。
+    * - (8)
+      - レコードが格納されない可能性のあるテーブルについては、外部結合とする。
+        クーポンを使用しない場合、t_order_couponにレコードが格納されないので外部結合にする必要がある。
+        t_order_couponと結合するt_couponも同様である。
+    * - (9)
+      - \ ``findOne``\メソッド用のSQLを実装する。
 
+        ORDER BY句には、1:Nの関連をもつEntityの並び順を指定する。
+        上記例では、PKの昇順で並べ替えている。
+    * - (10)
+      - \ ``findPage``\メソッド用のSQLを実装する。
+        ORDER BY句には、Orderと1:Nの関連をもつEntityの並び順を指定する。
+        上記例では、OrderはPKの降順(新しい順)、関連EntityはPKの昇順で並べ替えている。
 
-全件取得SQL定義は以下の通り。
+ .. tip::
 
-- findAllのSQL定義
+    1:Nの関連を持つ関連Entityを1回のSQLでまとめて取得する際にページネーション検索が必要な場合は、
+    MyBatis3から提供されている\ ``RowBounds``\を使用することが出来ない。
 
- .. code-block:: xml
+    代替案としては、
 
-    <!-- (1) -->
-    <select id="findAll" resultMap="orderResultMap">
-        <!-- (2) -->
-        <include refid="fragment_selectFormJoin"/>
-      ORDER BY
-        <!-- (3) -->
-        order_id DESC,
-        item_code ASC,
-        category_code ASC,
-        coupon_code ASC
-    </select>
+    * まず主Entityのみを検索するメソッドを呼び出し、関連Entityは別途のメソッドを呼び出して取得する
+    * SQLでページ範囲内の主Entityのみ格納されている仮想テーブルを作成し、仮想テーブルのレコードとJOINする事で、
+      マッピングに必要な全てのレコードを取得する(上記例の \ ``findPage``\は、このパターンで実装している)
 
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 10 80
+    等の方法が考えられる。
 
-    * - 項番
-      - 説明
-    * - (1)
-      - すべてのOrder、および、関連オブジェクトを取得するためのSQL。
-    * - (2)
-      - findOneとfindAllでSELECT句、FROM句、JOIN句を共有するためのsql要素。
-    * - (3)
-      - 取得されるリストの並び順を、t_orderのidの降順にするための指定。
+|
 
+上記SQL(findPage)を実行すると以下のレコードが取得される。
+注文レコードとしては2件だが、レコードが複数件格納される関連テーブルと結合しているため、
+合計で9レコードが取得される。
 
-| 上記SQL(findAll)を実行した結果、以下のレコードが取得される。
-| 注文レコードとしては2件だが、レコードが複数件格納される関連テーブルと結合して
-  いるため、合計で9レコードが取得される。
-| 1～3行目は、注文IDが\ ``2`` \の\ ``Order`` \オブジェクトを生成するためのレ
-  コード、4～9行目は注文IDが\ ``1`` \の\ ``Order`` \オブジェクトを生成するため
-  のレコードとなる。
+内訳は、
+
+* 1～3行目は、注文IDが\ ``2``\の\ ``Order``\オブジェクトを生成するためのレコード
+* 4～9行目は、注文IDが\ ``1``\の\ ``Order``\オブジェクトを生成するためレコード
+
+となる。
+
+以降の説明では、注文IDが\ ``1``\のレコードを例に、
+どのように検索結果(\ ``ResultSet``\)をJavaBeanにマッピングするかを説明していく。
+
 
  .. figure:: images/dataaccess_sql_result.png
-    :alt: Result Set of findAll
+    :alt: Result Set of findPage
     :width: 100%
     :align: center
 
-    **Picture - Result Set of findAll**
+    **Picture - Result Set of findPage**
 
+|
 
-| 上記レコードを、\ ``Order`` \オブジェクト、および、関連オブジェクトにマッピン
-  グする方法について説明する。
+.. _DataAccessMyBatis3AppendixAcquireRelatedObjectsAtOnceMapping:
+
+マッピングの実装
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+上記レコードを、\ ``Order``\オブジェクトと関連Entityにマッピングするための定義を以下に示す。
 
  .. code-block:: xml
 
-    <resultMap id="orderResultMap" type="Order">
-        <id property="id" column="order_id" />
-        <association property="status" resultMap="orderStatusResultMap" />
-        <collection property="orderItems" resultMap="orderItemResultMap" />
-        <collection property="orderCoupons" resultMap="orderCouponResultMap" />
-    </resultMap>
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+            "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+    <mapper namespace="com.example.domain.repository.order.OrderRepository">
 
-    <resultMap id="orderStatusResultMap" type="OrderStatus">
-        <id property="code" column="status_code" />
-        <result property="name" column="status_name" />
-    </resultMap>
+        <!-- ... -->
 
-    <resultMap id="orderItemResultMap" type="OrderItem">
-        <id property="itemCode" column="item_code" />
-        <result property="quantity" column="quantity" />
-        <association property="item" resultMap="itemResultMap" />
-    </resultMap>
+        <!-- (1) -->
+        <resultMap id="orderResultMap" type="Order">
+            <id property="id" column="id"/>
+            <!-- (2) -->
+            <result property="orderStatus.code" column="status_code" />
+            <result property="orderStatus.name" column="status_name" />
+            <!-- (3) -->
+            <collection property="orderItems" ofType="OrderItem">
+                <id property="orderId" column="id"/>
+                <id property="item.code" column="item_code"/>
+                <result property="quantity" column="quantity"/>
+                <association property="item" resultMap="itemResultMap"/>
+            </collection>
+            <!-- (4) -->
+            <collection property="orderCoupons" ofType="OrderCoupon"
+                        notNullColumn="coupon_code">
+                <id property="orderId" column="id"/>
+                <!-- (5) -->
+                <id property="coupon.code" column="coupon_code"/>
+                <result property="coupon.name" column="coupon_name"/>
+                <result property="coupon.price" column="coupon_price"/>
+            </collection>
+        </resultMap>
 
-    <resultMap id="itemResultMap" type="Item">
-        <id property="code" column="item_code" />
-        <result property="name" column="item_name" />
-        <result property="price" column="item_price" />
-        <collection property="categoryList" resultMap="categoryResultMap" />
-    </resultMap>
+        <!-- (6) -->
+        <resultMap id="itemResultMap" type="Item">
+            <id property="code" column="item_code"/>
+            <result property="name" column="item_name"/>
+            <result property="price" column="item_price"/>
+            <!-- (7) -->
+            <collection property="categories" ofType="Category">
+                <id property="code" column="category_code"/>
+                <result property="name" column="category_name"/>
+            </collection>
+        </resultMap>
 
-    <resultMap id="categoryResultMap" type="Category">
-        <id property="code" column="category_code" />
-        <result property="name" column="category_name" />
-    </resultMap>
-
-    <resultMap id="orderCouponResultMap" type="OrderCoupon">
-        <id property="couponCode" column="coupon_code" />
-        <association property="coupon" resultMap="couponResultMap" />
-    </resultMap>
-
-    <resultMap id="couponResultMap" type="Coupon">
-        <id property="code" column="coupon_code" />
-        <result property="name" column="coupon_name" />
-        <result property="price" column="coupon_price" />
-    </resultMap>
-
-| 各resultMap要素の役割と依存関係を、以下に示す。
-
- .. figure:: images/dataaccess_resultmap.png
-    :alt: Implementation of ResultMap
-    :width: 100%
-    :align: center
-
-    **Picture - Implementation of ResultMap**
+    </mapper>
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
  .. list-table::
@@ -6632,49 +7357,53 @@ MyBatis3では、接続に指定しているJDBCドライバからデータベ�
     * - 項番
       - 説明
     * - (1)
-      - 取得したレコードを\ ``Order`` \オブジェクトにマッピングするための定義。
-        関連オブジェクト(\ ``OrderStatus`` \, \ ``OrderItem`` \,
-        \ ``OrderCoupon`` \)のマッピングは、別のresultMapに委譲している。
+      - 取得したレコードを\ ``Order``\オブジェクトにマッピングするための定義。
+        関連Entity(\ ``OrderStatus``\, \ ``OrderItem``\,\ ``OrderCoupon``\)のマッピングを行う。
     * - (2)
-      - 取得したレコードを、\ ``OrderStatus`` \オブジェクトにマッピングするため
-        の定義。
+      - 取得したレコードを\ ``OrderStatus``\オブジェクトにマッピングするための定義。
     * - (3)
-      - 取得したレコードを、\ ``OrderItem`` \オブジェクトにマッピングするための
-        定義。
-        関連オブジェクト(\ ``Item`` \)のマッピングは別のresultMapに委譲してい
-        る。
+      - 取得したレコードを\ ``OrderItem``\オブジェクトにマッピングするための定義。
+        関連Entity(\ ``Item``\)へのマッピングは、別の\ ``resultMap``\(6)に委譲している。
     * - (4)
-      - 取得したレコードを、\ ``Item`` \オブジェクトにマッピングするための定
-        義。関連オブジェクト(\ ``Category`` \)のマッピングは、別のresultMapに委
-        譲している。
+      - 取得したレコードを\ ``OrderCoupon``\オブジェクトにマッピングするための定義。
     * - (5)
-      - 取得したレコードを、\ ``Category`` \オブジェクトにマッピングするための
-        定義。
+      - 取得したレコードを\ ``Coupon``\オブジェクトにマッピングするための定義。
     * - (6)
-      - 取得したレコードを、\ ``OrderCoupon`` \オブジェクトにマッピングするため
-        の定義。関連オブジェクト(\ ``Coupon`` \)のマッピングは、別のresultMapに
-        委譲している。
+      - 取得したレコードを\ ``Item``\オブジェクトにマッピングするための定義。
     * - (7)
-      - 取得したレコードを、\ ``Coupon`` \オブジェクトにマッピングするための定
-        義。
+      - 取得したレコードを\ ``Category``\オブジェクトにマッピングするための定義。
 
+|
 
-| \ ``Order`` \オブジェクトへのマッピングを行う。
+.. _DataAccessMyBatis3AppendixAcquireRelatedObjectsAtOnceMappingOrder:
+
+Orderオブジェクトへのマッピングの実装
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+\ ``Order``\オブジェクトへのマッピングを行う。
 
  .. code-block:: xml
+    :emphasize-lines: 1-4
 
+    <!-- (1) -->
     <resultMap id="orderResultMap" type="Order">
-        <!-- (1) -->
-        <id property="id" column="id" />
         <!-- (2) -->
-        <association property="status"
-            resultMap="orderStatusResultMap" />
-        <!-- (3) -->
-        <collection property="orderItemList"
-            resultMap="orderItemResultMap" />
-        <!-- (4) -->
-        <collection property="orderCouponList"
-            resultMap="orderCouponResultMap" />
+        <id property="id" column="id"/>
+        <result property="orderStatus.code" column="status_code" />
+        <result property="orderStatus.name" column="status_name" />
+        <collection property="orderItems" ofType="OrderItem">
+            <id property="orderId" column="id"/>
+            <id property="item.code" column="item_code"/>
+            <result property="quantity" column="quantity"/>
+            <association property="item" resultMap="itemResultMap"/>
+        </collection>
+        <collection property="orderCoupons" ofType="OrderCoupon"
+                    notNullColumn="coupon_code">
+            <id property="orderId" column="id"/>
+            <id property="coupon.code" column="coupon_code"/>
+            <result property="coupon.name" column="coupon_name"/>
+            <result property="coupon.price" column="coupon_price"/>
+        </collection>
     </resultMap>
 
  .. figure:: images/dataaccess_resultmap_order.png
@@ -6684,6 +7413,7 @@ MyBatis3では、接続に指定しているJDBCドライバからデータベ�
 
     **Picture - ResultMap for Order**
 
+
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
  .. list-table::
     :header-rows: 1
@@ -6692,41 +7422,62 @@ MyBatis3では、接続に指定しているJDBCドライバからデータベ�
     * - 項番
       - 説明
     * - (1)
-      - 取得したレコードの\ ``id`` \カラムの値を、\ ``Order#id`` \に設定する。
-        id要素を使用する事で、\ ``id`` \プロパティでグループ化されるため、
-        \ ``id=1`` \と\ ``id=2`` \の２つの\ ``Order`` \オブジェクトが、生成され
-        る。
+      - 検索結果を\ ``Order``\オブジェクトにマッピングする。
+
+        \ ``type``\属性にマッピングするクラスを指定する。
     * - (2)
-      - \ ``OrderStatus`` \ オブジェクトの生成を、
-        \ ``id="order.orderStatusResultMap"`` \のresultMapに委譲し、生成された
-        オブジェクトを、\ ``Order#status`` \に設定する。resultMapにオブジェクト
-        の生成を委譲し、かつオブジェクトがコレクションではない場合はassociation
-        要素を使用する。
-    * - (3)
-      - \ ``OrderItem`` \オブジェクトの生成を、
-        \ ``id="order.orderItemResultMap"`` \のresultMapに委譲し、生成されたオ
-        ブジェクトを、\ ``Order#orderItems`` \のリストに追加する。resultMapにオ
-        ブジェクトの生成を委譲し、かつオブジェクトがコレクションである場合は
-        collection要素を使用する。
-    * - (4)
-      - \ ``OrderCoupon`` \オブジェクトの生成を、
-        \ ``id="order.orderCouponResultMap"`` \のresultMapに委譲し、生成された
-        オブジェクトを、\ ``Order#orderCoupons`` \のリストに追加する。resultMap
-        にオブジェクトの生成を委譲し、かつオブジェクトがコレクションである場合
-        はcollection要素を使用する。
+      - 取得したレコードの\ ``id``\カラムの値を、\ ``Order#id``\プロパティに設定する。
 
-| 以降では、\ ``id=1`` \の\ ``Order`` \オブジェクトへのマッピングに、焦点を当て
-  て説明する。
+        \ ``id``\カラムはPKなので、\ ``id``\要素を使用してマッピングを行う。
+        \ ``id``\要素を使用すると、指定したプロパティの値でレコードがグループ化される。
+        具体的には、\ ``id=1``\と\ ``id=2``\の2つにグループ化され、
+        2つの\ ``Order``\オブジェクトが生成される。
 
-\ ``OrderStatus`` \オブジェクトへのマッピングを行う。
+
+|
+
+.. _DataAccessMyBatis3AppendixAcquireRelatedObjectsAtOnceMappingOrderStatus:
+
+OrderStatusオブジェクトへのマッピングの実装
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+\ ``OrderStatus``\オブジェクトへのマッピングを行う。
+
+ .. note::
+
+    「:ref:`domainlayer_entity`」のEntityクラスの作成方針では、
+    「コード系テーブルは、Entityとして扱うのではなく、java.lang.Stringなどの基本型で扱う。」としている。
+    これは、コード系テーブルで保持しているデータは、
+    「:doc:`Codelist`」などの別の仕組みを使用するケースが多いためである。
+
+    本節では、関連Entity(JavaBean)へのマッピング方法を説明する事が目的なので、
+    コード系テーブルもEntityとして扱っている点を補足しておく。
+
+    実際のプロジェクトでは、Entityクラスの作成方針を参考にEntityを作成することを推奨する。
+
 
  .. code-block:: xml
+    :emphasize-lines: 3-6
 
-    <resultMap id="orderStatusResultMap" type="OrderStatus">
+    <resultMap id="orderResultMap" type="Order">
+        <id property="id" column="id"/>
         <!-- (1) -->
-        <result property="code" column="status_code" />
+        <result property="orderStatus.code" column="status_code" />
         <!-- (2) -->
-        <result property="name" column="status_name" />
+        <result property="orderStatus.name" column="status_name" />
+        <collection property="orderItems" ofType="OrderItem">
+            <id property="orderId" column="id"/>
+            <id property="item.code" column="item_code"/>
+            <result property="quantity" column="quantity"/>
+            <association property="item" resultMap="itemResultMap"/>
+        </collection>
+        <collection property="orderCoupons" ofType="OrderCoupon"
+                    notNullColumn="coupon_code">
+            <id property="orderId" column="id"/>
+            <id property="coupon.code" column="coupon_code"/>
+            <result property="coupon.name" column="coupon_name"/>
+            <result property="coupon.price" column="coupon_price"/>
+        </collection>
     </resultMap>
 
  .. figure:: images/dataaccess_resultmap_orderstatus.png
@@ -6744,27 +7495,50 @@ MyBatis3では、接続に指定しているJDBCドライバからデータベ�
     * - 項番
       - 説明
     * - (1)
-      - 取得したレコードの、\ ``status_code`` \カラムの値を、
-        \ ``OrderStatus#code`` \に設定する。\  ``Order`` \と、
-        \ ``OrderStatus`` \オブジェクトは、1:1の関係なので、id要素を使用する。
-        本例では、\ ``code=accepted`` \の\ ``OrderStatus`` \オブジェクトが生成
-        される。
+      - 取得したレコードの\ ``status_code``\カラムの値を、
+        \ ``OrderStatus#code``\プロパティに設定する。
     * - (2)
-      - 取得したレコードの、\ ``status_name`` \カラムの値を、
-        \ ``OrderStatus#name`` \に設定する。
+      - 取得したレコードの\ ``status_name``\カラムの値を、
+        \ ``OrderStatus#name``\プロパティに設定する。
 
+ .. note::
 
-| \ ``OrderItem`` \オブジェクトへのマッピングを行う。
+    \ ``OrderStatus``\オブジェクトには、\ ``id``\カラムでグループ化されたレコードの値が設定される。
+
+|
+
+.. _DataAccessMyBatis3AppendixAcquireRelatedObjectsAtOnceMappingOrderItem:
+
+OrderItemオブジェクトへのマッピングの実装
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+``OrderItem``\オブジェクトへのマッピングを行う。
 
  .. code-block:: xml
+    :emphasize-lines: 5-15
 
-    <resultMap id="orderItemResultMap" type="OrderItem">
+    <resultMap id="orderResultMap" type="Order">
+        <id property="id" column="id"/>
+        <result property="orderStatus.code" column="status_code" />
+        <result property="orderStatus.name" column="status_name" />
         <!-- (1) -->
-        <id property="itemCode" column="item_code" />
-        <!-- (2) -->
-        <result property="quantity" column="quantity" />
-        <!-- (3) -->
-        <association property="item" resultMap="itemResultMap" />
+        <collection property="orderItems" ofType="OrderItem">
+            <!-- (2) -->
+            <id property="orderId" column="id"/>
+            <!-- (3) -->
+            <id property="item.code" column="item_code"/>
+            <!-- (4) -->
+            <result property="quantity" column="quantity"/>
+            <!-- (5) -->
+            <association property="item" resultMap="itemResultMap"/>
+        </collection>
+        <collection property="orderCoupons" ofType="OrderCoupon"
+                    notNullColumn="coupon_code">
+            <id property="orderId" column="id"/>
+            <id property="coupon.code" column="coupon_code"/>
+            <result property="coupon.name" column="coupon_name"/>
+            <result property="coupon.price" column="coupon_price"/>
+        </collection>
     </resultMap>
 
  .. figure:: images/dataaccess_resultmap_orderitem.png
@@ -6782,38 +7556,65 @@ MyBatis3では、接続に指定しているJDBCドライバからデータベ�
     * - 項番
       - 説明
     * - (1)
-      - 取得したレコードの\ ``item_code`` \カラムの値を、
-        \ ``OrderItem#itemCode`` \に設定する。\ ``Order`` \と\ ``OrderItem`` \
-        は、1:Nの関係なので、id要素を使用する。本例では、\ ``itemCode`` \プロパ
-        ティでグループ化されるため、\ ``itemCode=ITM0000001`` \と
-        \ ``itemCode=ITM0000002`` \の、２つの\ ``OrderItem`` \オブジェクトが生
-        成される。注文商品は、t_order_itemのプライマリキー(order_id,item_code)
-        でグループ化する必要があるが、order_idカラムについては、親のresultMapで
-        指定されているため、ここでは、item_codeカラムの値を保持する
-        \ ``itemCode`` \プロパティのみ指定する。(3)で生成される\ ``Item#code`` \
-        と重複するが、\ ``itemCode`` \プロパティは、\ ``OrderItem`` \をグループ
-        化するために必要なプロパティとなる。
-    * - (2)
-      - 取得したレコードの\ ``quantity`` \カラムの値を、
-        \ ``OrderItem#quantity`` \に設定する。
-    * - (3)
-      - \ ``Item`` \オブジェクトの生成を、\ ``id="order.itemResultMap"`` \の
-        resultMapに委譲し、生成されたオブジェクトを\ ``OrderItem#item`` \に設定
-        する。
+      - 検索結果を\ ``OrderItem``\オブジェクトにマッピングし、
+        \ ``Order#orderItems``\プロパティに追加する。
 
-| \ ``Item`` \オブジェクトへのマッピングを行う。
+        1:Nの関係の関連Entityにマッピングする場合は、\ ``collection``\要素を使用する。
+        \ ``collection``\要素の詳細は、
+        「`MyBatis3 REFERENCE DOCUMENTATION(Mapper XML Files-collection-) <http://mybatis.github.io/mybatis-3/sqlmap-xml.html#collection>`_\」を参照されたい。
+    * - (2)
+      - 取得したレコードの\ ``id``\カラムの値を、\ ``OrderItem#orderId``\プロパティに設定する。
+
+        \ ``id``\カラムはPKなので、\ ``id``\要素を使用してマッピングを行う。
+    * - (3)
+      - 取得したレコードの\ ``item_code``\カラムの値を、\ ``Item#code``\プロパティに設定する。
+
+
+        \ ``item_code``\カラムはPKなので、\ ``id``\要素を使用してマッピングを行う。
+        \ ``id``\要素を使用すると、指定したプロパティの値でレコードがグループ化される。
+        具体的には、\ ``Item#code=ITM0000001``\と\ ``Item#code=ITM0000002``\の2つにグループ化され、
+        2つの\ ``OrderItem``\オブジェクトが生成される。
+    * - (4)
+      - 取得したレコードの\ ``quantity``\カラムの値を、\ ``OrderItem#quantity``\プロパティに設定する。
+    * - (5)
+      - \ ``Item``\オブジェクトの生成を、別の\ ``resultMap``\に委譲し、
+        生成されたオブジェクトを\ ``OrderItem#item``\プロパティに設定する。
+        実際のマッピングは、
+        「:ref:`DataAccessMyBatis3AppendixAcquireRelatedObjectsAtOnceMappingItem`」を参照されたい。
+
+        1:1の関係の関連Entityにマッピングする場合は、\ ``association``\要素を使用する。
+        \ ``association``\要素の詳細は、
+        「`MyBatis3 REFERENCE DOCUMENTATION(Mapper XML Files-association-) <http://mybatis.github.io/mybatis-3/sqlmap-xml.html#association>`_\」を参照されたい。
+
+ .. note::
+
+    \ ``OrderItem``\オブジェクトには、
+    \ ``id``\カラムと\ ``item_code``\カラムでグループ化されたレコードの値が設定される。
+
+|
+
+.. _DataAccessMyBatis3AppendixAcquireRelatedObjectsAtOnceMappingItem:
+
+Itemオブジェクトへのマッピングの実装
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+\ ``Item``\オブジェクトへのマッピングを行う。
 
  .. code-block:: xml
+    :emphasize-lines: 1-8
 
+    <!-- (1) -->
     <resultMap id="itemResultMap" type="Item">
-        <!-- (1) -->
-        <id property="code" column="item_code" />
         <!-- (2) -->
-        <result property="name" column="item_name" />
+        <id property="code" column="item_code"/>
         <!-- (3) -->
-        <result property="price" column="item_price" />
+        <result property="name" column="item_name"/>
         <!-- (4) -->
-        <collection property="categoryList" resultMap="categoryResultMap" />
+        <result property="price" column="item_price"/>
+        <collection property="categories" ofType="Category">
+            <id property="code" column="category_code"/>
+            <result property="name" column="category_name"/>
+        </collection>
     </resultMap>
 
  .. figure:: images/dataaccess_resultmap_item.png
@@ -6831,46 +7632,55 @@ MyBatis3では、接続に指定しているJDBCドライバからデータベ�
     * - 項番
       - 説明
     * - (1)
-      - 取得したレコードの\ ``item_code`` \カラムの値を、\ ``Item#code`` \に設
-        定する。\  ``OrderItem`` \と\ ``Item`` \オブジェクトは、1:1の関係だ
-        が、\ ``Item`` \と\ ``Category`` \は、1:Nの関係なので、id要素を使用す
-        る。カテゴリは商品毎にグループ化する必要があるため、商品を一意に識別す
-        るための値が格納されている\ ``code`` \プロパティを、groupBy属性に指定す
-        る。本例では、\ ``OrderItem#itemCode=ITM0000001`` \用に、
-        \ ``code=ITM0000001`` \の\ ``Item`` \オブジェクトが、
-        \ ``OrderItem#itemCode=ITM0000002`` \用に、\ ``code=ITM0000002`` \の
-        \ ``Item`` \オブジェクトが生成される。(計２つのオブジェクトが生成され
-        る。)
+      - 検索結果を\ ``Item``\オブジェクトにマッピングする。
+
+        \ ``type``\属性にマッピングするクラスを指定する。
     * - (2)
-      - 取得したレコードの\ ``item_name`` \カラムの値を、\ ``Item#name`` \に設
-        定する。
+      - 取得したレコードの\ ``item_code``\カラムの値を、\ ``Item#code``\に設定する。
+
+        \ ``item_code``\カラムはPKなので、\ ``id``\要素を使用してマッピングを行う。
     * - (3)
-      - 取得したレコードの\ ``item_price`` \カラムの値を、\ ``Item#price`` \に
-        設定する。
+      - 取得したレコードの\ ``item_name``\カラムの値を、\ ``Item#name``\に設定する。
     * - (4)
-      - \ ``Category`` \オブジェクトの生成を、\ ``id="categoryResultMap"`` \の
-        resultMapに委譲し、生成されたオブジェクトを ``Item#categoryList`` のリ
-        ストに追加する。格納するプロパティがコレクションであるためcollection要
-        素を使用する。
+      - 取得したレコードの\ ``item_price``\カラムの値を、\ ``Item#price``\に設定する。
 
+ .. note::
 
-| \ ``Category`` \オブジェクトへのマッピングを行う。
+    \ ``Item``\オブジェクトには、
+    \ ``id``\カラムと\ ``item_code``\カラムでグループ化されたレコードの値が設定される。
+
+|
+
+.. _DataAccessMyBatis3AppendixAcquireRelatedObjectsAtOnceMappingCategory:
+
+Categoryオブジェクトへのマッピングの実装
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+\ ``Category``\オブジェクトへのマッピングを行う。
 
  .. code-block:: xml
+    :emphasize-lines: 5-11
 
-    <resultMap id="categoryResultMap" type="Category">
+    <resultMap id="itemResultMap" type="Item">
+        <id property="code" column="item_code"/>
+        <result property="name" column="item_name"/>
+        <result property="price" column="item_price"/>
         <!-- (1) -->
-        <id property="code" column="category_code" />
-        <!-- (2) -->
-        <result property="name" column="category_name" />
+        <collection property="categories" ofType="Category">
+            <!-- (2) -->
+            <id property="code" column="category_code"/>
+            <!-- (3) -->
+            <result property="name" column="category_name"/>
+        </collection>
     </resultMap>
 
+
  .. figure:: images/dataaccess_resultmap_category.png
-    :alt: ResultMap for Item
+    :alt: ResultMap for Category
     :width: 100%
     :align: center
 
-    **Picture - ResultMap for Item**
+    **Picture - ResultMap for Category**
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
  .. list-table::
@@ -6880,33 +7690,63 @@ MyBatis3では、接続に指定しているJDBCドライバからデータベ�
     * - 項番
       - 説明
     * - (1)
-      - 取得したレコードの \ ``item_code`` \カラムの値を、\ ``Item#code`` \に設
-        定する。本例では、1:Nの関係のテーブル(t_orderとt_order_line、t_orderと
-        t_order_coupon)を複数結合しているため、t_order_couponに複数レコードが格
-        納されていると \ ``Item`` \オブジェクト内に保持する\ ``Category`` \オブ
-        ジェクトのリストが、重複してしまう。重複をなくすために、カテゴリを一意
-        に識別する値が格納されている\ ``code`` \プロパティを、id要素で指定す
-        る。\ ``code`` \プロパティの値が、同じ\ ``Category`` \オブジェクトが一
-        つにマージされ、重複をなくすことができる。本例では、
-        \ ``Item#code=ITM0000001`` \用に、\ ``code=CTG0000001`` \の
-        \ ``Category`` \オブジェクトが、\ ``Item#code=ITM0000002`` \用に、
-        \ ``code=CTG0000002`` \と、\ ``code=CTG0000003`` \の2つの
-        \ ``Category`` \オブジェクトが生成される。(計3つのオブジェクトが生成さ
-        れる。)
+      - 検索結果を\ ``Category``\オブジェクトにマッピングし、\ ``Item#categories``\プロパティに追加する。
+
+        1:Nの関係の関連Entityにマッピングする場合は、\ ``collection``\要素を使用する。
+        \ ``collection``\要素の詳細は、
+        「`MyBatis3 REFERENCE DOCUMENTATION(Mapper XML Files-collection-) <http://mybatis.github.io/mybatis-3/sqlmap-xml.html#collection>`_\」を参照されたい。
     * - (2)
-      - 取得したレコードの \ ``item_name`` \カラムの値を、\ ``Item#name`` \に設
-        定する。
+      - 取得したレコードの\ ``category_code``\カラムの値を、\ ``Category#code``\に設定する。
 
+        \ ``category_code``\カラムはPKなので、\ ``id``\要素を使用してマッピングを行う。
+        \ ``id``\要素を使用すると、指定したプロパティの値でレコードがグループ化される。
 
-| \ ``OrderCoupon`` \オブジェクトへのマッピングを行う。
+        具体的には、
+
+        * \ ``Item#code=ITM0000001``\のカテゴリとして、\ ``Category#code=CTG0000001``\の\ ``Category``\オブジェクト
+
+        * \ ``Item#code=ITM0000002``\のカテゴリとして、\ ``Category#code=CTG0000002``\と\ ``Category#code=CTG0000003``\の2つの\ ``Category``\オブジェクト
+
+        が生成される。
+    * - (3)
+      - 取得したレコードの\ ``category_name``\カラムの値を、\ ``Category#name`` \に設定する。
+
+ .. note::
+
+    \ ``Category``\オブジェクトには、
+    \ ``id``\カラムと\ ``item_code``\カラムと\ ``category_code``\カラムでグループ化されたレコードの値が設定される。
+
+|
+
+.. _DataAccessMyBatis3AppendixAcquireRelatedObjectsAtOnceMappingOrderCoupon:
+
+OrderCouponオブジェクトへのマッピングの実装
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+\ ``OrderCoupon``\オブジェクトへのマッピングを行う。
 
  .. code-block:: xml
+    :emphasize-lines: 11-16
 
-    <resultMap id="orderCouponResultMap" type="OrderCoupon">
+    <resultMap id="orderResultMap" type="Order">
+        <id property="id" column="id"/>
+        <result property="orderStatus.code" column="status_code" />
+        <result property="orderStatus.name" column="status_name" />
+        <collection property="orderItems" ofType="OrderItem">
+            <id property="orderId" column="id"/>
+            <id property="item.code" column="item_code"/>
+            <result property="quantity" column="quantity"/>
+            <association property="item" resultMap="itemResultMap"/>
+        </collection>
         <!-- (1) -->
-        <id property="couponCode" column="coupon_code" />
-        <!-- (2) -->
-        <association property="coupon" resultMap="couponResultMap" />
+        <collection property="orderCoupons" ofType="OrderCoupon" notNullColumn="coupon_code">
+            <!-- (2) -->
+            <id property="orderId" column="id"/>
+            <!-- (3) -->
+            <id property="coupon.code" column="coupon_code"/>
+            <result property="coupon.name" column="coupon_name"/>
+            <result property="coupon.price" column="coupon_price"/>
+        </collection>
     </resultMap>
 
  .. figure:: images/dataaccess_resultmap_ordercoupon.png
@@ -6924,36 +7764,77 @@ MyBatis3では、接続に指定しているJDBCドライバからデータベ�
     * - 項番
       - 説明
     * - (1)
-      - 取得したレコードの\ ``coupon_code`` \カラムの値を、
-        \ ``OrderCoupon#couponCode`` \に設定する。\  ``Order`` \と
-        \ ``OrderCoupon`` \は、1:Nの関係なので、id要素を使用する。(2)で生成され
-        る\ ``Coupon#code`` \と重複するが、\ ``couponCode`` \プロパティは、
-        \ ``OrderCoupon`` \をグループ化するために必要なプロパティとなる。本例で
-        は、\ ``couponCode`` \プロパティでグループ化されるため、
-        \ ``couponCode=CPN0000001`` \と\ ``couponCode=CPN0000002`` \の2つの
-        \ ``OrderCoupon`` \オブジェクトが生成される。注文クーポンは、
-        t_order_couponのプライマリキー(order_id,coupon_code)でグループ化する必
-        要があるが、order_idカラムについては親のresultMapで指定されているため、
-        ここでは、coupon_codeカラムの値を保持する\ ``couponCode`` \プロパティの
-        み指定する。
+      - 検索結果を\ ``OrderCoupon``\オブジェクトにマッピングし、\ ``Order#orderCoupons``\プロパティに追加する。
+
+        1:Nの関係の関連Entityにマッピングする場合は、\ ``collection``\要素を使用する。
+        \ ``collection``\要素の詳細は、
+        「`MyBatis3 REFERENCE DOCUMENTATION(Mapper XML Files-collection-) <http://mybatis.github.io/mybatis-3/sqlmap-xml.html#collection>`_\」を参照されたい。
+
+        上記例にて、\ ``notNullColumn``\属性を指定している点に注目してほしい。
+
+        これは\ ``t_coupon``\テーブルにレコードが存在しない時に、
+        \ ``OrderCoupon``\オブジェクトを生成させないための設定である。
+        本実装例では、\ ``id``\カラムが\ ``2``\のデータには\ ``t_coupon``\テーブルのレコードを格納していないため、
+        検索結果をみると、\ ``coupon_code``\と\ ``coupon_name``\と\ ``coupon_price``\の値が\ ``null``\になっているのがわかる。
+
+        \ ``OrderCoupon``\オブジェクトにマッピングするカラムがこの3つだけであれば、
+        \ ``notNullColumn``\属性を指定する必要はないが、
+        実装例では\ ``id``\カラムの値を\ ``OrderCoupon#orderId``\プロパティにマッピングする設定を行っているため、
+        \ ``notNullColumn``\属性の指定が必要となる。
+        これは、マッピング対象のカラムの中に\ ``null``\でない値がセットされていた場合に、
+        MyBatisがオブジェクトを生成するためである。
+
+        上記例のように、\ ``notNullColumn``\属性に\ ``coupon_code``\カラムを指定しておくと、
+        \ ``coupon_code``\カラムが\ ``null``\でない場合(つまり、レコードが存在する場合)にのみ、
+        オブジェクトが生成される。
+        \ ``notNullColumn``\属性には、複数のカラムを指定する事もできる。
     * - (2)
-      - \ ``Coupon`` \オブジェクトの生成を\ ``id="couponResultMap"`` \の
-        resultMapに委譲し、生成されたオブジェクトを\ ``OrderCoupon#coupon`` \に
-        設定する。
+      - 取得したレコードの\ ``id``\カラムの値を、\ ``OrderCoupon#orderId``\プロパティに設定する。
+
+        \ ``orderId``\はPKなので、\ ``id``\要素を使用する。
+    * - (3)
+      - 取得したレコードの\ ``coupon_code``\カラムの値を\ ``Coupon#code``\に設定する。
+
+        \ ``coupon_code``\カラムはPKなので、\ ``id``\要素を使用してマッピングを行う。
+        \ ``id``\要素を使用すると、指定したプロパティの値でレコードがグループ化される。
+
+        具体的には、\ ``Coupon#code=CPN0000001``\と\ ``Coupon#code=CPN0000002``\の2つにグループ化され、
+        2つの\ ``OrderCoupon``\オブジェクトが生成される。
+
+|
+
+.. _DataAccessMyBatis3AppendixAcquireRelatedObjectsAtOnceMappingCoupon:
+
+Couponオブジェクトへのマッピングの実装
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 
-| \ ``Coupon`` \オブジェクトへのマッピングを行う。
+\ ``Coupon``\オブジェクトへのマッピングを行う。
 
  .. code-block:: xml
+    :emphasize-lines: 13-18
 
-    <resultMap id="couponResultMap" type="Coupon">
-        <!-- (1) -->
-        <result property="code" column="coupon_code" />
-        <!-- (2) -->
-        <result property="name" column="coupon_name" />
-        <!-- (3) -->
-        <result property="price" column="coupon_price" />
+    <resultMap id="orderResultMap" type="Order">
+        <id property="id" column="id"/>
+        <result property="orderStatus.code" column="status_code" />
+        <result property="orderStatus.name" column="status_name" />
+        <collection property="orderItems" ofType="OrderItem">
+            <id property="orderId" column="id"/>
+            <id property="item.code" column="item_code"/>
+            <result property="quantity" column="quantity"/>
+            <association property="item" resultMap="itemResultMap"/>
+        </collection>
+        <collection property="orderCoupons" ofType="OrderCoupon" notNullColumn="coupon_code">
+            <id property="orderId" column="id"/>
+            <!-- (1) -->
+            <id property="coupon.code" column="coupon_code"/>
+            <!-- (2) -->
+            <result property="coupon.name" column="coupon_name"/>
+            <!-- (3) -->
+            <result property="coupon.price" column="coupon_price"/>
+        </collection>
     </resultMap>
+
 
  .. figure:: images/dataaccess_resultmap_coupon.png
     :alt: ResultMap for Coupon
@@ -6970,47 +7851,26 @@ MyBatis3では、接続に指定しているJDBCドライバからデータベ�
     * - 項番
       - 説明
     * - (1)
-      - 取得したレコードの\ ``coupon_code`` \カラムの値を、\ ``Coupon#code`` \
-        に設定する。\ ``OrderCoupon`` \と\ ``Coupon`` \オブジェクトは、1:1の関
-        係なので、result要素を使用する。本例では、
-        \ ``OrderCoupon#couponCode=CPN0000001`` \用に、\ ``code=CPN0000001`` \の
-        \ ``Coupon`` \オブジェクトが、\ ``OrderCoupon#couponCode=CPN0000001`` \
-        用に、\ ``code=CPN0000001`` \の\ ``Coupon`` \オブジェクトが生成される。
-        (計２つのオブジェクトが生成される。)
+      - 取得したレコードの\ ``coupon_code``\カラムの値を、\ ``Coupon#code``\に設定する。
     * - (2)
-      - 取得したレコードの\ ``coupon_name`` \カラムの値を、\ ``Coupon#name`` \
-        に設定する。
+      - 取得したレコードの\ ``coupon_name``\カラムの値を、\ ``Coupon#name``\に設定する。
     * - (3)
-      - 取得したレコードの\ ``coupon_price`` \ カラムの値を、\ ``Coupon#price`` \
-        に設定する。
+      - 取得したレコードの\ ``coupon_price``\ カラムの値を、\ ``Coupon#price``\に設定する。
+
+ .. note::
+
+    \ ``Coupon``\オブジェクトには、
+    \ ``id``\カラムと\ ``coupon_code``\カラムでグループ化されたレコードの値が設定される。
 
 
-| JavaBeanにマッピングされたレコードとカラムは、以下の通りである。
-| グレーアウトしている部分は、groupBy属性に指定によって、グレーアウトされていな
-  い部分にマージされる。
+|
 
- .. figure:: images/dataaccess_sql_result_used.png
-    :alt: Valid Result Set for result mapping
-    :width: 100%
-    :align: center
+.. _DataAccessMyBatis3AppendixAcquireRelatedObjectsAtOnceObject:
 
-    **Picture - Valid Result Set for result mapping**
+マッピング後のオブジェクト図
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-
-.. _data-access-mybatis2_warning_sqlmapping_bulk:
-
- .. warning::
-
-     1:Nの関連をもつレコードをJOINしてマッピングする場合、グレーアウトされてい
-     る部分のデータの取得が無駄になる点を、意識しておくこと。
-
-     Nの部分のデータを使用しない処理で、同じSQLを使用した場合、さらに無駄なデー
-     タの取得となってしまうので、Nの部分を取得するSQLと、取得しないSQLを、別々
-     に用意しておくなどの工夫を行うこと。
-
-
-| 実際にマッピングされた\ ``Order`` \オブジェクトおよび関連オブジェクトの状態
-  は、以下の通りである。
+実際にマッピングされた\ ``Order``\オブジェクトおよび関連Entityの状態は、以下の通りである。
 
  .. figure:: images/dataaccess_object.png
     :alt: Mapped object diagram
@@ -7019,64 +7879,1168 @@ MyBatis3では、接続に指定しているJDBCドライバからデータベ�
 
     **Picture - Mapped object diagram**
 
+|
+
+.. _DataAccessMyBatis3AppendixNestedSelect:
+
+関連EntityをネストしたSQLを使用して取得する方法について
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+MyBatis3では、マッピング時に別のSQL(ネストしたSQL)を使用して関連Entityを取得する方法を提供している。
+
+ネストしたSQLを使用して関連Entityを取得する仕組みを使用すると、
+
+* 個々のSQL定義
+* \ ``resultMap``\要素のマッピング定義
+
+をシンプルにする事ができる。
+
+ .. warning::
+
+     各種定義がシンプルになる一方で、ネストしたSQLを多用すると、
+     N+1問題を引き起こす要因になるという事を意識する必要がある。
+
+     ネストしたSQLを使用する場合のMyBatisのデフォルトの動作は、"Eager Load"となる。
+     これは、関連Entityの使用有無に関係なくSQLが発行される事を意味しており、
+
+     * 無駄なSQLの実行とデータの取得
+     * N+1問題
+
+     などが発生する危険性が高まる。
+
  .. tip::
 
-     関連オブジェクトを取得する別の方法として、取得したレコードの値を使って、内
-     部で別のSQLを実行して、取得する方法がある。内部で別のSQLを実行する方法は、
-     個々のSQLや、resultMap要素の定義が、非常にシンプルとなる。ただし、この方法
-     で取得する場合は、N+1問題を引き起こす要因となることを、意識しておく必要が
-     ある。
+    MyBatis3では、ネストしたSQLを使用して関連Entityを取得する際の動作を、
+    "Lazy Load"に変更するためのオプションを提供している。
 
+    "Lazy Load"の使用方法については、「:ref:`DataAccessMyBatis3AppendixNestedSelectLazySetting`」を参照されたい。
+
+|
+
+.. _DataAccessMyBatis3AppendixNestedSelectMapping:
+
+関連EntityをネストしたSQLを使用して取得する実装例
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+ネストしたSQLを使用して関連Entityを取得する際の実装例を以下に示す。
+
+ .. code-block:: xml
+    :emphasize-lines: 5-7
+
+    <resultMap id="itemResultMap" type="Item">
+        <id property="code" column="item_code"/>
+        <result property="name" column="item_name"/>
+        <result property="price" column="item_price"/>
+        <!-- (1) -->
+        <collection property="categories" column="item_code"
+            select="findAllCategoryByItemCode" />
+    </resultMap>
+
+    <select id="findAllCategoryByItemCode"
+        parameterType="string" resultType="Category">
+        SELECT
+            ct.code,
+            ct.name
+        FROM
+            m_item_category ic
+        INNER JOIN m_category ct ON ct.code = ic.category_code
+        WHERE
+            ic.item_code = #{itemCode}
+        ORDER BY
+            code
+    </select>
+
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (1)
+      - \ ``association``\要素又は\ ``collection``\要素の\ ``select``\属性に、
+        呼び出すSQLのステートメントIDを指定する。
+
+        \ ``column``\属性には、SQLに渡すパラメータ値が格納されているカラム名を指定する。
+        上記例では、
+        \ ``findAllCategoryByItemCode``\のパラメータとして\ ``item_code``\カラムの値を渡している。
+
+        指定可能な属性の詳細は、
+        「`MyBatis3 REFERENCE DOCUMENTATION(Mapper XML Files-Nested Select for Association-) <http://mybatis.github.io/mybatis-3/sqlmap-xml.html#Nested_Select_for_Association>`_\」を参照されたい。
+
+ .. note::
+
+    上記例では、\ ``fetchType``\属性を指定していないため、
+    "Lazy Load"と"Eager Load"のどちらで実行されるかは、
+    アプリケーション全体の設定に依存する。
+
+    アプリケーション全体の設定については、
+    「:ref:`DataAccessMyBatis3AppendixNestedSelectLazySettingMyBatis`」を参照されたい。
+
+|
+
+.. _DataAccessMyBatis3AppendixNestedSelectLazySetting:
+
+関連EntityをLazy Loadするための設定
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+ネストしたSQLを使用して関連Entityを取得する際のMyBatis3のデフォルト動作は、
+"Eager Load"であるが、"Lazy Load"を使用する事も可能である。
+
+以下に、"Lazy Load"を使用するために最低限必要な設定及び使用方法について説明を行う。
+
+説明していない設定値については、
+「`MyBatis3 REFERENCE DOCUMENTATION(Mapper XML Files-settings-) <http://mybatis.github.io/mybatis-3/configuration.html#settings>`_\」を参照されたい。
+
+|
+
+.. _DataAccessMyBatis3AppendixNestedSelectLazySettingLibrary:
+
+バイトコード操作ライブラリの追加
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+"Lazy Load"を使用する場合は、"Lazy Load"を実現するためのProxyオブジェクトを生成するために、
+
+* CGLIB
+* JAVASSIST
+
+のいずれか一方のライブラリが必要となる。
+
+ここでは、MyBatis 3.2系のデフォルトに指定されているCGLIBを依存ライブラリに追加する方法を示す。
+
+* :file:`pom.xml`
+
+ .. code-block:: xml
+
+    <!-- (1) -->
+    <dependency>
+        <groupId>cglib</groupId>
+        <artifactId>cglib</artifactId>
+        <version>2.2.2</version>
+    </dependency>
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (1)
+      - \ :file:`pom.xml`\に、CGLIBのアーティファクトを追加する。
 
  .. tip::
 
-     内部で別のSQLを実行する方法を使う場合、関連オブジェクトは "Eager Load"され
-     るため、関連オブジェクトを使用しない場合も、SQLが実行されてしまう。この動
-     作回避する方法として、Mybatisでは、関連オブジェクトを "Lazy Load"する方法
-     を、オプションとして提供している。
+    MyBatis 3.3.0以降のバージョンでは、JAVASSISTがMyBatis本体に内包されるため、
+    ライブラリを追加しなくても"Lazy Load"を使用する事ができる。
 
-     "Lazy Load"を有効にするための設定は、以下の通りである。
+    3.2系ではCGLIBがデフォルトだが、3.3系からはMyBatisが内包しているJAVASSISTがデフォルトになる。
 
-     * CGLIBをクラスパスに追加する。
-     * Mybatis設定ファイルのsetting要素のlazyLoadingEnabled属性を、
-       \ ``true`` \に設定する。
+    3.2系でJAVASSISTを使用する場合は、
+
+    * \ :file:`pom.xml`\にJAVASSISTのアーティファクトを追加
+    * MyBatis設定ファイル(:file:`mybatis-config.xml`)に「\ ``proxyFactory=JAVASSIST``\」を追加
+
+    すればよい。
+
+    JAVASSISTのアーティファクト情報については、
+    「`MyBatis3 PROJECT DOCUMENTATION(Project Dependencies-compile-) <http://mybatis.github.io/mybatis-3/dependencies.html#compile>`_\」を参照されたい。
+
+|
+
+.. _DataAccessMyBatis3AppendixNestedSelectLazySettingMyBatis:
+
+Lazy Loadを使用するためのMyBatisの設定
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+MyBatis3では、"Lazy Load"の使用有無を、
+
+* アプリケーションの全体設定(MyBatis設定ファイル)
+* 個別設定(マッピングファイル)
+
+の2箇所で指定する事ができる。
+
+* アプリケーションの全体設定は、
+  MyBatis設定ファイル(``META-INF/mybatis/mybatis-config.xml``)に指定する。
+
+ .. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <!DOCTYPE configuration
+            PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+            "http://mybatis.org/dtd/mybatis-3-config.dtd">
+    <configuration>
+        <settings>
+            <!-- (1) -->
+            <setting name="lazyLoadingEnabled" value="true"/>
+        </settings>
+    </configuration>
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (1)
+      - アプリケーションのデフォルト動作を\ ``lazyLoadingEnabled``\に指定する。
+
+        * \ ``true``\ : "Lazy Load"
+        * \ ``false``\ : "Eager Load" (デフォルト)
+
+        \ ``association``\要素と\ ``collection``\要素の\ ``fetchType``\属性を指定した場合は、
+        \ ``fetchType``\属性の指定値が優先される。
+
+ .. warning::
+
+    「\ ``false``\ : "Eager Load"」の状態で\ ``association``\要素又は\ ``collection``\要素の\ ``select``\属性を使用すると、
+    マッピング時にSQLが実行されるので、注意が必要である。
+
+    特に理由がない場合は、\ ``lazyLoadingEnabled``\は\ ``true``\にする事を推奨する。
+
+|
+
+* 個別設定は、
+  マッピングファイルの\ ``association``\要素と\ ``collection``\要素の\ ``fetchType``\属性で指定する。
+
+ .. code-block:: xml
+    :emphasize-lines: 7
+
+        <resultMap id="itemResultMap" type="Item">
+            <id property="code" column="item_code"/>
+            <result property="name" column="item_name"/>
+            <result property="price" column="item_price"/>
+            <!-- (2) -->
+            <collection property="categories" column="item_code"
+                fetchType="lazy"
+                select="findAllCategoryByItemCode" />
+        </resultMap>
+
+        <select id="findAllCategoryByItemCode"
+            parameterType="string" resultType="Category">
+            SELECT
+                ct.code,
+                ct.name
+            FROM
+                m_item_category ic
+            INNER JOIN m_category ct ON ct.code = ic.category_code
+            WHERE
+                ic.item_code = #{itemCode}
+            ORDER BY
+                code
+        </select>
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (2)
+      - \ ``association``\要素又は\ ``collection``\要素の\ ``fetchType``\属性に、
+        \ ``lazy``\又は\ ``eager``\を指定する。
+
+        \ ``fetchType``\属性を指定すると、アプリケーション全体の設定を上書きする事ができる。
+
+|
+
+.. _DataAccessMyBatis3AppendixNestedSelectLazySettingTiming:
+
+Lazy Loadの実行タイミングを制御するための設定
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+MyBatis3では、"Lazy Load"を実行するタイミングを制御するためのオプションを提供している。
+
+"Lazy Load"を実行するタイミングを制御するための設定は、
+MyBatis設定ファイル(``META-INF/mybatis/mybatis-config.xml``)に指定する。
+
+ .. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <!DOCTYPE configuration
+            PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+            "http://mybatis.org/dtd/mybatis-3-config.dtd">
+    <configuration>
+        <settings>
+            <!-- (1) -->
+            <setting name="aggressiveLazyLoading" value="false"/>
+        </settings>
+    </configuration>
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (1)
+      - "Lazy Load"を実行するタイミングを\ ``aggressiveLazyLoading``\に指定する。
+
+        * \ ``true``\ : "Lazy Load"対象となっているプロパティを保持するオブジェクトのgetterメソッドが呼び出されたタイミングで実行する（デフォルト）
+        * \ ``false``\ : "Lazy Load"対象となっているプロパティのgetterメソッドが呼び出されたタイミングで実行する
+
+
+ .. warning::
+
+    「\ ``true``\」（デフォルト）の場合、使用されないデータを取得するためにSQLが実行される可能性があるので、注意が必要である。
+
+    具体的には、以下のようなマッピングを行い、
+    "Lazy Load"対象になっていないプロパティだけにアクセスするケースである。
+    「\ ``true``\」（デフォルト）の場合、"Lazy Load"対象のプロパティに対して直接アクセスしなくても、
+    "Lazy Load"が実行されてしまう。
+
+    特に理由がない場合は、\ ``aggressiveLazyLoading``\は\ ``false``\にする事を推奨する。
+
+    * Entity
+
+      .. code-block:: java
+
+        public class Item implements Serializable {
+            private static final long serialVersionUID = 1L;
+            private String code;
+            private String name;
+            private int price;
+            private List<Category> categories;
+            // ...
+        }
+
+    * マッピングファイル
 
       .. code-block:: xml
 
-         <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-         <project xmlns="http://maven.apache.org/POM/4.0.0"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                 http://maven.apache.org/maven-v4_0_0.xsd">
+        <resultMap id="itemResultMap" type="Item">
+            <id property="code" column="item_code"/>
+            <result property="name" column="item_name"/>
+            <result property="price" column="item_price"/>
+            <collection property="categories" column="item_code"
+                fetchType="lazy" select="findByItemCode" />
+        </resultMap>
 
-             <dependencyManagement>
-                 <dependencies>
-                     <dependency>
-                         <groupId>cglib</groupId>
-                         <artifactId>cglib</artifactId>
-                         <version>${cglib.version}</version>
-                     </dependency>
-                 </dependencies>
-             </dependencyManagement>
+    * アプリケーションコード(Service)
 
-             <properties>
-                 <cglib.version>2.2</cglib.version>
-             </properties>
+      .. code-block:: java
+        :emphasize-lines: 2-3
 
-         </project>
+            Item item = itemRepository.findOne(itemCode);
+            // (2)
+            String code = item.getCode();
+            String name = item.getName();
+            String price = item.getPrice();
+            // ...
+        }
 
-      .. code-block:: xml
+      .. tabularcolumns:: |p{0.15\linewidth}|p{0.75\linewidth}|
+      .. list-table::
+        :header-rows: 1
+        :widths: 15 75
 
-         <?xml version="1.0" encoding="UTF-8" ?>
-         <!DOCTYPE configuration PUBLIC "-//mybatis.org/DTD Config 3.0//EN"
-             "http://mybatis.org/dtd/mybatis-3-config.dtd">
-         <configuration>
+        * - 項番
+          - 説明
+        * - (2)
+          - 上記例では、"Lazy Load"対象のプロパティである\ ``categories``\プロパティにアクセスしていないが、
+            \ ``Item#code``\プロパティにアクセスした際に、"Lazy Load"が実行される。
 
-             <settings>
-                 <setting name="lazyLoadingEnabled" value="true" />
-             </settings>
+            「\ ``false``\」（デフォルト）の場合、上記のケースでは"Lazy Load"は実行されない。
 
-         </configuration>
+|
+
+.. _DataAccessMyBatis3AppendixSqlSession:
+
+SqlSessionのAPIを利用して一括処理する方法について
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+本ガイドラインでは、基本的には\ ``SqlSession``\のAPIを直接使用する前提ではない。
+
+ただし、機能要件と性能要件を両方充たすために、
+\ ``SqlSession``\のAPIを直接する事が必要になる事も考えられるため、
+\ ``SqlSession``\のAPIを直接使用する際の実装例を簡単に紹介しておく。
+
+\ ``SqlSession``\のAPIを直接する際は、
+
+* `MyBatis-Spring REFERENCE DOCUMENTATION(Using an SqlSession) <http://mybatis.github.io/spring/sqlsession.html>`_\
+* `MyBatis3 REFERENCE DOCUMENTATION(Java API-SqlSession-) <http://mybatis.github.io/mybatis-3/java-api.html#SqlSession>`_\
+
+を必ず一読すること。
+
+以下では、バッチモードを利用して複数のSQLを一括実行し、SQL毎の更新結果を返却する際の実装例を紹介する。
+
+|
+
+.. _DataAccessMyBatis3AppendixSqlSessionBatchRepository:
+
+バッチモードでSQLを実行するためのRepositoryの作成
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+まず、バッチモードでSQLを実行するためのRepositoryを作成する。
+
+- Repositoryインタフェースを作成する。
+
+ .. code-block:: java
+
+    public interface TodoRepository {
+        boolean update(Todo todo);
+    }
+
+- [projectName]-infra.xml にバッチモードのRepositoryをBean定義する。
+
+ .. code-block:: xml
+
+    <!-- (1) -->
+    <bean id="batchSqlSessionTemplate"
+          class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactory"/>
+        <constructor-arg index="1" value="BATCH"/>
+    </bean>
+
+    <!-- (2) -->
+    <bean id="todoBatchRepository"
+          class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface"
+                  value="com.example.domain.repository.todo.TodoRepository"/>
+        <property name="sqlSessionTemplate" ref="batchSqlSessionTemplate"/>
+    </bean>
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (1)
+      - バッチモード用の\ ``SqlSessionTemplate``\をBean定義する。
+    * - (2)
+      - バッチモード用のRepositoryをBean定義する。
+
+        上記例では、Repository単位でバッチモードのRepositoryをBean定義しているが、
+        まとめてスキャンする方法もある。
+        まとめてスキャンする方法については、
+        「:ref:`DataAccessMyBatis3HowToExtendExecutorTypeBatchBulkSetting`」を参照されたい。
+
+|
+
+.. _DataAccessMyBatis3AppendixSqlSessionBulkRepository:
+
+一括更新するRepositoryの作成
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+続いて、バッチモードのRepositoryと\ ``SqlSession``\のAPIを使用して、
+複数のEntityを一括更新するためのRepositoryを作成する。
+
+- Repositoryインターフェースを作成する。
+
+ .. code-block:: java
+
+    package com.example.domain.repository.todo;
+
+    import com.example.domain.model.Todo;
+
+    import java.util.List;
+
+    // (3)
+    public interface TodoBulkRepository {
+        // (4)
+        int[] update(List<Todo> todos);
+    }
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (3)
+      - Entityを一括操作するためのRepositoryインタフェースを作成する。
+
+        このインタフェースはMyBatisのMapperインタフェース用ではなく、この後に自作するRepositoryクラスで実装するためのインタフェースである。
+    * - (4)
+      - 引数で指定されたEntityリストを一括更新するためのメソッドを定義する。
+
+        上記例では、指定されたEntityリストに対応する更新結果(更新件数)を配列で返却するメソッドを定義している。
+
+|
+
+- Repositoryクラスを実装する。
+
+ .. code-block:: java
+
+    package com.example.domain.repository.todo;
+
+    import com.example.domain.model.Todo;
+    import org.apache.ibatis.executor.BatchResult;
+    import org.mybatis.spring.SqlSessionTemplate;
+    import org.mybatis.spring.support.SqlSessionDaoSupport;
+    import org.springframework.stereotype.Repository;
+
+    import javax.inject.Inject;
+    import javax.inject.Named;
+    import java.util.List;
+
+    // (5)
+    @Repository("todoBulkRepository")
+    public class TodoBulkRepositoryImpl extends SqlSessionDaoSupport
+        implements TodoBulkRepository {
+
+        private static final int[] EMPTY_RESULT = new int[0];
+
+        // (6)
+        @Inject
+        @Named("todoBatchRepository")
+        TodoRepository todoRepository;
+
+        // (7)
+        @Inject
+        @Named("batchSqlSessionTemplate")
+        public void setSqlSessionTemplate(SqlSessionTemplate sqlSessionTemplate) {
+            super.setSqlSessionTemplate(sqlSessionTemplate);
+        }
+
+        // (8)
+        @Override
+        public int[] update(List<Todo> todos) {
+            if (todos == null || todos.isEmpty()) {
+                return EMPTY_RESULT;
+            }
+
+            // (9)
+            getSqlSession().flushStatements();
+
+            // (10)
+            for (Todo todo : todos) {
+                todoRepository.update(todo);
+            }
+
+            // (11)
+            List<BatchResult> results = getSqlSession().flushStatements();
+
+            // (12)
+            BatchResult result = results.iterator().next();
+            return result.getUpdateCounts();
+        }
+
+    }
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (5)
+      - Entityを一括操作するためのRepositoryクラスを作成する。
+
+        MyBatis-Springから提供されている\ ``org.mybatis.spring.support.SqlSessionDaoSupport``\を継承すると、
+        Spring Frameworkと連携するために提供されている\ ``SqlSession``\(\ ``SqlSessionTemplate``\)を使用する事がでいるため、
+        安全に\ ``SqlSession``\のAPIを呼び出す事ができる。
+
+        上記例では、Repositoryクラスをコンポーネントスキャン対象にするために、
+        \ ``org.springframework.stereotype.Repository``\アノテーションを指定している。
+    * - (6)
+      - バッチモードでSQLを実行するためのRepositoryをインジェクションする。
+    * - (7)
+      - バッチモード用の\ ``SqlSessionTemplate``\をインジェクションする。
+
+        インジェクションする\ ``SqlSessionTemplate``\は、
+        (6)でインジェクションしたRepositoryに紐づけられている\ ``SqlSessionTemplate``\と同じものを指定する必要がある。
+    * - (8)
+      - 引数で指定されたEntityリストを一括更新するためのメソッドを実装する。
+    * - (9)
+      - \ ``SqlSession``\のAPIを呼び出し、キューイングされているSQLを実行する。
+
+        これは、指定されたEntityを更新するためのSQLを実行する前に、
+        既にキューイングされているSQLを実行しておかないと、(11)で正しい更新結果が得られないためである。
+    * - (10)
+      - 引数で指定されたEntityリストをバッチモードで更新する。
+
+        バッチモードでSQLを実行するためのRepositoryのメソッドを呼び出し、Entityを更新するためのSQLをキューイングする。
+    * - (11)
+      - \ ``SqlSession``\のAPIを呼び出し、(10)の処理でキューイングしたSQLを実行する。
+
+        SQLの実行結果は、メソッドの返り値としてリスト形式で取得する事ができる。
+    * - (12)
+      - 処理結果リストから該当SQLの更新件数を取得し、呼び出し元に返却する。
+
+        上記例では、1種類のSQL(\ ``TodoRepository#update``\メソッド)を連続で呼び出しているので、
+        処理結果リストは1件になる。
+
+
+ .. note::
+
+    自作のRepositoryクラスを作成する場合は、
+    \ ``@Repository``\アノテーションの\ ``value``\属性にBean名を明示的に指定し、
+    Serviceクラスにインジェクションする際は、Bean名を指定してインジェクションするとよい。
+
+     .. code-block:: java
+
+        @Transactional
+        @Service
+        public class TodoServiceImpl implements  TodoService {
+
+            @Inject
+            @Named("todoBulkRepository")
+            TodoBulkRepository todoBulkRepository;
+
+            // ...
+
+        }
+
+    これは、自作するRepositoryクラス用に作成したRepositoryインタフェース(上記例だと、\ ``TodoBulkRepository``\)が、
+    MyBatis-Springから提供されているスキャン機能によって検出された際に、
+    自作したクラスが確実に使用されるようにするための対策である。
+
+    \ ``@Named``\アノテーションを使用せず、型ベースでインジェクションすると、
+    MyBatis-Springから提供されているスキャン機能によって検出されたRepositoryがインジェクションされ、
+    想定通りの動きにならない可能性がある。
+
+    この問題が発生しないようにするための対策方法としては、
+    MyBatis-Springから提供されているスキャン機能のオプションを使用する方法もある。
+
+    MyBatis-Springから提供されているスキャン機能には、
+    スキャン対象のインタフェースを絞り込むための仕組みとして、以下の二つのオプションが用意されている。
+
+    * \ ``marker-interface``\属性に、スキャン対象のマーカーインタフェース名(FQCN)を指定する
+    * \ ``annotation``\属性に、スキャン対象のアノテーション名(FQCN)を指定する。
+
+    これらの属性が指定されている場合、
+
+    * 指定したインタフェースを継承しているインターフェース
+    * 指定したアノテーションが付与されているインタフェース
+
+    のみをスキャン対象にする事ができる。
+
+|
+
+.. _DataAccessMyBatis3AppendixAnnotation:
+
+MyBatis3のアノテーションについて
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+本ガイドラインでは、XMLベースのマッピングを使用する前提で説明しているが、
+MyBatis3ではアノテーションベースのマッピングもサポートしている。
+
+MyBatis3が提供しているアノテーションについては、
+「`MyBatis3 REFERENCE DOCUMENTATION(Java API-Mapper Annotations-) <http://mybatis.github.io/mybatis-3/java-api.html#Mapper_Annotations>`_\」を参照されたい。
+
+ .. tip::
+
+    \ ``@MapKey``\アノテーションと\ ``@Param``\アノテーションについては、
+    XMLベースでマッピングする際も使用するアノテーションである。
+
+ .. note::
+
+    本ガイドラインでは、アノテーションベースのマッピングについて触れていないが、
+    使用を禁止しているわけではない。
+
+    アノテーションベースのマッピングを使用すると、マッピングファイルの作成が任意になるので、
+    開発効率が向上する可能性がある。
+    そのため、プロジェクトの特性によっては、
+    アノテーションベースのマッピングを併用する事を検討してもよいかもしれない。
+
+    例えば、
+
+    * 自動マッピング可能なシンプルなクエリや更新系のSQLについては、アノテーションを利用する。
+    * 動的SQLや手動マッピングが必要な複雑なクエリはXMを利用する。
+
+    などの併用方法が考えられる。
+
+    **アノテーションベースの利用については、アーキテクトの判断に任せる。**
+    **ただし、アノテーションを使用する場合は、**
+    **アノテーションとXMLの使い分けに関する指針をプログラマに対して明確に示すことで、**
+    **アプリケーション全体として統一された作りになるようにすること。**
+
+ .. note:: **本ガイドラインがXMLベースのマッピングを使用する前提としている理由**
+
+    本ガイドラインでは、
+
+    * XMLベースでは、SQL及びマッピングの共通化を行う事ができる。
+    * XMLベースの方が、SQL及びマッピングの定義が柔軟である。
+    * XMLベースの方が、SQLの可読性が高い。
+    * XMLベースの方が、環境依存性を吸収しやすい。
+
+    ため、XMLベースのマッピングを使用する前提としている。
+
+
+|
+
+.. _DataAccessMyBatis3AppendixPlugin:
+
+Pluginの実装方法について
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+MyBatis3から提供されているPlugin機能を利用して、共通的な処理をMyBatisに組み込む実装例を紹介する。
+
+ .. warning::
+
+     MyBatis3から提供されているPlugin機能を利用する場合は、
+     必ず「:ref:`DataAccessMyBatis3HowToExtendPlugin`」に記載されている注意点を確認すること。
+
+
+|
+
+.. _DataAccessMyBatis3AppendixPluginAudit:
+
+Audit用プロパティの設定処理の共通化
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Entityには、データ監査を行うためのAudit用プロパティ(作成者、作成日時、最終更新者、最終更新日時)を保持しているケースがある。
+
+MyBatis3では、Audit用プロパティに値を設定する共通的な仕組みは提供していないが、
+Plugin機能を利用すると、Audit用プロパティに値を設定する処理を共通化する事ができる。
+
+ .. note:: **アプリケーションのコードからAudit用プロパティに値を設定する処理を切り離す理由**
+
+    Audit用プロパティへの値の設定は、一般的にアプリケーション要件ではなく、
+    データの監査要件によって必要になる処理である。
+    本質的にはServiceなどのアプリケーション内のコードで意識すべき処理ではないため、
+    アプリケーションのコードから切り離した方がよい。
+
+    Audit用プロパティの設定処理をServiceクラスから分離することで、
+    Serviceクラスは業務ロジック(ビジネスルール)の実装に集中する事ができる。
+
+|
+
+以下に、実装例を示す。
+
+実装例では、Spring Data CommonsのAPI(インタフェース)を利用する実装例となっているが、
+あくまで一例なので、独自のインタフェースを作成してもよい。
+
+* EntityクラスにAudit用プロパティを追加する
+
+ .. code-block:: java
+
+    package com.example.domain.model;
+
+    import com.example.infra.mybatis.plugin.VersionPlugin;
+    import org.joda.time.DateTime;
+    import org.springframework.data.domain.Auditable;
+
+    import java.io.Serializable;
+
+    // (1)
+    public abstract class AbstractEntity<ID extends Serializable>
+        implements Auditable<String, ID> {
+
+        private String createdBy;
+        private String lastModifiedBy;
+        private DateTime createdDate;
+        private DateTime lastModifiedDate;
+
+        // getter / setter ...
+
+        @Override
+        public boolean isNew() {
+            return getId() == null;
+        }
+
+    }
+
+ .. code-block:: java
+
+    // (2)
+    public class Todo extends AbstractEntity<String> {
+
+        // field / getter / setter ...
+
+        @Override
+        public String getId() {
+            return getTodoId();
+        }
+
+    }
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (1)
+      - Audit用プロパティを保持する抽象Entityを作成する。
+
+        上記例では、Spring Data Commonsから提供されている\ ``org.springframework.data.domain.Auditable``\を実装することで、
+        Audit用プロパティを保持する抽象Entityクラスを作成している。
+    * - (2)
+      - Audit用プロパティを保持する抽象Entityを継承し、Entityの実体クラスを作成する。
+
+|
+
+* Auditor(データを操作した人)を識別するためのIDを取得するためのクラスを作成する
+
+ .. code-block:: java
+
+    package com.example.infra.mybatis.plugin;
+
+    import org.springframework.data.domain.AuditorAware;
+    import org.springframework.security.core.Authentication;
+    import org.springframework.security.core.context.SecurityContextHolder;
+    import org.springframework.stereotype.Component;
+
+    // (3)
+    @Component
+    public class SpringSecurityAuditorAware implements AuditorAware<String> {
+
+        // (4)
+        @Override
+        public String getCurrentAuditor() {
+            Authentication authentication = SecurityContextHolder.getContext()
+                    .getAuthentication();
+            if (authentication != null) {
+                return authentication.getName();
+            }
+            return null;
+        }
+
+    }
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (3)
+      - Auditorを識別するためのIDを取得するためのクラスを作成する
+
+        上記例では、Spring Data Commonsから提供されている\ ``org.springframework.data.domain.AuditorAware``\を実装することで、
+        Auditorを識別するためのIDを取得するためのクラスを作成している。
+
+        このクラスの作成は必須ではないが、テスタビリティを考慮し、作成しておいた方がよい。
+    * - (4)
+      - Auditorを識別するためのIDを取得し、メソッドの返り値として返却する。
+
+        上記例では、Spring Securityの認証情報からユーザ名(認証済みユーザのID)を取得している。
+
+        ここで返却した値が、Audit用プロパティの\ ``createdBy``\や\ ``lastModifiedBy``\に設定される。
+
+|
+
+* EntityのAudit用プロパティに値を設定するPluginを作成する
+
+ .. code-block:: java
+
+    package com.example.infra.mybatis.plugin;
+
+    import org.apache.ibatis.executor.Executor;
+    import org.apache.ibatis.mapping.MappedStatement;
+    import org.apache.ibatis.mapping.SqlCommandType;
+    import org.apache.ibatis.plugin.*;
+    import org.joda.time.DateTime;
+    import org.springframework.data.domain.Auditable;
+    import org.springframework.data.domain.AuditorAware;
+    import org.springframework.stereotype.Component;
+    import org.terasoluna.gfw.common.date.DateFactory;
+
+    import javax.inject.Inject;
+    import java.util.Properties;
+
+    // (5)
+    @Intercepts({@Signature(
+            type = Executor.class,
+            method = "update",
+            args = {MappedStatement.class, Object.class})})
+    @Component
+    public class AuditPlugin implements Interceptor {
+
+        // (6)
+        @Inject
+        DateFactory dateFactory;
+
+        // (7)
+        @Inject
+        AuditorAware<String> auditorAware;
+
+        // (8)
+        @Override
+        public Object intercept(Invocation invocation) throws Throwable {
+            Object entity = invocation.getArgs()[1];
+            if (entity instanceof Auditable) {
+                MappedStatement mappedStatement =
+                    (MappedStatement) invocation.getArgs()[0];
+                @SuppressWarnings("unchecked")
+                Auditable<String, ?> auditable = (Auditable<String, ?>) entity;
+                DateTime operatedAt = dateFactory.newDateTime();
+                String currentAuditor = auditorAware.getCurrentAuditor();
+                if (mappedStatement.getSqlCommandType() == SqlCommandType.INSERT) {
+                    auditable.setCreatedBy(currentAuditor);
+                    auditable.setCreatedDate(operatedAt);
+                }
+                auditable.setLastModifiedBy(currentAuditor);
+                auditable.setLastModifiedDate(operatedAt);
+            }
+            return invocation.proceed();
+        }
+
+        @Override
+        public Object plugin(Object target) {
+            return Plugin.wrap(target, this);
+        }
+
+        @Override
+        public void setProperties(Properties properties) {
+        }
+
+    }
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (5)
+      - EntityのAudit用プロパティに値を設定するPluginクラスを作成する。
+
+        Pluginを作成する場合は、\ ``org.apache.ibatis.plugin.Interceptor``\インタフェースを実装し、
+        \ ``@org.apache.ibatis.plugin.Intercepts``\アノテーションにインターセプトするMyBatisのメソッドを指定する。
+
+        上記例では、\ ``org.apache.ibatis.executor.Executor#update(MappedStatement, Object)``\メソッドをインターセプトしている。
+    * - (6)
+      - データを操作した日時を取得するために、共通ライブラリから提供している\ ``DateFactory``\をDIする。
+    * - (7)
+      - Auditorを識別するためのIDを取得するためのオブジェクトをDIする。
+    * - (8)
+      - \ ``@Intercepts``\アノテーションで指定したメソッドの呼び出し前後に行う処理を実装する。
+
+        上記例では、メソッド呼び出し前の処理として、Audit用プロパティに値を設定している。
+
+|
+
+* [projectName]-infra.xml にPluginを適用するための設定を追加する
+
+ .. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+        xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context.xsd
+            http://mybatis.org/schema/mybatis-spring
+            http://mybatis.org/schema/mybatis-spring.xsd
+        ">
+
+        <import resource="classpath:/META-INF/spring/projectName-env.xml" />
+
+        <bean id="sqlSessionFactory"
+            class="org.mybatis.spring.SqlSessionFactoryBean">
+            <property name="dataSource" ref="dataSource" />
+            <property name="configLocation"
+                value="classpath:/META-INF/mybatis/mybatis-config.xml" />
+            <!-- (9) -->
+            <property name="plugins">
+                <list>
+                    <ref bean="auditPlugin" />
+                </list>
+            </property>
+        </bean>
+
+        <mybatis:scan base-package="com.example.domain.repository" />
+
+        <context:component-scan base-package="com.example.infra.mybatis.plugin"/>
+
+    </beans>
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (9)
+      - Pluginの中でSpring FrameworkのDIコンテナ上で管理しているBeanを使用したい場合は、
+        \ ``SqlSessionFactoryBean``\の\ ``plugins``\プロパティにPluginを指定する。
+
+        上記例では、\ ``DateFactory``\と\ ``AuditorAware``\をDIコンテナから取得する必要があるため、
+        \ ``SqlSessionFactoryBean``\の\ ``plugins``\プロパティにPluginを指定している。
+
+ .. tip::
+
+    上記例では、Spring FrameworkのBean定義を使用してPluginを有効化しているが、
+    DIコンテナからBeanを取得する必要がない場合は、
+    MyBatis設定ファイル(:file:`mybatis-config.xml`)に指定する事もできる。
+
+     .. code-block:: xml
+
+        <plugins>
+            <plugin interceptor="com.example.infra.mybatis.plugin.XxxPlugin" />
+        </plugins>
+
+    ただし、DIコンテナからBeanを取得する必要があるPluginが一つでも存在する場合は、
+    一律\ ``SqlSessionFactoryBean``\の\ ``plugins``\プロパティにPluginを指定する方法を推奨する。
+    これは、複数の箇所に定義していると保守性が低下する可能性があるからである。
+
+|
+
+.. _DataAccessMyBatis3AppendixPluginVersion:
+
+バージョン管理用プロパティの設定処理の共通化
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+楽観ロックを使用するアプリケーションでは、バージョン管理用のプロパティを設け、
+
+* レコード登録時に\ ``1``\を設定
+* レコード更新時にインクリメントした値を設定
+
+する必要がある。
+
+特にレコード更新時に行うインクリメント処理は、データの一貫性を担保するために、
+SQLの中でインクリメントするケースが多い。
+しかし、SQLで行ったインクリメントはMyBatisで管理しているEntityオブジェクトに反映されないため、
+何もしないとデータ不整合の状態になる。
+
+このようなデータ不整合の状態を防ぐためには、Serviceクラスの処理の中でバージョンをインクリメントする必要があるが、
+コンポーネントの責務としては、バージョンのインクリメントは本来Repositoryが行うべき処理である。
+このような、Repositoryが本来行うべき処理をMyBatis側の処理として追加実装する方法として、
+Plugin機能を使用する事ができる。
+
+バージョン管理用プロパティの設定処理をServiceクラスから分離することで、
+Serviceクラスは業務ロジック(ビジネスルール)の実装に集中する事ができる。
+
+|
+
+以下に、実装例を示す。
+
+* Entityクラスにバージョン管理用プロパティを追加する
+
+
+ .. code-block:: java
+
+    package com.example.domain.model;
+
+    // (1)
+    public interface Versionable {
+        long getVersion();
+       void setVersion(long version);
+    }
+
+ .. code-block:: java
+
+    package com.example.domain.model;
+
+    // (2)
+    public abstract class AbstractEntity<ID extends Serializable>
+        implements Versionable {
+
+        // ...
+
+        private long version;
+
+        // getter / setter ...
+
+    }
+
+ .. code-block:: java
+
+    // (3)
+    public class Todo extends AbstractEntity<String> {
+
+        // field / getter / setter ...
+
+    }
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (1)
+      - バージョン管理用プロパティを保持するオブジェクトである事を示すインタフェースを作成する。
+    * - (2)
+      - バージョン管理用プロパティを保持する抽象Entityを作成する。
+
+        (1)で作成したインタフェースを実装する。
+    * - (3)
+      - バージョン管理用プロパティを保持する抽象Entityを継承し、Entityの実体クラスを作成する。
+
+|
+
+* Entityのバージョン管理用プロパティに値を設定するPluginを作成する
+
+ .. code-block:: java
+
+    package com.example.infra.mybatis.plugin;
+
+    import com.example.domain.model.Versionable;
+    import org.apache.ibatis.executor.Executor;
+    import org.apache.ibatis.mapping.MappedStatement;
+    import org.apache.ibatis.mapping.SqlCommandType;
+    import org.apache.ibatis.plugin.*;
+    import org.springframework.stereotype.Component;
+
+    import java.util.Properties;
+
+    @Intercepts({@Signature(
+            type = Executor.class,
+            method = "update",
+            args = {MappedStatement.class, Object.class})})
+    @Component
+    public class VersionPlugin implements Interceptor {
+
+        // (4)
+        @Override
+        public Object intercept(Invocation invocation) throws Throwable {
+            Object entity = invocation.getArgs()[1];
+            Object result;
+            if (entity instanceof Versionable) {
+                Versionable versionable = (Versionable) entity;
+                MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];
+                if (mappedStatement.getSqlCommandType() == SqlCommandType.INSERT) {
+                    versionable.setVersion(1);
+                }
+                result = invocation.proceed();
+                if (mappedStatement.getSqlCommandType() == SqlCommandType.UPDATE) {
+                    versionable.setVersion(versionable.getVersion() + 1);
+                }
+            } else {
+                result = invocation.proceed();
+            }
+            return result;
+        }
+
+        @Override
+        public Object plugin(Object target) {
+            return Plugin.wrap(target, this);
+        }
+
+        @Override
+        public void setProperties(Properties properties) {
+        }
+
+    }
+
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 80
+
+    * - 項番
+      - 説明
+    * - (4)
+      - \ ``@Intercepts``\アノテーションで指定したメソッドの呼び出し前後に行う処理を実装する。
+
+        上記例では、
+
+        * INSERT時のメソッド呼び出し前の処理として、バージョン管理用プロパティの初期値(\ ``1``\)を設定
+        * UPDATE寺のメソッド呼び出し後の処理として、バージョン管理用プロパティのインクリメント
+
+        を行っている。
 
 
 .. raw:: latex

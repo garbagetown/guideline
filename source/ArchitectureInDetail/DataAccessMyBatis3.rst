@@ -273,8 +273,8 @@ MyBatis-Springのコンポーネント構成について
 
         生成された\ ``SqlSessionFactory`` \は、SpringのDIコンテナによって管理される。
     * - (4)
-      - \ ``MapperFactoryBean`` \は、スレッドセーフな\ ``SqlSession`` \(\ ``SqlSessionTemplate`` \)の生成を行い、
-        スレッドセーフなMapperオブジェクト(MapperインタフェースのProxyオブジェクト)の生成する。
+      - \ ``MapperFactoryBean`` \は、スレッドセーフな\ ``SqlSession`` \(\ ``SqlSessionTemplate`` \)と、
+        スレッドセーフなMapperオブジェクト(MapperインタフェースのProxyオブジェクト)を生成する。
 
         生成されたMapperオブジェクトは、SpringのDIコンテナによって管理され、ServiceクラスなどにDIされる。
         Mapperオブジェクトは、スレッドセーフな\ ``SqlSession`` \(\ ``SqlSessionTemplate`` \)を利用することで、スレッドセーフな実装を提供している。
@@ -2742,7 +2742,7 @@ Entityを1件登録する際の実装例を以下に示す。
       - VALUE句にレコード登録時の設定値を指定する。
       
         VALUE句にバインドする値は、#{variableName}形式のバインド変数として指定する。
-        上記例では、Repositoryインタフェースの引数としてJavaBean(\ ``Todo```\)を指定しているため、
+        上記例では、Repositoryインタフェースの引数としてJavaBean(\ ``Todo``\)を指定しているため、
         バインド変数名にはJavaBeanのプロパティ名を指定する。
 
 |
@@ -2995,7 +2995,7 @@ Entityを一括で登録する場合は、
 
 方法がある。
 
-JDBCのバッチ更新機能を使用する方法については、「:ref:`DataAccessMyBatis3HowToExtendBatchMode`」を参照されたい。
+JDBCのバッチ更新機能を使用する方法については、「:ref:`DataAccessMyBatis3HowToExtendExecutorTypeBatch`」を参照されたい。
 
 ここでは、複数のレコードを同時に登録するINSERT文を発行するする方法について説明する。
 下記例は、データベースとしてH2 Databaseを使用している。
@@ -4540,7 +4540,7 @@ MyBatis3では、SQLに値を埋め込む仕組みとして、以下の2つの�
      上記属性は、MyBatisが適切な振る舞いを選択してくれない時に指定すればよい。
 
      属性の使い方については、
-     「\ `REFERENCE DOCUMENTATION(Mapper XML Files-Parameters-) <http://mybatis.github.io/mybatis-3/sqlmap-xml.html#Parameters>`_ 」を参照されたい。
+     「\ `MyBatis3 REFERENCE DOCUMENTATION(Mapper XML Files-Parameters-) <http://mybatis.github.io/mybatis-3/sqlmap-xml.html#Parameters>`_ 」を参照されたい。
 
 
 
@@ -5030,7 +5030,7 @@ Joda-Time用のTypeHandlerの実装
     * - (2)
       - \ ``DateTime``\を\ ``Timestamp``\に変換し、\ ``PreparedStatement``\に設定する処理を実装する。
     * - (3)
-      - \ ``ResultSet`\又は\ ``CallableStatement``\から取得した\ ``Timestamp``\を\ ``DateTime``\に変換し、返り値として返却する。
+      - \ ``ResultSet``\又は\ ``CallableStatement``\から取得した\ ``Timestamp``\を\ ``DateTime``\に変換し、返り値として返却する。
     * - (4)
       - \ ``null``\を許可するカラムの場合、\ ``Timestamp``\が\ ``null``\になる可能性があるため、
         \ ``null``\チェックを行ってから\ ``DateTime``\に変換する必要がある。
@@ -6423,7 +6423,7 @@ Mapperインタフェースの仕組みについて
     * - (2)
       - MapperインタフェースのProxyオブジェクトは、\ ``MapperProxy`` \のinvokeメソッドを呼び出す。
 
-        \ ``MapperProxy`` \は、Mapperインタフェースのメソッド呼び出しをハンドリングしをハンドリングする役割をもつ。
+        \ ``MapperProxy`` \は、Mapperインタフェースのメソッド呼び出しをハンドリングする役割をもつ。
     * - (3)
       - \ ``MapperProxy`` \は、呼び出されたMapperインタフェースのメソッドに対応する \ ``MapperMethod`` \を生成し、executeメソッドを呼び出す。
 

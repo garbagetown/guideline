@@ -1961,6 +1961,45 @@ Entityの検索
       - 上記例では、検索条件を保持するJavaBean(\ ``TodoCriteria``\)に一致するTodoオブジェクトをリスト形式で複数件取得するためのメソッドとして、
         \ ``findAllByCriteria``\メソッドを定義している。
 
+ .. tip::
+
+    上記例では、メソッドの返り値を\ ``java.util.List``\を指定しているが、
+    検索結果を\ ``java.util.Map``\として受け取る事も出来る。
+
+    \ ``Map``\で受け取る場合は、
+
+    * \ ``Map``\の\ ``key``\にはPKの値
+    * \ ``Map``\の\ ``value``\ははEntityオブジェクト
+
+    を格納する事になる。
+
+    検索結果を\ ``Map``\で受け取る場合、\ ``java.util.HashMap``\のインスタンスが返却されるため、
+    \ ``Map``\の並び順は保証されないという点に注意すること。
+
+    以下に、実装例を示す。
+
+     .. code-block:: java
+
+        package com.example.domain.repository.todo;
+
+        import java.util.Map;
+
+        import com.example.domain.model.Todo;
+        import org.apache.ibatis.annotations.MapKey;
+
+        public interface TodoRepository {
+
+            @MapKey("todoId")
+            Map<String, Todo> findAllByCriteria(TodoCriteria criteria);
+
+        }
+
+    検索結果を\ ``Map``\で受け取る場合は、\ ``@MapKey``\アノテーションをメソッドに指定する。
+    アノテーションの\ ``value``\属性には、\ ``Map``\の\ ``key``\として扱うプロパティ名を指定する。
+    上記例では、TodoオブジェクトのPK(\ ``todoId``\)を指定している。
+
+
+
 |
 
 * 検索条件を保持するJavaBeanを作成する。

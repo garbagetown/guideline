@@ -4354,6 +4354,13 @@ bind要素の実装例
 
         上記例では、\ ``bind``\要素を使用して作成した変数(\ ``escapedTodoTitle``\)を、バインド変数として指定している。
 
+ .. tip::
+
+    上記例では、\ ``bind``\要素を使用して作成した変数をバインド変数として指定しているが、
+    置換変数として使用する事もできる。
+
+    バインド変数と置換変数については、
+    「:ref:`DataAccessMyBatis3HowToUseSqlInjectionCountermeasure`」を参照されたい。
 
 |
 

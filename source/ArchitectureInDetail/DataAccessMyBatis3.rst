@@ -6166,7 +6166,7 @@ MyBatis3から呼び出す方法について説明を行う。
 
 * ストアードプロシージャ（ファンクション）を登録する。
 
- .. code-block:: plpgsql
+ .. code-block:: guess
 
     /* (1) */
     CREATE FUNCTION findTodo(pTodoId CHAR)

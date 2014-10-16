@@ -1877,14 +1877,15 @@ Modifications in Form
 To define input validation rules, add annotations in form class.
 
 .. code-block:: java
-   :emphasize-lines: 3-4,8-9
+   :emphasize-lines: 3-4,9-10
 
     package todo.app.todo;
 
     import javax.validation.constraints.NotNull;
     import javax.validation.constraints.Size;
 
-    public class TodoForm {
+    public class TodoForm implements Serializable {
+        private static final long serialVersionUID = 1L;
 
         @NotNull // (1)
         @Size(min = 1, max = 30) // (2)
@@ -2187,20 +2188,22 @@ For specifying separate rules for new creation and completion in a single Form, 
 
 
 .. code-block:: java
-   :emphasize-lines: 8-9,11-12,15-16,19,23-29
+   :emphasize-lines: 7-9,11-12,16-18,20-21,25-31
 
     package todo.app.todo;
 
     import javax.validation.constraints.NotNull;
     import javax.validation.constraints.Size;
 
-    public class TodoForm {
+    public class TodoForm implements Serializable {
         // (3)
         public static interface TodoCreate {
         };
 
         public static interface TodoFinish {
         };
+
+        private static final long serialVersionUID = 1L;
 
         // (4)
         @NotNull(groups = { TodoFinish.class })
@@ -2512,14 +2515,14 @@ Add group for Delete to TodoForm. Rules are almost same as for Finish.
 
 
 .. code-block:: java
-   :emphasize-lines: 14-15,18
+   :emphasize-lines: 13-15,19-20
 
     package todo.app.todo;
 
     import javax.validation.constraints.NotNull;
     import javax.validation.constraints.Size;
 
-    public class TodoForm {
+    public class TodoForm implements Serializable {
         public static interface TodoCreate {
         };
 
@@ -2529,6 +2532,8 @@ Add group for Delete to TodoForm. Rules are almost same as for Finish.
         // (6)
         public static interface TodoDelete {
         }
+
+        private static final long serialVersionUID = 1L;
 
         // (7)
         @NotNull(groups = { TodoFinish.class, TodoDelete.class })

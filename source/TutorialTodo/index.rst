@@ -2505,14 +2505,15 @@ Formの修正
 入力チェックのルールを定義するため、Formオブジェクトにアノテーションを追加する。
 
  .. code-block:: java
-    :emphasize-lines: 3-4,8-9
+    :emphasize-lines: 3-4,9-10
 
     package todo.app.todo;
 
     import javax.validation.constraints.NotNull;
     import javax.validation.constraints.Size;
 
-    public class TodoForm {
+    public class TodoForm implements Serializable {
+        private static final long serialVersionUID = 1L;
 
         @NotNull // (1)
         @Size(min = 1, max = 30) // (2)
@@ -2811,20 +2812,22 @@ TodoFormに、todoIdプロパティを追加する必要があるが、そのま
 一つのFormに、新規作成用と完了用で、別々のルールを指定するために、group属性を設定する。
 
  .. code-block:: java
-    :emphasize-lines: 7-9,11-12,14-16,18-19,23-29
+    :emphasize-lines: 7-9,11-12,16-18,20-21,25-31
 
     package todo.app.todo;
 
     import javax.validation.constraints.NotNull;
     import javax.validation.constraints.Size;
 
-    public class TodoForm {
+    public class TodoForm implements Serializable {
         // (3)
         public static interface TodoCreate {
         };
 
         public static interface TodoFinish {
         };
+
+        private static final long serialVersionUID = 1L;
 
         // (4)
         @NotNull(groups = { TodoFinish.class })
@@ -3136,14 +3139,14 @@ Delete用のグループを、TodoFormに追加する。ルールは、Finish用
 
 
  .. code-block:: java
-    :emphasize-lines: 13-15,17-18
+    :emphasize-lines: 13-15,19-20
 
     package todo.app.todo;
 
     import javax.validation.constraints.NotNull;
     import javax.validation.constraints.Size;
 
-    public class TodoForm {
+    public class TodoForm implements Serializable {
         public static interface TodoCreate {
         };
 
@@ -3153,6 +3156,8 @@ Delete用のグループを、TodoFormに追加する。ルールは、Finish用
         // (6)
         public static interface TodoDelete {
         }
+
+        private static final long serialVersionUID = 1L;
 
         // (7)
         @NotNull(groups = { TodoFinish.class, TodoDelete.class })

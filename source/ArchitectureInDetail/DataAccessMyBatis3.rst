@@ -70,17 +70,20 @@ MyBatis3のコンポーネント構成について
         Springと連携して使用する場合は、データベースの接続先やマッピングファイルのパスの設定を本設定ファイルに指定する必要がないため、
         MyBatis3のデフォルトの動作を変更又は拡張する際に、設定を行う事になる。
     * - (2)
-      - ``SqlSessionFactoryBuilder``
+      - ``org.apache.ibatis.session.``
+        ``SqlSessionFactoryBuilder``
       - MyBatis設定ファイルを読込み、\ ``SqlSessionFactory`` \を生成するためのコンポーネント。
 
         Springと連携して使用する場合は、アプリケーションのクラスから本コンポーネントを直接扱うことはない。
     * - (3)
-      - `SqlSessionFactory`
+      - ``org.apache.ibatis.session.``
+        ``SqlSessionFactory``
       - \ ``SqlSession`` \を生成するためのコンポーネント。
 
         Springと連携して使用する場合は、アプリケーションのクラスから本コンポーネントを直接扱うことはない。
     * - (4)
-      - `SqlSession`
+      - ``org.apache.ibatis.session.``
+        ``SqlSession``
       - SQLの発行やトランザクション制御のAPIを提供するコンポーネント。
 
         MyBatis3を使ってデータベースにアクセスする際に、もっとも重要な役割を果たすコンポーネントである。
@@ -182,7 +185,7 @@ MyBatis-Springを使用すると、
 
 * MyBatis3のSQLの実行をSpringが管理しているトランザクション内で行う事ができるため、MyBatis3のAPIに依存したトランザクション制御を行う必要がない。
 
-* MyBatis3の例外は、Springが用意している汎用的な例外(\ ``DataAccessException`` \)へ変換されるため、MyBatis3のAPIに依存しない例外処理を実装する事ができる。
+* MyBatis3の例外は、Springが用意している汎用的な例外(\ ``org.springframework.dao.DataAccessException`` \)へ変換されるため、MyBatis3のAPIに依存しない例外処理を実装する事ができる。
 
 * MyBatis3を使用するための初期化処理は、すべてMyBatis-SpringのAPIが行ってくれるため、基本的にはMyBatis3のAPIを直接使用する必要がない。
 
@@ -212,14 +215,16 @@ MyBatis-Springのコンポーネント構成について
       - コンポーネント/設定ファイル
       - 説明
     * - (1)
-      - ``SqlSessionFactoryBean``
+      - ``org.mybatis.spring.``
+        ``SqlSessionFactoryBean``
       - \ ``SqlSessionFactory`` \を構築し、SpringのDIコンテナ上にオブジェクトを格納するためのコンポーネント。
 
         MyBatis3標準では、MyBatis設定ファイルに定義されている情報を基に\ ``SqlSessionFactory`` \を構築するが、
         \ ``SqlSessionFactoryBean`` \を使用すると、MyBatis設定ファイルがなくても\ ``SqlSessionFactory`` \を構築することができる。
         もちろん、併用することも可能である。
     * - (2)
-      - ``MapperFactoryBean``
+      - ``org.mybatis.spring.mapper.``
+        ``MapperFactoryBean``
       - シングルトンのMapperオブジェクトを構築し、SpringのDIコンテナ上にオブジェクトを格納するためのコンポーネント。
 
         MyBatis3標準の仕組みで生成されるMapperオブジェクトはスレッドセーフではないため、
@@ -227,7 +232,8 @@ MyBatis-Springのコンポーネント構成について
         MyBatis-Springのコンポーネントで作成されたMapperオブジェクトは、
         スレッドセーフなMapperオブジェクトを生成する事ができるため、ServiceなどのシングルトンのコンポーネントにDIすることが可能となる。
     * - (3)
-      - ``SqlSessionTemplate``
+      - ``org.mybatis.spring.``
+        ``SqlSessionTemplate``
       - \ ``SqlSession`` \インターフェースを実装したシングルトン版の\ ``SqlSession`` \コンポーネント。
 
         MyBatis3標準の仕組みで生成される\ ``SqlSession`` \オブジェクトはスレッドセーフではないため、
@@ -715,7 +721,7 @@ MyBatis3では、SQLを実行するモードとして以下の3種類を用意�
       - 説明
     * - (1)
       - SIMPLE
-      - SQL実行毎に新しい\ ``PreparedStatement``\を作成する。
+      - SQL実行毎に新しい\ ``java.sql.PreparedStatement``\を作成する。
 
         MyBatisのデフォルトの動作であり、ブランクプロジェクトも\ ``SIMPLE``\モードとなっている。
     * - (2)
@@ -1997,7 +2003,7 @@ Entityの検索
 
         }
 
-    検索結果を\ ``Map``\で受け取る場合は、\ ``@MapKey``\アノテーションをメソッドに指定する。
+    検索結果を\ ``Map``\で受け取る場合は、\ ``@org.apache.ibatis.annotations.MapKey``\アノテーションをメソッドに指定する。
     アノテーションの\ ``value``\属性には、\ ``Map``\の\ ``key``\として扱うプロパティ名を指定する。
     上記例では、TodoオブジェクトのPK(\ ``todoId``\)を指定している。
 
@@ -6323,7 +6329,7 @@ TypeAliasを設定したいクラスに\ ``@org.apache.ibatis.type.Alias`` \ア�
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 MyBatis3では、JDBCドライバから接続しているデータベースのベンダー情報を取得して、
-使用するSQLを切り替える仕組み(\ ``VendorDatabaseIdProvider``\)を提供している。
+使用するSQLを切り替える仕組み(\ ``org.apache.ibatis.mapping.VendorDatabaseIdProvider``\)を提供している。
 
 この仕組みは、動作環境として複数のデータベースをサポートするようなアプリケーションを構築する際に有効である。
 

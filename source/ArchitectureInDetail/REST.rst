@@ -6458,7 +6458,7 @@ DomainMessageCodes.java
         /** e.ex.mm.5001=Specified member not found. member id : {0} */
         public static final String E_EX_MM_5001 = "e.ex.mm.5001";
     
-        /* e.ex.mm.8001=Cannot use specified sign id. sign id : {0} */
+        /** e.ex.mm.8001=Cannot use specified sign id. sign id : {0} */
         public static final String E_EX_MM_8001 = "e.ex.mm.8001";
     }
 

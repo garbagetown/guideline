@@ -1581,7 +1581,7 @@ MyBatis3では、検索結果(\ ``ResultSet``\)のカラムとJavaBeanのプロ�
 - :file:`projectName-domain/src/main/resources/com/example/domain/repository/todo/TodoRepository.xml`
 
  .. code-block:: xml
-    :emphasize-lines: 6-7, 8-9, 10-11, 17-18
+    :emphasize-lines: 6-7, 8-9, 10-14, 17-18
 
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"

@@ -2926,10 +2926,10 @@ URIで指定されたMemberリソースを更新するREST APIの実装例を、
                 MemberResource requestedResource) {
     
             // (4)
-            Member inputtedMember = beanMapper.map(
+            Member inputMember = beanMapper.map(
                 requestedResource, Member.class);
             Member updatedMember = memberSevice.updateMember(
-                memberId, inputtedMember);
+                memberId, inputMember);
     
             MemberResource responseResource = beanMapper.map(updatedMember,
                     MemberResource.class);
@@ -4135,7 +4135,7 @@ ExceptionCodeResolverを使ったエラーコードとメッセージの解決
     # omitted
 
     e.ex.mm.5001 = Specified member not found. member id : {0}
-    e.ex.mm.8001 = Can not used specified sign id. sign id : {0}
+    e.ex.mm.8001 = Cannot use specified sign id. sign id : {0}
 
     # omitted
 

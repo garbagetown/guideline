@@ -393,7 +393,7 @@ pom.xmlの設定
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 | インフラストラクチャ層にMyBatis3を使用する場合は、\ :file:`pom.xml`\にterasoluna-gfw-mybatis3への依存関係を追加する。
-| マルチプロジェクト構成の場合は、domainプロジェクトの\ :file:`pom.xml`\に追加する。
+| マルチプロジェクト構成の場合は、domainプロジェクトの\ :file:`pom.xml`\(:file:`projectName-domain/pom.xml`)に追加する。
 
 `MyBatis3用のブランクプロジェクト <https://github.com/terasolunaorg/terasoluna-gfw-web-multi-blank#multi-blank-project-with-mybatis3>`_ \ からプロジェクトを生成した場合は、terasoluna-gfw-mybatis3への依存関係は、設定済の状態である。
 
@@ -496,7 +496,7 @@ MyBatis3とSpringを連携する場合、データソースはSpringのDIコン�
 
 設定例は以下の通り。
 
-- :file:`[projectName]-env.xml`
+- :file:`projectName-env/src/main/resources/META-INF/spring/projectName-env.xml`
 
  .. code-block:: xml
     :emphasize-lines: 15-20
@@ -556,7 +556,7 @@ MyBatis3とSpringを連携する場合、データソースはSpringのDIコン�
 
 設定例は以下の通り。
 
-- :file:`[projectName]-env.xml`
+- :file:`projectName-env/src/main/resources/META-INF/spring/projectName-env.xml`
 
  .. code-block:: xml
     :emphasize-lines: 6,13-14,18-19
@@ -615,7 +615,7 @@ MyBatis3とSpringを連携する場合、MyBatis-Springのコンポーネント�
 
 設定例は以下の通り。
 
-- :file:`[projectName]-infra.xml`
+- :file:`projectName-domain/src/main/resources/META-INF/spring/projectName-infra.xml`
 
  .. code-block:: xml
     :emphasize-lines: 4,7-8,12-20,22-23
@@ -698,7 +698,7 @@ MyBatis3の設定
  .. note:: **MyBatis設定ファイルの格納場所について**
  
     本ガイドラインでは、MyBatis設定ファイルは、
-    \ :file:`/src/main/resources/META-INF/mybatis/mybatis-config.xml`\ に格納することを推奨している。
+    \ :file:`projectName-domain/src/main/resources/META-INF/mybatis/mybatis-config.xml`\ に格納することを推奨している。
 
     `MyBatis3用のブランクプロジェクト <https://github.com/terasolunaorg/terasoluna-gfw-web-multi-blank#multi-blank-project-with-mybatis3>`_ \ からプロジェクトを生成した場合は、上記ファイルは格納済みの状態である。
 
@@ -772,7 +772,7 @@ Entityを格納するパッケージ(\ ``${projectPackage}.domain.model``\)配�
 
 TypeAliasの設定方法は以下の通り。
 
-- :file:`mybatis-config.xml`
+- :file:`projectName-domain/src/main/resources/META-INF/mybatis/mybatis-config.xml`
 
  .. code-block:: xml
     :emphasize-lines: 7-8
@@ -882,7 +882,7 @@ NULL値とJDBC型のマッピング設定
 
 以下に、MyBatis3のデフォルトの動作を変更する方法を示す。
 
-- mybatis-config.xml
+- :file:`projectName-domain/src/main/resources/META-INF/mybatis/mybatis-config.xml`
 
  .. code-block:: xml
 
@@ -987,7 +987,7 @@ TypeHandlerの作成が必要になるケースは、MyBatis3でサポートし�
 
 ここでは、作成したTypeHandlerをMyBatisに適用する方法について説明を行う。
 
-- mybatis-config.xml
+- :file:`projectName-domain/src/main/resources/META-INF/mybatis/mybatis-config.xml`
 
  .. code-block:: xml
 
@@ -1023,7 +1023,7 @@ TypeHandlerの作成が必要になるケースは、MyBatis3でサポートし�
 
     クラス単位にTypeHandlerを設定する場合は、\ ``typeHandler``\要素を使用する。
 
-    - mybatis-config.xml
+    - :file:`projectName-domain/src/main/resources/META-INF/mybatis/mybatis-config.xml`
 
      .. code-block:: xml
         :emphasize-lines: 2
@@ -1038,7 +1038,7 @@ TypeHandlerの作成が必要になるケースは、MyBatis3でサポートし�
     更に、TypeHandlerの中でDIコンテナで管理されているbeanを使用したい場合は、
     bean定義ファイル内でTypeHandlerを指定すればよい。
 
-    - [projectname]-infra.xml
+    - :file:`projectName-domain/src/main/resources/META-INF/spring/projectName-infra.xml`
 
      .. code-block:: xml
         :emphasize-lines: 16-20
@@ -1362,7 +1362,7 @@ MyBatis3では、検索結果(\ ``ResultSet``\)のカラムとJavaBeanのプロ�
 
 以下に、自動マッピングを使用して検索結果をJavaBeanにマッピングする実装例を示す。
 
-- XxxRepository.xml
+- :file:`projectName-domain/src/main/resources/com/example/domain/repository/todo/TodoRepository.xml`
 
  .. code-block:: xml
     :emphasize-lines: 8, 10
@@ -1476,7 +1476,7 @@ MyBatis3では、検索結果(\ ``ResultSet``\)のカラムとJavaBeanのプロ�
 MyBatis設定ファイル(\ :file:`mybatis-config.xml`\)に以下の設定を追加することで、
 キャメルケースのJavaBeanのプロパティに自動マッピングする事ができる。
 
-- :file:`mybatis-config.xml`
+- :file:`projectName-domain/src/main/resources/META-INF/mybatis/mybatis-config.xml`
 
  .. code-block:: xml
     :emphasize-lines: 8-9
@@ -1507,7 +1507,7 @@ MyBatis設定ファイル(\ :file:`mybatis-config.xml`\)に以下の設定を追
         設定を\ `true`\にすると、アンダースコア区切りのカラム名がキャメルケース形式に自動変換される。
         具体例としては、カラム名が\ ``"todo_id"``\の場合、\ ``"todoId"``\に変換されてマッピングが行われる。
 
-- XxxRepository.xml
+- :file:`projectName-domain/src/main/resources/com/example/domain/repository/todo/TodoRepository.xml`
 
  .. code-block:: xml
     :emphasize-lines: 8-12
@@ -1578,7 +1578,7 @@ MyBatis3では、検索結果(\ ``ResultSet``\)のカラムとJavaBeanのプロ�
 
 を参照されたい。
 
-- XxxRepository.xml
+- :file:`projectName-domain/src/main/resources/com/example/domain/repository/todo/TodoRepository.xml`
 
  .. code-block:: xml
     :emphasize-lines: 6-7, 8-9, 10-11, 17-18
@@ -1666,7 +1666,7 @@ Entityの検索処理の実装方法の説明を読む前に、「:ref:`DataAcce
 
 以降の説明では、アンダースコア区切りのカラム名をキャメルケース形式のプロパティ名に自動でマッピングする設定を有効にした場合の実装例となる。
 
-- :file:`mybatis-config.xml`
+- :file:`projectName-domain/src/main/resources/META-INF/mybatis/mybatis-config.xml`
 
  .. code-block:: xml
 
@@ -4633,7 +4633,7 @@ MyBatis3では、SQLに値を埋め込む仕組みとして、以下の2つの�
     「\ :doc:`Codelist` \」を使用すると、入力チェックと連動する事ができるため、
     より安全に値の埋め込みを行う事ができる。
 
-    - [projectName]-codelist.xml
+    - :file:`projectName-domain/src/main/resources/META-INF/spring/projectName-codelist.xml`
 
       .. code-block:: xml
 
@@ -5314,7 +5314,7 @@ MyBatisの動作(使い方)は変わらない。
 
 実行モードをデフォルト(\ ``SIMPLE``\)から\ ``REUSE``\に変更する方法を、以下に示す。
 
-* mybatis-config.xml に設定を追加する。
+* :file:`projectName-domain/src/main/resources/META-INF/mybatis/mybatis-config.xml` に設定を追加する。
 
  .. code-block:: xml
 
@@ -5412,7 +5412,7 @@ RepositoryのBean定義を行えばよい。
 
 をBean登録している。
 
-- [projectname]-infra.xml にBean定義を追加する。
+- :file:`projectName-domain/src/main/resources/META-INF/spring/projectName-infra.xml` にBean定義を追加する。
 
  .. code-block:: xml
 
@@ -5588,7 +5588,7 @@ RepositoryのBean定義を行えばよい。
 
 |
 
-* :file:`[projectname]-infra.xml`\にBean定義を追加する。
+* :file:`projectName-domain/src/main/resources/META-INF/spring/projectName-infra.xml` にBean定義を追加する。
 
  .. code-block:: xml
 
@@ -6242,7 +6242,7 @@ TypeAliasをクラス単位に設定
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 TypeAliasの設定は、クラス単位で設定する事もできる。
 
-- :file:`mybatis-config.xml`
+- :file:`projectName-domain/src/main/resources/META-INF/mybatis/mybatis-config.xml`
 
  .. code-block:: xml
     :emphasize-lines: 2-4
@@ -6366,7 +6366,7 @@ MyBatis3では、JDBCドライバから接続しているデータベースの�
 
 |
 
-- [projectName]-infra.xmlにBean定義を追加する。
+- :file:`projectName-domain/src/main/resources/META-INF/spring/projectName-infra.xml` にBean定義を追加する。
 
  .. code-block:: xml
 
@@ -7856,7 +7856,7 @@ MyBatis3では、マッピング時に別のSQL(ネストしたSQL)を使用し�
 
 ここでは、MyBatis 3.2系のデフォルトに指定されているCGLIBを依存ライブラリに追加する方法を示す。
 
-* :file:`pom.xml`
+* :file:`projectName-domain/pom.xml`
 
  .. code-block:: xml
 
@@ -7887,7 +7887,7 @@ MyBatis3では、マッピング時に別のSQL(ネストしたSQL)を使用し�
     3.2系でJAVASSISTを使用する場合は、
 
     * \ :file:`pom.xml`\にJAVASSISTのアーティファクトを追加
-    * MyBatis設定ファイル(:file:`mybatis-config.xml`)に「\ ``proxyFactory=JAVASSIST``\」を追加
+    * MyBatis設定ファイル(:file:`projectName-domain/src/main/resources/META-INF/mybatis/mybatis-config.xml`)に「\ ``proxyFactory=JAVASSIST``\」を追加
 
     すればよい。
 
@@ -7909,7 +7909,7 @@ MyBatis3では、"Lazy Load"の使用有無を、
 の2箇所で指定する事ができる。
 
 * アプリケーションの全体設定は、
-  MyBatis設定ファイル(``META-INF/mybatis/mybatis-config.xml``)に指定する。
+  MyBatis設定ファイル(:file:`projectName-domain/src/main/resources/META-INF/mybatis/mybatis-config.xml`)に指定する。
 
  .. code-block:: xml
 
@@ -8002,7 +8002,7 @@ Lazy Loadの実行タイミングを制御するための設定
 MyBatis3では、"Lazy Load"を実行するタイミングを制御するためのオプションを提供している。
 
 "Lazy Load"を実行するタイミングを制御するための設定は、
-MyBatis設定ファイル(``META-INF/mybatis/mybatis-config.xml``)に指定する。
+MyBatis設定ファイル(:file:`projectName-domain/src/main/resources/META-INF/mybatis/mybatis-config.xml`)に指定する。
 
  .. code-block:: xml
 

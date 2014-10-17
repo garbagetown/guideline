@@ -2505,9 +2505,11 @@ Formの修正
 入力チェックのルールを定義するため、Formオブジェクトにアノテーションを追加する。
 
  .. code-block:: java
-    :emphasize-lines: 3-4,9-10
+    :emphasize-lines: 5-6,11-12
 
     package todo.app.todo;
+
+    import java.io.Serializable;
 
     import javax.validation.constraints.NotNull;
     import javax.validation.constraints.Size;
@@ -2812,9 +2814,11 @@ TodoFormに、todoIdプロパティを追加する必要があるが、そのま
 一つのFormに、新規作成用と完了用で、別々のルールを指定するために、group属性を設定する。
 
  .. code-block:: java
-    :emphasize-lines: 7-9,11-12,16-18,20-21,25-31
+    :emphasize-lines: 9-11,13-14,18-20,22-23,27-33
 
     package todo.app.todo;
+
+    import java.io.Serializable;
 
     import javax.validation.constraints.NotNull;
     import javax.validation.constraints.Size;
@@ -3139,9 +3143,11 @@ Delete用のグループを、TodoFormに追加する。ルールは、Finish用
 
 
  .. code-block:: java
-    :emphasize-lines: 13-15,19-20
+    :emphasize-lines: 15-17,21-22
 
     package todo.app.todo;
+
+    import java.io.Serializable;
 
     import javax.validation.constraints.NotNull;
     import javax.validation.constraints.Size;

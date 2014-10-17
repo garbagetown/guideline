@@ -1298,6 +1298,11 @@ SQL実装時の考慮点として、以下の点について説明を行う。
       
         Serviceの詳細については、「:ref:`service-label`」を参照されたい。
 
+ .. note::
+
+    本ガイドラインでは、アーキテクチャ上の用語を統一するために、
+    MyBatis3のMapperインタフェースの事をRepositoryインタフェースと呼んでいる。
+
 以降の説明では、「:ref:`domainlayer_entity`」「:ref:`repository-label`」「:ref:`service-label`」を読んでいる前提で説明を行う。
 
 |

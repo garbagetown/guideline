@@ -342,7 +342,7 @@ spring-security.xml
 
 認証処理の設定
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Spring Securityにおける認証処理の設定は\ ``AuthenticationProvider``\ と\ ``UserDetailsService``\ に対して行う。
+Spring Securityで認証処理を設定するために、\ ``AuthenticationProvider``\ と\ ``UserDetailsService``\ を定義する
 
 \ ``AuthenticationProvider``\ は、次の役割を担う。
 

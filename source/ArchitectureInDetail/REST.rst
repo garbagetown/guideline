@@ -4631,55 +4631,6 @@ JSONの中に関連リソースへのハイパーメディアリンクを含め�
 
 |
 
-* リンク情報に設定するURIを組み立てるためのクラスを作成する。
-
- .. code-block:: java
-    :emphasize-lines: 13
-
-    package org.terasoluna.examples.rest.api.common.resource;
-    
-    import java.net.URI;
-    
-    import org.springframework.stereotype.Component;
-    import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-    
-    @Component
-    public class ResourceUriBuilder {
-        
-        // omitted
-        
-        // (6)
-        public URI self() {
-            return ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
-        }
-    
-        // omitted
-
-    }
-
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 10 90
-
-    * - 項番
-      - 説明
-    * - | (6)
-      - | 自身のリソースにアクセスするためのURIを組み立てるためのメソッド。
-        | 上記例では、Spring MVCから提供されている\ ``org.springframework.web.servlet.support.ServletUriComponentsBuilder``\を使用して、URIの組み立て処理を行っている。
-        |
-        | \ ``ServletUriComponentsBuilder``\クラスのメソッドを使用してURIを組み立てると、リクエスト情報をベースにURIを組み立てる事ができる。
-        | そのため、リソースに依存しない汎用的な組み立て処理を実装することが可能となる。
-        | 例えば、\ ``http://example.com/api/v1/members/M000000001``\に対してリクエストした場合、selfメソッドの返り値は、リクエストされたURIと同じ値(\ ``http://example.com/api/v1/members/M000000001``\)になる。
-        |
-        | 必要に応じてリンク情報に設定するURIを組み立てるためのメソッドを実装すること。
-
- .. tip::
-
-    \ ``ServletUriComponentsBuilder``\では、URIを組み立てる際に\ ``X-Forwarded-Host``\ ヘッダを参照することで、クライアントとアプリケーションサーバの間にロードバランサやWebサーバがある構成を考慮している。
-    ただし、パスの構成を合わせておかないと期待通りのURIにならないので注意が必要である。
-
-|
 
 リソース毎の実装
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -4710,12 +4661,11 @@ JSONの中に関連リソースへのハイパーメディアリンクを含め�
       - | リンク情報のコレクションを保持するResourceの抽象クラスを継承する。
         | 継承することで、リンク情報のコレクションを保持するフィールド(\ ``links``\)が取り込まれ、ハイパーメディアリンクをサポートするResourceクラスとなる。
 
-|
 
 * REST APIの処理で、ハイパーメディアリンクを追加する。
 
  .. code-block:: java
-    :emphasize-lines: 7-8, 24
+    :emphasize-lines: 12, 20
 
     @RequestMapping("members")
     @Controller
@@ -4723,17 +4673,13 @@ JSONの中に関連リソースへのハイパーメディアリンクを含め�
 
         // omitted
 
-        // (2)
-        @Inject
-        ResourceUriBuilder resourceUriBuilder;
-
-        // omitted
-
         @RequestMapping(value = "{memberId}", method = RequestMethod.GET)
         @ResponseBody
         @ResponseStatus(HttpStatus.OK)
         public MemberResource getMember(
-                @PathVariable("memberId") String memberId) {
+                @PathVariable("memberId") String memberId
+                // (2)
+                UriComponentsBuilder uriBuilder) {
     
             Member member = memberSevice.getMember(memberId);
     
@@ -4741,7 +4687,8 @@ JSONの中に関連リソースへのハイパーメディアリンクを含め�
                     MemberResource.class);
     
             // (3)
-            responseResource.addSelf(resourceUriBuilder.self());
+            responseResource.addSelf(uriBuilder.path("/members").pathSegment(memberId)
+                    .build().toUri());
     
             return responseResource;
         }
@@ -4758,12 +4705,25 @@ JSONの中に関連リソースへのハイパーメディアリンクを含め�
     * - 項番
       - 説明
     * - | (2)
-      - | リンク情報に設定するURIを組み立てるためのオブジェクトをインジェクションする。
+      - | リンク情報に設定するURIを組み立てるため、Spring MVCから提供されている\ ``org.springframework.web.util.UriComponentsBuilder``\クラスをメソッドの引数に指定する。
+        | \ ``UriComponentsBuilder``\ クラスをControllerのメソッドの引数に指定すると、メソッド実行時に、Spring MVCにより\ ``UriComponentsBuilder``\ クラスを継承した
+        | \ ``org.springframework.web.servlet.support.ServletUriComponentsBuilder``\クラスのインスタンスが渡される。
     * - | (3)
       - | リソースにリンク情報を追加する。
-        | 上記例では、リンク情報に設定するURIを組み立てるためのオブジェクトのメソッドを呼び出し、自身のリソースにアクセスするためのURIをリソースに追加している。
+        | 上記例では、リンク情報に設定するURIを組み立てるため \ ``UriComponentsBuilder`` \ クラスのメソッドを呼び出し、自身のリソースにアクセスするためのURIをリソースに追加している。
+        |
+        | 引数として渡された\ ``ServletUriComponentsBuilder``\ のインスタンスは、web.xmlに記載の\ ``<servlet-mapping>``\要素の情報を元に初期化されており、リソースには依存しない。
+        | そのため、Spring Frameworkから提供される `URI Template Patterns <http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/mvc.html#mvc-ann-requestmapping-uri-templates>`_\ 等を利用し、
+        | リクエスト情報をベースにURIを組み立てる事により、リソースに依存しない汎用的な組み立て処理を実装することが可能となる。
+        | 例えば、上記例において\ ``http://example.com/api/v1/members/M000000001``\に対してGETした場合、組み立てられるURIは、リクエストされたURIと同じ値となる。\ ``（http://example.com/api/v1/members/M000000001）`` \となる。
+        | 
+        | 必要に応じてリンク情報に設定するURIを組み立てるためのメソッドを実装すること。
 
-|
+ .. tip::
+
+    \ ``ServletUriComponentsBuilder``\では、URIを組み立てる際に「\ ``X-Forwarded-Host``\」ヘッダを参照することで、クライアントとアプリケーションサーバの間にロードバランサやWebサーバがある構成を考慮している。 
+    ただし、パスの構成を合わせておかないと期待通りのURIにならないので注意が必要である。
+
 
 * | レスポンス例
   | 実際に動かすと、以下のようなレスポンスとなる。
@@ -4816,63 +4776,7 @@ POST時のLocationヘッダの設定
 | HTTPの仕様に準拠する場合、POST時のレスポンスヘッダー(「Locationヘッダ」)には、作成したリソースのURIを設定する必要がある。
 | POST時のレスポンスヘッダ(「Locationヘッダ」)に、作成したリソースのURIを設定するための実装方法について説明する。
 
-共通部品の実装
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-* | Locationヘッダに設定するURIを組み立てるためのクラスを作成する。
-  | 本クラスは、「:ref:`RESTAppendixHyperMediaLink`」で説明したクラスと同じクラスである。
-
- .. code-block:: java
-    :emphasize-lines: 13
-
-    package org.terasoluna.examples.rest.api.common.resource;
-    
-    import java.net.URI;
-    
-    import org.springframework.stereotype.Component;
-    import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-    
-    @Component
-    public class ResourceUriBuilder<T> {
-    
-        // omitted
-
-        // (1)
-        public URI created(T id) {
-            return childrens(String.valueOf(id));
-        }
-    
-        public URI childrens(String... paths) {
-            return ServletUriComponentsBuilder.fromCurrentRequestUri().path("/")
-                    .pathSegment(paths).build().toUri();
-        }
-    
-        // omitted
-    
-    }
-
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
- .. list-table::
-    :header-rows: 1
-    :widths: 10 90
-
-    * - 項番
-      - 説明
-    * - | (1)
-      - | 作成したリソースのURIを組み立てるためのメソッド。
-        | 上記例では、Spring MVCから提供されている\ ``org.springframework.web.servlet.support.ServletUriComponentsBuilder``\を使用して、URIの組み立て処理を行っている。
-        |
-        | \ ``ServletUriComponentsBuilder``\クラスのメソッドを使用してURIを組み立てると、リクエスト情報をベースにURIを組み立てる事ができる。
-        | そのため、リソースに依存しない汎用的な組み立て処理を実装することが可能となる。
-        | 例えば、\ ``http://example.com/api/v1/members``\に対してPOSTした場合、createdメソッドの返り値は、「リクエストされたURI + \ ``"/"``\ + 引数に指定したID」となる。
-        | 具体的には、IDに\ ``"M000000001"``\を指定した場合、 ``http://example.com/api/v1/members/M000000001``\となる。
-
- .. tip::
-
-    \ ``ServletUriComponentsBuilder``\では、URIを組み立てる際に「\ ``X-Forwarded-Host``\」ヘッダを参照することで、クライアントとアプリケーションサーバの間にロードバランサやWebサーバがある構成を考慮している。
-    ただし、パスの構成を合わせておかないと期待通りのURIにならないので注意が必要である。
-
-|
 
 リソース毎の実装
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -4880,17 +4784,11 @@ POST時のLocationヘッダの設定
 * REST APIの処理で、作成したリソースのURIをLocationヘッダに設定する。
 
  .. code-block:: java
-    :emphasize-lines: 7, 27, 30, 34
+    :emphasize-lines: 13, 23, 27, 31
 
     @RequestMapping("members")
     @Controller
     public class MemberRestController {
-
-        // omitted
-
-        // (1)
-        @Inject
-        ResourceUriBuilder resourceUriBuilder;
 
         // omitted
 
@@ -4899,7 +4797,9 @@ POST時のLocationヘッダの設定
         @ResponseStatus(HttpStatus.CREATED)
         public HttpEntity<MemberResource> postMembers(
                 @RequestBody @Validated({ PostMembers.class, Default.class })
-                MemberResource requestedResource) {
+                MemberResource requestedResource,
+                // (1)
+                UriComponentsBuilder uriBuilder) {
     
             Member creatingMember = beanMapper.map(requestedResource, Member.class);
     
@@ -4909,8 +4809,9 @@ POST時のLocationヘッダの設定
                     MemberResource.class);
 
             // (2)
-            URI createdUri = resourceUriBuilder.created(responseResource.getMemberId());
-                    
+            URI createdUri = uriBuilder.path("/members")
+                    .pathSegment(responseResource.getMemberId()).build().toUri();
+    
             // (3)
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.setLocation(createdUri);
@@ -4931,16 +4832,31 @@ POST時のLocationヘッダの設定
     * - 項番
       - 説明
     * - | (1)
-      - | 作成したリソースのURIを組み立てるオブジェクトをインジェクションする。
+      - | 作成したリソースのURIを組み立てるため、Spring MVCから提供されている\ ``org.springframework.web.util.UriComponentsBuilder``\クラスをメソッドの引数に指定する。
+        | \ ``UriComponentsBuilder``\ クラスをControllerのメソッドの引数に指定すると、メソッド実行時に、Spring MVCにより\ ``UriComponentsBuilder``\ クラスを継承した
+        | \ ``org.springframework.web.servlet.support.ServletUriComponentsBuilder``\クラスのインスタンスが渡される。
     * - | (2)
       - | 作成したリソースのURIを組み立てる。
-        | 上記例では、作成したリソースのURIを組み立てるオブジェクトのメソッドを呼び出し、作成したリソースのURIを組み立てている。
+        | 上記例では、\ ``UriComponentsBuilder``\クラスのメソッドを呼び出し、作成したリソースのURIを組み立てている。
+        |
+        | 引数として渡された\ ``ServletUriComponentsBuilder``\ のインスタンスは、web.xmlに記載の\ ``<servlet-mapping>``\要素の情報を元に初期化されており、リソースには依存しない。
+        | そのため、Spring Frameworkから提供される `URI Template Patterns <http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/mvc.html#mvc-ann-requestmapping-uri-templates>`_\ 等を利用し、
+        | リクエスト情報をベースにURIを組み立てる事により、リソースに依存しない汎用的な組み立て処理を実装することが可能となる。
+        | 例えば、上記例において\ ``http://example.com/api/v1/members``\に対してPOSTした場合、組み立てられるURIは、「リクエストされたURI + \ ``"/"``\ + pathSegmentメソッドの引数のID」となる。
+        | 具体的には、IDに\ ``"M000000001"``\を指定した場合、 ``http://example.com/api/v1/members/M000000001``\となる。
+        | 
+        | 必要に応じてリンク情報に設定するURIを組み立てるためのメソッドを実装すること。
     * - | (3)
       - | 作成したリソースのURIをLocationヘッダに設定する。
     * - | (4)
       - | \ ``org.springframework.http.HttpEntity``\に、Resourceオブジェクトとレスポンスヘッダに設定する情報を格納し、返却する。
 
-|
+
+ .. tip::
+
+    \ ``ServletUriComponentsBuilder``\では、URIを組み立てる際に「\ ``X-Forwarded-Host``\」ヘッダを参照することで、クライアントとアプリケーションサーバの間にロードバランサやWebサーバがある構成を考慮している。 
+    ただし、パスの構成を合わせておかないと期待通りのURIにならないので注意が必要である。
+
 
 * | レスポンス例
   | 実際に動かすと、以下のようなレスポンスヘッダとなる。

@@ -4710,12 +4710,13 @@ JSONの中に関連リソースへのハイパーメディアリンクを含め�
         | \ ``org.springframework.web.servlet.support.ServletUriComponentsBuilder``\クラスのインスタンスが渡される。
     * - | (3)
       - | リソースにリンク情報を追加する。
-        | 上記例では、リンク情報に設定するURIを組み立てるため \ ``UriComponentsBuilder`` \ クラスのメソッドを呼び出し、自身のリソースにアクセスするためのURIをリソースに追加している。
+        | 上記例では、リンク情報に設定するURIを組み立てるため \ ``UriComponentsBuilder``\ クラスのメソッドを呼び出し、自身のリソースにアクセスするためのURIをリソースに追加している。
         |
-        | 引数として渡された\ ``ServletUriComponentsBuilder``\ のインスタンスは、web.xmlに記載の\ ``<servlet-mapping>``\要素の情報を元に初期化されており、リソースには依存しない。
+        | Controllerのメソッドの引数として渡された\ ``ServletUriComponentsBuilder``\ のインスタンスは、web.xmlに記載の\ ``<servlet-mapping>``\要素の情報を元に初期化されており、リソースには依存しない。
         | そのため、Spring Frameworkから提供される `URI Template Patterns <http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/mvc.html#mvc-ann-requestmapping-uri-templates>`_\ 等を利用し、
         | リクエスト情報をベースにURIを組み立てる事により、リソースに依存しない汎用的な組み立て処理を実装することが可能となる。
-        | 例えば、上記例において\ ``http://example.com/api/v1/members/M000000001``\に対してGETした場合、組み立てられるURIは、リクエストされたURIと同じ値となる。\ ``（http://example.com/api/v1/members/M000000001）`` \となる。
+        | 
+        | 例えば、上記例において\ ``http://example.com/api/v1/members/M000000001``\に対してGETした場合、組み立てられるURIは、リクエストされたURIと同じ値\ ``（http://example.com/api/v1/members/M000000001）``\になる。
         | 
         | 必要に応じてリンク情報に設定するURIを組み立てるためのメソッドを実装すること。
 
@@ -4809,8 +4810,8 @@ POST時のLocationヘッダの設定
                     MemberResource.class);
 
             // (2)
-            URI createdUri = uriBuilder.path("/members")
-                    .pathSegment(responseResource.getMemberId()).build().toUri();
+            URI createdUri = uriBuilder.path("/members/{memberId}")
+                    .buildAndExpand(responseResource.getMemberId()).toUri();
     
             // (3)
             HttpHeaders responseHeaders = new HttpHeaders();
@@ -4837,13 +4838,15 @@ POST時のLocationヘッダの設定
         | \ ``org.springframework.web.servlet.support.ServletUriComponentsBuilder``\クラスのインスタンスが渡される。
     * - | (2)
       - | 作成したリソースのURIを組み立てる。
-        | 上記例では、\ ``UriComponentsBuilder``\クラスのメソッドを呼び出し、作成したリソースのURIを組み立てている。
-        |
-        | 引数として渡された\ ``ServletUriComponentsBuilder``\ のインスタンスは、web.xmlに記載の\ ``<servlet-mapping>``\要素の情報を元に初期化されており、リソースには依存しない。
+        | 上記例では、引数として渡された\ ``ServletUriComponentsBuilder``\ のインスタンスに\ ``path``\ メソッドで、URI Template Patternsを用いたパスを追加し、
+        | \ ``buildAndExpand``\ メソッドを呼び出して、作成したリソースのIDをバインドすることで、作成したリソースのURIを組み立てている。
+        | 
+        | Controllerのメソッドの引数として渡された\ ``ServletUriComponentsBuilder``\ のインスタンスは、web.xmlに記載の\ ``<servlet-mapping>``\要素の情報を元に初期化されており、リソースには依存しない。
         | そのため、Spring Frameworkから提供される `URI Template Patterns <http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/mvc.html#mvc-ann-requestmapping-uri-templates>`_\ 等を利用し、
         | リクエスト情報をベースにURIを組み立てる事により、リソースに依存しない汎用的な組み立て処理を実装することが可能となる。
-        | 例えば、上記例において\ ``http://example.com/api/v1/members``\に対してPOSTした場合、組み立てられるURIは、「リクエストされたURI + \ ``"/"``\ + pathSegmentメソッドの引数のID」となる。
-        | 具体的には、IDに\ ``"M000000001"``\を指定した場合、 ``http://example.com/api/v1/members/M000000001``\となる。
+        | 
+        | 例えば、上記例において\ ``http://example.com/api/v1/members``\に対してPOSTした場合、組み立てられるURIは、「リクエストされたURI + \ ``"/"``\ + 作成したリソースのID」となる。
+        | 具体的には、IDに\ ``"M000000001"``\を指定した場合、\ ``http://example.com/api/v1/members/M000000001``\となる。
         | 
         | 必要に応じてリンク情報に設定するURIを組み立てるためのメソッドを実装すること。
     * - | (3)

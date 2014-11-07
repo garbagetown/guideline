@@ -166,8 +166,8 @@ Spring MVCとTilesの連携
 
     <?xml version="1.0" encoding="UTF-8" ?>
     <!DOCTYPE tiles-definitions PUBLIC
-       "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
-       "http://tiles.apache.org/dtds/tiles-config_2_1.dtd"> <!-- (1) -->
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd"> <!-- (1) -->
 
     <tiles-definitions>
         <definition name="layouts"
@@ -245,14 +245,15 @@ Tilesを使用するためにカスタムタグ(TLD)を設定する必要があ�
  .. code-block:: jsp
 
   <%@ page session="false"%>
-  <%@ taglib uri=" http://java.sun.com/jsp/jstl/core" prefix="c"%>
-  <%@ taglib uri=" http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-  <%@ taglib uri=" http://www.springframework.org/tags" prefix="spring"%>
-  <%@ taglib uri=" http://www.springframework.org/tags/form" prefix="form"%>
-  <%@ taglib uri=" http://www.springframework.org/security/tags" prefix="sec"%>
-  <%@ taglib uri=" http://terasoluna.org/functions" prefix="f"%>
-  <%@ taglib uri=" http://terasoluna.org/tags" prefix="t"%>
+  <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+  <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+  <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+  <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+  <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
+  <%@ taglib uri="http://terasoluna.org/functions" prefix="f"%>
+  <%@ taglib uri="http://terasoluna.org/tags" prefix="t"%>
   <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%> <!-- (1) -->
+  <%@ taglib uri="http://tiles.apache.org/tags-tiles-extras" prefix="tilesx"%> <!-- (2) -->
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
@@ -263,6 +264,16 @@ Tilesを使用するためにカスタムタグ(TLD)を設定する必要があ�
      - 説明
    * - | (1)
      - | Tiles用のカスタムタグ(TLD)の定義を追加する。
+   * - | (2)
+     - | Tiles-extras用のカスタムタグ(TLD)の定義を追加する。
+
+Tilesのカスタムタグの詳細は、\ `こちら <https://tiles.apache.org/framework/tiles-jsp/tagreference.html>`_\ を参照されたい。
+
+.. tip::
+
+    | version 2系では tiles tag lig は一つであったが、version 3から tiles-extras tag lib が追加された。
+    | version 2系では tiles tag lig で利用可能であった useAttribute tag がversion 3から tiles-extras tag へ移動されているので、利用していた場合は注意すること。
+    | 変更例 ) `<tiles:useAttribute>` : version 2 -> `<tilesx:useAttribute>` : version 3
 
 
 - web.xml
@@ -518,8 +529,8 @@ How to extend
 
     <?xml version="1.0" encoding="UTF-8" ?>
     <!DOCTYPE tiles-definitions PUBLIC
-       "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
-       "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 
     <tiles-definitions>
         <definition name="layoutsOfSearch"

@@ -12,7 +12,7 @@ Overview
 | ヘッダ、フッタ、サイドメニューといった共通的なレイアウトを持つWebアプリケーションを開発する場合に、全てのJSPに共通部分をコーディングすると、メンテナンスが煩雑になる。
 | 例えば、ヘッダのデザインを修正する必要がある場合、全てのJSPに修正を加えなければならない。
 
-| JSPでの開発で多くの画面で同じレイアウトを使用する場合は、 `Apache Tiles <http://tiles.apache.org/2.2/framework/index.html>`_\ (以下、Tiles)の利用を推奨する。
+| JSPでの開発で多くの画面で同じレイアウトを使用する場合は、 `Apache Tiles <https://tiles.apache.org/>`_\ (以下、Tiles)の利用を推奨する。
 | 理由は、以下3つの通りである。
 
 #. 設計者によるレイアウトの誤差をなくすこと
@@ -104,7 +104,7 @@ pom.xmlの設定
 Spring MVCとTilesの連携
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-| Spring MVCとTilesを連携するには ``org.springframework.web.servlet.view.tiles2.TilesViewResolver`` を利用すればよい。
+| Spring MVCとTilesを連携するには ``org.springframework.web.servlet.view.tiles3.TilesViewResolver`` を利用すればよい。
 | Spring MVCのControllerの実装(View名の返却)を変更する必要は無い。
 
 設定方法について、以下に示す。
@@ -123,12 +123,12 @@ Spring MVCとTilesの連携
     </bean>
 
     <bean id="tilesViewResolver"
-        class="org.springframework.web.servlet.view.tiles2.TilesViewResolver"> <!-- (2) -->
+        class="org.springframework.web.servlet.view.tiles3.TilesViewResolver"> <!-- (2) -->
         <property name="order" value="1" />
     </bean>
 
     <bean id="tilesConfigurer"
-        class="org.springframework.web.servlet.view.tiles2.TilesConfigurer"> <!-- (3) -->
+        class="org.springframework.web.servlet.view.tiles3.TilesConfigurer"> <!-- (3) -->
         <property name="definitions">
             <list>
                 <value>/WEB-INF/tiles/tiles-definitions.xml</value>
@@ -153,7 +153,7 @@ Spring MVCとTilesの連携
    * - | (2)
      - | TilesViewResovlerを定義する。
        | property定義のorderで"1"を指定することで、最初にTilesを定義した設定tiles-definitions.xmlを使うように優先順を定義する。
-       | 読み込んだjspのファイル名が、Tiles定義ファイル内definitionタグのname属性のパターンに合致する場合、 ``org.springframework.web.servlet.view.tiles2.TilesViewResolver`` が使用される。
+       | 読み込んだjspのファイル名が、Tiles定義ファイル内definitionタグのname属性のパターンに合致する場合、 ``org.springframework.web.servlet.view.tiles3.TilesViewResolver`` が使用される。
    * - | (3)
      - | Tilesの定義ファイルの場所を指定する。
        | /WEB-INF/tiles/tiles-definitions.xmlを読み込む。

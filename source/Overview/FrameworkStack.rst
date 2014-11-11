@@ -29,22 +29,22 @@ DIコンテナ
 DIコンテナとしてSpringを利用する。
 
 
-* `Spring Framework 3.2 <http://spring.io/>`_
+* `Spring Framework 4.0 <http://projects.spring.io/spring-framework/>`_
 
 MVCフレームワーク
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Web MVCフレームワークとしてSpring MVCを利用する。
 
-* `Spring MVC 3.2 <http://docs.spring.io/spring/docs/3.2.x/spring-framework-reference/html/mvc.html>`_
+* `Spring MVC 4.0 <http://docs.spring.io/spring/docs/4.0.7.RELEASE/spring-framework-reference/html/mvc.html>`_
 
 O/R Mapper
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 本ガイドラインでは、以下の\ **いずれか**\ を想定している。
 
-* `JPA2.0 <http://download.oracle.com/otn-pub/jcp/persistence-2.0-fr-eval-oth-JSpec/persistence-2_0-final-spec.pdf>`_
+* `JPA2.1 <http://download.oracle.com/otn-pub/jcp/persistence-2_1-fr-eval-spec/JavaPersistence.pdf>`_
 
-  * プロバイダは、\ `Hibernate 4.2 <http://docs.jboss.org/hibernate/orm/4.2/manual/en-US/html/>`_\ を使用する。
+  * プロバイダは、\ `Hibernate 4.3 <http://docs.jboss.org/hibernate/orm/4.3/manual/en-US/html_single/>`_\ を使用する。
 
 * `MyBatis 3 <http://mybatis.github.io/mybatis-3/>`_
 
@@ -70,7 +70,7 @@ ViewにはJSPを利用する。
 
 JSPをTiles化する場合は、
 
-* `Apache Tiles 2.2 <http://tiles.apache.org/2.2/framework/index.html>`_
+* `Apache Tiles 3.0 <http://tiles.apache.org/framework/index.html>`_
 
 を利用する。
 
@@ -78,20 +78,28 @@ JSPをTiles化する場合は、
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 認証・認可のフレームワークとしてSpring Securityを利用する。
 
-* `Spring Security 3.1 <http://docs.spring.io/spring-security/site/docs/3.1.4.RELEASE/reference/springsecurity.html>`_
+* `Spring Security 3.2 <http://projects.spring.io/spring-security/>`_
 
-.. todo::
+.. tip::
 
-  今後、Spring Security 3.2にupdateする予定である。
+    Spring Security 3.2 から、認証・認可の仕組みの提供に加えて、
+    悪意のある攻撃者からWebアプリケーションを守るための仕組みが強化されている。
+
+    悪意のある攻撃者からWebアプリケーションを守るための仕組みについては、
+
+    * :doc:`../Security/CSRF`
+    * :ref:`SpringSecurityAppendixSecHeaders`
+
+    を参照されたい。
 
 バリデーション
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* 単項目チェックには\ `BeanValidation 1.0 <http://download.oracle.com/otn-pub/jcp/bean_validation-1.0-fr-oth-JSpec/bean_validation-1_0-final-spec.pdf>`_\ を利用する。
+* 単項目チェックには\ `BeanValidation 1.1 <http://download.oracle.com/otn-pub/jcp/bean_validation-1_1-fr-eval-spec/bean-validation-specification.pdf>`_\ を利用する。
 
-  * 実装は、\ `Hibernate Validator 4.3 <http://docs.jboss.org/hibernate/validator/4.3/reference/en-US/html/>`_\ を利用する。
+  * 実装は、\ `Hibernate Validator 5.0 <http://docs.jboss.org/hibernate/validator/4.3/reference/en-US/html/>`_\ を利用する。
 
-* 相関チェックには\ `BeanValidation <http://download.oracle.com/otn-pub/jcp/bean_validation-1.0-fr-oth-JSpec/bean_validation-1_0-final-spec.pdf>`_\ 、もしくは\ `Spring Validation <http://docs.spring.io/spring/docs/3.2.x/spring-framework-reference/html/validation.html>`_\ を利用する。
+* 相関チェックには\ `Bean Validation <http://download.oracle.com/otn-pub/jcp/bean_validation-1_1-fr-eval-spec/bean-validation-specification.pdf>`_\ 、もしくは\ `Spring Validation <http://docs.spring.io/spring/docs/4.0.7.RELEASE/spring-framework-reference/html/validation.html#validator>`_\ を利用する。
 
   * 使い分けについては\ :doc:`../ArchitectureInDetail/Validation`\ を参照されたい。
 
@@ -113,7 +121,23 @@ JSPをTiles化する場合は、
 利用するOSSのバージョン
 --------------------------------------------------------------------------------
 
-version 1.0.1.RELEASEで利用するOSSの一覧を以下に示す。
+version 1.1.0.RELEASEで利用するOSSの一覧を以下に示す。
+
+.. tip::
+
+    version 1.1.0.RELEASEより、
+    `Spring IO platform <http://platform.spring.io/platform/>`_\ を親プロジェクトに指定する構成を採用している。
+
+    Spring IO platformを親プロジェクトに指定することで、
+
+    * Spring Frameworkが提供しているライブラリ
+    * Spring Frameworkが依存しているOSSライブラリ
+    * Spring Frameworkと相性のよいOSSライブラリ
+
+    への依存関係を解決しており、
+    TERASOLUNA Global Frameworkで使用するOSSのバージョンは、原則として、Spring IO platformの定義に準じている。
+
+    なお、version 1.1.0.RELEASEで指定しているSpring IO platformのバージョンは、`1.0.2.RELEASE <http://docs.spring.io/platform/docs/1.0.2.RELEASE/reference/htmlsingle/>`_\ である。
 
 .. tabularcolumns:: |p{0.20\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|p{0.5\linewidth}|
 .. list-table::
@@ -129,92 +153,92 @@ version 1.0.1.RELEASEで利用するOSSの一覧を以下に示す。
     * - Spring
       - org.springframework
       - spring-aop
-      - 3.2.10.RELEASE
+      - 4.0.7.RELEASE
       -
     * - Spring
       - org.springframework
       - spring-aspects
-      - 3.2.10.RELEASE
+      - 4.0.7.RELEASE
       -
     * - Spring
       - org.springframework
       - spring-beans
-      - 3.2.10.RELEASE
+      - 4.0.7.RELEASE
       -
     * - Spring
       - org.springframework
       - spring-context
-      - 3.2.10.RELEASE
+      - 4.0.7.RELEASE
       -
     * - Spring
       - org.springframework
       - spring-context-support
-      - 3.2.10.RELEASE
+      - 4.0.7.RELEASE
       -
     * - Spring
       - org.springframework
       - spring-core
-      - 3.2.10.RELEASE
+      - 4.0.7.RELEASE
       -
     * - Spring
       - org.springframework
       - spring-expression
-      - 3.2.10.RELEASE
+      - 4.0.7.RELEASE
       -
     * - Spring
       - org.springframework
       - spring-jdbc
-      - 3.2.10.RELEASE
+      - 4.0.7.RELEASE
       -
     * - Spring
       - org.springframework
       - spring-orm
-      - 3.2.10.RELEASE
+      - 4.0.7.RELEASE
       -
     * - Spring
       - org.springframework
       - spring-tx
-      - 3.2.10.RELEASE
+      - 4.0.7.RELEASE
       -
     * - Spring
       - org.springframework
       - spring-web
-      - 3.2.10.RELEASE
+      - 4.0.7.RELEASE
       -
     * - Spring
       - org.springframework
       - spring-webmvc
-      - 3.2.10.RELEASE
+      - 4.0.7.RELEASE
       -
     * - Spring
       - org.springframework.data
       - spring-data-commons
-      - 1.6.4.RELEASE
+      - 1.8.4.RELEASE
       -
     * - Spring
       - org.springframework.security
       - spring-security-acl
-      - 3.1.4.RELEASE
+      - 3.2.5.RELEASE
       -
     * - Spring
       - org.springframework.security
       - spring-security-config
-      - 3.1.4.RELEASE
+      - 3.2.5.RELEASE
       -
     * - Spring
       - org.springframework.security
       - spring-security-core
-      - 3.1.4.RELEASE
+      - 3.2.5.RELEASE
       -
     * - Spring
       - org.springframework.security
       - spring-security-taglibs
-      - 3.1.4.RELEASE
+      - 3.2.5.RELEASE
       -
     * - Spring
       - org.springframework.security
       - spring-security-web
-      - 3.1.4.RELEASE
+      - 3.2.5.RELEASE
       -
     * - JPA(Hibernate)
       - antlr
@@ -229,37 +253,47 @@ version 1.0.1.RELEASEで利用するOSSの一覧を以下に示す。
     * - JPA(Hibernate)
       - org.hibernate
       - hibernate-core
-      - 4.2.3.Final
+      - 4.3.6.Final
       - \*1
     * - JPA(Hibernate)
       - org.hibernate
       - hibernate-entitymanager
-      - 4.2.3.Final
+      - 4.3.6.Final
       - \*1
     * - JPA(Hibernate)
       - org.hibernate.common
       - hibernate-commons-annotations
-      - 4.0.2.Final
+      - 4.0.5.Final
       - \*1
     * - JPA(Hibernate)
       - org.hibernate.javax.persistence
-      - hibernate-jpa-2.0-api
-      - 1.0.1.Final
+      - hibernate-jpa-2.1-api
+      - 1.0.0.Final
       - \*1
     * - JPA(Hibernate)
       - org.javassist
       - javassist
-      - 3.15.0-GA
+      - 3.18.1-GA
       - \*1
     * - JPA(Hibernate)
+      - org.jboss
+      - jandex
+      - 1.1.0.Final
+      - \*1
+    * - JPA(Hibernate)
+      - org.jboss.logging
+      - jboss-logging-annotations
+      - 1.2.0.Final
+      - \*1 \*7
+    * - JPA(Hibernate)
       - org.jboss.spec.javax.transaction
-      - jboss-transaction-api_1.1_spec
-      - 1.0.1.Final
+      - jboss-transaction-api_1.2_spec
+      - 1.0.0.Final
       - \*1
     * - JPA(Hibernate)
       - org.springframework.data
       - spring-data-jpa
-      - 1.4.3.RELEASE
+      - 1.6.4.RELEASE
       - \*1
     * - MyBatis3
       - org.mybatis
@@ -299,73 +333,88 @@ version 1.0.1.RELEASEで利用するOSSの一覧を以下に示す。
     * - AOP
       - org.aspectj
       - aspectjrt
-      - 1.7.4
+      - 1.8.2
       -
     * - AOP
       - org.aspectj
       - aspectjweaver
-      - 1.7.4
+      - 1.8.2
       -
     * - ログ出力
       - ch.qos.logback
       - logback-classic
-      - 1.0.13
+      - 1.1.2
       -
     * - ログ出力
       - ch.qos.logback
       - logback-core
-      - 1.0.13
+      - 1.1.2
       -
     * - ログ出力
       - org.lazyluke
       - log4jdbc-remix
       - 0.2.7
-      -
+      - \*5
     * - ログ出力
       - org.slf4j
       - jcl-over-slf4j
-      - 1.7.5
+      - 1.7.7
       -
     * - ログ出力
       - org.slf4j
       - slf4j-api
-      - 1.7.5
+      - 1.7.7
       -
     * - JSON
-      - org.codehaus.jackson
-      - jackson-core-asl
-      - 1.9.7
+      - com.fasterxml.jackson.core
+      - jackson-annotations
+      - 2.3.4
       -
     * - JSON
-      - org.codehaus.jackson
-      - jackson-mapper-asl
-      - 1.9.7
+      - com.fasterxml.jackson.core
+      - jackson-core
+      - 2.3.4
+      -
+    * - JSON
+      - com.fasterxml.jackson.core
+      - jackson-databind
+      - 2.3.4
+      -
+    * - JSON
+      - com.fasterxml.jackson.datatype
+      - jackson-datatype-joda
+      - 2.3.4
       -
     * - 入力チェック
       - javax.validation
       - validation-api
-      - 1.0.0.GA
+      - 1.1.0.Final
       -
     * - 入力チェック
       - org.hibernate
       - hibernate-validator
-      - 4.3.1.Final
+      - 5.0.3.Final
       -
     * - 入力チェック
       - org.jboss.logging
       - jboss-logging
-      - 3.1.0.GA
+      - 3.1.3.GA
+      - \*6
+    * - 入力チェック
+      - com.fasterxml
+      - classmate
+      - 1.0.0
       -
     * - Bean変換
       - commons-beanutils
       - commons-beanutils
-      - 1.8.3
+      - 1.9.2
       - \*4
     * - Bean変換
       - net.sf.dozer
       - dozer
       - 5.4.0
-      - \*4
+      - \*4 \*5
     * - Bean変換
       - org.apache.commons
       - commons-lang3
@@ -374,67 +423,87 @@ version 1.0.1.RELEASEで利用するOSSの一覧を以下に示す。
     * - 日付操作
       - joda-time
       - joda-time
-      - 2.2
+      - 2.3
       -
     * - 日付操作
       - joda-time
       - joda-time-jsptags
       - 1.1.1
-      - \*4
+      - \*4 \*5
     * - 日付操作
       - org.jadira.usertype
       - usertype.core
       - 3.0.0.GA
-      - \*1
+      - \*1 \*5
     * - 日付操作
       - org.jadira.usertype
       - usertype.spi
       - 3.0.0.GA
-      - \*1
+      - \*1 \*5
     * - コネクションプール
-      - commons-dbcp
-      - commons-dbcp
-      - 1.2.2.patch_DBCP264_DBCP372
+      - org.apache.commons
+      - commons-dbcp2
+      - 2.0.1
       - \*4
     * - コネクションプール
-      - commons-pool
-      - commons-pool
-      - 1.6
+      - org.apache.commons
+      - commons-pool2
+      - 2.2
       - \*4
     * - Tiles
       - commons-digester
       - commons-digester
-      - 2
+      - 2.1
       - \*4
     * - Tiles
       - org.apache.tiles
       - tiles-api
-      - 2.2.2
+      - 3.0.4
       - \*4
     * - Tiles
       - org.apache.tiles
       - tiles-core
-      - 2.2.2
+      - 3.0.4
       - \*4
     * - Tiles
       - org.apache.tiles
       - tiles-jsp
-      - 2.2.2
+      - 3.0.4
       - \*4
     * - Tiles
       - org.apache.tiles
       - tiles-servlet
-      - 2.2.2
+      - 3.0.4
       - \*4
     * - Tiles
       - org.apache.tiles
       - tiles-template
-      - 2.2.2
+      - 3.0.4
+      - \*4
+    * - Tiles
+      - org.apache.tiles
+      - tiles-autotag-core-runtime
+      - 1.1.0
+      - \*4
+    * - Tiles
+      - org.apache.tiles
+      - tiles-request-servlet
+      - 1.0.4
+      - \*4
+    * - Tiles
+      - org.apache.tiles
+      - tiles-request-api
+      - 1.0.1
+      - \*4
+    * - Tiles
+      - org.apache.tiles
+      - tiles-request-jsp
+      - 1.0.4
       - \*4
     * - ユーティリティ
       - com.google.guava
       - guava
-      - 13.0.1
+      - 17.0
       -
     * - ユーティリティ
       - commons-collections
@@ -456,7 +525,9 @@ version 1.0.1.RELEASEで利用するOSSの一覧を以下に示す。
 #. データアクセスに、MyBatis3を使用する場合に依存するライブラリ
 #. データアクセスに、MyBatis2を使用する場合に依存するライブラリ
 #. 共通ライブラリに依存しないが、TERASOLUNA Global Frameworkでアプリケーションを開発する場合に、利用することを推奨しているライブラリ
-
+#. TERASOLUNA Global Frameworkが独自に依存するライブラリ(Spring IO platformに定義のないライブラリ)
+#. 複数のライブラリから異なるバージョンへの依存があるライブラリ(TERASOLUNA Global Framework側で共存可能なバージョンを明示的に指定しているライブラリ)
+#. BetaやRC(Release Candidate)などGA(General Availability)の状態にない依存ライブラリ(TERASOLUNA Global Framework側でGAのバージョンを明示的に指定しているライブラリ)
 
 .. _frameworkstack_common_library:
 
@@ -552,7 +623,6 @@ terasoluna-gfw-security-web
 
 * 認証ユーザ名ログ出力用サーブレットフィルタ
 * オープンリダイレクト脆弱性対策リダイレクトハンドラ
-* CSRF対策 (Spring Security 3.2を導入するまでの暫定措置)
 
 .. raw:: latex
 

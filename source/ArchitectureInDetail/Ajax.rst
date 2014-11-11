@@ -81,10 +81,10 @@ Ajax通信時で使用されるContent-Type(``"application/xml"`` や ``"applica
      - | 説明
    * - 1.
      - | org.springframework.http.converter.json.
-       | MappingJacksonHttpMessageConverter
+       | MappingJackson2HttpMessageConverter
      - | JSON
      - | リクエストBody又はレスポンスBodyとしてJSONを扱うための ``HttpMessageConverter`` 。
-       | ブランクプロジェクトでは、 `Jackson 1.x <http://jackson.codehaus.org/>`_ 系を同封しているため、デフォルトの状態で使用することができる。
+       | ブランクプロジェクトでは、 `Jackson <http://jackson.codehaus.org/>`_ 系を同封しているため、デフォルトの状態で使用することができる。
    * - 2.
      - | org.springframework.http.converter.xml.
        | Jaxb2RootElementHttpMessageConverter
@@ -1118,7 +1118,7 @@ HttpMessageNotReadableException のハンドリング
 
         具体的なエラー原因は、使用する ``HttpMessageConverter`` や利用するライブラリの実装によって異なる。
 
-        JSON形式のデータをJacksonを使ってJavaBeanに変換する ``MappingJacksonHttpMessageConverter`` の実装では、Integer項目に数値以外の文字列を指定すると、 ``HttpMessageNotReadableException`` が発生する。
+        JSON形式のデータをJacksonを使ってJavaBeanに変換する ``MappingJackson2HttpMessageConverter`` の実装では、Integer項目に数値以外の文字列を指定すると、 ``HttpMessageNotReadableException`` が発生する。
 
 - Controller
 

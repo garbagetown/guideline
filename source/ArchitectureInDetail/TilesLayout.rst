@@ -12,7 +12,7 @@ Overview
 | ヘッダ、フッタ、サイドメニューといった共通的なレイアウトを持つWebアプリケーションを開発する場合に、全てのJSPに共通部分をコーディングすると、メンテナンスが煩雑になる。
 | 例えば、ヘッダのデザインを修正する必要がある場合、全てのJSPに修正を加えなければならない。
 
-| JSPでの開発で多くの画面で同じレイアウトを使用する場合は、 `Apache Tiles <https://tiles.apache.org/>`_\ (以下、Tiles)の利用を推奨する。
+| JSPでの開発で多くの画面で同じレイアウトを使用する場合は、 `Apache Tiles <http://tiles.apache.org/>`_\ (以下、Tiles)の利用を推奨する。
 | 理由は、以下3つの通りである。
 
 #. 設計者によるレイアウトの誤差をなくすこと
@@ -267,12 +267,12 @@ Tilesを使用するためにカスタムタグ(TLD)を設定する必要があ�
    * - | (2)
      - | Tiles-extras用のカスタムタグ(TLD)の定義を追加する。
 
-Tilesのカスタムタグの詳細は、\ `こちら <https://tiles.apache.org/framework/tiles-jsp/tagreference.html>`_\ を参照されたい。
+Tilesのカスタムタグの詳細は、\ `こちら <http://tiles.apache.org/framework/tiles-jsp/tagreference.html>`_\ を参照されたい。
 
 .. tip::
 
-    | version 2系では tiles tag lig は一つであったが、version 3から tiles-extras tag lib が追加された。
-    | version 2系では tiles tag lig で利用可能であった useAttribute tag がversion 3から tiles-extras tag へ移動されているので、利用していた場合は注意すること。
+    | version 2系では tiles taglib は一つであったが、version 3から tiles-extras taglib が追加された。
+    | version 2系では tiles taglib で利用可能であった useAttribute tag がversion 3から tiles-extras taglib へ移動されているので、利用していた場合は注意すること。
     | 変更例 ) `<tiles:useAttribute>` : version 2 -> `<tilesx:useAttribute>` : version 3
 
 

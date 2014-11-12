@@ -84,7 +84,7 @@ The ``HttpMessageConverter`` which is enabled by default on specifying ``<mvc:an
        | MappingJackson2HttpMessageConverter
      - | JSON
      - | ``HttpMessageConverter`` to handle JSON as request body or response body.
-       | `Jackson <http://jackson.codehaus.org/>`_ system is included in the blank project. Hence, it can be used in its default state.
+       | `Jackson <https://github.com/FasterXML/jackson/>`_ system is included in the blank project. Hence, it can be used in its default state.
    * - 2.
      - | org.springframework.http.converter.xml.
        | Jaxb2RootElementHttpMessageConverter

@@ -84,7 +84,7 @@ Ajax通信時で使用されるContent-Type(``"application/xml"`` や ``"applica
        | MappingJackson2HttpMessageConverter
      - | JSON
      - | リクエストBody又はレスポンスBodyとしてJSONを扱うための ``HttpMessageConverter`` 。
-       | ブランクプロジェクトでは、 `Jackson <http://jackson.codehaus.org/>`_ を同封しているため、デフォルトの状態で使用することができる。
+       | ブランクプロジェクトでは、 `Jackson <https://github.com/FasterXML/jackson/>`_ を同封しているため、デフォルトの状態で使用することができる。
    * - 2.
      - | org.springframework.http.converter.xml.
        | Jaxb2RootElementHttpMessageConverter

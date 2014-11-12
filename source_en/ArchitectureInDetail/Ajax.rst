@@ -92,6 +92,10 @@ The ``HttpMessageConverter`` which is enabled by default on specifying ``<mvc:an
      - | ``HttpMessageConverter`` to handle XML as request body or response body.
        | JAXB2.0 is included  as standard from JavaSE6. Hence it can be used in its default state.
 
+ .. note::
+
+    **Notice If you change from jackson version 1.xx to jackson version 2.xx**, refer to \ :ref:`here <REST_note_changed_jackson_version>`\ .
+
  .. warning:: **XXE (XML External Entity) Injection measures**
 
     When handling XML format data in Ajax communication, it is necessary to implement \ `XXE(XML External Entity) Injection <https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Processing>`_\  measure.

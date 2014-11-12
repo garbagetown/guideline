@@ -1756,6 +1756,33 @@ RESTful Web Serviceで必要となるSpring MVCのコンポーネントを有効
       - | Spring MVCのフレームワークでハンドリングされた例外を、ログ出力するためのAOP定義を指定する。
         | \ ``HandlerExceptionResolverLoggingInterceptor``\については、「\ :doc:`ExceptionHandling`\」を参照されたい。
 
+.. _REST_note_changed_jackson_version:
+
+.. note::
+
+    **jackson version 1.x.x から jackson version 2.x.xへ変更する場合の注意点**
+    
+    * パッケージの変更
+
+     .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+     .. list-table::
+        :header-rows: 1
+        :widths: 10 90
+
+        * - verision
+          - package
+        * - | 1.x.x
+          - | `org.codehaus.jackson`
+        * - | 2.x.x
+          - | `com.fasterxml.jackson`
+
+     * 注意事項として、配下のパッケージ構成も変更されている。
+
+    * Deprecated一覧
+
+     * http://fasterxml.github.io/jackson-core/javadoc/2.3.0/deprecated-list.html
+     * http://fasterxml.github.io/jackson-databind/javadoc/2.3.0/deprecated-list.html
+
 |
 
 .. _RESTHowToUseApplicationSettingsOfDispatcherServlet:

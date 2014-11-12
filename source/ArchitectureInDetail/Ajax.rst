@@ -65,7 +65,7 @@ Ajax通信時で使用されるContent-Type(``"application/xml"`` や ``"applica
     * リクエストBodyに格納されているデータからJavaオブジェクトを生成する。
     * JavaオブジェクトからレスポンスBodyに書き込むデータを生成する。
 
-|
+
 
 ``<mvc:annotation-driven>`` 指定時にデフォルトで有効化される ``HttpMessageConverter`` は以下の通りである。
 
@@ -84,13 +84,18 @@ Ajax通信時で使用されるContent-Type(``"application/xml"`` や ``"applica
        | MappingJackson2HttpMessageConverter
      - | JSON
      - | リクエストBody又はレスポンスBodyとしてJSONを扱うための ``HttpMessageConverter`` 。
-       | ブランクプロジェクトでは、 `Jackson <http://jackson.codehaus.org/>`_ 系を同封しているため、デフォルトの状態で使用することができる。
+       | ブランクプロジェクトでは、 `Jackson <http://jackson.codehaus.org/>`_ を同封しているため、デフォルトの状態で使用することができる。
    * - 2.
      - | org.springframework.http.converter.xml.
        | Jaxb2RootElementHttpMessageConverter
      - | XML
      - | リクエストBody又はレスポンスBodyとしてXMLを扱うための ``HttpMessageConverter`` 。
        | JavaSE6からJAXB2.0が標準で同封されているため、デフォルトの状態で使用することができる。
+
+ .. note::
+
+    **jackson version 1.x.x から jackson version 2.x.xへ変更する場合の注意点** は\ :ref:`こちら <REST_note_changed_jackson_version>`\ を参照されたい。
+
 
  .. warning:: **XXE(XML External Entity) Injection 対策について**
  

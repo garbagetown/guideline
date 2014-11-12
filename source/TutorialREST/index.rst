@@ -733,6 +733,11 @@ spring-mvc-rest.xmlの作成
 
  .. figure:: ./images_rest/add-spring-mvc-rest.png
 
+ .. note::
+
+    **jackson version 1.x.x から jackson version 2.x.xへ変更する場合の注意点** は\ :ref:`こちら <REST_note_changed_jackson_version>`\ を参照されたい。
+
+
 REST API用のSpring Securityの定義追加
 --------------------------------------------------------------------------------
 | 本チュートリアルで作成するREST APIでは、CSRF対策を無効にする。

@@ -1756,6 +1756,33 @@ Settings for activating the Spring MVC components necessary for RESTful Web Serv
       - | AOP definition to output the exception handled by Spring MVC framework to a log, is specified.
         | Refer to \ :doc:`ExceptionHandling`\  for \ ``HandlerExceptionResolverLoggingInterceptor``\ .
 
+.. _REST_note_changed_jackson_version:
+
+.. note::
+
+    **Notice If you change from jackson version 1.xx to jackson version 2.xx**
+
+    * changed package
+
+     .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+     .. list-table::
+        :header-rows: 1
+        :widths: 10 90
+
+        * - verision
+          - package
+        * - | 1.x.x
+          - | `org.codehaus.jackson`
+        * - | 2.x.x
+          - | `com.fasterxml.jackson`
+
+     * Notice. Configuration of subordinate package also has been changed.
+
+    * Deprecated List
+
+     * http://fasterxml.github.io/jackson-core/javadoc/2.3.0/deprecated-list.html
+     * http://fasterxml.github.io/jackson-databind/javadoc/2.3.0/deprecated-list.html
+
 |
 
 .. _RESTHowToUseApplicationSettingsOfDispatcherServlet:

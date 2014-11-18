@@ -191,8 +191,9 @@ Delete TODO
 * データベースを使用せずMapを使ったインメモリ実装のRepositoryImpl
 * Spring Data JPAの使用してデータベースにアクセスするRepositoryImpl
 * TERASOLUNA DAO(MyBatis2)を使用してデータベースにアクセスするRepositoryImpl
+* MyBatis3を使用してデータベースにアクセスするRepositoryImpl
 
-の3種類を用意している。
+の4種類を用意している。
 
 まず、\ ``mvn archetype:generate``\ を利用して、実装するインフラストラクチャ層向けのブランクプロジェクトを作成する。
 
@@ -237,6 +238,19 @@ Delete TODO
      -DgroupId=todo^
      -DartifactId=todo^
      -Dversion=1.0.0-SNAPSHOT
+
+* MyBatis3を使用してデータベースにアクセスするRepositoryImpl用のプロジェクトを作成する場合は、MyBatis3用のブランクプロジェクトを作成するために、コマンドプロンプトで以下のコマンドを実行する。
+
+ .. code-block:: console
+
+    mvn archetype:generate -B^
+     -DarchetypeCatalog=http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-snapshots^
+     -DarchetypeGroupId=org.terasoluna.gfw.blank^
+     -DarchetypeArtifactId=terasoluna-gfw-web-blank-mybatis3-archetype^
+     -DarchetypeVersion=1.1.0-SNAPSHOT^
+     -DgroupId=todo^
+     -DartifactId=todo^
+     -Dversion=1.1.1-SNAPSHOT
 
 コンソール上に以下のようなログが表示されれば、ブランクプロジェクトの作成は成功となる。
 
@@ -388,6 +402,10 @@ Mavenの設定
 
 チュートリアルで作成していくプロジェクトの構成について、以下に示す。
 
+
+O/R Mapperに依存しないブランクプロジェクト、JPA用のブランクプロジェクト、TERASOLUNA DAO(MyBatis2)用のブランクプロジェクトを作成した場合
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
  .. code-block:: console
 
     src
@@ -415,6 +433,33 @@ Mavenの設定
     本チュートリアルでは、学習容易性を重視しているためシングルプロジェクト構成にしている。
     
     **ただし、実プロジェクトで適用する場合は、マルチプロジェクト構成を強く推奨する。**
+
+MyBatis3用のブランクプロジェクトを作成した場合
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ .. code-block:: console
+
+    src
+      └main
+          ├java
+          │  └todo
+          │    ├ app ... アプリケーション層を格納
+          │    │   └welcome ... todo管理業務に関わるクラスを格納
+          │    └domain ... ドメイン層を格納
+          │        ├model ... Domain Objectを格納
+          │        ├repository ... Repositoryを格納
+          │        └service ... Serviceを格納
+          ├resources
+          │  ├META-INF
+          │  │  ├mybatis... MyBatis関連の設定ファイルを格納
+          │  │  └spring ... spring関連の設定ファイルを格納
+          │  └todo
+          │    └domain
+          │        └repository ... マッピングファイルを格納
+          │             └sample ... sample用マッピングファイルを格納
+          └wepapp
+              └WEB-INF
+                  └views ... jspを格納
+
 
 |
 
@@ -1065,6 +1110,110 @@ TERASOLUNA DAO(MyBatis2)用のブランクプロジェクトを作成した場�
         
     \ ``useStatementNamespaces``\を\ ``true``\にすることで、SQLIDにネームスペースを指定することが出来る。
  
+MyBatis3用のブランクプロジェクトを作成した場合
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+MyBatis3用のブランクプロジェクトを作成した場合、以下のような設定となっている。
+
+ .. code-block:: xml
+   :emphasize-lines: 11-12, 14-16, 17-18, 19-20, 23-25
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+           xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://mybatis.org/schema/mybatis-spring
+            http://mybatis.org/schema/mybatis-spring.xsd">
+
+         <!-- (1) -->
+        <import resource="classpath:/META-INF/spring/todo-env.xml" />
+
+         <!-- (2) -->
+        <!-- define the SqlSessionFactory -->
+        <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+             <!-- (3) -->
+            <property name="dataSource" ref="dataSource" />
+             <!-- (4) -->
+            <property name="configLocation" value="classpath:/META-INF/mybatis/mybatis-config.xml" />
+        </bean>
+
+         <!-- (5) -->
+        <!-- scan for Mappers -->
+        <mybatis:scan base-package="todo.domain.repository" />
+
+    </beans>
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+   :header-rows: 1
+   :widths: 10 80
+
+
+   * - 項番
+     - 説明
+   * - | (1)
+     - | 環境依存するコンポーネント(データソースやトランザクションマネージャなど)を定義するBean定義ファイルをimportする。
+   * - | (2)
+     - | \ ``SqlSessionFactory`` \を生成するためのコンポーネントとして、\ ``SqlSessionFactoryBean`` \をbean定義する。
+   * - | (3)
+     - | \ ``dataSource`` \プロパティに、設定済みのデータソースのbeanを指定する。
+       |
+       | MyBatis3の処理の中でSQLを発行する際は、ここで指定したデータソースからコネクションが取得される。
+   * - | (4)
+     - | ``configLocation`` \プロパティに、MyBatis設定ファイルのパスを指定する。
+       |
+       | ここで指定したファイルが\ ``SqlSessionFactory`` \を生成する時に読み込まれる。
+   * - | (5)
+     - | Mapperインタフェースをスキャンするために\ ``<mybatis:scan>`` \を定義し、\ ``base-package`` \属性には、
+       | Mapperインタフェースが格納されている基底パッケージを指定する。
+       |
+       | 指定されたパッケージ配下に格納されている Mapperインタフェースがスキャンされ、
+       | スレッドセーフなMapperオブジェクト(MapperインタフェースのProxyオブジェクト)が自動的に生成される。
+
+ .. note::
+ 
+    \ :file:`mybatis-config.xml`\は、MyBatis3自体の動作設定を行う設定ファイルである。
+    
+    ブランクプロジェクトでは、デフォルトで以下の設定が行われている。
+
+     .. code-block:: xml
+
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <!DOCTYPE configuration
+          PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+          "http://mybatis.org/dtd/mybatis-3-config.dtd">
+        <configuration>
+
+            <!-- See http://mybatis.github.io/mybatis-3/configuration.html#settings -->
+            <settings>
+                <setting name="mapUnderscoreToCamelCase" value="true" />
+                <setting name="lazyLoadingEnabled" value="true" />
+                <setting name="aggressiveLazyLoading" value="false" />
+        <!--
+                <setting name="defaultExecutorType" value="REUSE" />
+                <setting name="jdbcTypeForNull" value="NULL" />
+                <setting name="proxyFactory" value="JAVASSIST" />
+                <setting name="localCacheScope" value="STATEMENT" />
+        -->
+            </settings>
+
+            <typeAliases>
+                <package name="todo.domain.model" />
+                <package name="todo.domain.repository" />
+        <!--
+                <package name="todo.infra.mybatis.typehandler" />
+        -->
+            </typeAliases>
+
+            <typeHandlers>
+        <!--
+                <package name="todo.infra.mybatis.typehandler" />
+        -->
+            </typeHandlers>
+
+        </configuration>
 
 |
 
@@ -1124,6 +1273,8 @@ todo-env.xmlの確認
 
 作成したブランクプロジェクトの\ ``src/main/resources/META-INF/spring/todo-env.xml``\は、以下のような設定となっている。
 
+O/R Mapperに依存しないブランクプロジェクト、JPA用のブランクプロジェクト、TERASOLUNA DAO(MyBatis2)用のブランクプロジェクトを作成した場合
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
  .. code-block:: xml
     :emphasize-lines: 8-10, 22-25, 27-31
 
@@ -1193,7 +1344,7 @@ todo-env.xmlの確認
     * JPA用のブランクプロジェクトを作成した場合は、
       JPAのAPIを使用してトランザクションを制御するクラス(\ ``org.springframework.orm.jpa.JpaTransactionManager``\)
     
-    * TERASOLUNA DAO(MyBatis2)用のブランクプロジェクトを作成した場合は、
+    * TERASOLUNA DAO(MyBatis2)、MyBatis3用のブランクプロジェクトを作成した場合は、
       JDBCのAPIを使用してトランザクションを制御するクラス(\ ``org.springframework.jdbc.datasource.DataSourceTransactionManager``\)
     
     が設定されている。
@@ -1208,6 +1359,76 @@ todo-env.xmlの確認
     トランザクションマネージャの設定が、アプリケーションをデプロイする環境によって変わらないプロジェクト(例えば、Tomcatを使用する場合など)は、
     \ :file:`todo-infra.xml`に定義してもよい。
 
+MyBatis3用のブランクプロジェクトを作成した場合
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+ .. code-block:: xml
+    :emphasize-lines: 8-10, 22-25, 39-43
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+        <bean id="dateFactory" class="org.terasoluna.gfw.common.date.DefaultDateFactory" />
+
+        <!-- (1) -->
+        <bean id="realDataSource" class="org.apache.commons.dbcp2.BasicDataSource"
+            destroy-method="close">
+            <property name="driverClassName" value="${database.driverClassName}" />
+            <property name="url" value="${database.url}" />
+            <property name="username" value="${database.username}" />
+            <property name="password" value="${database.password}" />
+            <property name="defaultAutoCommit" value="false" />
+            <property name="maxTotal" value="${cp.maxActive}" />
+            <property name="maxIdle" value="${cp.maxIdle}" />
+            <property name="minIdle" value="${cp.minIdle}" />
+            <property name="maxWaitMillis" value="${cp.maxWait}" />
+        </bean>
+
+        <!-- (2) -->
+        <bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+            <constructor-arg index="0" ref="realDataSource" />
+        </bean>
+
+        <!--  REMOVE THIS LINE IF YOU USE JPA
+        <bean id="transactionManager"
+            class="org.springframework.orm.jpa.JpaTransactionManager">
+            <property name="entityManagerFactory" ref="entityManagerFactory" />
+        </bean>
+              REMOVE THIS LINE IF YOU USE JPA  -->
+        <!--  REMOVE THIS LINE IF YOU USE MyBatis2
+        <bean id="transactionManager"
+            class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+            <property name="dataSource" ref="dataSource" />
+        </bean>
+              REMOVE THIS LINE IF YOU USE MyBatis2  -->
+        <!-- (3) -->
+        <bean id="transactionManager"
+            class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+            <property name="dataSource" ref="dataSource" />
+        </bean>
+    </beans>
+
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.80\linewidth}|
+ .. list-table::
+   :header-rows: 1
+   :widths: 10 80
+
+
+   * - 項番
+     - 説明
+   * - | (1)
+     - | 実データソースの設定。
+   * - | (2)
+     - | データソースの設定。
+       | JDBC関連のログを出力する機能をもったデータソースを指定している。
+       | \ ``net.sf.log4jdbc.Log4jdbcProxyDataSource``\を使用すると、SQLなどのJDBC関連のログを出力できるため、デバッグに役立つ情報を出力することができる。
+   * - | (3)
+     - | トランザクションマネージャの設定。idは、transactionManagerにすること。
+       | 別の名前を指定する場合は、<tx:annotation-driven>タグにも、トランザクションマネージャ名を指定する必要がある。
+
+
 |
 
 spring-mvc.xmlの確認
@@ -1217,6 +1438,9 @@ spring-mvc.xmlの確認
 
 | 作成したブランクプロジェクトの\ :file:`src/main/resources/META-INF/spring/spring-mvc.xml`\は、以下のような設定となっている。
 | なお、チュートリアルで使用しないコンポーネントについての説明は割愛する。
+
+O/R Mapperに依存しないブランクプロジェクト、JPA用のブランクプロジェクト、TERASOLUNA DAO(MyBatis2)用のブランクプロジェクトを作成した場合
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
  .. code-block:: xml
     :emphasize-lines: 12-14, 16-22, 26-27, 29-32, 35-42, 61-67
@@ -1299,6 +1523,18 @@ spring-mvc.xmlの確認
                 </util:list>
             </constructor-arg>
         </bean>
+        <!--  REMOVE THIS LINE IF YOU USE MyBatis3
+        <bean id="requestDataValueProcessor"
+            class="org.terasoluna.gfw.web.mvc.support.CompositeRequestDataValueProcessor">
+            <constructor-arg>
+                <util:list>
+                    <bean class="org.springframework.security.web.servlet.support.csrf.CsrfRequestDataValueProcessor" />
+                    <bean
+                        class="org.terasoluna.gfw.web.token.transaction.TransactionTokenRequestDataValueProcessor" />
+                </util:list>
+            </constructor-arg>
+        </bean>
+              REMOVE THIS LINE IF YOU USE MyBatis3  -->
 
         <!-- Setting Exception Handling. -->
         <!-- Exception Resolver. -->
@@ -1475,11 +1711,11 @@ logback.xmlの確認
             <level value="debug" />
         </logger>
               REMOVE THIS LINE IF YOU USE JPA  -->
-        <!--  REMOVE THIS LINE IF YOU USE MyBatis2
+        <!--  REMOVE THIS LINE IF YOU USE MyBatis2/MyBatis3
         <logger name="org.springframework.jdbc.datasource.DataSourceTransactionManager">
             <level value="debug" />
         </logger>
-              REMOVE THIS LINE IF YOU USE MyBatis2  -->
+              REMOVE THIS LINE IF YOU USE MyBatis2/MyBatis3  -->
     
         <logger name="jdbc.sqltiming">
             <level value="debug" />
@@ -1520,7 +1756,7 @@ logback.xmlの確認
             <level value="debug" />
         </logger>
 
-    * TERASOLUNA DAO(MyBatis2)用のブランクプロジェクト
+    * TERASOLUNA DAO(MyBatis2)、MyBatis3用のブランクプロジェクト
 
      .. code-block:: xml
 
@@ -2080,6 +2316,9 @@ Serviceの作成
             todo.setFinished(false);
 
             todoRepository.save(todo);
+            /* REMOVE THIS LINE IF YOU USE MyBatis3
+            todoRepository.create(todo);
+               REMOVE THIS LINE IF YOU USE MyBatis3 */
 
             return todo;
         }
@@ -2096,6 +2335,9 @@ Serviceの作成
             }
             todo.setFinished(true);
             todoRepository.save(todo);
+            /* REMOVE THIS LINE IF YOU USE MyBatis3
+            todoRepository.update(todo);
+               REMOVE THIS LINE IF YOU USE MyBatis3 */
             return todo;
         }
 
@@ -3357,16 +3599,16 @@ Controllerの修正
 
 本節では、Domainオブジェクトをデータベースに永続化するためのインフラストラクチャ層の作成方法について、説明する。
 
-本チュートリアルでは、以下の2つのO/R Mapperを使用したインフラストラクチャ層の作成について、説明する。
+本チュートリアルでは、以下の3つのO/R Mapperを使用したインフラストラクチャ層の作成について、説明する。
 
 * Spring Data JPA
 * TERASOLUNA DAO(MyBatis2)
-
+* MyBatis3
 
 共通設定
 --------------------------------------------------------------------------------
 
-| まずは、Spring Data JPA版、TERASOLUNA Dao版の両方に共通して適用する設定を行う。
+| まずは、Spring Data JPA版、TERASOLUNA Dao版、MyBatis3の全てに共通して適用する設定を行う。
 | 今回は、データベースのセットアップの手間を省くため、H2 Databaseを使用する。
 
 todo-infra.propertiesの修正
@@ -3419,7 +3661,7 @@ Spring Data JPAを使用したインフラストラクチャ層の作成
 --------------------------------------------------------------------------------
 
 本節では、インフラストラクチャ層において、 `Spring Data JPA <http://www.springsource.org/spring-data/jpa>`_ を使用する方法について、説明する。
-TERASOLUNA DAOを使用する場合は、本節を読み飛ばして、\ :ref:`using_terasolunaDao`\ に進んでよい。
+TERASOLUNA DAOを使用する場合は、本節を読み飛ばして、\ :ref:`using_terasolunaDao`\ 、もしくは\ :ref:`using_MyBatis3`\ に進んでよい。
 
 Entityの設定
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3840,6 +4082,172 @@ Service及びアプリケーション層を作成後にAPサーバーを起動�
     date:2014-08-26 13:39:08    thread:tomcat-http--9   X-Track:49fbb5426f574375b8169d39c330ec7f    level:TRACE logger:o.t.gfw.web.logging.TraceLoggingInterceptor      message:[END CONTROLLER  ] TodoController.list(Model)-> view=todo/list, model={todoForm=todo.app.todo.TodoForm@c7582d, todos=[], org.springframework.validation.BindingResult.todoForm=org.springframework.validation.BeanPropertyBindingResult: 0 errors}
     date:2014-08-26 13:39:08    thread:tomcat-http--9   X-Track:49fbb5426f574375b8169d39c330ec7f    level:TRACE logger:o.t.gfw.web.logging.TraceLoggingInterceptor      message:[HANDLING TIME   ] TodoController.list(Model)-> 2,521,308 ns
 
+.. _using_MyBatis3:
+
+MyBatis3を使用したインフラストラクチャ層の作成
+--------------------------------------------------------------------------------
+本節では、インフラストラクチャ層において、MyBatis3を使用する場合の設定方法について説明する。
+
+TodoRepositoryの作成
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+MyBatis3に対応するインタフェースTodoRepositoryを、以下のように記述する。
+
+ .. code-block:: java
+
+    package todo.domain.repository.todo;
+
+    import java.util.Collection;
+
+    import todo.domain.model.Todo;
+
+    public interface TodoRepository {
+
+        Todo findOne(String todoId);
+
+        Collection<Todo> findAll();
+
+        void create(Todo todo);
+
+        boolean update(Todo todo);
+
+        void delete(Todo todo);
+
+        long countByFinished(boolean finished);
+    }
+
+TodoRepositoryImplの作成
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+| MyBatis3を使用した場合、RepositoryImplは、インタフェースから自動生成される。
+| そのため、TodoRepositoryImplの作成は、不要である。
+
+マッピングファイルの作成
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+\ :file:`src/main/resources/todo/domain/repository/todo/TodoRepository.xml`\を作成し、
+インタフェースTodoRepositoryに定義したメソッドのメソッド名に対応するsqlを、以下のように記述する。
+
+ .. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="todo.domain.repository.todo.TodoRepository">
+
+        <resultMap id="todo" type="Todo">
+            <result property="todoId" column="todo_id" />
+            <result property="todoTitle" column="todo_title" />
+            <result property="finished" column="finished" />
+            <result property="createdAt" column="created_at" />
+        </resultMap>
+
+        <select id="findOne" parameterType="String" resultMap="todo">
+        <![CDATA[
+            SELECT
+                todo_id,
+                todo_title,
+                finished,
+                created_at
+            FROM
+                todo
+            WHERE
+                todo_id = #{todoId}
+        ]]>
+        </select>
+
+        <select id="findAll" resultMap="todo">
+        <![CDATA[
+            SELECT
+                todo_id,
+                todo_title,
+                finished,
+                created_at
+            FROM
+                todo
+        ]]>
+        </select>
+
+        <insert id="create" parameterType="Todo">
+        <![CDATA[
+            INSERT INTO todo
+            (
+                todo_id,
+                todo_title,
+                finished,
+                created_at
+            )
+            VALUES
+            (
+                #{todoId},
+                #{todoTitle},
+                #{finished},
+                #{createdAt}
+            )
+        ]]>
+        </insert>
+
+        <update id="update" parameterType="Todo">
+        <![CDATA[
+            UPDATE todo
+            SET
+                todo_title = #{todoTitle},
+                finished = #{finished},
+                created_at = #{createdAt}
+            WHERE
+                todo_id = #{todoId}
+        ]]>
+        </update>
+
+        <delete id="delete" parameterType="Todo">
+        <![CDATA[
+            DELETE FROM
+                todo
+            WHERE
+                todo_id = #{todoId}
+        ]]>
+        </delete>
+
+        <select id="countByFinished" parameterType="Boolean"
+            resultType="Long">
+        <![CDATA[
+            SELECT
+                COUNT(*)
+            FROM
+                todo
+            WHERE
+                finished = #{finished}
+        ]]>
+        </select>
+
+    </mapper>
+
+|
+
+以上で、MyBatis3を使用したインフラストラクチャ層の作成が完了したので、Service及びアプリケーション層の作成を行う。
+
+Service及びアプリケーション層を作成後にAPサーバーを起動し、Todoの表示を行うと、以下のようなSQLログや、トランザクションログが出力される。
+
+ .. code-block:: text
+   :emphasize-lines: 2-18
+
+    date:2014-11-17 19:38:11	thread:tomcat-http--13	X-Track:2c11392236f94c7ca7888cc14e230b86	level:TRACE	logger:o.t.gfw.web.logging.TraceLoggingInterceptor     	message:[START CONTROLLER] TodoController.list(Model)
+    date:2014-11-17 19:38:11	thread:tomcat-http--13	X-Track:2c11392236f94c7ca7888cc14e230b86	level:DEBUG	logger:o.s.jdbc.datasource.DataSourceTransactionManager	message:Creating new transaction with name [todo.domain.service.todo.TodoServiceImpl.findAll]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly; ''
+    date:2014-11-17 19:38:12	thread:tomcat-http--13	X-Track:2c11392236f94c7ca7888cc14e230b86	level:DEBUG	logger:o.s.jdbc.datasource.DataSourceTransactionManager	message:Acquired Connection [net.sf.log4jdbc.ConnectionSpy@640d0bc1] for JDBC transaction
+    date:2014-11-17 19:38:12	thread:tomcat-http--13	X-Track:2c11392236f94c7ca7888cc14e230b86	level:DEBUG	logger:t.domain.repository.todo.TodoRepository.findAll 	message:==>  Preparing: SELECT todo_id, todo_title, finished, created_at FROM todo 
+    date:2014-11-17 19:38:12	thread:tomcat-http--13	X-Track:2c11392236f94c7ca7888cc14e230b86	level:DEBUG	logger:t.domain.repository.todo.TodoRepository.findAll 	message:==> Parameters: 
+    date:2014-11-17 19:38:12	thread:tomcat-http--13	X-Track:2c11392236f94c7ca7888cc14e230b86	level:DEBUG	logger:jdbc.sqltiming                                  	message: sun.reflect.NativeMethodAccessorImpl.invoke0(null:-2)
+    1. SELECT
+                todo_id,
+                todo_title,
+                finished,
+                created_at
+            FROM
+                todo {executed in 0 msec}
+    date:2014-11-17 19:38:12	thread:tomcat-http--13	X-Track:2c11392236f94c7ca7888cc14e230b86	level:DEBUG	logger:t.domain.repository.todo.TodoRepository.findAll 	message:<==      Total: 0
+    date:2014-11-17 19:38:12	thread:tomcat-http--13	X-Track:2c11392236f94c7ca7888cc14e230b86	level:DEBUG	logger:o.s.jdbc.datasource.DataSourceTransactionManager	message:Initiating transaction commit
+    date:2014-11-17 19:38:12	thread:tomcat-http--13	X-Track:2c11392236f94c7ca7888cc14e230b86	level:DEBUG	logger:o.s.jdbc.datasource.DataSourceTransactionManager	message:Committing JDBC transaction on Connection [net.sf.log4jdbc.ConnectionSpy@640d0bc1]
+    date:2014-11-17 19:38:12	thread:tomcat-http--13	X-Track:2c11392236f94c7ca7888cc14e230b86	level:DEBUG	logger:o.s.jdbc.datasource.DataSourceTransactionManager	message:Releasing JDBC Connection [net.sf.log4jdbc.ConnectionSpy@640d0bc1] after transaction
+    date:2014-11-17 19:38:12	thread:tomcat-http--13	X-Track:2c11392236f94c7ca7888cc14e230b86	level:TRACE	logger:o.t.gfw.web.logging.TraceLoggingInterceptor     	message:[END CONTROLLER  ] TodoController.list(Model)-> view=todo/list, model={todoForm=todo.app.todo.TodoForm@336d5ec2, todos=[], org.springframework.validation.BindingResult.todoForm=org.springframework.validation.BeanPropertyBindingResult: 0 errors}
+    date:2014-11-17 19:38:12	thread:tomcat-http--13	X-Track:2c11392236f94c7ca7888cc14e230b86	level:TRACE	logger:o.t.gfw.web.logging.TraceLoggingInterceptor     	message:[HANDLING TIME   ] TodoController.list(Model)-> 698,511,332 ns
+
 |
 
 おわりに
@@ -3857,6 +4265,7 @@ Service及びアプリケーション層を作成後にAPサーバーを起動�
  * Spring MVCとJSPタグライブラリを使用したアプリケーション層の実装
  * Spring Data JPAによるインフラストラクチャ層の実装
  * MyBatis2によるインフラストラクチャ層の実装
+ * MyBatis3によるインフラストラクチャ層の実装
 
 ここで作成したTODO管理アプリケーションには、以下の改善点がある。
 アプリケーションの修正を学習課題として、ガイドライン中の該当する説明を参照されたい。

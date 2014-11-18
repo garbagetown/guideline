@@ -604,7 +604,7 @@ version 1.1.0.RELEASEで利用するOSSの一覧を以下に示す。
    | (Spring IO platformとしては依存関係の管理は行っていないライブラリ)
 #. | 複数のライブラリから異なるバージョンへの依存があるライブラリ
    | (TERASOLUNA Global Framework側で共存可能なバージョンを明示的に指定しているライブラリ)
-#. | デフォルトで適用されるバージョンが、BetaやRC(Release Candidate)などGA(General Availability)の状態にないライブラリ
+#. | Spring IO platformで適用されるバージョンが、BetaやRC(Release Candidate)であるライブラリ
    | (TERASOLUNA Global Framework側でGAのバージョンを明示的に指定しているライブラリ)
 
 .. _frameworkstack_common_library:

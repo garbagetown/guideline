@@ -3314,7 +3314,7 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
  .. code-block:: java
     :emphasize-lines: 1-2, 10-12, 16, 24
 
-    @ControllerAdvice // (6)
+    @ControllerAdvice(annotations = RestController.class) // (6)
     public class ApiGlobalExceptionHandler extends ResponseEntityExceptionHandler {
     
         @Inject
@@ -3354,7 +3354,7 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
     * - 項番
       - 説明
     * - | (6)
-      - | Spring MVCから提供されている\ ``ResponseEntityExceptionHandler``\を継承したクラスを作成し、\ ``@ControllerAdvice``\アノテーションを付与する。
+      - | Spring MVCから提供されている\ ``ResponseEntityExceptionHandler``\を継承したクラスを作成し、\ ``@ControllerAdvice``\アノテーションを付与し、\ ``@RestController``\アノテーションが付与されている全てのControllerで利用可能とする。
     * - | (7)
       - | \ ``ResponseEntityExceptionHandler``\のhandleExceptionInternalメソッドをオーバライドする。
     * - | (8)
@@ -3502,7 +3502,7 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
  .. code-block:: java
     :emphasize-lines: 12-14, 21-23, 29-31, 34-36, 44-45
 
-    @ControllerAdvice
+    @ControllerAdvice(annotations = RestController.class)
     public class ApiGlobalExceptionHandler extends ResponseEntityExceptionHandler {
     
         @Inject
@@ -3744,7 +3744,7 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
  .. code-block:: java
     :emphasize-lines: 12-13, 17, 22-23
 
-    @ControllerAdvice
+    @ControllerAdvice(annotations = RestController.class)
     public class ApiGlobalExceptionHandler extends ResponseEntityExceptionHandler {
     
         @Inject
@@ -3828,7 +3828,7 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
  .. code-block:: java
     :emphasize-lines: 6-7, 11
 
-    @ControllerAdvice
+    @ControllerAdvice(annotations = RestController.class)
     public class ApiGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         // omitted
@@ -3891,7 +3891,7 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
  .. code-block:: java
     :emphasize-lines: 6-8, 12
 
-    @ControllerAdvice
+    @ControllerAdvice(annotations = RestController.class)
     public class ApiGlobalExceptionHandler extends ResponseEntityExceptionHandler {
     
         // omitted
@@ -3954,7 +3954,7 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
  .. code-block:: java
     :emphasize-lines: 6-7, 11
 
-    @ControllerAdvice
+    @ControllerAdvice(annotations = RestController.class)
     public class ApiGlobalExceptionHandler extends ResponseEntityExceptionHandler {
     
         // omitted
@@ -5657,7 +5657,7 @@ ApiGlobalExceptionHandler.java
     import org.terasoluna.gfw.common.exception.ResourceNotFoundException;
     import org.terasoluna.gfw.common.exception.ResultMessagesNotificationException;
     
-    @ControllerAdvice
+    @ControllerAdvice(annotations = RestController.class)
     public class ApiGlobalExceptionHandler extends ResponseEntityExceptionHandler {
     
         @Inject

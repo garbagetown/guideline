@@ -139,395 +139,473 @@ version 1.1.0.RELEASEで利用するOSSの一覧を以下に示す。
 
     なお、version 1.1.0.RELEASEで指定しているSpring IO platformのバージョンは、`1.0.2.RELEASE <http://docs.spring.io/platform/docs/1.0.2.RELEASE/reference/htmlsingle/>`_\ である。
 
-.. tabularcolumns:: |p{0.20\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|p{0.5\linewidth}|
+.. tabularcolumns:: |p{0.15\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|p{0.05\linewidth}|p{0.05\linewidth}|
 .. list-table::
     :header-rows: 1
     :stub-columns: 1
-    :widths: 20 25 25 25 5
+    :widths: 15 25 25 25 5 5
 
     * - Type
       - GroupId
       - ArtifactId
       - Version
+      - Spring IO platform
       - Remarks
     * - Spring
       - org.springframework
       - spring-aop
       - 4.0.7.RELEASE
+      - \*
       -
     * - Spring
       - org.springframework
       - spring-aspects
       - 4.0.7.RELEASE
+      - \*
       -
     * - Spring
       - org.springframework
       - spring-beans
       - 4.0.7.RELEASE
+      - \*
       -
     * - Spring
       - org.springframework
       - spring-context
       - 4.0.7.RELEASE
+      - \*
       -
     * - Spring
       - org.springframework
       - spring-context-support
       - 4.0.7.RELEASE
+      - \*
       -
     * - Spring
       - org.springframework
       - spring-core
       - 4.0.7.RELEASE
+      - \*
       -
     * - Spring
       - org.springframework
       - spring-expression
       - 4.0.7.RELEASE
+      - \*
       -
     * - Spring
       - org.springframework
       - spring-jdbc
       - 4.0.7.RELEASE
+      - \*
       -
     * - Spring
       - org.springframework
       - spring-orm
       - 4.0.7.RELEASE
+      - \*
       -
     * - Spring
       - org.springframework
       - spring-tx
       - 4.0.7.RELEASE
+      - \*
       -
     * - Spring
       - org.springframework
       - spring-web
       - 4.0.7.RELEASE
+      - \*
       -
     * - Spring
       - org.springframework
       - spring-webmvc
       - 4.0.7.RELEASE
+      - \*
       -
     * - Spring
       - org.springframework.data
       - spring-data-commons
       - 1.8.4.RELEASE
+      - \*
       -
     * - Spring
       - org.springframework.security
       - spring-security-acl
       - 3.2.5.RELEASE
+      - \*
       -
     * - Spring
       - org.springframework.security
       - spring-security-config
       - 3.2.5.RELEASE
+      - \*
       -
     * - Spring
       - org.springframework.security
       - spring-security-core
       - 3.2.5.RELEASE
+      - \*
       -
     * - Spring
       - org.springframework.security
       - spring-security-taglibs
       - 3.2.5.RELEASE
+      - \*
       -
     * - Spring
       - org.springframework.security
       - spring-security-web
       - 3.2.5.RELEASE
+      - \*
       -
     * - JPA(Hibernate)
       - antlr
       - antlr
       - 2.7.7
+      - \*
       - \*1
     * - JPA(Hibernate)
       - dom4j
       - dom4j
       - 1.6.1
+      - \*
       - \*1
     * - JPA(Hibernate)
       - org.hibernate
       - hibernate-core
       - 4.3.6.Final
+      - \*
       - \*1
     * - JPA(Hibernate)
       - org.hibernate
       - hibernate-entitymanager
       - 4.3.6.Final
+      - \*
       - \*1
     * - JPA(Hibernate)
       - org.hibernate.common
       - hibernate-commons-annotations
       - 4.0.5.Final
-      - \*1
+      - \*
+      - \*1 \*5
     * - JPA(Hibernate)
       - org.hibernate.javax.persistence
       - hibernate-jpa-2.1-api
       - 1.0.0.Final
+      - \*
       - \*1
     * - JPA(Hibernate)
       - org.javassist
       - javassist
       - 3.18.1-GA
+      - \*
       - \*1
     * - JPA(Hibernate)
       - org.jboss
       - jandex
       - 1.1.0.Final
-      - \*1
+      - \*
+      - \*1 \*5
     * - JPA(Hibernate)
       - org.jboss.logging
       - jboss-logging-annotations
       - 1.2.0.Final
-      - \*1 \*7
+      - \*
+      - \*1 \*5 \*7
     * - JPA(Hibernate)
       - org.jboss.spec.javax.transaction
       - jboss-transaction-api_1.2_spec
       - 1.0.0.Final
-      - \*1
+      - \*
+      - \*1 \*5
     * - JPA(Hibernate)
       - org.springframework.data
       - spring-data-jpa
       - 1.6.4.RELEASE
+      - \*
       - \*1
     * - MyBatis3
       - org.mybatis
       - mybatis
       - 3.2.8
+      -
       - \*2
     * - MyBatis3
       - org.mybatis
       - mybatis-spring
       - 1.2.2
+      -
       - \*2
     * - MyBatis2
       - jp.terasoluna.fw
       - terasoluna-dao
       - 2.0.5.0
+      -
       - \*3
     * - MyBatis2
       - jp.terasoluna.fw
       - terasoluna-ibatis
       - 2.0.5.0
+      -
       - \*3
     * - MyBatis2
       - org.mybatis
       - mybatis
       - 2.3.5
+      -
       - \*3
     * - DI
       - javax.inject
       - javax.inject
       - 1
+      - \*
       -
     * - AOP
       - aopalliance
       - aopalliance
       - 1
+      - \*
       -
     * - AOP
       - org.aspectj
       - aspectjrt
       - 1.8.2
+      - \*
       -
     * - AOP
       - org.aspectj
       - aspectjweaver
       - 1.8.2
+      - \*
       -
     * - ログ出力
       - ch.qos.logback
       - logback-classic
       - 1.1.2
+      - \*
       -
     * - ログ出力
       - ch.qos.logback
       - logback-core
       - 1.1.2
-      -
+      - \*
+      - \*5
     * - ログ出力
       - org.lazyluke
       - log4jdbc-remix
       - 0.2.7
-      - \*5
+      -
+      -
     * - ログ出力
       - org.slf4j
       - jcl-over-slf4j
       - 1.7.7
+      - \*
       -
     * - ログ出力
       - org.slf4j
       - slf4j-api
       - 1.7.7
+      - \*
       -
     * - JSON
       - com.fasterxml.jackson.core
       - jackson-annotations
       - 2.3.4
+      - \*
       -
     * - JSON
       - com.fasterxml.jackson.core
       - jackson-core
       - 2.3.4
+      - \*
       -
     * - JSON
       - com.fasterxml.jackson.core
       - jackson-databind
       - 2.3.4
+      - \*
       -
     * - JSON
       - com.fasterxml.jackson.datatype
       - jackson-datatype-joda
       - 2.3.4
+      - \*
       -
     * - 入力チェック
       - javax.validation
       - validation-api
       - 1.1.0.Final
+      - \*
       -
     * - 入力チェック
       - org.hibernate
       - hibernate-validator
       - 5.0.3.Final
+      - \*
       -
     * - 入力チェック
       - org.jboss.logging
       - jboss-logging
       - 3.1.3.GA
-      - \*6
+      - \*
+      - \*5 \*6
     * - 入力チェック
       - com.fasterxml
       - classmate
       - 1.0.0
-      -
+      - \*
+      - \*5
     * - Bean変換
       - commons-beanutils
       - commons-beanutils
       - 1.9.2
+      - \*
       - \*4
     * - Bean変換
       - net.sf.dozer
       - dozer
       - 5.4.0
-      - \*4 \*5
+      -
+      - \*4
     * - Bean変換
       - org.apache.commons
       - commons-lang3
       - 3.1
+      - \*
       - \*4
     * - 日付操作
       - joda-time
       - joda-time
       - 2.3
+      - \*
       -
     * - 日付操作
       - joda-time
       - joda-time-jsptags
       - 1.1.1
-      - \*4 \*5
+      -
+      - \*4
     * - 日付操作
       - org.jadira.usertype
       - usertype.core
       - 3.0.0.GA
-      - \*1 \*5
+      -
+      - \*1
     * - 日付操作
       - org.jadira.usertype
       - usertype.spi
       - 3.0.0.GA
-      - \*1 \*5
+      -
+      - \*1
     * - コネクションプール
       - org.apache.commons
       - commons-dbcp2
       - 2.0.1
+      - \*
       - \*4
     * - コネクションプール
       - org.apache.commons
       - commons-pool2
       - 2.2
+      - \*
       - \*4
     * - Tiles
       - commons-digester
       - commons-digester
       - 2.1
+      - \*
       - \*4
     * - Tiles
       - org.apache.tiles
       - tiles-api
       - 3.0.4
+      - \*
       - \*4
     * - Tiles
       - org.apache.tiles
       - tiles-core
       - 3.0.4
+      - \*
       - \*4
     * - Tiles
       - org.apache.tiles
       - tiles-jsp
       - 3.0.4
+      - \*
       - \*4
     * - Tiles
       - org.apache.tiles
       - tiles-servlet
       - 3.0.4
+      - \*
       - \*4
     * - Tiles
       - org.apache.tiles
       - tiles-template
       - 3.0.4
-      - \*4
+      - \*
+      - \*4 \*5
     * - Tiles
       - org.apache.tiles
       - tiles-autotag-core-runtime
       - 1.1.0
-      - \*4
+      - \*
+      - \*4 \*5
     * - Tiles
       - org.apache.tiles
       - tiles-request-servlet
       - 1.0.4
-      - \*4
+      - \*
+      - \*4 \*5
     * - Tiles
       - org.apache.tiles
       - tiles-request-api
       - 1.0.1
+      - \*
       - \*4
     * - Tiles
       - org.apache.tiles
       - tiles-request-jsp
       - 1.0.4
-      - \*4
+      - \*
+      - \*4 \*5
     * - ユーティリティ
       - com.google.guava
       - guava
       - 17.0
+      - \*
       -
     * - ユーティリティ
       - commons-collections
       - commons-collections
       - 3.2.1
+      - \*
       - \*4
     * - ユーティリティ
       - commons-io
       - commons-io
       - 2.4
+      - \*
       - \*4
     * - サーブレット
       - javax.servlet
       - jstl
       - 1.2
+      - \*
       -
 
-#. データアクセスに、JPAを使用する場合に依存するライブラリ
-#. データアクセスに、MyBatis3を使用する場合に依存するライブラリ
-#. データアクセスに、MyBatis2を使用する場合に依存するライブラリ
-#. 共通ライブラリに依存しないが、TERASOLUNA Global Frameworkでアプリケーションを開発する場合に、利用することを推奨しているライブラリ
-#. TERASOLUNA Global Frameworkが独自に依存するライブラリ(Spring IO platformに定義のないライブラリ)
-#. 複数のライブラリから異なるバージョンへの依存があるライブラリ(TERASOLUNA Global Framework側で共存可能なバージョンを明示的に指定しているライブラリ)
-#. BetaやRC(Release Candidate)などGA(General Availability)の状態にない依存ライブラリ(TERASOLUNA Global Framework側でGAのバージョンを明示的に指定しているライブラリ)
+#. | データアクセスに、JPAを使用する場合に依存するライブラリ
+#. | データアクセスに、MyBatis3を使用する場合に依存するライブラリ
+#. | データアクセスに、MyBatis2を使用する場合に依存するライブラリ
+#. | 共通ライブラリに依存しないが、TERASOLUNA Global Frameworkでアプリケーションを開発する場合に、利用することを推奨しているライブラリ
+#. | Spring IO platformでサポートしているライブラリが個別に依存しているライブラリ
+   | (Spring IO platformとしては依存関係の管理は行っていないライブラリ)
+#. | 複数のライブラリから異なるバージョンへの依存があるライブラリ
+   | (TERASOLUNA Global Framework側で共存可能なバージョンを明示的に指定しているライブラリ)
+#. | デフォルトで適用されるバージョンが、BetaやRC(Release Candidate)などGA(General Availability)の状態にないライブラリ
+   | (TERASOLUNA Global Framework側でGAのバージョンを明示的に指定しているライブラリ)
 
 .. _frameworkstack_common_library:
 

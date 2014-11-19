@@ -1673,12 +1673,12 @@ RESTful Web Serviceで必要となるSpring MVCのコンポーネントを有効
             location="classpath*:/META-INF/spring/*.properties" />
     
         <bean id="jsonMessageConverter"
-            class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+            class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
             <property name="objectMapper">
-                <bean id="objectMapper" class="org.codehaus.jackson.map.ObjectMapper">
+                <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper">
                     <!-- (2) -->
                     <property name="dateFormat">
-                        <bean class="org.codehaus.jackson.map.util.StdDateFormat" />
+                        <bean class="com.fasterxml.jackson.databind.util.StdDateFormat" />
                     </property>
                 </bean>
             </property>
@@ -1755,6 +1755,33 @@ RESTful Web Serviceで必要となるSpring MVCのコンポーネントを有効
     * - | (7)
       - | Spring MVCのフレームワークでハンドリングされた例外を、ログ出力するためのAOP定義を指定する。
         | \ ``HandlerExceptionResolverLoggingInterceptor``\については、「\ :doc:`ExceptionHandling`\」を参照されたい。
+
+.. _REST_note_changed_jackson_version:
+
+.. note::
+
+    **jackson version 1.x.x から jackson version 2.x.xへ変更する場合の注意点**
+    
+    * パッケージの変更
+
+     .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+     .. list-table::
+        :header-rows: 1
+        :widths: 10 90
+
+        * - verision
+          - package
+        * - | 1.x.x
+          - | `org.codehaus.jackson`
+        * - | 2.x.x
+          - | `com.fasterxml.jackson`
+
+     * 注意事項として、配下のパッケージ構成も変更されている。
+
+    * Deprecated一覧
+
+     * http://fasterxml.github.io/jackson-core/javadoc/2.3.0/deprecated-list.html
+     * http://fasterxml.github.io/jackson-databind/javadoc/2.3.0/deprecated-list.html
 
 |
 
@@ -2275,8 +2302,7 @@ Resourceクラスの役割は以下の通りである。
     import javax.validation.constraints.Null;
     import javax.validation.constraints.Size;
     
-    import org.codehaus.jackson.map.annotate.JsonSerialize;
-    import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+    import com.fasterxml.jackson.annotation.JsonInclude;
     import org.hibernate.validator.constraints.Email;
     import org.joda.time.DateTime;
 
@@ -2290,7 +2316,7 @@ Resourceクラスの役割は以下の通りである。
         private String signId;
 
         // (5)
-        @JsonSerialize(include = Inclusion.NON_NULL)
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         @NotNull
         @Size(min = 8, max = 32)
         private String password;
@@ -3181,8 +3207,7 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
     import java.util.ArrayList;
     import java.util.List;
     
-    import org.codehaus.jackson.map.annotate.JsonSerialize;
-    import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+    import com.fasterxml.jackson.annotation.JsonInclude;
 
     // (1)
     public class ApiError implements Serializable {
@@ -3193,10 +3218,10 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
     
         private final String message;
     
-        @JsonSerialize(include = Inclusion.NON_EMPTY)
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
         private final String target; // (2)
     
-        @JsonSerialize(include = Inclusion.NON_EMPTY)
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
         private final List<ApiError> details = new ArrayList<>(); // (3)
     
         public ApiError(String code, String message) {
@@ -3252,8 +3277,8 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
 
  .. tip::   
  
-    フィールドに\ ``@JsonSerialize(include = Inclusion.NON_EMPTY)``\を指定することで、値が\ ``null``\や空の場合にJSONに項目が出力されないようにする事が出来る。
-    項目を出力させないための条件を\ ``null``\に限定したい場合は、\ ``@JsonSerialize(include = Inclusion.NON_NULL)``\を指定すればよい。
+    フィールドに\ ``@JsonInclude(JsonInclude.Include.NON_EMPTY)``\を指定することで、値が\ ``null``\や空の場合にJSONに項目が出力されないようにする事が出来る。
+    項目を出力させないための条件を\ ``null``\に限定したい場合は、\ ``@JsonInclude(JsonInclude.Include.NON_NULL)``\を指定すればよい。
 
 |
 
@@ -3602,15 +3627,15 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
           - 例外クラス
           - 説明
         * - | (1)
-          - | org.codehaus.jackson.
+          - | com.fasterxml.jackson.core.
             | JsonParseException
           - | JSONとして不正な構文が含まれる場合に発生する。
         * - | (2)
-          - | org.codehaus.jackson.map.exc.
+          - | com.fasterxml.jackson.databind.exc.
             | UnrecognizedPropertyException
           - | Resourceオブジェクトに存在しないフィールドがJSONに指定されている場合に発生する。
         * - | (3)
-          - | org.codehaus.jackson.map.
+          - | com.fasterxml.jackson.databind.
             | JsonMappingException
           - | JSONからResourceオブジェクトへ変換する際に、値の型変換エラーが発生した場合に発生する。
 
@@ -4578,14 +4603,13 @@ JSONの中に関連リソースへのハイパーメディアリンクを含め�
     import java.util.LinkedHashSet;
     import java.util.Set;
     
-    import org.codehaus.jackson.map.annotate.JsonSerialize;
-    import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+    import com.fasterxml.jackson.annotation.JsonInclude;
     
     // (2)
     public abstract class AbstractLinksSupportedResource {
 
         // (3)
-        @JsonSerialize(include = Inclusion.NON_EMPTY)
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
         private final Set<Link> links = new LinkedHashSet<>();
     
         public Set<Link> getLinks() {
@@ -4622,7 +4646,7 @@ JSONの中に関連リソースへのハイパーメディアリンクを含め�
         | 本クラスは、パイパーメディアリンクをサポートするResourceクラスによって、継承される事を想定したクラスである。
     * - | (3)
       - | リンク情報を複数保持するフィールドを定義する。
-        | 上記例では、リンクの指定がない時にJSONに出力しないようにするために、\ ``@JsonSerialize(include = Inclusion.NON_EMPTY)``\を指定している。
+        | 上記例では、リンクの指定がない時にJSONに出力しないようにするために、\ ``@JsonInclude(JsonInclude.Include.NON_EMPTY)``\を指定している。
     * - | (4)
       - | リンク情報を追加するためのメソッドを用意する。
     * - | (5)

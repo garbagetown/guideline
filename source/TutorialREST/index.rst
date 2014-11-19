@@ -661,7 +661,7 @@ spring-mvc-rest.xmlの作成
             <mvc:message-converters>
                 <!-- (2) -->
                 <bean
-                        class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+                        class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
                     <property name="objectMapper" ref="objectMapper"/>
                 </bean>
             </mvc:message-converters>
@@ -670,10 +670,10 @@ spring-mvc-rest.xmlの作成
             </mvc:argument-resolvers>
         </mvc:annotation-driven>
     
-        <bean id="objectMapper" class="org.codehaus.jackson.map.ObjectMapper">
+        <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper">
             <property name="dateFormat">
                 <!-- (3) -->
-                <bean class="org.codehaus.jackson.map.util.StdDateFormat"/>
+                <bean class="com.fasterxml.jackson.databind.util.StdDateFormat"/>
             </property>
         </bean>
     
@@ -721,17 +721,22 @@ spring-mvc-rest.xmlの作成
        | 画面遷移用のContollerは、\ ``app``\ パッケージ配下に格納していたが、REST API用のContollerは、\ ``api``\ パッケージ配下に格納する事を推奨する。
    * - | (2)
      - | \ ``<mvc:message-converters>``\ に、Contrtollerの引数及び返り値で扱うJavaBeanをシリアライズ/デシリアライズするためのクラスを設定する。
-       | 複数設定する事ができるが、今回のチュートリアルではJSONしか使用しないため、\ ``MappingJacksonHttpMessageConverter``\ のみ指定している。
-       | \ ``MappingJacksonHttpMessageConverter``\の\ ``objectMapper``\プロパティには、Jacksonより提供されている「JSON <-> JavaBean」の変換を行うためのコンポーネント「\ ``ObjectMapper``\」を指定する。
+       | 複数設定する事ができるが、今回のチュートリアルではJSONしか使用しないため、\ ``MappingJackson2HttpMessageConverter``\ のみ指定している。
+       | \ ``MappingJackson2HttpMessageConverter``\の\ ``objectMapper``\プロパティには、Jacksonより提供されている「JSON <-> JavaBean」の変換を行うためのコンポーネント「\ ``ObjectMapper``\」を指定する。
        | 本チュートリアルでは、日時型の変換をカスタマイズした\ ``ObjectMapper``\を指定している。
    * - | (3)
      - | 本チュートリアルでは、\ ``java.util.Date``\ オブジェクトをシリアライズする際にISO-8601形式とする。
-       | \ ``Date``\ オブジェクトをシリアライズする際にISO-8601形式にする場合は、\ ``ObjectMapper``\の\ ``dateFormat``\ プロパティに\ ``org.codehaus.jackson.map.util.StdDateFormat``\ を設定する事で実現する事ができる。
+       | \ ``Date``\ オブジェクトをシリアライズする際にISO-8601形式にする場合は、\ ``ObjectMapper``\の\ ``dateFormat``\ プロパティに\ ``com.fasterxml.jackson.databind.util.StdDateFormat``\ を設定する事で実現する事ができる。
    * - | (4)
      - | JPAを使用する場合は\ ``OpenEntityManagerInViewInterceptor``\ を使用するが、今回のチュートリアルではMyBatis2を使用するので、コメントアウトのままにするか、この\ ``<mvc:interceptor>``\ タグを削除する。
 
 
  .. figure:: ./images_rest/add-spring-mvc-rest.png
+
+ .. note::
+
+    **jackson version 1.x.x から jackson version 2.x.xへ変更する場合の注意点** は\ :ref:`こちら <REST_note_changed_jackson_version>`\ を参照されたい。
+
 
 REST API用のSpring Securityの定義追加
 --------------------------------------------------------------------------------
@@ -1032,7 +1037,7 @@ GET Todosの実装
      - | \ ``TodoService.findAll``\ で取得した\ ``Todo``\ オブジェクトを、応答するJSONを表現する\ ``TodoResource``\ 型に変換する。
        | \ ``Todo``\と\ ``TodoResource``\ の変換処理は、Dozerの\ ``org.dozer.Mapper``\ を使うと便利である。
    * - | (5)
-     - | \ ``List<TodoResource>``\ オブジェクトを返却することで、\ :file:`spring-mvc-rest.xml`\に定義した\ ``MappingJacksonHttpMessageConverter``\ により、\ ``[{"todoId" : "xxx", "todoTitle": "yyy", ...}, {"todoId" : "xxx", "todoTitle": "yyy", ...}, ...]``\ 形式のJSONにシリアライズされる。
+     - | \ ``List<TodoResource>``\ オブジェクトを返却することで、\ :file:`spring-mvc-rest.xml`\に定義した\ ``MappingJackson2HttpMessageConverter``\ により、\ ``[{"todoId" : "xxx", "todoTitle": "yyy", ...}, {"todoId" : "xxx", "todoTitle": "yyy", ...}, ...]``\ 形式のJSONにシリアライズされる。
 
 | tc Serverを起動し、実装したAPIの動作確認を行う。
 | プロジェクト名を右クリックして、「Run As」→「Run on Server」を選択する。
@@ -1151,7 +1156,7 @@ Todoリソースを新規作成するAPI(POST Todos)の処理を、\ ``TodoRestC
    * - | (5)
      - | \ ``TodoService.create``\ によって新規作成された\ ``Todo``\オブジェクトを、応答するJSONを表現する\ ``TodoResource``\ 型に変換する。
    * - | (6)
-     - | \ ``TodoResource``\ オブジェクトを返却することで、\ :file:`spring-mvc-rest.xml`\に定義した\ ``MappingJacksonHttpMessageConverter``\ により、\ ``{"todoId" : "xxx", "todoTitle": "yyy", ...}``\ 形式のJSONにシリアライズされる。
+     - | \ ``TodoResource``\ オブジェクトを返却することで、\ :file:`spring-mvc-rest.xml`\に定義した\ ``MappingJackson2HttpMessageConverter``\ により、\ ``{"todoId" : "xxx", "todoTitle": "yyy", ...}``\ 形式のJSONにシリアライズされる。
 
 | HTTP Dev Clientを使用して、実装したAPIの動作確認を行う。
 | Dev HTTP Clientを開いてURLに\ ``"localhost:8080/todo-api/api/v1/todos"``\を入力し、メソッドにPOSTを指定する。
@@ -1825,8 +1830,7 @@ REST APIのエラー情報を保持するJavaBeanの作成
     import java.util.ArrayList;
     import java.util.List;
     
-    import org.codehaus.jackson.map.annotate.JsonSerialize;
-    import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+    import com.fasterxml.jackson.annotation.JsonInclude;
     
     public class ApiError {
     
@@ -1834,10 +1838,10 @@ REST APIのエラー情報を保持するJavaBeanの作成
     
         private final String message;
     
-        @JsonSerialize(include = Inclusion.NON_EMPTY)
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
         private final String target;
     
-        @JsonSerialize(include = Inclusion.NON_EMPTY)
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
         private final List<ApiError> details = new ArrayList<>();
     
         public ApiError(String code, String message) {

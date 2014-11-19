@@ -1673,12 +1673,12 @@ Settings for activating the Spring MVC components necessary for RESTful Web Serv
             location="classpath*:/META-INF/spring/*.properties" />
     
         <bean id="jsonMessageConverter"
-            class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+            class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
             <property name="objectMapper">
-                <bean id="objectMapper" class="org.codehaus.jackson.map.ObjectMapper">
+                <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper">
                     <!-- (2) -->
                     <property name="dateFormat">
-                        <bean class="org.codehaus.jackson.map.util.StdDateFormat" />
+                        <bean class="com.fasterxml.jackson.databind.util.StdDateFormat" />
                     </property>
                 </bean>
             </property>
@@ -1755,6 +1755,33 @@ Settings for activating the Spring MVC components necessary for RESTful Web Serv
     * - | (7)
       - | AOP definition to output the exception handled by Spring MVC framework to a log, is specified.
         | Refer to \ :doc:`ExceptionHandling`\  for \ ``HandlerExceptionResolverLoggingInterceptor``\ .
+
+.. _REST_note_changed_jackson_version:
+
+.. note::
+
+    **Notice If you change from jackson version 1.xx to jackson version 2.xx**
+
+    * changed package
+
+     .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+     .. list-table::
+        :header-rows: 1
+        :widths: 10 90
+
+        * - verision
+          - package
+        * - | 1.x.x
+          - | `org.codehaus.jackson`
+        * - | 2.x.x
+          - | `com.fasterxml.jackson`
+
+     * Notice. Configuration of subordinate package also has been changed.
+
+    * Deprecated List
+
+     * http://fasterxml.github.io/jackson-core/javadoc/2.3.0/deprecated-list.html
+     * http://fasterxml.github.io/jackson-databind/javadoc/2.3.0/deprecated-list.html
 
 |
 
@@ -2275,8 +2302,7 @@ Example of Resource class creation is shown below.
     import javax.validation.constraints.Null;
     import javax.validation.constraints.Size;
     
-    import org.codehaus.jackson.map.annotate.JsonSerialize;
-    import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+    import com.fasterxml.jackson.annotation.JsonInclude;
     import org.hibernate.validator.constraints.Email;
     import org.joda.time.DateTime;
 
@@ -2290,7 +2316,7 @@ Example of Resource class creation is shown below.
         private String signId;
 
         // (5)
-        @JsonSerialize(include = Inclusion.NON_NULL)
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         @NotNull
         @Size(min = 8, max = 32)
         private String password;
@@ -3181,8 +3207,7 @@ Implementation to output error information in response Body
     import java.util.ArrayList;
     import java.util.List;
     
-    import org.codehaus.jackson.map.annotate.JsonSerialize;
-    import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+    import com.fasterxml.jackson.annotation.JsonInclude;
 
     // (1)
     public class ApiError implements Serializable {
@@ -3193,10 +3218,10 @@ Implementation to output error information in response Body
     
         private final String message;
     
-        @JsonSerialize(include = Inclusion.NON_EMPTY)
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
         private final String target; // (2)
     
-        @JsonSerialize(include = Inclusion.NON_EMPTY)
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
         private final List<ApiError> details = new ArrayList<>(); // (3)
     
         public ApiError(String code, String message) {
@@ -3252,8 +3277,8 @@ Implementation to output error information in response Body
 
  .. tip::   
  
-    When the value is \ ``null``\  or empty, it is possible to avoid fields being output to JSON  by specifying \ ``@JsonSerialize(include = Inclusion.NON_EMPTY)``\  in field.
-    When the condition to disable field output is to be restricted to ``null``\ , it is advisable to specify \ ``@JsonSerialize(include = Inclusion.NON_NULL)``\ .
+    When the value is \ ``null``\  or empty, it is possible to avoid fields being output to JSON  by specifying \ ``@JsonInclude(JsonInclude.Include.NON_EMPTY)``\  in field.
+    When the condition to disable field output is to be restricted to ``null``\ , it is advisable to specify \ ``@JsonInclude(JsonInclude.Include.NON_NULL)``\ .
 
 |
 
@@ -3602,15 +3627,15 @@ Following three exceptions need to be handled in order to respond to input error
           - Exception class
           - Description
         * - | (1)
-          - | org.codehaus.jackson.
+          - | com.fasterxml.jackson.core.
             | JsonParseException
           - | It occurs when an invalid syntax is included for JSON.
         * - | (2)
-          - | org.codehaus.jackson.map.exc.
+          - | com.fasterxml.jackson.databind.exc.
             | UnrecognizedPropertyException
           - | It occurs when a field which does not exist in Resource object is specified in JSON.
         * - | (3)
-          - | org.codehaus.jackson.map.
+          - | com.fasterxml.jackson.databind.
             | JsonMappingException
           - | It occurs when a value type conversion error occurs while converting from JSON to Resource object.
 
@@ -4578,14 +4603,13 @@ Implementing common parts
     import java.util.LinkedHashSet;
     import java.util.Set;
     
-    import org.codehaus.jackson.map.annotate.JsonSerialize;
-    import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+    import com.fasterxml.jackson.annotation.JsonInclude;
     
     // (2)
     public abstract class AbstractLinksSupportedResource {
 
         // (3)
-        @JsonSerialize(include = Inclusion.NON_EMPTY)
+        @JsonInclude(JsonInclude.Include.NON_EMPTY)
         private final Set<Link> links = new LinkedHashSet<>();
     
         public Set<Link> getLinks() {
@@ -4622,7 +4646,7 @@ Implementing common parts
         | It is assumed that this is the class inherited by the Resource class supporting hypermedia link.
     * - | (3)
       - | A field that retains information of multiple links is defined.
-        | In the above example, \ ``@JsonSerialize(include = Inclusion.NON_EMPTY)``\  is specified to prevent output to JSON when link is not specified.
+        | In the above example, \ ``@JsonInclude(JsonInclude.Include.NON_EMPTY)``\  is specified to prevent output to JSON when link is not specified.
     * - | (4)
       - | Method to add link information is provided.
     * - | (5)

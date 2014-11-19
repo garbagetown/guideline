@@ -856,7 +856,7 @@ LoginページのLoginボタンを押下することにより、Welcomeページ
 
 * src/main/java/com/example/security/app/account/AccountController.java
 
-  ログイン済みの\ ``UserDetails``\ オブジェクトは\ ``java.security.Principal``\ オブジェクト内に格納されている。Controllerの処理メソッドの引数で\ ``Principal``\ オブジェクトを受け取ることにより、Controller内でログイン済みの\ ``UserDetails``\ オブジェクトにアクセスすることができる。
+  ログイン済みの\ ``UserDetails``\ オブジェクトはControllerの処理メソッドの引数で受け取る。
 
   .. code-block:: java
      :emphasize-lines: 17,20

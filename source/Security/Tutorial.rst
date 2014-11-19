@@ -132,7 +132,7 @@ URL一覧を以下に示す。
     [INFO] Parameter: version, Value: 1.1.1-SNAPSHOT
     [INFO] Parameter: groupId, Value: com.example.security
     [INFO] Parameter: artifactId, Value: first-springsecurity
-    [INFO] project created from Archetype in dir: C:\Users\btmiyashitasts\Documents\workspace\first-springsecurity
+    [INFO] project created from Archetype in dir: C:\workspace\first-springsecurity
     [INFO] ------------------------------------------------------------------------
     [INFO] BUILD SUCCESS
     [INFO] ------------------------------------------------------------------------

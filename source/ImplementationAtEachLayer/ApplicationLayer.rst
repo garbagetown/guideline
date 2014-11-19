@@ -3468,13 +3468,86 @@ HandlerMethodArgumentResolverを実装してControllerの引数として受け�
 
 \ ``@ControllerAdvice``\ の実装
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-\ ``@ControllerAdvice``\ では、全てのControllerで実行したい処理を実装する。
+\ ``@ControllerAdvice``\ では、指定したパッケージ配下、指定したクラス、または全てのControllerで実行したい処理を実装する。
 
 \ ``@ControllerAdvice``\ では、以下の処理を共通化することができる。
 
 - ``@InitBinder`` メソッドの共通化
 - ``@ExceptionHandler`` メソッドの共通化
 - ``@ModelAttribute`` メソッドの共通化
+
+共通化メソッドのサンプルは属性の説明後に記述する。
+
+.. _application_layer_controller_advice_attribute:
+
+\ ``@ControllerAdvice``\ では、属性を指定することが可能である。
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|
+ .. list-table::
+   :header-rows: 1
+   :widths: 10 20 35 35
+
+   * - 項番
+     - 属性
+     - 説明
+     - 例
+   * - | (1)
+     - | ``annotations``
+     - | アノテーションクラスを指定し、そのアノテーションが付与されたControllerで共通化した処理が実行される。
+     - | ``@ControllerAdvice(annotations = RestController.class)``
+   * - | (2)
+     - | ``assignableTypes``
+     - | 対象Controllerを指定する。そのControllerで共通化した処理が実行される。
+     - | ``@ControllerAdvice(assignableTypes = { Sample0001Controller.class, Sample0002Controller.class })``
+   * - | (3)
+     - | ``basePackageClasses``
+     - | 指定したControllerの存在するPackage配下のControllerで共通化した処理が実行される。
+     - | ``@ControllerAdvice(basePackageClasses = Sample0001Controller.class)``
+   * - | (4)
+     - | ``basePackages``
+     - | 指定したPackage配下のControllerで共通化した処理が実行される。
+     - | ``@ControllerAdvice(basePackages = "com.example.controller.advice.app.sample")``
+   * - | (5)
+     - | ``value``
+     - | ``basePackages`` と同じ。
+     - | ``@ControllerAdvice(value = "com.example.controller.advice.app.example")``
+
+.. tip::
+
+    1. ``basePackages`` , ``value`` の使用時の注意点
+    
+     * 存在しないPackageを指定した場合は、無視されるのではなく、全てのControllerに処理が適用される。
+    
+      起動時にWARNメッセ-ジが出力される。
+    
+      .. code-block:: text
+    
+          level:WARN 	logger:o.s.web.method.ControllerAdviceBean             	message:Package [com.example.controller.advice.app.sample.] was not found, see [com.example.controller.advice.app.advice.SampleAdvice]
+    
+    2. ``basePackageClasses`` , ``basePackages`` , ``value`` の使用時の注意点
+    
+     * 指定した（basePackageClassesの場合クラスから取得した）Package名は前方一致するPackageの全てのControllerに処理が適用される。
+    
+      例として、``@ControllerAdvice(basePackages = "com.example.controller.advice.app.sample")`` を指定した場合
+    
+      @ControllerAdviceの対象となるPackage
+    
+      .. code-block:: text
+    
+          com.example.controller.advice.app.sample
+          com.example.controller.advice.app.sample.sample0
+          com.example.controller.advice.app.sample1
+          com.example.controller.advice.app.sample2
+    
+      @ControllerAdviceの対象外となるPackage
+    
+      .. code-block:: text
+    
+          com.example.controller.advice.app.samp
+          com.example.controller.advice.app.example
+    
+    ``@Order`` で指定した順序は優先される。全てのControllerに適用の ``@ControllerAdvice`` より、``@Order`` で若い番号を指定した ``@ControllerAdvice`` での処理が優先となる。
+
 
 
 | 以下に、\ ``@InitBinder``\ メソッドのサンプルを示す。

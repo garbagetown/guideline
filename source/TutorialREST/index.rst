@@ -1797,7 +1797,7 @@ DELETE Todoの実装
 REST APIのエラーハンドリングを行うクラスの作成
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
 
-| REST APIのエラーハンドリングは、Spring MVCから提供されている\ ``org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler``\を継承したクラスを作成し、\ ``@ControllerAdvice``\アノテーションを付与する方法でハンドリングする事を推奨する。
+| REST APIのエラーハンドリングは、Spring MVCから提供されている\ ``org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler``\を継承したクラスを作成し、\ ``@ControllerAdvice``\アノテーションを付与する方法でハンドリングし、REST APIに関わる処理に限定するために ``(annotations = RestController.class)`` の属性を付与する事を推奨する。
 | 以下に、\ ``ResponseEntityExceptionHandler``\を継承した\ ``todo.api.common.error.RestGlobalExceptionHandler``\ クラスを作成する。
 
 * :file:`RestGlobalExceptionHandler.java`
@@ -1809,7 +1809,7 @@ REST APIのエラーハンドリングを行うクラスの作成
     import org.springframework.web.bind.annotation.ControllerAdvice;
     import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
     
-    @ControllerAdvice
+    @ControllerAdvice(annotations = RestController.class)
     public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
     
     }
@@ -1900,7 +1900,7 @@ HTTPレスポンスBODYにエラー情報を出力するための実装
     import org.springframework.web.context.request.WebRequest;
     import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-    @ControllerAdvice
+    @ControllerAdvice(annotations = RestController.class)
     public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         @Inject
@@ -1972,7 +1972,7 @@ HTTPレスポンスBODYにエラー情報を出力するための実装
     import org.springframework.web.context.request.WebRequest;
     import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
     
-    @ControllerAdvice
+    @ControllerAdvice(annotations = RestController.class)
     public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
     
         @Inject
@@ -2070,7 +2070,7 @@ HTTPレスポンスBODYにエラー情報を出力するための実装
     import org.terasoluna.gfw.common.exception.ResultMessagesNotificationException;
     import org.terasoluna.gfw.common.message.ResultMessage;
 
-    @ControllerAdvice
+    @ControllerAdvice(annotations = RestController.class)
     public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         @Inject
@@ -2178,7 +2178,7 @@ HTTPレスポンスBODYにエラー情報を出力するための実装
     import org.terasoluna.gfw.common.exception.ResultMessagesNotificationException;
     import org.terasoluna.gfw.common.message.ResultMessage;
 
-    @ControllerAdvice
+    @ControllerAdvice(annotations = RestController.class)
     public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         @Inject
@@ -2292,7 +2292,7 @@ HTTPレスポンスBODYにエラー情報を出力するための実装
     import org.terasoluna.gfw.common.exception.ResultMessagesNotificationException;
     import org.terasoluna.gfw.common.message.ResultMessage;
 
-    @ControllerAdvice
+    @ControllerAdvice(annotations = RestController.class)
     public class RestGlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         @Inject

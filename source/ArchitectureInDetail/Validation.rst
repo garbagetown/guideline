@@ -3284,6 +3284,12 @@ application-messages.propertiesに以下の定義を行った場合、
 
 プロジェクト全体で空文字を\ ``null``\ にしたい場合は、プロジェクト共通設定として\ :ref:`@ControllerAdvice <application_layer_controller_advice>`\ で設定すればよい。
 
+.. note::
+
+    プロジェクト全体以外にもSpring Framework 4.0 より ``@ControllerAdvice`` アノテーションに属性指定が追加され、Package単位、Controller単位で設定することが可能である。
+    
+    詳細については、\ :ref:`@ControllerAdviceの属性 <application_layer_controller_advice_attribute>`\ を参照されたい。
+
 .. code-block:: java
 
   @ControllerAdvice

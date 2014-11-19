@@ -164,6 +164,10 @@ Overview
   以前のバージョンで同じことを実現する場合、\ ``@ExceptionHandler``\ アノテーションが付与されたメソッドを、Controllerのベースクラスのメソッドとして定義し、
   各Controllerでベースクラスを継承する必要があった。
 
+  **Spring Framework 4.0 より@ControllerAdviceアノテーションに属性指定が追加された**
+
+  詳細については、\ :ref:`@ControllerAdviceの属性 <application_layer_controller_advice_attribute>`\ を参照されたい。
+
 .. note:: **@ControllerAdviceアノテーションの使いどころ**
 
   #. サーブレット単位で行う例外ハンドリングに対して、View名と、HTTPレスポンスコードの解決以外の処理が必要な場合。

@@ -35,7 +35,7 @@ MVCフレームワーク
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Web MVCフレームワークとしてSpring MVCを利用する。
 
-* `Spring MVC 4.0 <http://docs.spring.io/spring/docs/4.0.7.RELEASE/spring-framework-reference/html/mvc.html>`_
+* `Spring MVC 4.0 <http://docs.spring.io/spring/docs/4.0.8.RELEASE/spring-framework-reference/html/mvc.html>`_
 
 O/R Mapper
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -99,7 +99,7 @@ JSPをTiles化する場合は、
 
   * 実装は、\ `Hibernate Validator 5.0 <http://docs.jboss.org/hibernate/validator/4.3/reference/en-US/html/>`_\ を利用する。
 
-* 相関チェックには\ `Bean Validation <http://download.oracle.com/otn-pub/jcp/bean_validation-1_1-fr-eval-spec/bean-validation-specification.pdf>`_\ 、もしくは\ `Spring Validation <http://docs.spring.io/spring/docs/4.0.7.RELEASE/spring-framework-reference/html/validation.html#validator>`_\ を利用する。
+* 相関チェックには\ `Bean Validation <http://download.oracle.com/otn-pub/jcp/bean_validation-1_1-fr-eval-spec/bean-validation-specification.pdf>`_\ 、もしくは\ `Spring Validation <http://docs.spring.io/spring/docs/4.0.8.RELEASE/spring-framework-reference/html/validation.html#validator>`_\ を利用する。
 
   * 使い分けについては\ :doc:`../ArchitectureInDetail/Validation`\ を参照されたい。
 
@@ -137,7 +137,7 @@ version 1.1.0.RELEASEで利用するOSSの一覧を以下に示す。
     への依存関係を解決しており、
     TERASOLUNA Global Frameworkで使用するOSSのバージョンは、原則として、Spring IO platformの定義に準じている。
 
-    なお、version 1.1.0.RELEASEで指定しているSpring IO platformのバージョンは、`1.0.2.RELEASE <http://docs.spring.io/platform/docs/1.0.2.RELEASE/reference/htmlsingle/>`_\ である。
+    なお、version 1.1.0.RELEASEで指定しているSpring IO platformのバージョンは、`1.0.3.RELEASE <http://docs.spring.io/platform/docs/1.0.3.RELEASE/reference/htmlsingle/>`_\ である。
 
 .. tabularcolumns:: |p{0.15\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|p{0.05\linewidth}|p{0.05\linewidth}|
 .. list-table::
@@ -154,73 +154,73 @@ version 1.1.0.RELEASEで利用するOSSの一覧を以下に示す。
     * - Spring
       - org.springframework
       - spring-aop
-      - 4.0.7.RELEASE
+      - 4.0.8.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-aspects
-      - 4.0.7.RELEASE
+      - 4.0.8.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-beans
-      - 4.0.7.RELEASE
+      - 4.0.8.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-context
-      - 4.0.7.RELEASE
+      - 4.0.8.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-context-support
-      - 4.0.7.RELEASE
+      - 4.0.8.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-core
-      - 4.0.7.RELEASE
+      - 4.0.8.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-expression
-      - 4.0.7.RELEASE
+      - 4.0.8.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-jdbc
-      - 4.0.7.RELEASE
+      - 4.0.8.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-orm
-      - 4.0.7.RELEASE
+      - 4.0.8.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-tx
-      - 4.0.7.RELEASE
+      - 4.0.8.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-web
-      - 4.0.7.RELEASE
+      - 4.0.8.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-webmvc
-      - 4.0.7.RELEASE
+      - 4.0.8.RELEASE
       - \*
       -
     * - Spring
@@ -274,13 +274,13 @@ version 1.1.0.RELEASEで利用するOSSの一覧を以下に示す。
     * - JPA(Hibernate)
       - org.hibernate
       - hibernate-core
-      - 4.3.6.Final
+      - 4.3.7.Final
       - \*
       - \*1
     * - JPA(Hibernate)
       - org.hibernate
       - hibernate-entitymanager
-      - 4.3.6.Final
+      - 4.3.7.Final
       - \*
       - \*1
     * - JPA(Hibernate)
@@ -370,13 +370,13 @@ version 1.1.0.RELEASEで利用するOSSの一覧を以下に示す。
     * - AOP
       - org.aspectj
       - aspectjrt
-      - 1.8.2
+      - 1.8.4
       - \*
       -
     * - AOP
       - org.aspectj
       - aspectjweaver
-      - 1.8.2
+      - 1.8.4
       - \*
       -
     * - ログ出力
@@ -520,31 +520,31 @@ version 1.1.0.RELEASEで利用するOSSの一覧を以下に示す。
     * - Tiles
       - org.apache.tiles
       - tiles-api
-      - 3.0.4
+      - 3.0.5
       - \*
       - \*4
     * - Tiles
       - org.apache.tiles
       - tiles-core
-      - 3.0.4
+      - 3.0.5
       - \*
       - \*4
     * - Tiles
       - org.apache.tiles
       - tiles-jsp
-      - 3.0.4
+      - 3.0.5
       - \*
       - \*4
     * - Tiles
       - org.apache.tiles
       - tiles-servlet
-      - 3.0.4
+      - 3.0.5
       - \*
       - \*4
     * - Tiles
       - org.apache.tiles
       - tiles-template
-      - 3.0.4
+      - 3.0.5
       - \*
       - \*4 \*5
     * - Tiles
@@ -556,7 +556,7 @@ version 1.1.0.RELEASEで利用するOSSの一覧を以下に示す。
     * - Tiles
       - org.apache.tiles
       - tiles-request-servlet
-      - 1.0.4
+      - 1.0.6
       - \*
       - \*4 \*5
     * - Tiles
@@ -568,7 +568,7 @@ version 1.1.0.RELEASEで利用するOSSの一覧を以下に示す。
     * - Tiles
       - org.apache.tiles
       - tiles-request-jsp
-      - 1.0.4
+      - 1.0.6
       - \*
       - \*4 \*5
     * - ユーティリティ

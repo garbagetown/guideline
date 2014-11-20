@@ -490,13 +490,13 @@ version 1.1.0.RELEASEで利用するOSSの一覧を以下に示す。
     * - 日付操作
       - org.jadira.usertype
       - usertype.core
-      - 3.0.0.GA
+      - 3.2.0.GA
       -
       - \*1
     * - 日付操作
       - org.jadira.usertype
       - usertype.spi
-      - 3.0.0.GA
+      - 3.2.0.GA
       -
       - \*1
     * - コネクションプール

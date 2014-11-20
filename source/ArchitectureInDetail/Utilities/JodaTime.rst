@@ -31,8 +31,7 @@ Joda Time, Joda Time JSP tags の利用方法を、以下で説明する。
 現在時刻を取得
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-| 利用用途に併せて、 ``org.joda.time.DateTime`` , ``org.joda.time.LocalDate`` , ``org.joda.time.LocalTime`` ,
-| ``org.joda.time.DateMidnight`` を使い分けること。以下に、使用方法を示す。
+| 利用用途に併せて、 ``org.joda.time.DateTime`` , ``org.joda.time.LocalDate`` , ``org.joda.time.LocalTime`` を使い分けること。以下に、使用方法を示す。
 
 1. ミリ秒まで取得したい場合は、 ``org.joda.time.DateTime`` を使用する。
 
@@ -52,17 +51,17 @@ Joda Time, Joda Time JSP tags の利用方法を、以下で説明する。
 
    LocalTime localTime = new LocalTime();
 
-4. 0時に設定された現在日時を取得したい場合は、 ``org.joda.time.DateMidnight`` を使用する。
+4. 日付開始時刻と現在日付を取得したい場合は、 ``org.joda.time.DateTime.withTimeAtStartOfDay()`` を使用する。
 
 .. code-block:: java
 
-   DateMidnight dateMidnight = new DateMidnight();
+   DateTime dateTimeAtStartOfDay = new DateTime().withTimeAtStartOfDay();
 
 |
 
     .. note::
 
-        LocalDateとLocalTimeは、TimeZone情報を持たないが、DateMidnightは、TimeZone情報を持つ。
+        LocalDateとLocalTimeは、TimeZone情報を持たない。
 
     .. note::
 
@@ -75,13 +74,12 @@ Joda Time, Joda Time JSP tags の利用方法を、以下で説明する。
 
         DateFactoryの利用方法は、 :doc:`../SystemDate` を参照されたい。
 
-        LocalDateやLocalTime、DateMidnightの生成は
+        LocalDateやLocalTimeの生成は
 
             .. code-block:: java
 
                 LocalDate localDate = dataFactory.newDateTime().toLocalDate();
                 LocalTime localTime = dataFactory.newDateTime().toLocalTime();
-                DateMidnight dateMidnight = dataFactory.newDateTime().toDateMidnight();
 
 
         とすればよい。

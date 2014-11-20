@@ -638,7 +638,7 @@ spring-mvc-rest.xmlの作成
 * :file:`src/main/resources/META-INF/spring/spring-mvc-rest.xml`
 
  .. code-block:: xml
-    :emphasize-lines: 17-21, 41-42, 61-69
+    :emphasize-lines: 17-21, 33-34, 42-43, 62-70
 
     <?xml version="1.0" encoding="UTF-8"?>
     <beans xmlns="http://www.springframework.org/schema/beans"
@@ -672,7 +672,8 @@ spring-mvc-rest.xmlの作成
 
         <mvc:default-servlet-handler />
 
-        <context:component-scan base-package="todo.app" />
+        <!-- (2) -->
+        <context:component-scan base-package="todo.api"/>
 
         <mvc:resources mapping="/resources/**"
             location="/resources/,classpath:META-INF/resources/"
@@ -680,7 +681,7 @@ spring-mvc-rest.xmlの作成
 
         <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper">
             <property name="dateFormat">
-                <!-- (2) -->
+                <!-- (3) -->
                 <bean class="com.fasterxml.jackson.databind.util.StdDateFormat"/>
             </property>
         </bean>
@@ -700,7 +701,7 @@ spring-mvc-rest.xmlの作成
                 <bean
                     class="org.terasoluna.gfw.web.token.transaction.TransactionTokenInterceptor" />
             </mvc:interceptor>
-            <!-- (3) -->
+            <!-- (4) -->
             <!--  REMOVE THIS LINE IF YOU USE JPA
             <mvc:interceptor>
                 <mvc:mapping path="/**" />
@@ -712,49 +713,6 @@ spring-mvc-rest.xmlの作成
                   REMOVE THIS LINE IF YOU USE JPA  -->
         </mvc:interceptors>
 
-        <!-- Settings View Resolver. -->
-        <bean id="viewResolver"
-            class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-            <property name="prefix" value="/WEB-INF/views/" />
-            <property name="suffix" value=".jsp" />
-        </bean>
-
-        <bean id="requestDataValueProcessor"
-            class="org.terasoluna.gfw.web.mvc.support.CompositeRequestDataValueProcessor">
-            <constructor-arg>
-                <util:list>
-                    <bean class="org.springframework.security.web.servlet.support.csrf.CsrfRequestDataValueProcessor" />
-                    <bean
-                        class="org.terasoluna.gfw.web.token.transaction.TransactionTokenRequestDataValueProcessor" />
-                </util:list>
-            </constructor-arg>
-        </bean>
-
-        <!-- Setting Exception Handling. -->
-        <!-- Exception Resolver. -->
-        <bean class="org.terasoluna.gfw.web.exception.SystemExceptionResolver">
-            <property name="exceptionCodeResolver" ref="exceptionCodeResolver" />
-            <!-- Setting and Customization by project. -->
-            <property name="order" value="3" />
-            <property name="exceptionMappings">
-                <map>
-                    <entry key="ResourceNotFoundException" value="common/error/resourceNotFoundError" />
-                    <entry key="BusinessException" value="common/error/businessError" />
-                    <entry key="InvalidTransactionTokenException" value="common/error/transactionTokenError" />
-                    <entry key=".DataAccessException" value="common/error/dataAccessError" />
-                </map>
-            </property>
-            <property name="statusCodes">
-                <map>
-                    <entry key="common/error/resourceNotFoundError" value="404" />
-                    <entry key="common/error/businessError" value="409" />
-                    <entry key="common/error/transactionTokenError" value="409" />
-                    <entry key="common/error/dataAccessError" value="500" />
-                </map>
-            </property>
-            <property name="defaultErrorView" value="common/error/systemError" />
-            <property name="defaultStatusCode" value="500" />
-        </bean>
         <!-- Setting AOP. -->
         <bean id="handlerExceptionResolverLoggingInterceptor"
             class="org.terasoluna.gfw.web.exception.HandlerExceptionResolverLoggingInterceptor">
@@ -779,9 +737,13 @@ spring-mvc-rest.xmlの作成
        | \ ``MappingJackson2HttpMessageConverter``\の\ ``objectMapper``\プロパティには、Jacksonより提供されている「JSON <-> JavaBean」の変換を行うためのコンポーネント「\ ``ObjectMapper``\」を指定する。
        | 本チュートリアルでは、日時型の変換をカスタマイズした\ ``ObjectMapper``\を指定している。
    * - | (2)
+     - | REST API用のパッケージ配下に対してコンポーネントスキャンの設定をする。
+       | 本チュートリアルでは、REST API用のパッケージを\ ``todo.api``\にしている。
+       | 画面遷移用のContollerは、\ ``app``\ パッケージ配下に格納していたが、REST API用のContollerは、\ ``api``\ パッケージ配下に格納する事を推奨する。
+   * - | (3)
      - | 本チュートリアルでは、\ ``java.util.Date``\ オブジェクトをシリアライズする際にISO-8601形式とする。
        | \ ``Date``\ オブジェクトをシリアライズする際にISO-8601形式にする場合は、\ ``ObjectMapper``\の\ ``dateFormat``\ プロパティに\ ``com.fasterxml.jackson.databind.util.StdDateFormat``\ を設定する事で実現する事ができる。
-   * - | (3)
+   * - | (4)
      - | JPAを使用する場合は\ ``OpenEntityManagerInViewInterceptor``\ を使用するが、今回のチュートリアルではMyBatis2を使用するので、コメントアウトのままにするか、この\ ``<mvc:interceptor>``\ タグを削除する。
 
 
@@ -821,7 +783,7 @@ REST API用のSpring Securityの定義追加
         <sec:http pattern="/api/v1/**" auto-config="true" use-expressions="true" create-session="stateless">
             <sec:custom-filter ref="userIdMDCPutFilter" after="ANONYMOUS_FILTER"/>
             <!-- <sec:csrf /> --><!-- (2) -->
-            <!-- <sec:session-management /> --><!-- (3) -->
+            <!-- <sec:session-management session-authentication-strategy-ref="sessionAuthenticationStrategy" /> --> <!-- (3) -->
         </sec:http>
 
         <sec:http auto-config="true" use-expressions="true">
@@ -835,7 +797,7 @@ REST API用のSpring Securityの定義追加
             <sec:csrf />
             <sec:access-denied-handler ref="accessDeniedHandler"/>
             <sec:custom-filter ref="userIdMDCPutFilter" after="ANONYMOUS_FILTER"/>
-           <sec:session-management />
+            <sec:session-management session-authentication-strategy-ref="sessionAuthenticationStrategy" />
         </sec:http>
 
         <sec:authentication-manager></sec:authentication-manager>
@@ -871,6 +833,22 @@ REST API用のSpring Securityの定義追加
                 </bean>
             </constructor-arg>
         </bean>
+    
+        <bean id="sessionStrategy"
+            class="org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy">
+            <constructor-arg index="0">
+                <list>
+                    <!-- omitted -->
+                    <bean class=
+                        "org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
+                        <constructor-arg index="0" ref="sessionRegistry" />
+                        <property name="maximumSessions" value="2" />
+                    </bean>
+                </list>
+            </constructor-arg>
+        </bean>
+
+        <bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
     
         <!-- Put UserID into MDC -->
         <bean id="userIdMDCPutFilter" class="org.terasoluna.gfw.security.web.logging.UserIdMDCPutFilter">

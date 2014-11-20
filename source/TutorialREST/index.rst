@@ -2074,7 +2074,7 @@ HTTPレスポンスBODYにエラー情報を出力するための実装
       "todoTitle": null
     }
 
-また、「REQUEST」の「HEADERS」の「+」ボタンでHTTPヘッダーを追加し、「Content-Type」に「applicatio/json」を設定後、”Send”ボタンをクリックする。
+また、「REQUEST」の「HEADERS」の「+」ボタンでHTTPヘッダーを追加し、「Content-Type」に「application/json」を設定後、”Send”ボタンをクリックする。
 
 | "400 Bad Request"のHTTPステータスが返却され、「RESPONSE」の「Body」には、エラー情報のJSONが表示される。
 | \ ``todoTitle``\は必須項目なので、必須エラーが発生している。

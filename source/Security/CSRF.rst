@@ -237,7 +237,7 @@ CSRFトークン用の\ ``RequestDataValueProcessor``\ 実装クラスを利用�
 
 .. note::
 
-  CSRFトークンの生成及びチェックは \ ``<sec:csrf />``\ の設定で有効になる \``CsrfFilter``\ により行われるので、開発者はControllerで特にCSRF対策は意識しなくてよい。
+  CSRFトークンの生成及びチェックは \ ``<sec:csrf />``\ の設定で有効になる \ ``CsrfFilter``\ により行われるので、開発者はControllerで特にCSRF対策は意識しなくてよい。
 
 .. _csrf_form-tag-token-send:
 
@@ -247,7 +247,7 @@ CSRFトークン用の\ ``RequestDataValueProcessor``\ 実装クラスを利用�
 JSPで、フォームからCSRFトークンを送信するには
 
 * \ ``<form:form>``\ タグを使用してCSRFトークンが埋め込まれた\ ``<input type="hidden">``\ タグを自動的に追加する
-* \ ``<input type="hidden">``\ タグを作成し、明示的にCSRFトークンを埋め込む
+* \ ``<sec:csrfInput/>``\ タグを使用してCSRFトークンが埋め込まれた\ ``<input type="hidden">``\ タグを明示的に追加する
 
 のどちらかを行う必要がある。
 
@@ -257,7 +257,7 @@ CSRFトークンを自動で埋め込む方法
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 \ :ref:`spring-mvc.xmlの設定<csrf_spring-mvc-setting>`\ の通り、\ ``CsrfRequestDataValueProcessor``\ が定義されている場合、
-\ ``<form:form>``\ タグを使うことで、CSRFトークンの埋め込まれた\ ``<input type="hidden">``\ タグが、自動的に追加される。
+\ ``<form:form>``\ タグを使うことで、CSRFトークンが埋め込まれた\ ``<input type="hidden">``\ タグが、自動的に追加される。
 
 JSPで、CSRFトークンを意識する必要はない。
 
@@ -274,10 +274,19 @@ JSPで、CSRFトークンを意識する必要はない。
 
     <form action="/terasoluna/csrfTokenCheckExample" method="POST">
       <input type="submit" name="second" value="second" />
-      <input type="hidden" name="_csrf" value="dea86ae8-58ea-4310-bde1-59805352dec7" />
+      <input type="hidden" name="_csrf" value="dea86ae8-58ea-4310-bde1-59805352dec7" /> <!-- (1) -->
     </form>
 
-自動で、\ ``_name``\ 属性が\ ``_csrf``\ である、\ ``<input type="hidden">``\ タグが追加され、CSRFトークンが埋め込まれているとわかる。
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+   :header-rows: 1
+   :widths: 10 90
+
+   * - 項番
+     - 説明
+   * - | (1)
+     - | Spring Securityのデフォルト実装では、\ ``name``\ 属性に\ ``_csrf``\ が設定されている \ ``<input type="hidden">``\ タグが追加され、CSRFトークンが埋め込まれる。
+
 
 CSRFトークンはログインのタイミングで生成される。
 
@@ -322,8 +331,7 @@ CSRFトークンを明示的に埋め込む方法
 
 \ ``<form:form>``\ タグを使用しない場合は、明示的に、\ ``<sec:csrfInput/>``\ タグを追加する必要がある。
 
-\ ``<sec:csrf />``\ の設定で有効になる \ ``CsrfFilter``\ により \ ``org.springframework.security.web.csrf.CsrfToken``\ オブジェクトが、リクエストスコープの
-\ ``_csrf``\ 属性に設定されるため、jspでは、以下のように設定すればよい
+\ ``<sec:csrfInput/>``\ タグを使用すると、CSRFトークンが埋め込まれた\ ``<input type="hidden">``\ タグが出力される。
 
 .. code-block:: jsp
 
@@ -331,6 +339,15 @@ CSRFトークンを明示的に埋め込む方法
       action="${pageContext.request.contextPath}/csrfTokenCheckExample">
         <input type="submit" name="second" value="second" />
         <sec:csrfInput/>  <!-- (1) -->
+    </form>
+
+以下のようなHTMLが、出力される。
+
+.. code-block:: html
+
+    <form action="/terasoluna/csrfTokenCheckExample" method="POST">
+      <input type="submit" name="second" value="second" />
+      <input type="hidden" name="_csrf" value="dea86ae8-58ea-4310-bde1-59805352dec7"/>  <!-- (2) -->
     </form>
 
 .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
@@ -341,17 +358,9 @@ CSRFトークンを明示的に埋め込む方法
    * - 項番
      - 説明
    * - | (1)
-     - | \ ``<sec:csrfInput/>``\ でリクエストパラメータ名とCSRFトークンが設定される。
-
-以下のようなHTMLが、出力される。
-
-
-.. code-block:: html
-
-    <form action="/terasoluna/csrfTokenCheckExample" method="POST">
-      <input type="submit" name="second" value="second" />
-      <input type="hidden" name="_csrf" value="dea86ae8-58ea-4310-bde1-59805352dec7"/>  <!-- (2) -->
-    </form>
+     - | CSRFトークンが埋め込まれた\ ``<input type="hidden">``\ タグを出力するために、\ ``<sec:csrfInput/>``\ タグを指定する。
+   * - | (2)
+     - | Spring Securityのデフォルト実装では、\ ``name``\ 属性に\ ``_csrf``\ が設定されている \ ``<input type="hidden">``\ タグが追加され、CSRFトークンが埋め込まれる。
 
 .. _csrf_default-add-token-method:
 
@@ -366,7 +375,7 @@ CSRFトークンを明示的に埋め込む方法
 
 AjaxによるCSRFトークンの送信
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-| \ ``<sec:csrf />``\ の設定で有効になる \ ``CsrfFilter``\ が、前述のようにリクエストパラメータからCSRFトークンを取得するだけでなく、
+| \ ``<sec:csrf />``\ の設定で有効になる \ ``CsrfFilter``\ は、前述のようにリクエストパラメータからCSRFトークンを取得するだけでなく、
 | HTTPリクエストヘッダーからもCSRFトークンを取得する。
 | Ajaxを利用する場合はHTTPヘッダーに、CSRFトークンを設定することを推奨する。JSON形式でリクエストを送る場合にも対応できるためである。
 
@@ -428,11 +437,15 @@ AjaxによるCSRFトークンの送信
    * - 項番
      - 説明
    * - | (1)
-     - | \ ``<sec:csrfMetaTags />``\ タグを設定することにより、デフォルトでは\ ``<meta name="_csrf_parameter" content="_csrf" /><meta name="_csrf_header" content="X-CSRF-TOKEN" /><meta name="_csrf" content="**CSRF Token**" />``\ が設定される。
+     - | \ ``<sec:csrfMetaTags />``\ タグを設定することにより、デフォルトでは、以下の\ ``meta``\ タグが出力される。
+
+       * \ ``<meta name="_csrf_parameter" content="_csrf" />``\
+       * \ ``<meta name="_csrf_header" content="X-CSRF-TOKEN" />``\
+       * \ ``<meta name="_csrf" content="dea86ae8-58ea-4310-bde1-59805352dec7" />``\ (\ ``content``\ 属性の値はランダムなUUIDが設定される)
    * - | (2)
-     - | \ ``<meta name="_csrf ...>``\ タグに設定されたCSRFトークンを取得する。
+     - | \ ``<meta name="_csrf">``\ タグに設定されたCSRFトークンを取得する。
    * - | (3)
-     - | \ ``<meta name="_csrf_header" ...>``\ タグに設定されたCSRFヘッダ名を取得する。
+     - | \ ``<meta name="_csrf_header">``\ タグに設定されたCSRFヘッダ名を取得する。
    * - | (4)
      - | リクエストヘッダーに、\ ``<meta>``\ タグから取得したヘッダ名(デフォルト:X-CSRF-TOKEN)、CSRFトークンの値を設定する。
    * - | (5)

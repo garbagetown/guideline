@@ -1514,6 +1514,16 @@ Spring Frameworkから提供されている「宣言型トランザクション�
 | トランザクション管理対象とするクラスまたはクラスメソッドに対して\ ``@Transactional``\ アノテーションを指定する。
 | トランザクション制御に必要となる情報は、\ ``@Transactional``\ アノテーションの属性で指定する。
 
+ .. note::
+
+    本ガイドラインでは、Spring Frameworkから提供されている \ ``@org.springframework.transaction.annotation.Transactional``\ アノテーションを使用する前提である。
+
+ .. tip::
+
+    Spring 4からは、JTA 1.2から追加された \ ``@javax.transaction.Transactional``\ アノテーションを使用する事ができる。
+
+    ただし、本ガイドラインでは、「宣言型トランザクション管理」で必要となる情報をより細かく指定できるSpring Frameworkのアノテーションを使用することを推奨する。
+
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.10\linewidth}|p{0.80\linewidth}|
  .. list-table::
     :header-rows: 1

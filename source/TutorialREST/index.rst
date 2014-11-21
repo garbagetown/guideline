@@ -948,11 +948,11 @@ Controllerクラスの作成
 
     package todo.api.todo;
     
-    import org.springframework.stereotype.Controller;
     import org.springframework.web.bind.annotation.RequestMapping;
+    import org.springframework.web.bind.annotation.RestController;
     
-    @Controller
-    @RequestMapping("todos") // (1)
+    @RestController // (1)
+    @RequestMapping("todos") // (2)
     public class TodoRestController {
     
     }
@@ -965,6 +965,9 @@ Controllerクラスの作成
    * - 項番
      - 説明
    * - | (1)
+     - | ``@RestController`` を指定する。
+       | ``@RestController`` の詳細については、 :ref:`RestControllerクラスの作成<RESTHowToUseControllerClass>` を参照されたい。
+   * - | (2)
      - | リソースのパスを指定する。
        | \ ``/api/v1/``\ の部分はweb.xmlに定義しているため、この設定を行うことで\ ``/<contextPath>/api/v1/todos``\ というパスにマッピングされる。
 
@@ -973,7 +976,7 @@ GET Todosの実装
 作成済みのTodoリソースを全件取得するAPI(GET Todos)の処理を、\ ``TodoRestController``\の\ ``getTodos``\メソッドに実装する。
 
  .. code-block:: java
-    :emphasize-lines: 3-9,12-18,23-38
+    :emphasize-lines: 3-10,12-13,16-17,22-36
 
     package todo.api.todo;
     
@@ -985,16 +988,15 @@ GET Todosの実装
     
     import org.dozer.Mapper;
     import org.springframework.http.HttpStatus;
-    import org.springframework.stereotype.Controller;
     import org.springframework.web.bind.annotation.RequestMapping;
     import org.springframework.web.bind.annotation.RequestMethod;
-    import org.springframework.web.bind.annotation.ResponseBody;
     import org.springframework.web.bind.annotation.ResponseStatus;
+    import org.springframework.web.bind.annotation.RestController;
     
     import todo.domain.model.Todo;
     import todo.domain.service.todo.TodoService;
     
-    @Controller
+    @RestController
     @RequestMapping("todos")
     public class TodoRestController {
         @Inject
@@ -1003,15 +1005,14 @@ GET Todosの実装
         Mapper beanMapper;
     
         @RequestMapping(method = RequestMethod.GET) // (1)
-        @ResponseBody // (2)
-        @ResponseStatus(HttpStatus.OK) // (3)
+        @ResponseStatus(HttpStatus.OK) // (2)
         public List<TodoResource> getTodos() {
             Collection<Todo> todos = todoService.findAll();
             List<TodoResource> todoResources = new ArrayList<>();
             for (Todo todo : todos) {
-                todoResources.add(beanMapper.map(todo, TodoResource.class)); // (4)
+                todoResources.add(beanMapper.map(todo, TodoResource.class)); // (3)
             }
-            return todoResources; // (5)
+            return todoResources; // (4)
         }
     
     }
@@ -1028,15 +1029,12 @@ GET Todosの実装
    * - | (1)
      - | メソッドがGETのリクエストを処理するために、\ ``method``\ 属性に\ ``RequestMethod.GET``\ を設定する。
    * - | (2)
-     - | メソッドの返り値として返却したオブジェクトを、レスポンスBODYのメッセージとしてクライアントに返答することを示す\ ``@ResponseBody``\ アノテーションを付与する。
-       | 本チュートリアルでは、JSON形式のデータにシリアライズする。
-   * - | (3)
      - | 応答するHTTPステータスコードを\ ``@ResponseStatus``\ アノテーションに指定する。
        | HTTPステータスとして、"200 OK"を設定するため、value属性には\ ``HttpStatus.OK``\を設定する。
-   * - | (4)
+   * - | (3)
      - | \ ``TodoService.findAll``\ で取得した\ ``Todo``\ オブジェクトを、応答するJSONを表現する\ ``TodoResource``\ 型に変換する。
        | \ ``Todo``\と\ ``TodoResource``\ の変換処理は、Dozerの\ ``org.dozer.Mapper``\ を使うと便利である。
-   * - | (5)
+   * - | (3)
      - | \ ``List<TodoResource>``\ オブジェクトを返却することで、\ :file:`spring-mvc-rest.xml`\に定義した\ ``MappingJackson2HttpMessageConverter``\ により、\ ``[{"todoId" : "xxx", "todoTitle": "yyy", ...}, {"todoId" : "xxx", "todoTitle": "yyy", ...}, ...]``\ 形式のJSONにシリアライズされる。
 
 | tc Serverを起動し、実装したAPIの動作確認を行う。
@@ -1081,7 +1079,7 @@ Todoリソースを新規作成するAPI(POST Todos)の処理を、\ ``TodoRestC
 
 
  .. code-block:: java
-    :emphasize-lines: 12-13,42-49
+    :emphasize-lines: 11,39-46
 
     package todo.api.todo;
 
@@ -1093,18 +1091,16 @@ Todoリソースを新規作成するAPI(POST Todos)の処理を、\ ``TodoRestC
 
     import org.dozer.Mapper;
     import org.springframework.http.HttpStatus;
-    import org.springframework.stereotype.Controller;
     import org.springframework.validation.annotation.Validated;
-    import org.springframework.web.bind.annotation.RequestBody;
     import org.springframework.web.bind.annotation.RequestMapping;
     import org.springframework.web.bind.annotation.RequestMethod;
-    import org.springframework.web.bind.annotation.ResponseBody;
     import org.springframework.web.bind.annotation.ResponseStatus;
+    import org.springframework.web.bind.annotation.RestController;
 
     import todo.domain.model.Todo;
     import todo.domain.service.todo.TodoService;
 
-    @Controller
+    @RestController
     @RequestMapping("todos")
     public class TodoRestController {
         @Inject
@@ -1113,7 +1109,6 @@ Todoリソースを新規作成するAPI(POST Todos)の処理を、\ ``TodoRestC
         Mapper beanMapper;
 
         @RequestMapping(method = RequestMethod.GET)
-        @ResponseBody
         @ResponseStatus(HttpStatus.OK)
         public List<TodoResource> getTodos() {
             Collection<Todo> todos = todoService.findAll();
@@ -1125,7 +1120,6 @@ Todoリソースを新規作成するAPI(POST Todos)の処理を、\ ``TodoRestC
         }
 
         @RequestMapping(method = RequestMethod.POST) // (1)
-        @ResponseBody
         @ResponseStatus(HttpStatus.CREATED) // (2)
         public TodoResource postTodos(@RequestBody @Validated TodoResource todoResource) { // (3)
             Todo createdTodo = todoService.create(beanMapper.map(todoResource, Todo.class)); // (4)
@@ -1316,7 +1310,7 @@ GET Todoの実装
 Todoリソースを一件取得するAPI(GET Todo)の処理を、\ ``TodoRestController``\ の\ ``getTodo``\メソッドに実装する。
 
  .. code-block:: java
-    :emphasize-lines: 13,52-59
+    :emphasize-lines: 12,49-55
 
     package todo.api.todo;
 
@@ -1328,19 +1322,18 @@ Todoリソースを一件取得するAPI(GET Todo)の処理を、\ ``TodoRestCon
 
     import org.dozer.Mapper;
     import org.springframework.http.HttpStatus;
-    import org.springframework.stereotype.Controller;
     import org.springframework.validation.annotation.Validated;
     import org.springframework.web.bind.annotation.PathVariable;
     import org.springframework.web.bind.annotation.RequestBody;
     import org.springframework.web.bind.annotation.RequestMapping;
     import org.springframework.web.bind.annotation.RequestMethod;
-    import org.springframework.web.bind.annotation.ResponseBody;
     import org.springframework.web.bind.annotation.ResponseStatus;
+    import org.springframework.web.bind.annotation.RestController;
 
     import todo.domain.model.Todo;
     import todo.domain.service.todo.TodoService;
 
-    @Controller
+    @RestController
     @RequestMapping("todos")
     public class TodoRestController {
         @Inject
@@ -1349,7 +1342,6 @@ Todoリソースを一件取得するAPI(GET Todo)の処理を、\ ``TodoRestCon
         Mapper beanMapper;
 
         @RequestMapping(method = RequestMethod.GET)
-        @ResponseBody
         @ResponseStatus(HttpStatus.OK)
         public List<TodoResource> getTodos() {
             Collection<Todo> todos = todoService.findAll();
@@ -1361,7 +1353,6 @@ Todoリソースを一件取得するAPI(GET Todo)の処理を、\ ``TodoRestCon
         }
 
         @RequestMapping(method = RequestMethod.POST)
-        @ResponseBody
         @ResponseStatus(HttpStatus.CREATED)
         public TodoResource postTodos(@RequestBody @Validated TodoResource todoResource) {
             Todo createdTodo = todoService.create(beanMapper.map(todoResource, Todo.class));
@@ -1370,7 +1361,6 @@ Todoリソースを一件取得するAPI(GET Todo)の処理を、\ ``TodoRestCon
         }
 
         @RequestMapping(value="{todoId}", method = RequestMethod.GET) // (1)
-        @ResponseBody
         @ResponseStatus(HttpStatus.OK)
         public TodoResource getTodo(@PathVariable("todoId") String todoId) { // (2)
             Todo todo = todoService.findOne(todoId); // (3)
@@ -1410,7 +1400,7 @@ PUT Todoの実装
 Todoリソースを一件更新(完了状態へ更新)するAPI(PUT Todo)の処理を、\ ``TodoRestController``\ の\ ``putTodo``\メソッドに実装する。
 
  .. code-block:: java
-    :emphasize-lines: 61-68
+    :emphasize-lines: 57-63
 
     package todo.api.todo;
     
@@ -1422,19 +1412,18 @@ Todoリソースを一件更新(完了状態へ更新)するAPI(PUT Todo)の処�
     
     import org.dozer.Mapper;
     import org.springframework.http.HttpStatus;
-    import org.springframework.stereotype.Controller;
     import org.springframework.validation.annotation.Validated;
     import org.springframework.web.bind.annotation.PathVariable;
     import org.springframework.web.bind.annotation.RequestBody;
     import org.springframework.web.bind.annotation.RequestMapping;
     import org.springframework.web.bind.annotation.RequestMethod;
-    import org.springframework.web.bind.annotation.ResponseBody;
     import org.springframework.web.bind.annotation.ResponseStatus;
+    import org.springframework.web.bind.annotation.RestController;
     
     import todo.domain.model.Todo;
     import todo.domain.service.todo.TodoService;
     
-    @Controller
+    @RestController
     @RequestMapping("todos")
     public class TodoRestController {
         @Inject
@@ -1443,7 +1432,6 @@ Todoリソースを一件更新(完了状態へ更新)するAPI(PUT Todo)の処�
         Mapper beanMapper;
     
         @RequestMapping(method = RequestMethod.GET)
-        @ResponseBody
         @ResponseStatus(HttpStatus.OK)
         public List<TodoResource> getTodos() {
             Collection<Todo> todos = todoService.findAll();
@@ -1455,7 +1443,6 @@ Todoリソースを一件更新(完了状態へ更新)するAPI(PUT Todo)の処�
         }
     
         @RequestMapping(method = RequestMethod.POST)
-        @ResponseBody
         @ResponseStatus(HttpStatus.CREATED)
         public TodoResource postTodos(@RequestBody @Validated TodoResource todoResource) {
             Todo createdTodo = todoService.create(beanMapper.map(todoResource, Todo.class));
@@ -1464,7 +1451,6 @@ Todoリソースを一件更新(完了状態へ更新)するAPI(PUT Todo)の処�
         }
     
         @RequestMapping(value="{todoId}", method = RequestMethod.GET)
-        @ResponseBody
         @ResponseStatus(HttpStatus.OK)
         public TodoResource getTodo(@PathVariable("todoId") String todoId) {
             Todo todo = todoService.findOne(todoId);
@@ -1473,7 +1459,6 @@ Todoリソースを一件更新(完了状態へ更新)するAPI(PUT Todo)の処�
         }
     
         @RequestMapping(value="{todoId}", method = RequestMethod.PUT) // (1)
-        @ResponseBody
         @ResponseStatus(HttpStatus.OK)
         public TodoResource putTodo(@PathVariable("todoId") String todoId) { // (2)
             Todo finishedTodo = todoService.finish(todoId); // (3)
@@ -1516,7 +1501,7 @@ DELETE Todoの実装
 最後に、Todoリソースを一件削除するAPI(DELETE Todo)の処理を、\ ``TodoRestController``\ の\ ``deleteTodo``\メソッドに実装する。
 
  .. code-block:: java
-    :emphasize-lines: 70-75
+    :emphasize-lines: 65-69
 
     package todo.api.todo;
 
@@ -1528,19 +1513,18 @@ DELETE Todoの実装
 
     import org.dozer.Mapper;
     import org.springframework.http.HttpStatus;
-    import org.springframework.stereotype.Controller;
     import org.springframework.validation.annotation.Validated;
     import org.springframework.web.bind.annotation.PathVariable;
     import org.springframework.web.bind.annotation.RequestBody;
     import org.springframework.web.bind.annotation.RequestMapping;
     import org.springframework.web.bind.annotation.RequestMethod;
-    import org.springframework.web.bind.annotation.ResponseBody;
     import org.springframework.web.bind.annotation.ResponseStatus;
+    import org.springframework.web.bind.annotation.RestController;
 
     import todo.domain.model.Todo;
     import todo.domain.service.todo.TodoService;
 
-    @Controller
+    @RestController
     @RequestMapping("todos")
     public class TodoRestController {
         @Inject
@@ -1549,7 +1533,6 @@ DELETE Todoの実装
         Mapper beanMapper;
 
         @RequestMapping(method = RequestMethod.GET)
-        @ResponseBody
         @ResponseStatus(HttpStatus.OK)
         public List<TodoResource> getTodos() {
             Collection<Todo> todos = todoService.findAll();
@@ -1561,7 +1544,6 @@ DELETE Todoの実装
         }
 
         @RequestMapping(method = RequestMethod.POST)
-        @ResponseBody
         @ResponseStatus(HttpStatus.CREATED)
         public TodoResource postTodos(@RequestBody @Validated TodoResource todoResource) {
             Todo createdTodo = todoService.create(beanMapper.map(todoResource, Todo.class));
@@ -1570,7 +1552,6 @@ DELETE Todoの実装
         }
 
         @RequestMapping(value="{todoId}", method = RequestMethod.GET)
-        @ResponseBody
         @ResponseStatus(HttpStatus.OK)
         public TodoResource getTodo(@PathVariable("todoId") String todoId) {
             Todo todo = todoService.findOne(todoId);
@@ -1579,7 +1560,6 @@ DELETE Todoの実装
         }
 
         @RequestMapping(value="{todoId}", method = RequestMethod.PUT)
-        @ResponseBody
         @ResponseStatus(HttpStatus.OK)
         public TodoResource putTodo(@PathVariable("todoId") String todoId) {
             Todo finishedTodo = todoService.finish(todoId);
@@ -1588,7 +1568,6 @@ DELETE Todoの実装
         }
         
         @RequestMapping(value="{todoId}", method = RequestMethod.DELETE) // (1)
-        @ResponseBody
         @ResponseStatus(HttpStatus.NO_CONTENT) // (2)
         public void deleteTodo(@PathVariable("todoId") String todoId) { // (3)
             todoService.delete(todoId); // (4)

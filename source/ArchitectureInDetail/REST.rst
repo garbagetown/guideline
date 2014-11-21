@@ -370,7 +370,7 @@ REST APIの実装サンプル
       - | Todoリソースを削除する。
 
  .. code-block:: java
-    :emphasize-lines: 31-35, 44-48, 54-58, 64-68, 74-78
+    :emphasize-lines: 30-34, 42-45, 51-55, 59-63, 68-72
 
     package todo.api.todo;
 
@@ -382,19 +382,18 @@ REST APIの実装サンプル
 
     import org.dozer.Mapper;
     import org.springframework.http.HttpStatus;
-    import org.springframework.stereotype.Controller;
     import org.springframework.validation.annotation.Validated;
     import org.springframework.web.bind.annotation.PathVariable;
     import org.springframework.web.bind.annotation.RequestBody;
     import org.springframework.web.bind.annotation.RequestMapping;
     import org.springframework.web.bind.annotation.RequestMethod;
-    import org.springframework.web.bind.annotation.ResponseBody;
     import org.springframework.web.bind.annotation.ResponseStatus;
+    import org.springframework.web.bind.annotation.RestController;
 
     import todo.domain.model.Todo;
     import todo.domain.service.todo.TodoService;
 
-    @Controller
+    @RestController
     @RequestMapping("todos")
     public class TodoRestController {
         @Inject
@@ -404,7 +403,6 @@ REST APIの実装サンプル
 
         // (1)
         @RequestMapping(method = RequestMethod.GET)
-        @ResponseBody
         @ResponseStatus(HttpStatus.OK)
         public List<TodoResource> getTodos() {
             Collection<Todo> todos = todoService.findAll();
@@ -417,7 +415,6 @@ REST APIの実装サンプル
 
         // (2)
         @RequestMapping(method = RequestMethod.POST)
-        @ResponseBody
         @ResponseStatus(HttpStatus.CREATED)
         public TodoResource postTodos(@RequestBody @Validated TodoResource todoResource) {
             Todo createdTodo = todoService.create(beanMapper.map(todoResource, Todo.class));
@@ -427,7 +424,6 @@ REST APIの実装サンプル
 
         // (3)
         @RequestMapping(value="{todoId}", method = RequestMethod.GET)
-        @ResponseBody
         @ResponseStatus(HttpStatus.OK)
         public TodoResource getTodo(@PathVariable("todoId") String todoId) {
             Todo todo = todoService.findOne(todoId);
@@ -437,7 +433,6 @@ REST APIの実装サンプル
 
         // (4)
         @RequestMapping(value="{todoId}", method = RequestMethod.PUT)
-        @ResponseBody
         @ResponseStatus(HttpStatus.OK)
         public TodoResource putTodo(@PathVariable("todoId") String todoId) {
             Todo finishedTodo = todoService.finish(todoId);
@@ -447,7 +442,6 @@ REST APIの実装サンプル
         
         // (5)
         @RequestMapping(value="{todoId}", method = RequestMethod.DELETE)
-        @ResponseBody
         @ResponseStatus(HttpStatus.NO_CONTENT)
         public void deleteTodo(@PathVariable("todoId") String todoId) {
             todoService.delete(todoId);
@@ -2292,7 +2286,7 @@ Resourceクラスの役割は以下の通りである。
 * :file:`MemberCredentialResource.java`
 
  .. code-block:: java
-    :emphasize-lines: 14, 23
+    :emphasize-lines: 13, 22
 
     package org.terasoluna.examples.rest.api.member;
     
@@ -2362,14 +2356,16 @@ Controllerクラスの作成
 | 全てのAPIの実装が完了した際のソースコードについては、\ :ref:`Appendix <RESTAppendixSoruceCodesOfMemberRestController>`\を参照されたい。
 
  .. code-block:: java
-    :emphasize-lines: 5
+    :emphasize-lines: 7-8
 
     package org.terasoluna.examples.rest.api.member;
     
     // omitted
+    import org.springframework.web.bind.annotation.RestController;
+    // omitted
 
     @RequestMapping("members") // (1)
-    @Controller
+    @RestController // (2)
     public class MemberRestController {
 
         // omitted ...
@@ -2387,6 +2383,13 @@ Controllerクラスの作成
       - | Controllerに対して、リソースのコレクション用のURI(サーブレットパス)をマッピングする。
         | 具体的には、\ ``@RequestMapping``\アノテーションのvalue属性に、リソースのコレクションを表すサーブレットパスを指定する。
         | 上記例では、 \ ``/api/v1/members``\ というサーブレットパスをマッピングしている。
+    * - | (2)
+      - | Controllerに対して、``@RestController`` を付与する。
+        | ``@RestController`` はSpring Framework 4.0 から追加されたアノテーションである。
+        | ``@RestController`` は ``@Controller`` と ``@ResponseBody`` をまとめたアノテーションである。
+        | ``@RestController`` の登場前の Spring Framework 4.0 以前では、RESTを利用するControllerに ``@Controller`` を付与し、メソッドに ``@ResponseBody`` をしなければならなかったが、``@RestController`` を利用することで、``@ResponseBody`` の付与を省略できる。
+        | ``@ResponseBody`` の役割は、返却するResourceオブジェクトをJSONやXMLにmarshalし、レスポンスBODYに設定することである。
+        | ``@RestController`` の詳細については、\ `こちら <http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/bind/annotation/RestController.html>`_\ を参照されたい。
 
 |
 
@@ -2440,10 +2443,10 @@ URIで指定されたMemberリソースのコレクションをページ検索�
   | Memberリソースのコレクションをページ検索する処理を実装する。
   
  .. code-block:: java
-    :emphasize-lines: 13, 15, 17, 20, 22, 25, 28, 36
+    :emphasize-lines: 13, 15, 18, 20, 23, 26, 34
 
     @RequestMapping("members")
-    @Controller
+    @RestController
     public class MemberRestController {
     
         // omitted
@@ -2457,19 +2460,17 @@ URIで指定されたMemberリソースのコレクションをページ検索�
         // (3)
         @RequestMapping(method = RequestMethod.GET)
         // (4)
-        @ResponseBody
-        // (5)
         @ResponseStatus(HttpStatus.OK)
         public Page<MemberResource> getMembers(
-                // (6)
+                // (5)
                 @Validated MembersSearchQuery query,
-                // (7)
+                // (6)
                 Pageable pageable) {
     
-            // (8)
+            // (7)
             Page<Member> page = memberSevice.searchMembers(query.getName(), pageable);
     
-            // (9)
+            // (8)
             List<MemberResource> memberResources = new ArrayList<>();
             for (Member member : page.getContent()) {
                 memberResources.add(beanMapper.map(member, MemberResource.class));
@@ -2477,7 +2478,7 @@ URIで指定されたMemberリソースのコレクションをページ検索�
             Page<MemberResource> responseResource = new PageImpl<>(memberResources, 
                     pageable, page.getTotalElements());
     
-            // (10)
+            // (9)
             return responseResource;
         }
 
@@ -2495,9 +2496,6 @@ URIで指定されたMemberリソースのコレクションをページ検索�
     * - | (3)
       - | \ ``@RequestMapping``\アノテーションのmethod属性に、\ ``RequestMethod.GET``\を指定する。
     * - | (4)
-      - | メソッドアノテーションとして、\ ``@org.springframework.web.bind.annotation.ResponseBody``\アノテーションを付与する。
-        | このアノテーションを付与することで、返却したResourceオブジェクトがJSONやXMLにmarshalされ、レスポンスBODYに設定される。
-    * - | (5)
       - | メソッドアノテーションとして、\ ``@org.springframework.web.bind.annotation.ResponseStatus``\アノテーションを付与し、応答するステータスコードを指定する。
         | \ ``@ResponseStatus``\アノテーションのvalue属性には、200(OK)を設定する。
         
@@ -2519,23 +2517,23 @@ URIで指定されたMemberリソースのコレクションをページ検索�
             応答するステータスコードを処理内容や処理結果に応じて変える必要がある場合は、上記実装例の様に、\ ``org.springframework.http.ResponseEntity``\を使用する事になる。
 
 
-    * - | (6)
+    * - | (5)
       - | 検索条件を受け取るためのJavaBeanを引数に指定する。
         | 入力チェックが必要な場合は、引数アノテーションとして、\ ``@Validated``\アノテーションを付与する。入力チェックの詳細については、「\ :doc:`Validation`\」を参照されたい。
-    * - | (7)
+    * - | (6)
       - | ページ検索が必要な場合は、\ ``org.springframework.data.domain.Pageable``\を引数に指定する。
         | ページ検索の詳細については、「:doc:`Pagination`」を参照されたい。
-    * - | (8)
+    * - | (7)
       - | ドメイン層のServiceのメソッドを呼び出し、条件に一致するリソースの情報(Entityなど)を取得する。
         | ドメイン層の実装については、「:doc:`../ImplementationAtEachLayer/DomainLayer`」を参照されたい。
-    * - | (9)
+    * - | (8)
       - | 条件に一致したリソースの情報(Entityなど)をもとに、Web上に公開する情報を保持するResourceオブジェクトを生成する。
         | ページ検索の結果を応答する際は、 \ ``org.springframework.data.domain.PageImpl``\クラスを使用することで、ページ検索時の応答として必要な項目をクライアントに返却する事ができる。
         |
         | 上記例では、Beanマッピングライブラリを使用してEntityからResourceオブジェクトを生成している。Beanマッピングライブラリについては、「\ :doc:`Utilities/Dozer`\」を参照されたい。
         | **Resourceオブジェクトを生成するためのコード量が多くなる場合は、HelperクラスにResourceオブジェクトを生成するためのメソッドを作成することを推奨する。**
-    * - | (10)
-      - | (9)で生成したResourceオブジェクトを返却する。
+    * - | (9)
+      - | (8)で生成したResourceオブジェクトを返却する。
         | ここで返却したオブジェクトがJSONやXMLにmarshalされ、レスポンスBODYに設定される。
 
  | \ ``PageImpl``\クラスを使用した時のレスポンスは以下の様になる。
@@ -2680,7 +2678,6 @@ URIで指定されたMemberリソースのコレクションをページ検索�
         :emphasize-lines: 4
 
         @RequestMapping(method = RequestMethod.GET)
-        @ResponseBody
         @ResponseStatus(HttpStatus.OK)
         public List<MemberResource> getMembers(
                 @Validated MembersSearchQuery query) {
@@ -2740,17 +2737,16 @@ URIで指定されたMemberリソースのコレクションをページ検索�
   | 指定されたMemberリソースを作成し、Memberリソースをコレクションに追加する処理を実装する。
 
  .. code-block:: java
-    :emphasize-lines: 7, 10, 13, 17
+    :emphasize-lines: 7, 9, 12, 16
 
     @RequestMapping("members")
-    @Controller
+    @RestController
     public class MemberRestController {
     
         // omitted
 
         // (1)
         @RequestMapping(method = RequestMethod.POST)
-        @ResponseBody
         // (2)
         @ResponseStatus(HttpStatus.CREATED)
         public MemberResource postMember(
@@ -2839,17 +2835,16 @@ URIで指定されたMemberリソースを取得するREST APIの実装例を、
   | URIで指定されたMemberリソースを取得する処理を実装する。
 
  .. code-block:: java
-    :emphasize-lines: 7, 10, 13, 16
+    :emphasize-lines: 7, 9, 12, 15
 
     @RequestMapping("members")
-    @Controller
+    @RestController
     public class MemberRestController {
 
         // omitted
 
         // (1)
         @RequestMapping(value = "{memberId}", method = RequestMethod.GET)
-        @ResponseBody
         // (2)
         @ResponseStatus(HttpStatus.OK)
         public MemberResource getMember(
@@ -2932,17 +2927,16 @@ URIで指定されたMemberリソースを更新するREST APIの実装例を、
   | URIで指定されたMemberリソースを更新する処理を実装する。
 
  .. code-block:: java
-    :emphasize-lines: 7, 10, 14, 18
+    :emphasize-lines: 7, 9, 13, 17
 
     @RequestMapping("members")
-    @Controller
+    @RestController
     public class MemberRestController {
 
         // omitted
 
         // (1)
         @RequestMapping(value = "{memberId}", method = RequestMethod.PUT)
-        @ResponseBody
         // (2)
         @ResponseStatus(HttpStatus.OK)
         public MemberResource putMember(
@@ -3038,17 +3032,16 @@ URIで指定されたMemberリソースを削除するREST APIの実装例を、
   | URIで指定されたMemberリソースを削除する処理を実装する。
 
  .. code-block:: java
-    :emphasize-lines: 7, 10, 15
+    :emphasize-lines: 7, 9, 14
 
     @RequestMapping("members")
-    @Controller
+    @RestController
     public class MemberRestController {
 
         // omitted
 
         // (1)
         @RequestMapping(value = "{memberId}", method = RequestMethod.DELETE)
-        @ResponseBody
         // (2)
         @ResponseStatus(HttpStatus.NO_CONTENT)
         public void deleteMember(
@@ -3199,7 +3192,7 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
 * エラー情報を保持するJavaBeanを作成する。
 
  .. code-block:: java
-    :emphasize-lines: 10, 20, 23
+    :emphasize-lines: 9, 19, 22
 
     package org.terasoluna.examples.rest.api.common.error;
     
@@ -4224,7 +4217,7 @@ Filterでエラーが発生した場合や\ ``HttpServletResponse#sendError``\�
 サーブレットコンテナに通知されたエラーのエラー応答を行うControllerを作成する。
 
  .. code-block:: java
-    :emphasize-lines: 15-28, 20-21, 23, 27, 29, 33, 36
+    :emphasize-lines: 14-17, 19-20, 22-27, 31, 34
 
     package org.terasoluna.examples.rest.api.common.error;
     
@@ -4233,16 +4226,15 @@ Filterでエラーが発生した場合や\ ``HttpServletResponse#sendError``\�
     
     import org.springframework.http.HttpStatus;
     import org.springframework.http.ResponseEntity;
-    import org.springframework.stereotype.Controller;
     import org.springframework.web.bind.annotation.RequestMapping;
     import org.springframework.web.bind.annotation.RequestParam;
-    import org.springframework.web.bind.annotation.ResponseBody;
     import org.springframework.web.context.request.RequestAttributes;
+    import org.springframework.web.bind.annotation.RestController;
     import org.springframework.web.context.request.WebRequest;
 
     // (1)
     @RequestMapping("error")
-    @Controller
+    @RestController
     public class ApiErrorPageController {
     
         @Inject
@@ -4250,7 +4242,6 @@ Filterでエラーが発生した場合や\ ``HttpServletResponse#sendError``\�
     
         // (3)
         @RequestMapping
-        @ResponseBody
         public ResponseEntity<ApiError> handleErrorPage(
                 @RequestParam("errorCode") String errorCode, // (4)
                 WebRequest request) {
@@ -4346,7 +4337,7 @@ Filterでエラーが発生した場合や\ ``HttpServletResponse#sendError``\�
       - 説明
     * - | (1)
       - | 必要に応じてレスポンスコードによるエラーページの定義を追加する。
-        | 上記例では、\ ``"404 Not Found"``\が発生した際に、「\ ``/api/v1/error?errorCode=e.ex.fw.5001``\」というリクエストにマッピングされているController(\`` ApiErrorPageController``\)を呼び出してエラー応答を行っている。
+        | 上記例では、\ ``"404 Not Found"``\が発生した際に、「\ ``/api/v1/error?errorCode=e.ex.fw.5001``\」というリクエストにマッピングされているController(\ ``ApiErrorPageController``\)を呼び出してエラー応答を行っている。
     * - | (2)
       - | 致命的なエラーをハンドリングするための定義を追加する。
         | 致命的なエラーが発生していた場合、レスポンス情報を作成する処理で二重障害が発生する可能性があるため、予め用意している静的なJSONを応答する事を推奨する。
@@ -4595,7 +4586,7 @@ JSONの中に関連リソースへのハイパーメディアリンクを含め�
 * リンク情報のコレクションを保持するResourceの抽象クラスを作成する。
 
  .. code-block:: java
-    :emphasize-lines: 10, 13, 21, 27, 32
+    :emphasize-lines: 9, 12, 20, 26, 31
 
     package org.terasoluna.examples.rest.api.common.resource;
     
@@ -4689,16 +4680,15 @@ JSONの中に関連リソースへのハイパーメディアリンクを含め�
 * REST APIの処理で、ハイパーメディアリンクを追加する。
 
  .. code-block:: java
-    :emphasize-lines: 12, 20
+    :emphasize-lines: 11, 19
 
     @RequestMapping("members")
-    @Controller
+    @RestController
     public class MemberRestController {
 
         // omitted
 
         @RequestMapping(value = "{memberId}", method = RequestMethod.GET)
-        @ResponseBody
         @ResponseStatus(HttpStatus.OK)
         public MemberResource getMember(
                 @PathVariable("memberId") String memberId
@@ -4809,16 +4799,15 @@ POST時のLocationヘッダの設定
 * REST APIの処理で、作成したリソースのURIをLocationヘッダに設定する。
 
  .. code-block:: java
-    :emphasize-lines: 13, 23, 27, 31
+    :emphasize-lines: 12, 22, 26, 30
 
     @RequestMapping("members")
-    @Controller
+    @RestController
     public class MemberRestController {
 
         // omitted
 
         @RequestMapping(method = RequestMethod.POST)
-        @ResponseBody
         @ResponseStatus(HttpStatus.CREATED)
         public HttpEntity<MemberResource> postMembers(
                 @RequestBody @Validated({ PostMembers.class, Default.class })
@@ -4955,16 +4944,15 @@ OPTIONSメソッドの実装
   | URIで指定されたリソースでサポートされているHTTPメソッド(REST API)のリストを応答する処理を実装する。
 
  .. code-block:: java
-    :emphasize-lines: 9, 14, 17
+    :emphasize-lines: 8, 13, 16
 
     @RequestMapping("members")
-    @Controller
+    @RestController
     public class MembersRestController {
 
         // omitted
 
         @RequestMapping(value = "{memberId}", method = RequestMethod.OPTIONS)
-        @ResponseBody
         // (1)
         @ResponseStatus(HttpStatus.OK)
         public HttpEntity<Void> optionsMember(
@@ -5064,7 +5052,7 @@ HEADメソッドの実装
     :emphasize-lines: 9
 
     @RequestMapping("members")
-    @Controller
+    @RestController
     public class MemberRestController {
 
         // omitted
@@ -5072,7 +5060,6 @@ HEADメソッドの実装
         @RequestMapping(value = "{memberId}",
                         method = { RequestMethod.GET,
                                    RequestMethod.HEAD }) // (1)
-        @ResponseBody
         @ResponseStatus(HttpStatus.OK)
         public MemberResource getMember(
                 @PathVariable("memberId") String memberId) {
@@ -5460,21 +5447,20 @@ MemberRestController.java
     import org.springframework.data.domain.PageImpl;
     import org.springframework.data.domain.Pageable;
     import org.springframework.http.HttpStatus;
-    import org.springframework.stereotype.Controller;
     import org.springframework.validation.annotation.Validated;
     import org.springframework.web.bind.annotation.PathVariable;
     import org.springframework.web.bind.annotation.RequestBody;
     import org.springframework.web.bind.annotation.RequestMapping;
     import org.springframework.web.bind.annotation.RequestMethod;
-    import org.springframework.web.bind.annotation.ResponseBody;
     import org.springframework.web.bind.annotation.ResponseStatus;
+    import org.springframework.web.bind.annotation.RestController;
     import org.terasoluna.examples.rest.api.member.MemberResource.PostMembers;
     import org.terasoluna.examples.rest.api.member.MemberResource.PutMember;
     import org.terasoluna.examples.rest.domain.model.Member;
     import org.terasoluna.examples.rest.domain.service.member.MemberService;
     
     @RequestMapping("members")
-    @Controller
+    @RestController
     public class MemberRestController {
     
         @Inject
@@ -5484,7 +5470,6 @@ MemberRestController.java
         Mapper beanMapper;
     
         @RequestMapping(method = RequestMethod.GET)
-        @ResponseBody
         @ResponseStatus(HttpStatus.OK)
         public Page<MemberResource> getMembers(@Validated MembersSearchQuery query,
                 Pageable pageable) {
@@ -5502,7 +5487,6 @@ MemberRestController.java
         }
     
         @RequestMapping(method = RequestMethod.POST)
-        @ResponseBody
         @ResponseStatus(HttpStatus.CREATED)
         public MemberResource postMembers(@RequestBody @Validated({
                 PostMembers.class, Default.class }) MemberResource requestedResource) {
@@ -5518,7 +5502,6 @@ MemberRestController.java
         }
     
         @RequestMapping(value = "{memberId}", method = RequestMethod.GET)
-        @ResponseBody
         @ResponseStatus(HttpStatus.OK)
         public MemberResource getMember(@PathVariable("memberId") String memberId) {
     
@@ -5531,7 +5514,6 @@ MemberRestController.java
         }
     
         @RequestMapping(value = "{memberId}", method = RequestMethod.PUT)
-        @ResponseBody
         @ResponseStatus(HttpStatus.OK)
         public MemberResource putMember(
                 @PathVariable("memberId") String memberId,
@@ -5550,7 +5532,6 @@ MemberRestController.java
         }
     
         @RequestMapping(value = "{memberId}", method = RequestMethod.DELETE)
-        @ResponseBody
         @ResponseStatus(HttpStatus.NO_CONTENT)
         public void deleteMember(@PathVariable("memberId") String memberId) {
     

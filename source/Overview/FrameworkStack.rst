@@ -466,7 +466,13 @@ version 1.1.0.RELEASEで利用するOSSの一覧を以下に示す。
     * - Bean変換
       - net.sf.dozer
       - dozer
-      - 5.4.0
+      - 5.5.1
+      -
+      - \*4
+    * - Bean変換
+      - net.sf.dozer
+      - dozer-spring
+      - 5.5.1
       -
       - \*4
     * - Bean変換

@@ -124,7 +124,7 @@ Joda Time, Joda Time JSP tags の利用方法を、以下で説明する。
 
     LocalDateTime localDateTime = new LocalDateTime();
 
-\ ``org.terasoluna.gfw.common.date.DateFactory``\を利用する場合は、以下のようになる。
+\ ``org.terasoluna.gfw.common.date.DateFactory``\ を利用する場合は、以下のようになる。
 
 .. code-block:: java
 

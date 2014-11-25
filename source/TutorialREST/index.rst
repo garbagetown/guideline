@@ -207,7 +207,7 @@ STSで「File」→「Import」→「Maven」→「Existing Maven Projects」を
 
 と設定ファイル
 
-* \ :file:`src/main/resources/META-INF/todo\domain/repository/todo/TodoRepository.xml`\
+* \ :file:`src/main/resources/META-INF/todo/domain/repository/todo/TodoRepository.xml`\
 
 を、STSにインポートしたプロジェクトにコピーする。
 

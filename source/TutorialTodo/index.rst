@@ -339,7 +339,7 @@ Mavenの設定
  
     Proxyサーバーを介してインターネットアクセスする必要がある場合は、
     \ :file:`<HOME>/.m2/settings.xml`\に以下のような設定を行う必要がある。
-    (Windows7の場合C:\\Users\\<YourName>\\.m2\settings.xml)
+    (Windows7の場合C:\\Users\\<YourName>\\.m2\\settings.xml)
 
         .. code-block:: xml
 

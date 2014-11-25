@@ -385,7 +385,7 @@ If you are familiar with the Maven, and to make sure the following discussion.
 
 	.. note:: When proxy server is used to access the internet,
 	     perform the following settings in <HOME>/.m2/settings.xml.
-	    (In case of Windows7 C:\\Users\\<YourName>\\.m2\settings.xml)
+	    (In case of Windows7 C:\\Users\\<YourName>\\.m2\\settings.xml)
 
 	    	.. code-block:: xml
 

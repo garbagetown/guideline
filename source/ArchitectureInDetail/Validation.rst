@@ -543,12 +543,12 @@ NameとEmailが空文字であることに対するエラーメッセージと�
    エラーメッセージの出力順序はデフォルトでは順不同である。
    \ `@GroupSequenceアノテーション <http://docs.jboss.org/hibernate/validator/5.1/reference/en-US/html/chapter-groups.html#section-default-group-class>`_\ によって、
    順序制御することもできるが、対応コストが高い。
-  
+
    「エラーメッセージを一覧で表示する」方式では、
-  
+
    * フィード単位のエラーメッセージ定義
    * エラーメッセージの順序制御
-  
+
    のコストがかかるため、
    画面要件による制約がなければ、「入力フィールドの横にエラーメッセージを表示する」方式を推奨する。
 
@@ -557,10 +557,10 @@ NameとEmailが空文字であることに対するエラーメッセージと�
 
 
    エラーメッセージまとめて表示する際に、\ ``<form:form>``\ タグの外に表示したい場合は以下のように\ ``<spring:nestedPath>``\ タグを使用する。
-  
+
      .. code-block:: jsp
        :emphasize-lines: 1,4
-  
+
        <spring:nestedPath path="userForm">
            <form:errors path="*" element="div"
                cssClass="error-message-list" />
@@ -3045,12 +3045,14 @@ Bean Validationの標準アノテーションを、以下に示す。
    * - \ ``@DecimalMin``\
      - BigDecimal, BigInteger, String, byte, short, int, longおよびラッパー
        (Hibernate Validator実装では任意のNumber,CharSequence継承クラスにも適用可能)
-     - Decimal型の値が最小値以上であるかどうかを検証する。
+     - | Decimal型の値が、最小値以上であるかどうかを検証する。
+       | \ ``inclusive = false``\ を指定する事で、最小値より大きいかどうかを検証するように動作を変更する事ができる。
      - @DecimalMax参照
    * - \ ``@DecimalMax``\
      - BigDecimal, BigInteger, String, byte, short, int, longおよびラッパー
        (Hibernate Validator実装では任意のNumber,CharSequence継承クラスにも適用可能)
-     - Decimal型の値が、最大値以下であるかどうかを検証する。
+     - | Decimal型の値が、最大値以下であるかどうかを検証する。
+       | \ ``inclusive = false``\ を指定する事で、最大値より小さいかどうかを検証するように動作を変更する事ができる。
      - | @DecimalMin("0.0")
        | @DecimalMax("99999.99")
        | private BigDecimal price;
@@ -3098,6 +3100,13 @@ Bean Validationの標準アノテーションを、以下に示す。
        | @Valid
        | private Dept dept;
 
+.. tip::
+
+     \ ``@DecimalMin``\  と \ ``@DecimalMax``\ アノテーションの \ ``inclusive``\ 属性は、
+     Bean Validation 1.1 から追加された属性である。
+
+     \ ``inclusive``\ 属性のデフォルト値には \ ``true``\ (指定した閾値と同じ値を許容する)が指定されており、
+     Bean Validation 1.0 との互換性が保たれている。
 
 .. _Validation_validator_list:
 
@@ -3118,7 +3127,8 @@ Hibernate Validatorの代表的なアノテーションを、以下に示す。
      - 使用例
    * - \ ``@CreditCardNumber``\
      - 任意のCharSequence継承クラスに適用可能
-     - Luhnアルゴリズムでクレジットカード番号が妥当かどうかを検証する。使用可能な番号かどうかをチェックするわけではない。
+     - | Luhnアルゴリズムでクレジットカード番号が妥当かどうかを検証する。使用可能な番号かどうかをチェックするわけではない。
+       | \ ``ignoreNonDigitCharacters = true``\ を指定する事で、数字以外の文字を無視して検証する事ができる。
      - | @CreditCardNumber
        | private String cardNumber;
    * - \ ``@Email``\
@@ -3144,7 +3154,6 @@ Hibernate Validatorの代表的なアノテーションを、以下に示す。
        | private String password;
 
 
-
 .. _Validation_default_message_in_hibernate_validator:
 
 Hibernate Validatorが用意するデフォルトメッセージ
@@ -3156,8 +3165,8 @@ hibernate-validator-<version>.jar内のorg/hibernate/validatorに、ValidationMe
 
   javax.validation.constraints.AssertFalse.message = must be false
   javax.validation.constraints.AssertTrue.message  = must be true
-  javax.validation.constraints.DecimalMax.message  = must be less than or equal to {value}
-  javax.validation.constraints.DecimalMin.message  = must be greater than or equal to {value}
+  javax.validation.constraints.DecimalMax.message  = must be less than ${inclusive == true ? 'or equal to ' : ''}{value}
+  javax.validation.constraints.DecimalMin.message  = must be greater than ${inclusive == true ? 'or equal to ' : ''}{value}
   javax.validation.constraints.Digits.message      = numeric value out of bounds (<{integer} digits>.<{fraction} digits> expected)
   javax.validation.constraints.Future.message      = must be in the future
   javax.validation.constraints.Max.message         = must be less than or equal to {value}
@@ -3168,19 +3177,25 @@ hibernate-validator-<version>.jar内のorg/hibernate/validatorに、ValidationMe
   javax.validation.constraints.Pattern.message     = must match "{regexp}"
   javax.validation.constraints.Size.message        = size must be between {min} and {max}
 
-  org.hibernate.validator.constraints.CreditCardNumber.message = invalid credit card number
-  org.hibernate.validator.constraints.Email.message            = not a well-formed email address
-  org.hibernate.validator.constraints.Length.message           = length must be between {min} and {max}
-  org.hibernate.validator.constraints.NotBlank.message         = may not be empty
-  org.hibernate.validator.constraints.NotEmpty.message         = may not be empty
-  org.hibernate.validator.constraints.Range.message            = must be between {min} and {max}
-  org.hibernate.validator.constraints.SafeHtml.message         = may have unsafe html content
-  org.hibernate.validator.constraints.ScriptAssert.message     = script expression "{script}" didn't evaluate to true
-  org.hibernate.validator.constraints.URL.message              = must be a valid URL
-  org.hibernate.validator.constraints.br.CNPJ.message          = invalid Brazilian corporate taxpayer registry number (CNPJ)
-  org.hibernate.validator.constraints.br.CPF.message           = invalid Brazilian individual taxpayer registry number (CPF)
-  org.hibernate.validator.constraints.br.TituloEleitor.message = invalid Brazilian Voter ID card number
+  org.hibernate.validator.constraints.CreditCardNumber.message        = invalid credit card number
+  org.hibernate.validator.constraints.EAN.message                   = invalid {type} barcode
+  org.hibernate.validator.constraints.Email.message                   = not a well-formed email address
+  org.hibernate.validator.constraints.Length.message                  = length must be between {min} and {max}
+  org.hibernate.validator.constraints.LuhnCheck.message               = The check digit for ${value} is invalid, Luhn Modulo 10 checksum failed
+  org.hibernate.validator.constraints.Mod10Check.message              = The check digit for ${value} is invalid, Modulo 10 checksum failed
+  org.hibernate.validator.constraints.Mod11Check.message              = The check digit for ${value} is invalid, Modulo 11 checksum failed
+  org.hibernate.validator.constraints.ModCheck.message                = The check digit for ${value} is invalid, ${modType} checksum failed
+  org.hibernate.validator.constraints.NotBlank.message                = may not be empty
+  org.hibernate.validator.constraints.NotEmpty.message                = may not be empty
+  org.hibernate.validator.constraints.ParametersScriptAssert.message  = script expression "{script}" didn't evaluate to true
+  org.hibernate.validator.constraints.Range.message                   = must be between {min} and {max}
+  org.hibernate.validator.constraints.SafeHtml.message                = may have unsafe html content
+  org.hibernate.validator.constraints.ScriptAssert.message            = script expression "{script}" didn't evaluate to true
+  org.hibernate.validator.constraints.URL.message                     = must be a valid URL
 
+  org.hibernate.validator.constraints.br.CNPJ.message                 = invalid Brazilian corporate taxpayer registry number (CNPJ)
+  org.hibernate.validator.constraints.br.CPF.message                  = invalid Brazilian individual taxpayer registry number (CPF)
+  org.hibernate.validator.constraints.br.TituloEleitoral.message      = invalid Brazilian Voter ID card number
 
 
 型のミスマッチ

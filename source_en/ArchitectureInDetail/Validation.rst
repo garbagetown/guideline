@@ -537,7 +537,7 @@ An example of error message is shown when the following CSS class is applied.
 .. note::
 
    Error messages are output in random order by default.
-   Order can be controlled using \ `@GroupSequence annotation <http://docs.jboss.org/hibernate/validator/4.3/reference/en-US/html/validator-usingvalidator.html#section-default-group-class>`_\
+   Order can be controlled using \ `@GroupSequence annotation <http://docs.jboss.org/hibernate/validator/5.1/reference/en-US/html/chapter-groups.html#section-default-group-class>`_\
    However, cost is high.
   
    If error messages are displayed in a list,
@@ -2467,7 +2467,7 @@ Implementation example is shown below.
 
     If multiple rules are set in a single annotation, their AND condition forms the composite annotation.
     In Hibernate Validator, \ ``@ConstraintComposition``\  annotation is provided to implement OR condition.
-    Refer to \ `Hibernate Validator document <http://docs.jboss.org/hibernate/validator/4.3/reference/en-US/html/validator-specifics.html#d0e3701>`_\ for details.
+    Refer to \ `Hibernate Validator document <http://docs.jboss.org/hibernate/validator/5.1/reference/en-US/html/validator-specifics.html#section-boolean-constraint-composition>`_\ for details.
 
 Creation of Bean Validation annotation by implementing new rules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2940,7 +2940,7 @@ Appendix
 Input validation rules provided by Hibernate Validator
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 | Hibernate Validator provides additional validation annotations, in addition to the annotation defined in Bean Validation.
-| Refer to \ `<http://docs.jboss.org/hibernate/validator/4.3/reference/en-US/html_single/#section-builtin-constraints>`_\ for the annotation list that can be used for validation.
+| Refer to \ `<http://docs.jboss.org/hibernate/validator/5.1/reference/en-US/html/chapter-bean-constraints.html#section-builtin-constraints>`_\ for the annotation list that can be used for validation.
 
 .. _Validation_jsr303_doc:
 
@@ -3052,7 +3052,7 @@ Hibernate Validator check rules
 
 All the major annotations of Hibernate Validator are shown below.
 
-Refer to \ `Hibernate Validator specifications <http://docs.jboss.org/hibernate/validator/4.3/reference/en-US/html_single/#table-custom-constraints>`_\ for details.
+Refer to \ `Hibernate Validator specifications <http://docs.jboss.org/hibernate/validator/5.1/reference/en-US/html/chapter-bean-constraints.html#validator-defineconstraints-hv-constraints>`_\ for details.
 
 .. tabularcolumns:: |p{0.25\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|
 .. list-table::

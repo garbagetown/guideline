@@ -541,7 +541,7 @@ NameとEmailが空文字であることに対するエラーメッセージと�
 .. note::
 
    エラーメッセージの出力順序はデフォルトでは順不同である。
-   \ `@GroupSequenceアノテーション <http://docs.jboss.org/hibernate/validator/4.3/reference/en-US/html/validator-usingvalidator.html#section-default-group-class>`_\ によって、
+   \ `@GroupSequenceアノテーション <http://docs.jboss.org/hibernate/validator/5.1/reference/en-US/html/chapter-groups.html#section-default-group-class>`_\ によって、
    順序制御することもできるが、対応コストが高い。
   
    「エラーメッセージを一覧で表示する」方式では、
@@ -2520,7 +2520,7 @@ Bean Validationは標準で用意されているチェックルール以外に�
 
     1つのアノテーションに複数のルールを設定した場合、それらのAND条件が複合ルールとなる。
     Hibernate Validatorでは、OR条件を実現するための\ ``@ConstraintComposition``\ アノテーションが用意されている。
-    詳細は、\ `Hibernate Validatorのドキュメント <http://docs.jboss.org/hibernate/validator/4.3/reference/en-US/html/validator-specifics.html#d0e3701>`_\ を参照されたい。
+    詳細は、\ `Hibernate Validatorのドキュメント <http://docs.jboss.org/hibernate/validator/5.1/reference/en-US/html/validator-specifics.html#section-boolean-constraint-composition>`_\ を参照されたい。
 
 新規ルールを実装したBean Validationアノテーションの作成
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2994,7 +2994,7 @@ Appendix
 Hibernate Validatorが用意する入力チェックルール
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 | Hibernate ValidatorはBean Validationで定義されたアノテーションに加え、検証できるアノテーションを追加している。
-| 検証に使用することができるアノテーションのリストは、\ `こちら <http://docs.jboss.org/hibernate/validator/4.3/reference/en-US/html_single/#section-builtin-constraints>`_\ を参照されたい。
+| 検証に使用することができるアノテーションのリストは、\ `こちら <http://docs.jboss.org/hibernate/validator/5.1/reference/en-US/html/chapter-bean-constraints.html#section-builtin-constraints>`_\ を参照されたい。
 
 .. _Validation_jsr303_doc:
 
@@ -3106,7 +3106,7 @@ Hibernate Validatorのチェックルール
 
 Hibernate Validatorの代表的なアノテーションを、以下に示す。
 
-詳細は、\ `Hibernate Validator仕様 <http://docs.jboss.org/hibernate/validator/4.3/reference/en-US/html_single/#table-custom-constraints>`_\ を参照されたい。
+詳細は、\ `Hibernate Validator仕様 <http://docs.jboss.org/hibernate/validator/5.1/reference/en-US/html/chapter-bean-constraints.html#validator-defineconstraints-hv-constraints>`_\ を参照されたい。
 
 .. tabularcolumns:: |p{0.25\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|
 .. list-table::

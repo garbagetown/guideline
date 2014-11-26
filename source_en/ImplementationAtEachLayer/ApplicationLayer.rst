@@ -39,7 +39,7 @@ Implementing Controller
    | Receives requests by implementing methods to which \ ``@RequestMapping``\ annotation is assigned.
 #. | **Performs input validation of request parameter.**
    | For request which requires input validation of request parameters, it can be  performed by specifying \ ``@Validated``\  annotation to form object argument of method which receives the request.
-   | Performs single item check using Bean Validation (JSR-303) and correlation check by Spring Validator or Bean Validation (JSR-303).
+   | Performs single item check using Bean Validation and correlation check by Spring Validator or Bean Validation.
 #. | **Calls business logic.**
    | Controller does not implement business logic but delegates by calling Service method.
 #. | **Reflects the output of business logic to Model.**
@@ -2345,7 +2345,7 @@ DataType conversion in controller
 
 Specifying annotation for input validation
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-Since form object is validated using Bean Validation(JSR-303), it is necessary to specify annotation which indicates constraints of the field.
+Since form object is validated using Bean Validation, it is necessary to specify annotation which indicates constraints of the field.
 Refer to :doc:`../ArchitectureInDetail/Validation`  for the details of input validation.
 
 |

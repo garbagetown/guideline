@@ -1,5 +1,5 @@
 cd /D %~dp0
-rd /S /Q build_en\html
+rem rd /S /Q build_en\html
 
 SET SPHINXOPTS=-c conf\html
 SET SOURCEDIR=source_en

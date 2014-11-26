@@ -2704,7 +2704,7 @@ Set constraint of assigning "confirm" as the prefix of confirmation field.
             } else {
                 context.disableDefaultConstraintViolation(); // (3)
                 context.buildConstraintViolationWithTemplate(message)
-                        .addNode(field).addConstraintViolation(); // (4)
+                        .addPropertyNode(field).addConstraintViolation(); // (4)
                 return false;
             }
         }
@@ -2728,8 +2728,8 @@ Set constraint of assigning "confirm" as the prefix of confirmation field.
      * - | (4)
        - | Create independent \ ``ConstraintViolation``\  object.
          | Define message to be output in \ ``ConstraintValidatorContext.buildConstraintViolationWithTemplate``\ .
-         | Specify field name to output error message in \ ``ConstraintViolationBuilder.addNode``\.
-         | Refer to \ `JavaDoc <http://docs.oracle.com/javaee/6/api/javax/validation/ConstraintValidatorContext.html>`_\ for details.
+         | Specify field name to output error message in \ ``ConstraintViolationBuilder.addPropertyNode``\.
+         | Refer to \ `JavaDoc <http://docs.oracle.com/javaee/7/api/javax/validation/ConstraintValidatorContext.html>`_\ for details.
 
 
 Check below for the changes, if the "Reset password" is re-implemented using \ ``@Confirm``\  annotation.

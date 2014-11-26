@@ -71,7 +71,7 @@ Webアプリケーションの入力チェックには、サーバサイドで�
        | または Bean Validation
 
 
-Spring は、Java標準であるJSR-303のBean Validationをサポートしている。
+Spring は、Java標準であるBean Validationをサポートしている。
 単項目チェックには、このBean Validationを利用する。
 相関項目チェックの場合は、Bean ValidationまたはSpringが提供している\ ``org.springframework.validation.Validator``\ インタフェースを利用する。
 
@@ -2993,17 +2993,17 @@ Appendix
 
 Hibernate Validatorが用意する入力チェックルール
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-| Hibernate ValidatorはJSR-303で定義されたアノテーションに加え、検証できるアノテーションを追加している。
+| Hibernate ValidatorはBean Validationで定義されたアノテーションに加え、検証できるアノテーションを追加している。
 | 検証に使用することができるアノテーションのリストは、\ `こちら <http://docs.jboss.org/hibernate/validator/4.3/reference/en-US/html_single/#section-builtin-constraints>`_\ を参照されたい。
 
 .. _Validation_jsr303_doc:
 
-JSR-303のチェックルール
+Bean Validationのチェックルール
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-JSR-303アノテーションを、以下に示す。
+Bean Validationの標準アノテーションを、以下に示す。
 
-詳細は、\ `JSR-303 Specification <http://download.oracle.com/otn-pub/jcp/bean_validation-1.0-fr-oth-JSpec/bean_validation-1_0-final-spec.pdf>`_\ の6章を参照されたい。
+詳細は、\ `Bean Validation specification <http://download.oracle.com/otn-pub/jcp/bean_validation-1_1-fr-eval-spec/bean-validation-specification.pdf>`_\ の7章を参照されたい。
 
 .. tabularcolumns:: |p{0.25\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|
 .. list-table::

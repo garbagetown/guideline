@@ -2785,6 +2785,14 @@ Bean Validationは標準で用意されているチェックルール以外に�
          | \ ``ConstraintViolationBuilder.addPropertyNode``\ でエラーメッセージを出力したいフィールド名を指定する。
          | 詳細は、以下の\ `JavaDoc <http://docs.oracle.com/javaee/7/api/javax/validation/ConstraintValidatorContext.html>`_\ を参照されたい。
 
+ .. tip::
+
+    \ ``ConstraintViolationBuilder.addPropertyNode``\ メソッドは、Bean Validation 1.1 から追加されたメソッドである。
+
+    Bean Validation 1.0では \ ``ConstraintViolationBuilder.addNode``\ というメソッドを使用していたが、Bean Validation 1.1から非推奨のAPIとなっている。
+
+    Bean Validationの非推奨APIについては、\ `Bean Validation API Document(Deprecated API) <http://docs.jboss.org/hibernate/beanvalidation/spec/1.1/api/deprecated-list.html>`_\ を参照されたい。
+
 
 この\ ``@Confirm``\ アノテーションを使用して、前述の「パスワードリセット」処理を再実装すると、以下のようになる。
 

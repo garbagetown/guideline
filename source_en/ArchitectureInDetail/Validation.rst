@@ -2731,6 +2731,15 @@ Set constraint of assigning "confirm" as the prefix of confirmation field.
          | Specify field name to output error message in \ ``ConstraintViolationBuilder.addPropertyNode``\.
          | Refer to \ `JavaDoc <http://docs.oracle.com/javaee/7/api/javax/validation/ConstraintValidatorContext.html>`_\ for details.
 
+ .. tip::
+
+    \ ``ConstraintViolationBuilder.addPropertyNode``\ メソッドは、Bean Validation 1.1 から追加されたメソッドである。
+
+    Bean Validation 1.0では \ ``ConstraintViolationBuilder.addNode``\ というメソッドを使用していたが、Bean Validation 1.1から非推奨のAPIとなっている。
+
+    Bean Validationの非推奨APIについては、\ `Bean Validation API Document(Deprecated API) <http://docs.jboss.org/hibernate/beanvalidation/spec/1.1/api/deprecated-list.html>`_\ を参照されたい。
+
+
 
 Check below for the changes, if the "Reset password" is re-implemented using \ ``@Confirm``\  annotation.
 

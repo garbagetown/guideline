@@ -3154,6 +3154,27 @@ Hibernate Validatorの代表的なアノテーションを、以下に示す。
        | private String password;
 
 
+.. warning::
+
+    Hibernate Validatorから提供されている以下のアノテーションを使用した場合、
+    デフォルトで提供されているメッセージを使用するとメッセージが正しく生成されないバグ(\ `HV-881 <https://hibernate.atlassian.net/browse/HV-881>`_\ 、\ `HV-949 <https://hibernate.atlassian.net/browse/HV-949>`_\ )が存在する。
+
+    * \ ``@CreditCardNumber``\ (メッセージは表示されるがWARNログが出力される)
+    * \ ``@LuhnCheck``\
+    * \ ``@Mod10Check``\
+    * \ ``@Mod11Check``\
+    * \ ``@ModCheck``\ (5.1.0.Finalから非推奨API)
+
+    このバグは、デフォルトで提供されているメッセージ定義に不備が原因なので、
+    デフォルトで提供されているメッセージを適切なメッセージで上書きする事で回避可能である。
+
+    デフォルトで提供されているメッセージを上書きする場合は、
+    クラスパス直下(通常src/main/resources)に :file:`ValidationMessages.properties` を作成し、
+    適切なメッセージ定義を行えばよい。
+
+    適切なメッセージ定義については、
+    \ `Hibernate Validator 5.2系(次のマイナーバージョンアップ)に対して行われている修正内容 <https://github.com/hibernate/hibernate-validator/commit/5a9d7bae26bccb15229ae5612d67506a7a775b48#diff-762e02c90cfb2f00b0b2788486e3fd5e>`_\ を参照されたい。
+
 .. _Validation_default_message_in_hibernate_validator:
 
 Hibernate Validatorが用意するデフォルトメッセージ

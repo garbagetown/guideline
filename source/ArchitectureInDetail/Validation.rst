@@ -2200,6 +2200,48 @@ Bean Validationのアノテーションの\ ``message``\ 属性に指定され�
   \ ``{0}``\ でフィールド名を埋め込めむのは、Bean Validationの機能ではなく、Springの機能である。
   したがって、フィールド名変更の設定は、Spring管理下のapplication-messages.properties(\ ``ResourceBundleMessageSource``\ )に定義する必要がある。
 
+.. tip::
+
+    Bean Validation 1.1より、
+    :file:`ValidationMessages.properties` に指定するメッセージの中にExpression Language(以降、「EL式」と呼ぶ)を使用する事ができるようになった。
+    Hibernate Validator 5.xでは、Expression Language 2.2以上をサポートしている。
+
+    実行可能なEL式のバージョンは、アプリケーションサーバのバージョンによって異なる。
+    そのため、EL式を使用する場合は、**アプリケーションサーバがサポートしているEL式のバージョンを確認した上で使用すること。**
+
+    以下に、Hibernate Validatorがデフォルトで用意している :file:`ValidationMessages.properties` に定義されているメッセージを例に、EL式の使用例を示す。
+
+     .. code-block:: properties
+
+        # ...
+        # (1)
+        javax.validation.constraints.DecimalMax.message  = must be less than ${inclusive == true ? 'or equal to ' : ''}{value}
+        # ...
+
+     .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+     .. list-table::
+        :header-rows: 1
+        :widths: 10 90
+
+        * - 項番
+          - 説明
+        * - | (1)
+          - メッセージの中の 「\ ``${inclusive == true ? 'or equal to ' : ''}``\」の部分がEL式である。
+
+            上記のメッセージ定義から実際に生成されるメッセージのパターンは、
+
+            * must be less than or equal to {value}
+            * must be less than {value}
+
+            の2パターンとなる。(\ ``{value}``\ の部分には、\ ``@DecimalMax``\ アノテーションの \ ``value``\ 属性に指定した値が埋め込まれる)
+
+            前者は\ ``@DecimalMax``\ アノテーションの \ ``inclusive``\ 属性に \ ``true``\ を指定した場合(又は指定しなかった場合)、
+            後者は\ ``@DecimalMax``\ アノテーションの \ ``inclusive``\ 属性に \ ``false``\ を指定した場合に生成される。
+
+            Bean ValidationにおけるEL式の扱いについては、
+            \ `Hibernate Validator Reference Guide(Interpolation with message expressions) <http://docs.jboss.org/hibernate/validator/5.1/reference/en-US/html/chapter-message-interpolation.html#section-interpolation-with-message-expressions>`_\ を参照されたい。
+
+
 .. _Validation_message_in_application_messages:
 
 application-messages.propertiesに定義するメッセージ

@@ -358,7 +358,7 @@ Bean定義したDataSouceを使用する場合の設定
 
  .. code-block:: xml
 
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"
         destroy-method="close">                                           <!-- (1) (8) -->
         <property name="driverClassName" value="org.postgresql.Driver" /> <!-- (2) -->
         <property name="url" value="jdbc:postgresql://localhost:5432/terasoluna" /> <!-- (3) -->
@@ -376,7 +376,7 @@ Bean定義したDataSouceを使用する場合の設定
     * - 項番
       - 説明
     * - | (1)
-      - データソースの実装クラスを指定する。例では、Apache Commons DBCPから提供されているデータソースクラス(\ ``org.apache.commons.dbcp.BasicDataSource``\ )を指定する。
+      - データソースの実装クラスを指定する。例では、Apache Commons DBCPから提供されているデータソースクラス(\ ``org.apache.commons.dbcp2.BasicDataSource``\ )を指定する。
     * - | (2)
       - JDBCドライバクラスを指定する。例では、PostgreSQLから提供されているJDBCドライバクラスを指定する。
     * - | (3)

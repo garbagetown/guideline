@@ -1135,17 +1135,17 @@ todo-env.xmlの確認
         <bean id="dateFactory" class="org.terasoluna.gfw.common.date.DefaultDateFactory" />
 
         <!-- (1) -->
-        <bean id="realDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+        <bean id="realDataSource" class="org.apache.commons.dbcp2.BasicDataSource"
             destroy-method="close">
             <property name="driverClassName" value="${database.driverClassName}" />
             <property name="url" value="${database.url}" />
             <property name="username" value="${database.username}" />
             <property name="password" value="${database.password}" />
             <property name="defaultAutoCommit" value="false" />
-            <property name="maxActive" value="${cp.maxActive}" />
+            <property name="maxTotal" value="${cp.maxActive}" />
             <property name="maxIdle" value="${cp.maxIdle}" />
             <property name="minIdle" value="${cp.minIdle}" />
-            <property name="maxWait" value="${cp.maxWait}" />
+            <property name="maxWaitMillis" value="${cp.maxWait}" />
         </bean>
 
         <!-- (2) -->

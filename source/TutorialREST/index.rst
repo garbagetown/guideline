@@ -120,10 +120,10 @@ Chromeのアプリケーション一覧を開く(ブラウザのアドレスバ�
  .. code-block:: console
 
     mvn archetype:generate -B^
-     -DarchetypeCatalog=http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-releases^
+     -DarchetypeCatalog=http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-snapshots^
      -DarchetypeGroupId=org.terasoluna.gfw.blank^
-     -DarchetypeArtifactId=terasoluna-gfw-web-blank-mybatis2-archetype^
-     -DarchetypeVersion=1.0.1.RELEASE^
+     -DarchetypeArtifactId=terasoluna-gfw-web-blank-mybatis3-archetype^
+     -DarchetypeVersion=1.1.0-SNAPSHOT^
      -DgroupId=todo^
      -DartifactId=todo-api^
      -Dversion=1.0-SNAPSHOT
@@ -133,28 +133,28 @@ Chromeのアプリケーション一覧を開く(ブラウザのアドレスバ�
  .. code-block:: console
     
     C:\workspace>mvn archetype:generate -B^
-    More?  -DarchetypeCatalog=http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-releases^
-    More?  -DarchetypeGroupId=org.terasoluna.gfw.blank^
-    More?  -DarchetypeArtifactId=terasoluna-gfw-web-blank-mybatis2-archetype^
-    More?  -DarchetypeVersion=1.0.1.RELEASE^
-    More?  -DgroupId=todo^
-    More?  -DartifactId=todo-api^
-    More?  -Dversion=1.0-SNAPSHOT
+    More?      -DarchetypeCatalog=http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-snapshots^
+    More?      -DarchetypeGroupId=org.terasoluna.gfw.blank^
+    More?      -DarchetypeArtifactId=terasoluna-gfw-web-blank-mybatis3-archetype^
+    More?      -DarchetypeVersion=1.1.0-SNAPSHOT^
+    More?      -DgroupId=todo^
+    More?      -DartifactId=todo-api^
+    More?      -Dversion=1.0-SNAPSHOT
     [INFO] Scanning for projects...
     [INFO]
     [INFO] ------------------------------------------------------------------------
     [INFO] Building Maven Stub Project (No POM) 1
     [INFO] ------------------------------------------------------------------------
     [INFO]
-    [INFO] >>> maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom >>>
+    [INFO] >>> maven-archetype-plugin:2.2:generate (default-cli) > generate-sources @ standalone-pom >>>
     [INFO]
-    [INFO] <<< maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom <<<
+    [INFO] <<< maven-archetype-plugin:2.2:generate (default-cli) < generate-sources @ standalone-pom <<<
     [INFO]
     [INFO] --- maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom ---
     [INFO] Generating project in Batch mode
-    [INFO] Archetype repository missing. Using the one from [org.terasoluna.gfw.blank:terasoluna-gfw-web-blank-mybatis2-archetype:1.0.0.RELEASE -> http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-releases] found in catalog http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-releases
+    [INFO] Archetype repository missing. Using the one from [org.terasoluna.gfw.blank:terasoluna-gfw-web-blank-mybatis3-archetype:1.1.0-BUILD-SNAPSHOT -> http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-snapshots] found in catalog http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-snapshotsT/maven-metadata.xml (817 B at 0.2 KB/sec)
     [INFO] ----------------------------------------------------------------------------
-    [INFO] Using following parameters for creating project from Archetype: terasoluna-gfw-web-blank-mybatis2-archetype:1.0.1.RELEASE
+    [INFO] Using following parameters for creating project from Archetype: terasoluna-gfw-web-blank-mybatis3-archetype:1.1.0-SNAPSHOT
     [INFO] ----------------------------------------------------------------------------
     [INFO] Parameter: groupId, Value: todo
     [INFO] Parameter: artifactId, Value: todo-api
@@ -169,9 +169,9 @@ Chromeのアプリケーション一覧を開く(ブラウザのアドレスバ�
     [INFO] ------------------------------------------------------------------------
     [INFO] BUILD SUCCESS
     [INFO] ------------------------------------------------------------------------
-    [INFO] Total time: 2.287s
-    [INFO] Finished at: Fri Aug 22 20:20:55 JST 2014
-    [INFO] Final Memory: 11M/231M
+    [INFO] Total time: 7.805 s
+    [INFO] Finished at: 2014-11-19T16:10:37+09:00
+    [INFO] Final Memory: 12M/193M
     [INFO] ------------------------------------------------------------------------
     C:\workspace>
 
@@ -202,13 +202,12 @@ STSで「File」→「Import」→「Maven」→「Existing Maven Projects」を
 
 * \ ``todo.domain.model.Todo``\ 
 * \ ``todo.domain.repository.todo.TodoRepository``\ 
-* \ ``todo.domain.repository.todo.TodoRepositoryImpl``\ (MyBatis2版)
 * \ ``todo.domain.serivce.todo.TodoService``\ 
 * \ ``todo.domain.serivce.todo.TodoServiceImpl``\ (インフラストラクチャ層の変更反映版)
 
 と設定ファイル
 
-* \ :file:`src/main/resources/META-INF/mybatis/sql/todo-sqlmap.xml`\
+* \ :file:`src/main/resources/META-INF/todo/domain/repository/todo/TodoRepository.xml`\
 
 を、STSにインポートしたプロジェクトにコピーする。
 
@@ -475,7 +474,7 @@ web.xmlの修正
 | 追加で設定する箇所をハイライトしている。
 
  .. code-block:: xml
-    :emphasize-lines: 73-84,86-90
+    :emphasize-lines: 74-84,85-90
 
     <?xml version="1.0" encoding="UTF-8"?>
     <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -639,37 +638,47 @@ spring-mvc-rest.xmlの作成
 * :file:`src/main/resources/META-INF/spring/spring-mvc-rest.xml`
 
  .. code-block:: xml
-    :emphasize-lines: 14, 19, 32, 45
+    :emphasize-lines: 17-21, 33-34, 42-43, 62-70
 
     <?xml version="1.0" encoding="UTF-8"?>
     <beans xmlns="http://www.springframework.org/schema/beans"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
-           xmlns:context="http://www.springframework.org/schema/context"
-           xmlns:aop="http://www.springframework.org/schema/aop"
-           xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
-        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:util="http://www.springframework.org/schema/util"
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
-    
+
         <context:property-placeholder
-                location="classpath*:/META-INF/spring/*.properties"/>
-    
-        <!-- (1) -->
-        <context:component-scan base-package="todo.api"/>
+            location="classpath*:/META-INF/spring/*.properties" />
 
         <mvc:annotation-driven>
             <mvc:message-converters>
-                <!-- (2) -->
+                <!-- (1) -->
                 <bean
                         class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
                     <property name="objectMapper" ref="objectMapper"/>
                 </bean>
             </mvc:message-converters>
             <mvc:argument-resolvers>
-                <bean class="org.springframework.data.web.PageableHandlerMethodArgumentResolver"></bean>
+                <bean
+                    class="org.springframework.data.web.PageableHandlerMethodArgumentResolver" />
+                <bean
+                    class="org.springframework.security.web.bind.support.AuthenticationPrincipalArgumentResolver" />
             </mvc:argument-resolvers>
         </mvc:annotation-driven>
-    
+
+        <mvc:default-servlet-handler />
+
+        <!-- (2) -->
+        <context:component-scan base-package="todo.api"/>
+
+        <mvc:resources mapping="/resources/**"
+            location="/resources/,classpath:META-INF/resources/"
+            cache-period="#{60 * 60}" />
+
         <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper">
             <property name="dateFormat">
                 <!-- (3) -->
@@ -679,24 +688,31 @@ spring-mvc-rest.xmlの作成
     
         <mvc:interceptors>
             <mvc:interceptor>
-                <mvc:mapping path="/**"/>
-                <mvc:exclude-mapping path="/resources/**"/>
-                <mvc:exclude-mapping path="/**/*.html"/>
+                <mvc:mapping path="/**" />
+                <mvc:exclude-mapping path="/resources/**" />
+                <mvc:exclude-mapping path="/**/*.html" />
                 <bean
-                        class="org.terasoluna.gfw.web.logging.TraceLoggingInterceptor"/>
+                    class="org.terasoluna.gfw.web.logging.TraceLoggingInterceptor" />
+            </mvc:interceptor>
+            <mvc:interceptor>
+                <mvc:mapping path="/**" />
+                <mvc:exclude-mapping path="/resources/**" />
+                <mvc:exclude-mapping path="/**/*.html" />
+                <bean
+                    class="org.terasoluna.gfw.web.token.transaction.TransactionTokenInterceptor" />
             </mvc:interceptor>
             <!-- (4) -->
             <!--  REMOVE THIS LINE IF YOU USE JPA
             <mvc:interceptor>
-                <mvc:mapping path="/**"/>
-                <mvc:exclude-mapping path="/resources/**"/>
-                <mvc:exclude-mapping path="/**/*.html"/>
+                <mvc:mapping path="/**" />
+                <mvc:exclude-mapping path="/resources/**" />
+                <mvc:exclude-mapping path="/**/*.html" />
                 <bean
-                        class="org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor"/>
+                    class="org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor" />
             </mvc:interceptor>
                   REMOVE THIS LINE IF YOU USE JPA  -->
         </mvc:interceptors>
-        
+
         <!-- Setting AOP. -->
         <bean id="handlerExceptionResolverLoggingInterceptor"
             class="org.terasoluna.gfw.web.exception.HandlerExceptionResolverLoggingInterceptor">
@@ -716,14 +732,14 @@ spring-mvc-rest.xmlの作成
    * - 項番
      - 説明
    * - | (1)
-     - | REST API用のパッケージ配下に対してコンポーネントスキャンの設定をする。
-       | 本チュートリアルでは、REST API用のパッケージを\ ``todo.api``\にしている。
-       | 画面遷移用のContollerは、\ ``app``\ パッケージ配下に格納していたが、REST API用のContollerは、\ ``api``\ パッケージ配下に格納する事を推奨する。
-   * - | (2)
      - | \ ``<mvc:message-converters>``\ に、Contrtollerの引数及び返り値で扱うJavaBeanをシリアライズ/デシリアライズするためのクラスを設定する。
        | 複数設定する事ができるが、今回のチュートリアルではJSONしか使用しないため、\ ``MappingJackson2HttpMessageConverter``\ のみ指定している。
        | \ ``MappingJackson2HttpMessageConverter``\の\ ``objectMapper``\プロパティには、Jacksonより提供されている「JSON <-> JavaBean」の変換を行うためのコンポーネント「\ ``ObjectMapper``\」を指定する。
        | 本チュートリアルでは、日時型の変換をカスタマイズした\ ``ObjectMapper``\を指定している。
+   * - | (2)
+     - | REST API用のパッケージ配下に対してコンポーネントスキャンの設定をする。
+       | 本チュートリアルでは、REST API用のパッケージを\ ``todo.api``\にしている。
+       | 画面遷移用のContollerは、\ ``app``\ パッケージ配下に格納していたが、REST API用のContollerは、\ ``api``\ パッケージ配下に格納する事を推奨する。
    * - | (3)
      - | 本チュートリアルでは、\ ``java.util.Date``\ オブジェクトをシリアライズする際にISO-8601形式とする。
        | \ ``Date``\ オブジェクトをシリアライズする際にISO-8601形式にする場合は、\ ``ObjectMapper``\の\ ``dateFormat``\ プロパティに\ ``com.fasterxml.jackson.databind.util.StdDateFormat``\ を設定する事で実現する事ができる。
@@ -765,50 +781,77 @@ REST API用のSpring Securityの定義追加
         
         <!-- (1) -->
         <sec:http pattern="/api/v1/**" auto-config="true" use-expressions="true" create-session="stateless">
-            <!--<sec:custom-filter ref="csrfFilter" before="LOGOUT_FILTER"/>--> <!-- (2) -->
             <sec:custom-filter ref="userIdMDCPutFilter" after="ANONYMOUS_FILTER"/>
-            <!--<sec:session-management session-authentication-strategy-ref="sessionAuthenticationStrategy" />--> <!-- (3) -->
+            <!-- <sec:csrf /> --><!-- (2) -->
+            <!-- <sec:session-management session-authentication-strategy-ref="sessionAuthenticationStrategy" /> --> <!-- (3) -->
         </sec:http>
 
         <sec:http auto-config="true" use-expressions="true">
-            <sec:custom-filter ref="csrfFilter" before="LOGOUT_FILTER"/>
+            <sec:headers>
+                <sec:cache-control />
+                <sec:content-type-options />
+                <sec:hsts />
+                <sec:frame-options />
+                <sec:xss-protection />
+            </sec:headers>
+            <sec:csrf />
+            <sec:access-denied-handler ref="accessDeniedHandler"/>
             <sec:custom-filter ref="userIdMDCPutFilter" after="ANONYMOUS_FILTER"/>
             <sec:session-management session-authentication-strategy-ref="sessionAuthenticationStrategy" />
         </sec:http>
+
         <sec:authentication-manager></sec:authentication-manager>
-    
-        <!-- CSRF Protection -->
-        <bean id="csrfTokenRepository"
-            class="org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository" />
-    
-        <bean id="csrfFilter" class="org.springframework.security.web.csrf.CsrfFilter">
-            <constructor-arg index="0" ref="csrfTokenRepository" />
-            <property name="accessDeniedHandler">
+
+        <!-- Change View for CSRF or AccessDenied -->
+        <bean id="accessDeniedHandler"
+            class="org.springframework.security.web.access.DelegatingAccessDeniedHandler">
+            <constructor-arg index="0">
+                <map>
+                    <entry
+                        key="org.springframework.security.web.csrf.InvalidCsrfTokenException">
+                        <bean
+                            class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
+                            <property name="errorPage"
+                                value="/WEB-INF/views/common/error/invalidCsrfTokenError.jsp" />
+                        </bean>
+                    </entry>
+                    <entry
+                        key="org.springframework.security.web.csrf.MissingCsrfTokenException">
+                        <bean
+                            class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
+                            <property name="errorPage"
+                                value="/WEB-INF/views/common/error/missingCsrfTokenError.jsp" />
+                        </bean>
+                    </entry>
+                </map>
+            </constructor-arg>
+            <constructor-arg index="1">
                 <bean
                     class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
-                    <property name="errorPage" value="/WEB-INF/views/common/error/csrfTokenError.jsp" />
+                    <property name="errorPage"
+                        value="/WEB-INF/views/common/error/accessDeniedError.jsp" />
                 </bean>
-            </property>
+            </constructor-arg>
         </bean>
     
-        <bean id="sessionAuthenticationStrategy"
+        <bean id="sessionStrategy"
             class="org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy">
             <constructor-arg index="0">
                 <list>
-                    <bean
-                        class="org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy" />
-                    <bean
-                        class="org.springframework.security.web.csrf.CsrfAuthenticationStrategy">
-                        <constructor-arg index="0"
-                            ref="csrfTokenRepository" />
+                    <!-- omitted -->
+                    <bean class=
+                        "org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
+                        <constructor-arg index="0" ref="sessionRegistry" />
+                        <property name="maximumSessions" value="2" />
                     </bean>
                 </list>
             </constructor-arg>
         </bean>
+
+        <bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
     
         <!-- Put UserID into MDC -->
         <bean id="userIdMDCPutFilter" class="org.terasoluna.gfw.security.web.logging.UserIdMDCPutFilter">
-            <property name="removeValue" value="true" />
         </bean>
     
     </beans>
@@ -826,7 +869,7 @@ REST API用のSpring Securityの定義追加
        | 本チュートリアルでは\ ``/api/v1/``\で始まるリクエストパスをREST API用のリクエストパスとして扱う。
        | また、create-session属性を\ ``stateless``\とする事で、Spring Securityの処理でセッションが使用されなくなる。
    * - | (2)
-     - | CSRF対策を無効化するために、CSRF対策用のServlet Filterの定義をコメントアウトしている。
+     - | CSRF対策を無効化するために、CSRF対策用の定義をコメントアウトしている。
    * - | (3)
      - | セッションを使用しないアーキテクチャを採用するために、セッション管理に関係するコンポーネントへの参照定義をコメントアウトしている。
 
@@ -1162,7 +1205,7 @@ Todoリソースを新規作成するAPI(POST Todos)の処理を、\ ``TodoRestC
       "todoTitle": "Hello World!"
     }
 
-また、「REQUEST」の「HEADERS」の「+」ボタンでHTTPヘッダーを追加し、「\ ``Content-Type``\」に「\ ``applicatio/json``\」を設定後、"Send"ボタンをクリックする。
+また、「REQUEST」の「HEADERS」の「+」ボタンでHTTPヘッダーを追加し、「\ ``Content-Type``\」に「\ ``application/json``\」を設定後、"Send"ボタンをクリックする。
 
  .. figure:: ./images_rest/post-todos1.png
    :width: 100%
@@ -2010,7 +2053,7 @@ HTTPレスポンスBODYにエラー情報を出力するための実装
       "todoTitle": null
     }
 
-また、「REQUEST」の「HEADERS」の「+」ボタンでHTTPヘッダーを追加し、「Content-Type」に「applicatio/json」を設定後、”Send”ボタンをクリックする。
+また、「REQUEST」の「HEADERS」の「+」ボタンでHTTPヘッダーを追加し、「Content-Type」に「application/json」を設定後、”Send”ボタンをクリックする。
 
 | "400 Bad Request"のHTTPステータスが返却され、「RESPONSE」の「Body」には、エラー情報のJSONが表示される。
 | \ ``todoTitle``\は必須項目なので、必須エラーが発生している。

@@ -3165,7 +3165,7 @@ Hibernate Validatorの代表的なアノテーションを、以下に示す。
     * \ ``@Mod11Check``\
     * \ ``@ModCheck``\ (5.1.0.Finalから非推奨API)
 
-    このバグは、デフォルトで提供されているメッセージ定義に不備が原因なので、
+    このバグは、デフォルトで提供されているメッセージ定義の不備が原因なので、
     デフォルトで提供されているメッセージを適切なメッセージで上書きする事で回避可能である。
 
     デフォルトで提供されているメッセージを上書きする場合は、
@@ -3199,13 +3199,13 @@ hibernate-validator-<version>.jar内のorg/hibernate/validatorに、ValidationMe
   javax.validation.constraints.Size.message        = size must be between {min} and {max}
 
   org.hibernate.validator.constraints.CreditCardNumber.message        = invalid credit card number
-  org.hibernate.validator.constraints.EAN.message                   = invalid {type} barcode
+  org.hibernate.validator.constraints.EAN.message                     = invalid {type} barcode
   org.hibernate.validator.constraints.Email.message                   = not a well-formed email address
   org.hibernate.validator.constraints.Length.message                  = length must be between {min} and {max}
-  org.hibernate.validator.constraints.LuhnCheck.message               = The check digit for ${value} is invalid, Luhn Modulo 10 checksum failed
-  org.hibernate.validator.constraints.Mod10Check.message              = The check digit for ${value} is invalid, Modulo 10 checksum failed
-  org.hibernate.validator.constraints.Mod11Check.message              = The check digit for ${value} is invalid, Modulo 11 checksum failed
-  org.hibernate.validator.constraints.ModCheck.message                = The check digit for ${value} is invalid, ${modType} checksum failed
+  org.hibernate.validator.constraints.LuhnCheck.message               = The check digit for ${validatedValue} is invalid, Luhn Modulo 10 checksum failed
+  org.hibernate.validator.constraints.Mod10Check.message              = The check digit for ${validatedValue} is invalid, Modulo 10 checksum failed
+  org.hibernate.validator.constraints.Mod11Check.message              = The check digit for ${validatedValue} is invalid, Modulo 11 checksum failed
+  org.hibernate.validator.constraints.ModCheck.message                = The check digit for ${validatedValue} is invalid, ${modType} checksum failed
   org.hibernate.validator.constraints.NotBlank.message                = may not be empty
   org.hibernate.validator.constraints.NotEmpty.message                = may not be empty
   org.hibernate.validator.constraints.ParametersScriptAssert.message  = script expression "{script}" didn't evaluate to true

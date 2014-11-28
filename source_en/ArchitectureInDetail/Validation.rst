@@ -2704,7 +2704,7 @@ Set constraint of assigning "confirm" as the prefix of confirmation field.
             } else {
                 context.disableDefaultConstraintViolation(); // (3)
                 context.buildConstraintViolationWithTemplate(message)
-                        .addNode(field).addConstraintViolation(); // (4)
+                        .addPropertyNode(field).addConstraintViolation(); // (4)
                 return false;
             }
         }
@@ -2728,8 +2728,18 @@ Set constraint of assigning "confirm" as the prefix of confirmation field.
      * - | (4)
        - | Create independent \ ``ConstraintViolation``\  object.
          | Define message to be output in \ ``ConstraintValidatorContext.buildConstraintViolationWithTemplate``\ .
-         | Specify field name to output error message in \ ``ConstraintViolationBuilder.addNode``\.
-         | Refer to \ `JavaDoc <http://docs.oracle.com/javaee/6/api/javax/validation/ConstraintValidatorContext.html>`_\ for details.
+         | Specify field name to output error message in \ ``ConstraintViolationBuilder.addPropertyNode``\.
+         | Refer to \ `JavaDoc <http://docs.oracle.com/javaee/7/api/javax/validation/ConstraintValidatorContext.html>`_\ for details.
+
+ .. tip::
+
+    \ ``ConstraintViolationBuilder.addPropertyNode`` \ method has been added from the Bean Validation 1.1.
+
+    In the Bean Validation 1.0,
+    use the \ ``ConstraintViolationBuilder.addNode``\  method,
+    but it has becomes deprecated in the Bean Validation 1.1.
+
+    Refer to the \ `Bean Validation API Document (Deprecated API) <http://docs.jboss.org/hibernate/beanvalidation/spec/1.1/api/deprecated-list.html>`_\  for the list of deprecated API of Bean Validation.
 
 
 Check below for the changes, if the "Reset password" is re-implemented using \ ``@Confirm``\  annotation.

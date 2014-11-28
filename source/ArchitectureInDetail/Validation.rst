@@ -82,6 +82,57 @@ Spring は、Java標準であるBean Validationをサポートしている。
 How to use
 --------------------------------------------------------------------------------
 
+.. ValidationAddDependencyLibrary:
+
+依存ライブラリの追加
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Bean Validation 1.1(Hibernate Validator 5.x)以上を使用する場合、
+Bean ValidationのAPI仕様クラス(\ ``javax.validation``\ パッケージのクラス)が格納されているjarファイルとHibernate Validatorのjarファイルに加えて、
+
+* Expression Language 2.2以上のAPI仕様クラス (\ ``javax.el``\ パッケージのクラス)
+* Expression Language 2.2以上のリファレンス実装クラス
+
+が格納されているライブラリが必要となる。
+
+アプリケーションサーバにデプロイして動かす場合は、
+これらのライブラリはアプリケーションサーバから提供されているため、
+依存ライブラリの追加は不要である。
+ただし、スタンドアロン環境(JUnitなど)で動かす場合は、これらのライブラリを依存ライブラリとして追加する必要がある。
+
+スタンドアロン環境でBean Validation 1.1以上を動かす際に必要となるライブラリの追加例を以下に示す。
+
+.. code-block:: xml
+
+    <!-- (1) -->
+    <dependency>
+        <groupId>org.apache.tomcat.embed</groupId>
+        <artifactId>tomcat-embed-el</artifactId>
+        <scope>test</scope> <!-- (2) -->
+    </dependency>
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - 項番
+      - 説明
+    * - | (1)
+      - スタンドアロン環境で動かすプロジェクトの :file:`pom.xml` ファイルに、
+        Expression Language用のクラスが格納されているライブラリを追加する。
+
+        上記例では、組込み用のApache Tomcat向けに提供されているライブラリを指定している。
+        \ ``tomcat-embed-el``\ のjarファイルには、Expression LanguageのAPI仕様クラスとリファレンス実装クラスの両方が格納されている。
+
+    * - | (2)
+      - JUnitを実行するために依存ライブラリが必要になる場合は、スコープは \ ``test``\ が適切である。
+
+.. note::
+
+    上記設定例では、依存ライブラリのバージョンは親プロジェクトで管理する前提である。
+    そのため、\ ``<version>``\ 要素は指定していない。
+
+
 .. _Validation_single_check:
 
 単項目チェック

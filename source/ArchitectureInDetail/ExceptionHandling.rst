@@ -947,11 +947,9 @@ ResultMessagesを保持する例外(BisinessException,ResourceNotFoundException)
     </bean>
 
     <!-- Settings View Resolver. -->
-    <bean id="viewResolver"
-        class="org.springframework.web.servlet.view.InternalResourceViewResolver"> <!-- (8) -->
-        <property name="prefix" value="/WEB-INF/views/" />
-        <property name="suffix" value=".jsp" />
-    </bean>
+    <mvc:view-resolvers>
+        <mvc:jsp prefix="/WEB-INF/views/" /> <!-- (8) -->
+    </mvc:view-resolvers>
 
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|

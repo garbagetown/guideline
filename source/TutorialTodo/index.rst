@@ -1406,11 +1406,9 @@ O/R Mapperに依存しないブランクプロジェクト、JPA用のブラン�
 
         <!-- (6) -->
         <!-- Settings View Resolver. -->
-        <bean id="viewResolver"
-            class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-            <property name="prefix" value="/WEB-INF/views/" />
-            <property name="suffix" value=".jsp" />
-        </bean>
+        <mvc:view-resolvers>
+            <mvc:jsp prefix="/WEB-INF/views/" />
+        </mvc:view-resolvers>
 
         <bean id="requestDataValueProcessor"
             class="org.terasoluna.gfw.web.mvc.support.CompositeRequestDataValueProcessor">

@@ -144,28 +144,38 @@ PDFファイルのダウンロード
 
 ViewResolverの定義
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-| \ ``org.springframework.web.servlet.view.BeanNameViewResolver``\ とは、Springのコンテキストで管理された、bean名を用いて実行するViewを選択するクラスである。
-| BeanNameViewResolverを使用する際は、\ ``order``\ プロパティを設定して、通常使用する\ ``InternalResourceViewResolver``\ より先に呼ばれるようにする必要がある。
-\
-    .. note::
+\ ``org.springframework.web.servlet.view.BeanNameViewResolver``\ とは、
+Springのコンテキストで管理されたbean名を用いて実行する\ ``View``\ を選択するクラスである。
 
-        Spring はさまざまなView Resolverを提供している。複数のResolverをチェーンすることができるため、特定の状況では、意図しないViewが選択されてしまうことがある。
-        それを防ぐために orderプロパティを指定することで、優先順位を設定できる。
-        orderプロパティの指定値が低いほど、先に実行される。
+\ ``BeanNameViewResolver``\ を使用する際は、通常使用する、
+
+* JSP用の\ ``ViewResolver``\(\ ``InternalResourceViewResolver``\)
+* Tiles用の\ ``ViewResolver``\(\ ``TilesViewResolver``\)
+
+より先に\ ``BeanNameViewResolver``\が実行されるように定義する事を推奨する。
+
+.. note::
+
+    Springはさまざまな\ ``ViewResolver``\ を提供しており、複数の\ ``ViewResolver``\をチェーンすることができる。
+    そのため、特定の状況では、意図しない\ ``View``\ が選択されてしまうことがある。
+
+    この動作を防ぐためには、\ ``ViewResolver``\に優先順位を設定する必要がある。
+    優先順位の設定方法は、\ ``ViewResolver``\ の定義方法によって異なる。
+
+    * Spring 4.1より追加された\ ``<mvc:view-resolvers>``\ 要素を使用して\ ``ViewResolver``\ を定義する場合は、子要素に指定する\ ``ViewResolver``\の定義順が優先順位となる。(上から順に実行される)
+
+    * 従来通り\ ``<bean>``\ 要素を使用して\ ``ViewResolver``\ を指定する場合は、\ ``order``\ プロパティに優先順位を設定する。(設定値が低いものから実行される)
+
 
 **bean定義ファイル**
 
 .. code-block:: xml
-   :emphasize-lines: 6-8
+   :emphasize-lines: 2
 
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/WEB-INF/views/" />
-        <property name="suffix" value=".jsp" />
-    </bean>
-
-    <bean class="org.springframework.web.servlet.view.BeanNameViewResolver">  <!-- (1) -->
-        <property name="order" value="0"/>  <!-- (2) -->
-    </bean>
+    <mvc:view-resolvers>
+        <mvc:bean-name /> <!-- (1) (2) -->
+        <mvc:jsp prefix="/WEB-INF/views/" />
+    </mvc:view-resolvers>
 
 .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
 .. list-table::
@@ -175,9 +185,9 @@ ViewResolverの定義
    * - 項番
      - 説明
    * - | (1)
-     - | BeanNameViewResolver を定義する。
+     - | \ ``<mvc:bean-name>``\ 要素を使用して、\ ``BeanNameViewResolver``\ を定義する。
    * - | (2)
-     - | orderプロパティに0を設定する。InternalResourceViewResolverより、優先度を高くすること。
+     - | 通常使用する\ ``ViewResolver``\ より上に定義して、優先度を高くすること。
 
 |
 

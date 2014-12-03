@@ -183,12 +183,10 @@ Spring MVCの設定方法を理解するために、生成されたSpring MVCの
     
         <!-- (3) Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
         <!-- Settings View Resolver. -->
-        <bean id="viewResolver"
-            class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-            <property name="prefix" value="/WEB-INF/views/" />
-            <property name="suffix" value=".jsp" />
-        </bean>
-    
+        <mvc:view-resolvers>
+            <mvc:jsp prefix="/WEB-INF/views/" />
+        </mvc:view-resolvers>
+
         <bean id="requestDataValueProcessor"
             class="org.terasoluna.gfw.web.mvc.support.CompositeRequestDataValueProcessor">
             <constructor-arg>

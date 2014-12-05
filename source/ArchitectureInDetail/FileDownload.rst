@@ -156,16 +156,17 @@ Springのコンテキストで管理されたbean名を用いて実行する\ ``
 
 .. note::
 
-    Springはさまざまな\ ``ViewResolver``\ を提供しており、複数の\ ``ViewResolver``\をチェーンすることができる。
+    Spring Frameworkはさまざまな\ ``ViewResolver``\ を提供しており、複数の\ ``ViewResolver``\をチェーンすることができる。
     そのため、特定の状況では、意図しない\ ``View``\ が選択されてしまうことがある。
 
-    この動作を防ぐためには、\ ``ViewResolver``\に優先順位を設定する必要がある。
+    この動作は、\ ``ViewResolver``\に適切な優先順位を設定する事で防ぐことができる。
     優先順位の設定方法は、\ ``ViewResolver``\ の定義方法によって異なる。
 
-    * Spring 4.1より追加された\ ``<mvc:view-resolvers>``\ 要素を使用して\ ``ViewResolver``\ を定義する場合は、子要素に指定する\ ``ViewResolver``\の定義順が優先順位となる。(上から順に実行される)
+    * Spring Framework 4.1から追加された\ ``<mvc:view-resolvers>``\ 要素を使用して\ ``ViewResolver``\ を定義する場合は、子要素に指定する\ ``ViewResolver``\の定義順が優先順位となる。(上から順に実行される)
 
-    * 従来通り\ ``<bean>``\ 要素を使用して\ ``ViewResolver``\ を指定する場合は、\ ``order``\ プロパティに優先順位を設定する。(設定値が低いものから実行される)
+    * 従来通り\ ``<bean>``\ 要素を使用して\ ``ViewResolver``\ を指定する場合は、\ ``order``\ プロパティに優先順位を設定する。(設定値が小さいものから実行される)
 
+|
 
 **bean定義ファイル**
 
@@ -185,9 +186,33 @@ Springのコンテキストで管理されたbean名を用いて実行する\ ``
    * - 項番
      - 説明
    * - | (1)
-     - | \ ``<mvc:bean-name>``\ 要素を使用して、\ ``BeanNameViewResolver``\ を定義する。
+     - | Spring Framework 4.1から追加された\ ``<mvc:bean-name>``\ 要素を使用して、\ ``BeanNameViewResolver``\ を定義する。
    * - | (2)
-     - | 通常使用する\ ``ViewResolver``\ より上に定義して、優先度を高くすること。
+     - | \ ``<mvc:bean-name>``\ 要素を先頭に定義し、通常使用する\ ``ViewResolver``\ (JSP用の\ ``ViewResolver``\ )より優先度を高くする。
+
+
+.. tip::
+
+    \ ``<mvc:view-resolvers>``\ 要素はSpring Framework 4.1から追加されたXML要素である。
+    \ ``<mvc:view-resolvers>``\ 要素を使用すると、\ ``ViewResolver``\ をシンプルに定義することが出来る。
+
+    従来通り\ ``<bean>``\ 要素を使用した場合の定義例を以下に示す。
+
+
+     .. code-block:: xml
+        :emphasize-lines: 1-3
+
+        <bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+            <property name="order" value="0"/>
+        </bean>
+
+        <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+            <property name="prefix" value="/WEB-INF/views/" />
+            <property name="suffix" value=".jsp" />
+            <property name="order" value="1" />
+        </bean>
+
+    \ ``order``\ プロパティに、\ ``InternalResourceViewResolver``\ より小さい値を指定し、優先度を高くする。
 
 |
 

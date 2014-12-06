@@ -133,6 +133,22 @@ Spring Dataより提供されているページ検索用の機能は、以下の
 
     terasoluna-gfw-common 1.0.0.RELEASEを使用している場合は、terasoluna-gfw-common 1.0.1.RELEASE以上へバージョンアップする必要がある。
 
+ .. note:: **Spring Data CommonsのAPI仕様の変更に伴う注意点**
+
+    terasoluna-gfw-common 1.1.0.RELEASE以上が依存するspring-data-commons(1.9.1.RELEASE以上)では、
+    ページ検索機能用のインタフェース(\ ``org.springframework.data.domain.Page``\ )とクラス(\ ``org.springframework.data.domain.PageImpl``\ と\ ``org.springframework.data.domain.Sort.Order``\ )のAPI仕様が変更になっている。
+
+    具体的には、
+
+    * \ ``Page``\ インタフェースと\ ``PageImpl``\ クラスでは、\ ``isFirst()``\ と\ ``isLast()``\ メソッドがspring-data-commons 1.8.0.RELEASEで追加、\ ``isFirstPage()``\ と\ ``isLastPage()``\ メソッドがspring-data-commons 1.9.0.RELEASEで削除
+    * \ ``Sort.Order``\ クラスでは、 \ ``nullHandling``\ プロパティがspring-data-commons 1.8.0.RELEASEで追加
+
+    されている。
+
+    削除されたAPIを使用している場合はコンパイルエラーとなるので、アプリケーションの修正が必要になる。
+    加えて、REST APIのリソースオブジェクトとして\ ``Page``\ インタフェース(\ ``PageImpl``\ クラス)を使用している場合は、
+    JSONやXMLのフォーマットが変わってしまうため、こちらもアプリケーションの修正が必要になるケースがある。
+
 |
 
 .. _pagination_overview_paginationlink:

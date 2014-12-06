@@ -2625,6 +2625,9 @@ JSPの実装
    * - 3.
      - JSTL
      - - `<http://download.oracle.com/otndocs/jcp/jstl-1.2-mrel2-eval-oth-JSpec/>`_\
+   * - 4.
+     - Common library's tags & el functions
+     - - 本ガイドラインの「:doc:`../Appendix/TagLibAndELFunctions`」
 
  .. warning::
 

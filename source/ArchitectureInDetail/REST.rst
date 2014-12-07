@@ -2540,7 +2540,7 @@ URIで指定されたMemberリソースのコレクションをページ検索�
  | ハイライトしている部分が、ページ検索固有の項目となる。
  
  .. code-block:: json
-    :emphasize-lines: 37-49
+    :emphasize-lines: 37-50
     
     {
       "content" : [ {
@@ -2578,20 +2578,36 @@ URIで指定されたMemberリソースのコレクションをページ検索�
         "createdAt" : "2014-03-13T10:18:08.003Z",
         "lastModifiedAt" : "2014-03-13T10:18:08.003Z"
       } ],
+      "last" : false,
+      "totalPages" : 13,
+      "totalElements" : 25,
+      "size" : 2,
+      "number" : 1,
       "sort" : [ {
         "direction" : "DESC",
         "property" : "lastModifiedAt",
         "ignoreCase" : false,
+        "nullHandling": "NATIVE",
         "ascending" : false
       } ],
-      "lastPage" : false,
-      "firstPage" : false,
-      "totalElements" : 25,
       "numberOfElements" : 2,
-      "totalPages" : 13,
-      "size" : 2,
-      "number" : 1
+      "first" : false
     }
+
+ .. note:: **Spring Data CommonsのAPI仕様の変更に伴う注意点**
+
+    terasoluna-gfw-common 1.1.0.RELEASE以上が依存するspring-data-commons(1.9.1.RELEASE以上)では、
+    ページ検索機能用のインタフェース(\ ``org.springframework.data.domain.Page``\ )とクラス(\ ``org.springframework.data.domain.PageImpl``\ と\ ``org.springframework.data.domain.Sort.Order``\ )のAPI仕様が変更になっている。
+
+    具体的には、
+
+    * \ ``Page``\ インタフェースと\ ``PageImpl``\ クラスでは、\ ``isFirst()``\ と\ ``isLast()``\ メソッドがspring-data-commons 1.8.0.RELEASEで追加、\ ``isFirstPage()``\ と\ ``isLastPage()``\ メソッドがspring-data-commons 1.9.0.RELEASEで削除
+    * \ ``Sort.Order``\ クラスでは、 \ ``nullHandling``\ プロパティがspring-data-commons 1.8.0.RELEASEで追加
+
+    されている。
+
+    REST APIのリソースオブジェクトとして\ ``Page``\ インタフェース(\ ``PageImpl``\ クラス)を使用している場合は、
+    JSONやXMLのフォーマットが変わってしまうため、アプリケーションの修正が必要になるケースがある。
 
 |
 
@@ -2664,7 +2680,7 @@ URIで指定されたMemberリソースのコレクションをページ検索�
     Transfer-Encoding: chunked
     Date: Thu, 13 Mar 2014 11:10:43 GMT
     
-    {"content":[{"memberId":"M000000001","firstName":"John","lastName":"Smith","genderCode":"1","dateOfBirth":"2013-03-13","emailAddress":"user1394709042120@test.com","telephoneNumber":"09012345678","zipCode":"1710051","address":"Tokyo","credential":{"signId":"user1394709042120@test.com","passwordLastChangedAt":"2014-03-13T11:10:43.066Z","lastModifiedAt":"2014-03-13T11:10:43.066Z"},"createdAt":"2014-03-13T11:10:43.066Z","lastModifiedAt":"2014-03-13T11:10:43.066Z"},{"memberId":"M000000002","firstName":"Sophia","lastName":"Smith","genderCode":"2","dateOfBirth":"2013-03-13","emailAddress":"user1394709043663@test.com","telephoneNumber":"09012345678","zipCode":"1710051","address":"Tokyo","credential":{"signId":"user1394709043663@test.com","passwordLastChangedAt":"2014-03-13T11:10:43.678Z","lastModifiedAt":"2014-03-13T11:10:43.678Z"},"createdAt":"2014-03-13T11:10:43.678Z","lastModifiedAt":"2014-03-13T11:10:43.678Z"}],"sort":null,"firstPage":true,"lastPage":true,"totalPages":1,"numberOfElements":2,"totalElements":2,"size":2,"number":0}
+    {"content":[{"memberId":"M000000001","firstName":"John","lastName":"Smith","genderCode":"1","dateOfBirth":"2013-03-13","emailAddress":"user1394709042120@test.com","telephoneNumber":"09012345678","zipCode":"1710051","address":"Tokyo","credential":{"signId":"user1394709042120@test.com","passwordLastChangedAt":"2014-03-13T11:10:43.066Z","lastModifiedAt":"2014-03-13T11:10:43.066Z"},"createdAt":"2014-03-13T11:10:43.066Z","lastModifiedAt":"2014-03-13T11:10:43.066Z"},{"memberId":"M000000002","firstName":"Sophia","lastName":"Smith","genderCode":"2","dateOfBirth":"2013-03-13","emailAddress":"user1394709043663@test.com","telephoneNumber":"09012345678","zipCode":"1710051","address":"Tokyo","credential":{"signId":"user1394709043663@test.com","passwordLastChangedAt":"2014-03-13T11:10:43.678Z","lastModifiedAt":"2014-03-13T11:10:43.678Z"},"createdAt":"2014-03-13T11:10:43.678Z","lastModifiedAt":"2014-03-13T11:10:43.678Z"}],"last":true,"totalPages":1,"totalElements":2,"size":2,"number":0,"sort":null,"numberOfElements":2,"first":true}
 
 |
 

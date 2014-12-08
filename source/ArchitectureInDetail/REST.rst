@@ -3405,6 +3405,12 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
         | ステータスコードには、Spring MVCから提供されている\ ``ResponseEntityExceptionHandler``\によって適切な値が設定される。
         | 設定されるステータスコードについては、「\ :ref:`exception-handling-appendix-defaulthandlerexceptionresolver-label`\」を参照されたい。
 
+ .. tip:: **Spring Framework 4.0 より追加された@ControllerAdviceアノテーションの属性について**
+
+    \ ``@ControllerAdvice``\ アノテーションの属性を指定することで、
+    \ ``@ControllerAdvice``\ が付与されたクラスで実装したメソッドを適用するControllerを柔軟に指定できるように改善されている。
+    属性の詳細については、\ :ref:`@ControllerAdviceの属性 <application_layer_controller_advice_attribute>`\ を参照されたい。
+
 |
 
 * レスポンス例

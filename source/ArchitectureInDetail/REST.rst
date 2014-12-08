@@ -2384,12 +2384,43 @@ Controllerクラスの作成
         | 具体的には、\ ``@RequestMapping``\アノテーションのvalue属性に、リソースのコレクションを表すサーブレットパスを指定する。
         | 上記例では、 \ ``/api/v1/members``\ というサーブレットパスをマッピングしている。
     * - | (2)
-      - | Controllerに対して、``@RestController`` を付与する。
-        | ``@RestController`` はSpring Framework 4.0 から追加されたアノテーションである。
-        | ``@RestController`` は ``@Controller`` と ``@ResponseBody`` をまとめたアノテーションである。
-        | ``@RestController`` の登場前の Spring Framework 4.0 以前では、RESTを利用するControllerに ``@Controller`` を付与し、メソッドに ``@ResponseBody`` をしなければならなかったが、``@RestController`` を利用することで、``@ResponseBody`` の付与を省略できる。
-        | ``@ResponseBody`` の役割は、返却するResourceオブジェクトをJSONやXMLにmarshalし、レスポンスBODYに設定することである。
-        | ``@RestController`` の詳細については、\ `こちら <http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/bind/annotation/RestController.html>`_\ を参照されたい。
+      - Controllerに対して、\ ``@RestController``\ アノテーションを付与する。
+
+        \ ``@RestController``\ アノテーションを付与することで、
+
+        * クラスに\ ``org.springframework.stereotype.Controller``\ アノテーションを付与
+        * 以降で説明するControllerのメソッドに\ ``@org.springframework.web.bind.annotation.ResponseBody``\ アノテーションを付与
+
+        したのと同じ意味となる。
+
+        Controllerのメソッドに\ ``@ResponseBody``\ を付与することで、返却したResourceオブジェクトがJSONやXMLにmarshalされ、レスポンスBODYに設定される。
+
+ .. tip::
+
+    \ ``@RestController``\ アノテーションは、Spring Framework 4.0 から追加されたアノテーションである。
+
+    \ ``@RestController``\ アノテーションの登場により、Controllerの各メソッドに\ ``@ResponseBody``\ アノテーションを付与する必要がなくなったため、
+    REST API用のControllerをよりシンプルに作成出来るようになった。
+    \ ``@RestController``\ アノテーションの詳細については、\ `こちら <http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/bind/annotation/RestController.html>`_\ を参照されたい。
+
+    従来通り\ ``@Controller``\ アノテーションと\ ``@ResponseBody``\ アノテーションを組み合わせてREST API用のControllerを作成する例を以下に示す。
+
+     .. code-block:: java
+
+        @RequestMapping("members")
+        @Controller
+        public class MemberRestController {
+
+            @RequestMapping(method = RequestMethod.GET)
+            @ResponseStatus(HttpStatus.OK)
+            @ResponseBody
+            public Page<MemberResource> getMembers() {
+                // ...
+            }
+
+            // ...
+
+        }
 
 |
 

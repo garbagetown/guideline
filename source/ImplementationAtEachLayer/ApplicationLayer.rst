@@ -3481,89 +3481,182 @@ HandlerMethodArgumentResolverを実装してControllerの引数として受け�
 
 \ ``@ControllerAdvice``\ の実装
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-\ ``@ControllerAdvice``\ では、指定したパッケージ配下、指定したクラス、または全てのControllerで実行したい処理を実装する。
+\ ``@ControllerAdvice``\ アノテーションを付与したクラスでは、
+複数のControllerで実行したい共通的な処理を実装する。
 
-\ ``@ControllerAdvice``\ では、以下の処理を共通化することができる。
+\ ``@ControllerAdvice``\ アノテーションを付与したクラスを作成すると、
 
-- ``@InitBinder`` メソッドの共通化
-- ``@ExceptionHandler`` メソッドの共通化
-- ``@ModelAttribute`` メソッドの共通化
+- ``@InitBinder`` を付与したメソッド
+- ``@ExceptionHandler`` を付与したメソッド
+- ``@ModelAttribute`` を付与したメソッド
 
-共通化メソッドのサンプルは属性の説明後に記述する。
-
-.. _application_layer_controller_advice_attribute:
-
-\ ``@ControllerAdvice``\ では、属性を指定することが可能である。
-
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|
- .. list-table::
-   :header-rows: 1
-   :widths: 10 20 35 35
-
-   * - 項番
-     - 属性
-     - 説明
-     - 例
-   * - | (1)
-     - | ``annotations``
-     - | アノテーションクラスを指定し、そのアノテーションが付与されたControllerで共通化した処理が実行される。
-     - | ``@ControllerAdvice(annotations = RestController.class)``
-   * - | (2)
-     - | ``assignableTypes``
-     - | 対象Controllerを指定する。そのControllerで共通化した処理が実行される。
-     - | ``@ControllerAdvice(assignableTypes = { Sample0001Controller.class, Sample0002Controller.class })``
-   * - | (3)
-     - | ``basePackageClasses``
-     - | 指定したControllerの存在するPackage配下のControllerで共通化した処理が実行される。
-     - | ``@ControllerAdvice(basePackageClasses = Sample0001Controller.class)``
-   * - | (4)
-     - | ``basePackages``
-     - | 指定したPackage配下のControllerで共通化した処理が実行される。
-     - | ``@ControllerAdvice(basePackages = "com.example.controller.advice.app.sample")``
-   * - | (5)
-     - | ``value``
-     - | ``basePackages`` と同じ。
-     - | ``@ControllerAdvice(value = "com.example.controller.advice.app.example")``
+で実装した処理を、複数のControllerに適用する事ができる。
 
 .. tip::
 
-    1. ``basePackages`` , ``value`` の使用時の注意点
-    
-     * 存在しないPackageを指定した場合は、無視されるのではなく、全てのControllerに処理が適用される。
-    
-      起動時にWARNメッセ-ジが出力される。
-    
-      .. code-block:: text
-    
-          level:WARN 	logger:o.s.web.method.ControllerAdviceBean             	message:Package [com.example.controller.advice.app.sample.] was not found, see [com.example.controller.advice.app.advice.SampleAdvice]
-    
-    2. ``basePackageClasses`` , ``basePackages`` , ``value`` の使用時の注意点
-    
-     * 指定した（basePackageClassesの場合クラスから取得した）Package名は前方一致するPackageの全てのControllerに処理が適用される。
-    
-      例として、``@ControllerAdvice(basePackages = "com.example.controller.advice.app.sample")`` を指定した場合
-    
-      @ControllerAdviceの対象となるPackage
-    
-      .. code-block:: text
-    
-          com.example.controller.advice.app.sample
-          com.example.controller.advice.app.sample.sample0
-          com.example.controller.advice.app.sample1
-          com.example.controller.advice.app.sample2
-    
-      @ControllerAdviceの対象外となるPackage
-    
-      .. code-block:: text
-    
-          com.example.controller.advice.app.samp
-          com.example.controller.advice.app.example
-    
-    ``@Order`` で指定した順序は優先される。全てのControllerに適用の ``@ControllerAdvice`` より、``@Order`` で若い番号を指定した ``@ControllerAdvice`` での処理が優先となる。
+    \ ``@ControllerAdvice``\ アノテーションは、Spring Framework 3.2 から追加された仕組みだが、
+    全てのControllerに処理が適用される仕組みになっていたため、アプリケーション全体の共通処理しか実装できなかった。
 
+    Spring Framework 4.0 からは、共通処理を適用するControllerを柔軟に指定する事ができるように改善されている。
+    この改善により、様々な粒度で共通処理を実装する事ができるようになった。
 
+|
 
-| 以下に、\ ``@InitBinder``\ メソッドのサンプルを示す。
+.. _application_layer_controller_advice_attribute:
+
+以下に、共通処理を適用するControllerを指定する方法(属性の指定方法)について説明する。
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.15\linewidth}|p{0.75\linewidth}|
+.. list-table::
+   :header-rows: 1
+   :widths: 10 15 75
+
+   * - 項番
+     - 属性
+     - 説明と指定例
+   * - | (1)
+     - ``annotations``
+     - アノテーションを指定する。
+
+       指定したアノテーションが付与されたControllerに対して共通処理が適用される。
+       以下に指定例を示す。
+
+       .. code-block:: java
+
+           @ControllerAdvice(annotations = RestController.class)
+           public class ApiGlobalExceptionHandler {
+               // ...
+           }
+
+       .. code-block:: java
+
+           @RestController
+           public class SampleRestController {
+               // ...
+           }
+
+       上記例では、\ ``SampleRestController``\ に\ ``@RestController``\ アノテーションを付与しているため、
+       \ ``SampleRestController``\ に共通処理が適用される。
+   * - | (2)
+     - ``assignableTypes``
+     - クラス又はインタフェースを指定する。
+
+       指定したクラス又はインタフェースに割り当て可能(キャスト可能)なControllerに対して共通処理が適用される。
+       本属性を使用する場合は、共通処理を適用するControllerであることを示すためのマーカーインタフェースを属性値に指定するスタイルを採用することを推奨する。
+       このスタイルを採用した場合、Controller側では、適用したい共通処理用のマーカーインタフェースを実装するだけでよい。
+       以下の指定例を示す。
+
+       .. code-block:: java
+
+           @ControllerAdvice(assignableTypes = ISODateApplicable.class)
+           public class ISODateInitBinder {
+               public static interface ISODateApplicable {}
+               // ...
+           }
+
+       .. code-block:: java
+
+           @Controller
+           public class SampleController implements ISODateApplicable {
+               // ...
+           }
+
+       上記例では、\ ``SampleController``\ が\ ``@ISODateApplicable``\ インタフェース(マーカーインタフェース)を実装しているため、
+       \ ``SampleController``\ に共通処理が適用される。
+   * - | (3)
+     - ``basePackageClasses``
+     - クラス又はインタフェースを指定する。
+
+       指定したクラス又はインタフェースのパッケージ配下のControllerに対して共通処理が適用される。
+
+       本属性を使用する場合は、
+
+       * \ ``@ControllerAdvice``\ を付与したクラス
+       * パッケージを識別するためのマーカーインタフェース
+
+       を属性値に指定するスタイルを採用することを推奨する。
+       以下に指定例を示す。
+
+       .. code-block:: java
+
+           package com.example.app
+
+           @ControllerAdvice(basePackageClasses = AppGlobalExceptionHandler.class)
+           public class AppGlobalExceptionHandler {
+               // ...
+           }
+
+       .. code-block:: java
+
+           package com.example.app.sample
+
+           @Controller
+           public class SampleController {
+               // ...
+           }
+
+       上記例では、\ ``SampleController``\ が\ ``@ControllerAdvice``\ を付与したクラス(\ ``AppGlobalExceptionHandler``\)が格納されているパッケージ(\ ``com.example.app``\ )配下に格納されているため、
+       \ ``SampleController``\ に共通処理が適用される。
+
+       .. code-block:: java
+
+           package com.example.app.common
+
+           @ControllerAdvice(basePackageClasses = AppPackage.class)
+           public class AppGlobalExceptionHandler {
+               // ...
+           }
+
+       .. code-block:: java
+
+           package com.example.app
+
+           public interface AppPackage {
+           }
+
+       \ ``@ControllerAdvice``\ が付与されているクラスとControllerが格納されているクラスのパッケージ階層が異なる場合や、複数のベースパッケージに共通処理を適用したい場合は、
+       パッケージを識別するためのマーカインタフェースを用意すればよい。
+   * - | (4)
+     - ``basePackages``
+     - パッケージ名を指定する。
+
+       指定したパッケージ配下のControllerに対して共通処理が適用される。
+       以下に指定例を示す。
+
+       .. code-block:: java
+
+           @ControllerAdvice(basePackages = "com.example.app")
+           public class AppGlobalExceptionHandler {
+               // ...
+           }
+   * - | (5)
+     - ``value``
+     - \ ``basePackages``\ へのエイリアス。
+
+       \ ``basePackages``\ 属性を指定した際と同じ動作となる。
+       以下に指定例を示す。
+
+       .. code-block:: java
+
+           @ControllerAdvice("com.example.app")
+           public class AppGlobalExceptionHandler {
+               // ...
+           }
+
+.. tip::
+
+    \ ``basePackageClasses``\ 属性 / \ ``basePackages``\ 属性 / \ ``value``\ 属性は、
+    共通処理を適用したいControllerが格納されているベースパッケージを指定するための属性であるが、
+    \ ``basePackageClasses``\ 属性を使用した場合、
+
+    * 存在しないパッケージを指定してしまう事を防ぐことが出来る
+    * IDE上で行ったパッケージ名変更と連動することが出来る
+
+    ため、タイプセーフな指定方法と言える。
+
+|
+
+| 以下に、\ ``@InitBinder``\ メソッドの実装サンプルを示す。
 | サンプルコードでは、 リクエストパラメータで指定できる日付型で形式を ``"yyyy/MM/dd"`` に設定している。
 
  .. code-block:: java
@@ -3601,8 +3694,9 @@ HandlerMethodArgumentResolverを実装してControllerの引数として受け�
    * - | (4)
      - \ ``@InitBinder``\ メソッドを実装する。全てのControllerに対して\ ``@InitBinder``\ メソッドが適用される。
 
+|
 
-| 以下に、\ ``@ExceptionHandler``\ メソッドのサンプルを示す。
+| 以下に、\ ``@ExceptionHandler``\ メソッドの実装サンプルを示す。
 | サンプルコードでは、  ``org.springframework.dao.PessimisticLockingFailureException`` をハンドリングしてロックエラー画面のViewを返却している。
 
  .. code-block:: java
@@ -3625,7 +3719,9 @@ HandlerMethodArgumentResolverを実装してControllerの引数として受け�
    * - | (1)
      - \ ``@ExceptionHandler``\ メソッドを実装する。全てのControllerに対して\ ``@ExceptionHandler``\ メソッドが適用される。
 
-| 以下に、\ ``@ModelAttribute``\ メソッドのサンプルを示す。
+|
+
+| 以下に、\ ``@ModelAttribute``\ メソッドの実装サンプルを示す。
 | サンプルコードでは、 共通的なリクエストパラメータをJavaBeanに変換して ``Model`` に格納している。
 
 - ControllerAdvice
@@ -3673,7 +3769,6 @@ HandlerMethodArgumentResolverを実装してControllerの引数として受け�
      - \ ``@ModelAttribute``\ メソッドで生成されたオブジェクトが渡る。
 
 
-|
 |
 
 二重送信防止について

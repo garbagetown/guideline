@@ -4908,7 +4908,7 @@ POST時のLocationヘッダの設定
         | \ ``buildAndExpand``\ メソッドを呼び出して、作成したリソースのIDをバインドすることで、作成したリソースのURIを組み立てている。
         | 
         | Controllerのメソッドの引数として渡された\ ``ServletUriComponentsBuilder``\ のインスタンスは、web.xmlに記載の\ ``<servlet-mapping>``\要素の情報を元に初期化されており、リソースには依存しない。
-        | そのため、Spring Frameworkから提供される `URI Template Patterns <http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/mvc.html#mvc-ann-requestmapping-uri-templates>`_\ 等を利用し、
+        | そのため、Spring Frameworkから提供される `URI\ Template\ Patterns <http://static.springsource.org/spring/docs/3.2.x/spring-framework-reference/html/mvc.html#mvc-ann-requestmapping-uri-templates>`_\ 等を利用し、
         | リクエスト情報をベースにURIを組み立てる事により、リソースに依存しない汎用的な組み立て処理を実装することが可能となる。
         | 
         | 例えば、上記例において\ ``http://example.com/api/v1/members``\に対してPOSTした場合、組み立てられるURIは、「リクエストされたURI + \ ``"/"``\ + 作成したリソースのID」となる。

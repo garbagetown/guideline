@@ -949,11 +949,9 @@ ResultMessagesを保持する例外(BisinessException,ResourceNotFoundException)
     </bean>
 
     <!-- Settings View Resolver. -->
-    <bean id="viewResolver"
-        class="org.springframework.web.servlet.view.InternalResourceViewResolver"> <!-- (8) -->
-        <property name="prefix" value="/WEB-INF/views/" />
-        <property name="suffix" value=".jsp" />
-    </bean>
+    <mvc:view-resolvers>
+        <mvc:jsp prefix="/WEB-INF/views/" /> <!-- (8) -->
+    </mvc:view-resolvers>
 
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
@@ -997,9 +995,32 @@ ResultMessagesを保持する例外(BisinessException,ResourceNotFoundException)
             \ **"200"(OK)**\ 扱いになるので、注意すること。
 
     * - | (8)
-      - | 実際に遷移するViewは、ViewResolverの設定に依存する。
-        | 上記の設定では、"/WEB-INF/views/common/error/systemError.jsp"、"/WEB-INF/views/common/error/resourceNotFoundError.jsp"、"/WEB-INF/views/common/error/businessError.jsp"、"/WEB-INF/views/common/error/transactionTokenError.jsp"、"/WEB-INF/views/common/error/dataAccessError.jsp"が遷移先となる。
+      - 実際に遷移する\ ``View``\ は、\ ``ViewResolver``\ の設定に依存する。
 
+        上記の設定では、
+
+        * ``/WEB-INF/views/common/error/systemError.jsp``
+        * ``/WEB-INF/views/common/error/resourceNotFoundError.jsp``
+        * ``/WEB-INF/views/common/error/businessError.jsp``
+        * ``/WEB-INF/views/common/error/transactionTokenError.jsp``
+        * ``/WEB-INF/views/common/error/dataAccessError.jsp``
+
+        が遷移先となる。
+
+        .. tip::
+
+            \ ``<mvc:view-resolvers>``\ 要素はSpring Framework 4.1から追加されたXML要素である。
+            \ ``<mvc:view-resolvers>``\ 要素を使用すると、\ ``ViewResolver``\ をシンプルに定義することが出来る。
+
+            従来通り\ ``<bean>``\ 要素を使用した場合の定義例を以下に示す。
+
+             .. code-block:: xml
+
+                <bean id="viewResolver"
+                    class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+                    <property name="prefix" value="/WEB-INF/views/" />
+                    <property name="suffix" value=".jsp" />
+                </bean>
 
 \ ``HandlerExceptionResolver``\ でハンドリングされた例外を、ログに出力するためのインタセプタクラス（\ ``HandlerExceptionResolverLoggingInterceptor``\ ）と、AOPの設定を、bean定義に追加する。
 

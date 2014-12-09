@@ -183,12 +183,10 @@ Spring MVCの設定方法を理解するために、生成されたSpring MVCの
     
         <!-- (3) Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
         <!-- Settings View Resolver. -->
-        <bean id="viewResolver"
-            class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-            <property name="prefix" value="/WEB-INF/views/" />
-            <property name="suffix" value=".jsp" />
-        </bean>
-    
+        <mvc:view-resolvers>
+            <mvc:jsp prefix="/WEB-INF/views/" />
+        </mvc:view-resolvers>
+
         <bean id="requestDataValueProcessor"
             class="org.terasoluna.gfw.web.mvc.support.CompositeRequestDataValueProcessor">
             <constructor-arg>
@@ -250,7 +248,23 @@ Spring MVCの設定方法を理解するために、生成されたSpring MVCの
    * - | (2)
      - Spring MVCで使用するコンポーネントを探すパッケージを定義する。
    * - | (3)
-     - ViewのResolverを指定し、Viewの配置場所を定義する。
+     - \ ``ViewのResolver``\ を指定し、\ ``View``\ の配置場所を定義する。
+
+       .. tip::
+
+           \ ``<mvc:view-resolvers>``\ 要素はSpring Framework 4.1から追加されたXML要素である。
+           \ ``<mvc:view-resolvers>``\ 要素を使用すると、\ ``ViewResolver``\ をシンプルに定義することが出来る。
+
+           従来通り\ ``<bean>``\ 要素を使用した場合の定義例を以下に示す。
+
+            .. code-block:: xml
+
+               <bean id="viewResolver"
+                   class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+                   <property name="prefix" value="/WEB-INF/views/" />
+                   <property name="suffix" value=".jsp" />
+               </bean>
+
 
 ``com.example.helloworld.app.welcome.HomeController`` を以下に示す。
 

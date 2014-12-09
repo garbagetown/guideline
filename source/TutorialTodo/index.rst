@@ -1342,7 +1342,7 @@ O/R Mapperに依存しないブランクプロジェクト、JPA用のブラン�
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
  .. code-block:: xml
-    :emphasize-lines: 12-14, 16-22, 26-27, 29-32, 35-42, 61-67
+    :emphasize-lines: 12-14, 16-22, 26-27, 29-32, 35-42, 61-65
 
     <?xml version="1.0" encoding="UTF-8"?>
     <beans xmlns="http://www.springframework.org/schema/beans"
@@ -1406,11 +1406,9 @@ O/R Mapperに依存しないブランクプロジェクト、JPA用のブラン�
 
         <!-- (6) -->
         <!-- Settings View Resolver. -->
-        <bean id="viewResolver"
-            class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-            <property name="prefix" value="/WEB-INF/views/" />
-            <property name="suffix" value=".jsp" />
-        </bean>
+        <mvc:view-resolvers>
+            <mvc:jsp prefix="/WEB-INF/views/" />
+        </mvc:view-resolvers>
 
         <bean id="requestDataValueProcessor"
             class="org.terasoluna.gfw.web.mvc.support.CompositeRequestDataValueProcessor">
@@ -1498,6 +1496,21 @@ O/R Mapperに依存しないブランクプロジェクト、JPA用のブラン�
      - | コントローラ処理のTraceログを出力するインターセプタを設定する。/resources以下を除く任意のパスに適用されるように設定する。
    * - | (6)
      - | ViewResolverの設定を行う。この設定により、例えばコントローラからview名”hello”が返却された場合には/WEB-INF/views/hello.jspが実行される。
+
+       .. tip::
+
+           \ ``<mvc:view-resolvers>``\ 要素はSpring Framework 4.1から追加されたXML要素である。
+           \ ``<mvc:view-resolvers>``\ 要素を使用すると、\ ``ViewResolver``\ をシンプルに定義することが出来る。
+
+           従来通り\ ``<bean>``\ 要素を使用した場合の定義例を以下に示す。
+
+            .. code-block:: xml
+
+               <bean id="viewResolver"
+                   class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+                   <property name="prefix" value="/WEB-INF/views/" />
+                   <property name="suffix" value=".jsp" />
+               </bean>
 
  .. note::
  

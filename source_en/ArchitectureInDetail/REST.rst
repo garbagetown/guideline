@@ -1638,7 +1638,7 @@ Application settings for RESTful Web Service are explained below.
 .. _RESTHowToUseApplicationSettingsOfSpringMVC:
 
 Settings for activating the Spring MVC components necessary for RESTful Web Service
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 | A bean definition file is created for RESTful Web Service.
 | Definitions that are required to operate the sample indicated in the explanation hereafter, are as follows:
 
@@ -5867,7 +5867,7 @@ ApiGlobalExceptionHandler.java
 .. _RESTAppendixSoruceCodesOfDomainLayer:
 
 Source code of the domain layer class created at the time of REST API implementation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 | Source code of domain layer class called from REST API explained in \ :ref:`RESTHowToUse`\  is attached herewith.
 | Also, infrastructure layer is implemented by using JPA (Spring Data JPA).
 

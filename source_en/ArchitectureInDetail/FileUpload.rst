@@ -47,7 +47,7 @@ Basic flow of uploading files using File Upload functionality supported by Servl
    * - | (3)
      - | \ ``DispatcherServlet``\  calls the method of \ ``org.springframework.web.multipart.support.StandardServletMultipartResolver``\  to enable File Upload functionality of Servlet3.0 in Spring MVC.
        | \ ``StandardServletMultipartResolver``\  generates ``org.springframework.web.multipart.MultipartFile`` object that wraps the API (``javax.servlet.http.Part``) introduced through Servlet 3.0.
-       | (4)
+   * - | (4)
      - | \ ``DispatcherServlet``\  calls the processing method of Controller.
        | \ ``DispatcherServlet``\  object created in step (3) binds to the Controller argument or form object.
    * - | (5)
@@ -432,7 +432,7 @@ Add the exception handling definition of \ ``MultipartException``\  which occurs
         <!-- omitted -->
     </bean>
 
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+  .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
   .. list-table::
    :header-rows: 1
    :widths: 10 90
@@ -1116,7 +1116,7 @@ Implementing Controller
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
-   :header-rows: 1
+    :header-rows: 1
     :widths: 10 90
 
    * - Sr. No.
@@ -1432,7 +1432,7 @@ Example for temporarily saving the uploaded file in a temporary directory, is sh
         return "article/uploadConfirm";
     }
     
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+  .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
   .. list-table::
    :header-rows: 1
    :widths: 10 90

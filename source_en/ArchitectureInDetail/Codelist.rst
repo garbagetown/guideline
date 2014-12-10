@@ -1452,7 +1452,7 @@ Setting SimpleI18nCodeList
 | The respective setting methods are explained using the example of selectbox for selecting charges.
 
 Set \ ``java.util.Map``\  (key = code value, value = label) for each locale by rows
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 **Bean definition file**
 
@@ -1502,7 +1502,7 @@ Set \ ``java.util.Map``\  (key = code value, value = label) for each locale by r
 |
 
 Set \ ``java.util.Map``\ (key = locale, value = label) for each code value by columns
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 **Bean definition file**
 

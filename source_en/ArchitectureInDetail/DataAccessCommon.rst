@@ -218,7 +218,7 @@ See the example below for handling unique constraint violation as business excep
     * - | (1)
       - | Exception (DuplicateKeyException) that occurs in case of unique constraint violation is caught.
     * - | (2)
-        | Business exception indicating that there is duplicate data is thrown.
+      - | Business exception indicating that there is duplicate data is thrown.
         | When exception is caught, make sure to specify the cause of exception (\ ``e``\ ) in business exception.
 
 About multiple datasources

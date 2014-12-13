@@ -2667,6 +2667,7 @@ JSPの実装
 - :ref:`view_jsp_out-label`
 - :ref:`view_jsp_outnumber-label`
 - :ref:`view_jsp_outdate-label`
+- :ref:`view_jsp_requesturl-label`
 - :ref:`view_jsp_form-label`
 - :ref:`view_jsp_errors-label`
 - :ref:`view_jsp_resultmessages-label`
@@ -2903,6 +2904,248 @@ JSTLのJSPタグライブラリから提供されている ``<c:out>`` タグを
 .. note::
     日時オブジェクトの型として、Joda Timeから提供されている ``org.joda.time.DateTime`` などを利用する場合は、Jada Timeから提供されているJSPタグライブラリを使用すること。
     Joda Timeの詳細は、 :doc:`../ArchitectureInDetail/Utilities/JodaTime` を参照されたい。
+
+
+|
+
+.. _view_jsp_requesturl-label:
+
+リクエストURLを生成する
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+HTMLの\ ``<form>``\ 要素(JSPタグライブラリの\ ``<form:form>``\ 要素)の\ ``action``\ 属性や\ ``<a>``\ 要素の\ ``href``\ 属性などに対してリクエストURL(Controllerのメソッドを呼び出すためのURL)を設定する場合は、
+以下のいずれかの方法を使用してURLを生成する。
+
+* 文字列としてリクエストURLを組み立てる
+* Spring Framework 4.1から追加されたEL関数を使用してリクエストURLを組み立てる
+
+.. note::
+
+    どちらの方法を使用してもよいが、一つのアプリケーションの中で混在して使用することは、
+    保守性を低下させる可能性があるので避けた方がよい。
+
+|
+
+| 以降の説明で使用するControllerのメソッドの実装サンプルを示す。
+| 以降の説明では、以下に示すメソッドを呼び出すためのリクエストURLを生成するための実装方法について説明する。
+
+ .. code-block:: java
+
+    package com.example.app.hello;
+
+    import org.springframework.stereotype.Controller;
+    import org.springframework.web.bind.annotation.RequestMapping;
+
+    @RequestMapping("hello")
+    @Controller
+    public class HelloController {
+
+        // (1)
+        @RequestMapping({"", "/"})
+        public String hello() {
+            return "hello/home";
+        }
+
+    }
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - 項番
+      - 説明
+    * - | (1)
+      - このメソッドに割り当てられるリクエストURLは、\ "``{コンテキストパス}/hello"``\ となる。
+
+|
+
+**文字列としてリクエストURLを組み立てる**
+
+まず、文字列としてリクエストURLを組み立てる方法について説明する。
+
+ .. code-block:: jsp
+
+    <form action="${pageContext.request.contextPath}/hello"> <!-- (2) -->
+        <!-- ... -->
+    </form>
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - 項番
+      - 説明
+    * - | (2)
+      - \ ``pageContext``\ (JSPの暗黙オブジェクト)からWebアプリケーションに割り振られているコンテキスパスを取得し(\ ``${pageContext.request.contextPath}``\ )、
+        コンテキストパスの後ろに呼び出すControllerのメソッドに割り振られているサーブレットパス(上記例では、\ ``/hello``\)を加える。
+
+ .. tip::
+
+    URLを組み立てるJSPタグライブラリとして、
+
+    * JSTLから提供されている \ ``<c:url>``\
+    * Spring Frameworkから提供されている \ ``<spring:url>``\
+
+    が存在する。これらのJSPタグライブラリを使用して、リクエストURLを組み立ててもよい。
+
+    リクエストURLを動的に組み立てる必要がある場合は、
+    これらのJSPタグライブラリを使用してURLを組み立てた方がよいケースがある。
+
+|
+
+**Spring Framework 4.1から追加されたEL関数を使用してリクエストURLを組み立てる**
+
+つぎに、Spring Framework 4.1から追加されたEL関数(\ ``spring:mvcUrl``\ )を使用してリクエストURLを組み立てる方法について説明する。
+
+\ ``spring:mvcUrl``\ 関数を使用すると、Controllerのメソッドのメタ情報(メソッドシグネチャやアノテーションなど)と連携して、
+リクエストURLを組み立てる事ができる。
+
+ .. code-block:: jsp
+
+    <form action="${spring:mvcUrl('HC#hello').build()}"> <!-- (3) -->
+        <!-- ... -->
+    </form>
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - 項番
+      - 説明
+    * - | (3)
+      - \ ``spring:mvcUrl``\ 関数の引数には、呼び出すControllerのメソッドに割り振られているリクエストマッピング名を指定する。
+
+        \ ``spring:mvcUrl``\ 関数からは、リクエストURLを組み立てるクラス(\ ``MvcUriComponentsBuilder.MethodArgumentBuilder``\ )のオブジェクトが返却される。
+        \ ``MvcUriComponentsBuilder.MethodArgumentBuilder``\ クラスには、
+
+        * \ ``arg``\ メソッド
+        * \ ``build``\ メソッド
+        * \ ``buildAndExpand``\ メソッド
+
+        が用意されており、それぞれ、以下の役割を持つ。
+
+        * \ ``arg``\ メソッドは、Controllerのメソッドの引数に渡す値を指定するためのメソッドである。
+        * \ ``build``\ メソッドは、リクエストURLを生成するためのメソッドである。
+        * \ ``buildAndExpand``\ メソッドは、Controllerのメソッドの引数として宣言されていない動的な部分(パス変数など)に埋め込む値を指定した上で、リクエストURLを生成するためのメソッドである。
+
+        上記例では、リクエストURLが静的なURLであるため、\ ``build``\ メソッドのみを呼び出してリクエストURLを生成している。
+        リクエストURLが動的なURL(パス変数やクエリ文字列が存在するURL)の場合は、
+        \ ``arg``\ メソッドや\ ``buildAndExpand``\ メソッドを呼び出す必要がある。
+
+        \ ``arg``\ メソッドと\ ``buildAndExpand``\ メソッドの具体的な使用例については、
+        「\ `Spring Framework Reference Documentation(Building URIs to Controllers and methods from views) <http://docs.spring.io/spring/docs/4.1.3.RELEASE/spring-framework-reference/html/mvc.html#mvc-links-to-controllers-from-views>`_\ 」を参照されたい。
+
+
+ .. note:: **リクエストマッピング名について**
+
+    リクエストマッピング名は、デフォルト実装(\ ``org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMethodMappingNamingStrategy``\ の実装)では、
+    「クラス名の大文字部分(クラスの短縮名) + \ ``"#"``\  + メソッド名」となる。
+
+    リクエストマッピング名は重複しないようにする必要がある。
+    名前が重複してしまった場合は、\ ``@RequestMapping``\ アノテーションの\ ``name``\ 属性に一意となる名前を指定する必要がある。
+
+    Controllerのメソッドに割り当てられたリクエストマッピング名を確認したい場合は、
+    \ :file:`logback.xml`\ に以下の設定を追加すればよい。
+
+     .. code-block:: xml
+
+        <logger name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+            <level value="trace" />
+        </logger>
+
+    上記設定を行った後に再起動すると、以下のようなログが出力されるようになる。
+
+     .. code-block:: text
+
+        date:2014-12-09 18:34:29	thread:RMI TCP Connection(2)-127.0.0.1	X-Track:	level:TRACE	logger:o.s.w.s.m.m.a.RequestMappingHandlerMapping      	message:Mapping name=HC#hello
+
+リクエストマッピング名の重複件数が多く、個別に対応するのが現実的でない場合は、
+リクエストマッピング名を生成する実装を差し替えることもできる。
+
+デフォルト実装を差し替える場合は、\ ``org.springframework.beans.factory.config.BeanPostProcessor``\ の仕組みを利用するとよい。
+以下に実装例を示す。
+
+ .. code-block:: java
+
+    package com.example.app;
+
+    import org.springframework.beans.BeansException;
+    import org.springframework.beans.factory.config.BeanPostProcessor;
+    import org.springframework.stereotype.Component;
+    import org.springframework.web.method.HandlerMethod;
+    import org.springframework.web.servlet.handler.HandlerMethodMappingNamingStrategy;
+    import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+    import org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping;
+
+    // (4)
+    @Component
+    public class CustomHandlerMethodMappingNamingStrategy implements
+                HandlerMethodMappingNamingStrategy<RequestMappingInfo>,
+                BeanPostProcessor {
+
+        // (5)
+        @Override
+        public String getName(HandlerMethod handlerMethod, RequestMappingInfo requestMappingInfo) {
+            if (requestMappingInfo.getName() != null) {
+                return requestMappingInfo.getName();
+            } else {
+                StringBuilder sb = new StringBuilder();
+                String simpleTypeName = handlerMethod.getBeanType().getSimpleName();
+                sb.append(simpleTypeName);
+                sb.append("#").append(handlerMethod.getMethod().getName());
+                return sb.toString();
+            }
+        }
+
+        @Override
+        public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+            if (bean instanceof RequestMappingInfoHandlerMapping) {
+                // (6)
+                ((RequestMappingInfoHandlerMapping) bean).setHandlerMethodMappingNamingStrategy(this);
+            }
+            return bean;
+        }
+
+        @Override
+        public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+            // NOP
+            return bean;
+        }
+
+    }
+
+ .. code-block:: jsp
+
+        <form action="${spring:mvcUrl('HelloController#hello').build()}"> <!-- (7) -->
+            <!-- ... -->
+        </form>
+
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - 項番
+      - 説明
+    * - | (4)
+      - リクエストマッピング名を生成するためのクラス(\ ``HandlerMethodMappingNamingStrategy``\インタフェースの実装クラス)を作成する。
+
+        デフォルト実装を差し替えるために、\ ``BeanPostProcessor``\ インタフェースを実装する。
+    * - | (5)
+      - \ ``getName``\ メソッドに、リクエストマッピング名を生成するためのロジックを実装する。
+
+        上記例では、リクエストマッピング名を「クラス名 + \ ``"#"``\  + メソッド名」の形式にしている。
+    * - | (6)
+      - \ ``postProcessBeforeInitialization``\ メソッドに、デフォルト実装を差し替えるためのロジックを実装する。
+
+        \ ``org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping``\ クラスの \ ``setHandlerMethodMappingNamingStrategy``\ メソッドを呼び出し、
+        リクエストマッピング名を生成するためのコンポーネントを差し替える。
+    * - | (7)
+      - \ ``spring:mvcUrl``\ 関数の引数に指定するリクエストマッピング名は、差し替えたコンポーネントで生成される名前を指定する。
 
 |
 

@@ -266,7 +266,7 @@ Using codelist in Java class
 
       @Inject
       @Named("CL_ORDERSTATUS")
-      protected CodeList orderStatusCodeList; // (1)
+      CodeList orderStatusCodeList; // (1)
 
       public boolean existOrderStatus(String target) {
           return orderStatusCodeList.asMap().containsKey(target); // (2)
@@ -1058,7 +1058,7 @@ Using codelist in Java class
 
       @Inject
       @Named("CL_I18N_PRICE")
-      protected I18nCodeList priceCodeList;
+      I18nCodeList priceCodeList;
 
       private String getPriceMessage(String targetPrice, Locale locale) {
            return priceCodeList.asMap(locale).get(targetPrice);  // (1)
@@ -1255,7 +1255,7 @@ Calling refresh method in Controller (Service) class
   public class CodeListContoller {
 
       @Inject
-      protected CodeListService codeListService; // (1)
+      CodeListService codeListService; // (1)
 
       @RequestMapping(method = RequestMethod.GET, params = "refresh")
       public String refreshJdbcCodeList() {
@@ -1287,7 +1287,7 @@ The description below is given only for the implementation class. Description fo
 
       @Inject
       @Named(value = "CL_AUTHORITIES") // (2)
-      protected ReloadableCodeList codeListItem; // (3)
+      ReloadableCodeList codeListItem; // (3)
 
       @Override
       public void refresh() { // (4)
@@ -1362,7 +1362,7 @@ Customizing the codelist independently
   public class DepYearCodeList extends AbstractCodeList { // (2)
 
       @Inject
-      protected DateFactory dateFactory; // (3)
+      DateFactory dateFactory; // (3)
 
       @Override
       public Map<String, String> asMap() {  // (4)

@@ -266,7 +266,7 @@ Javaクラスでのコードリスト使用
 
       @Inject
       @Named("CL_ORDERSTATUS")
-      protected CodeList orderStatusCodeList; // (1)
+      CodeList orderStatusCodeList; // (1)
 
       public boolean existOrderStatus(String target) {
           return orderStatusCodeList.asMap().containsKey(target); // (2)
@@ -1058,7 +1058,7 @@ Javaクラスでのコードリスト使用
 
       @Inject
       @Named("CL_I18N_PRICE")
-      protected I18nCodeList priceCodeList;
+      I18nCodeList priceCodeList;
 
       private String getPriceMessage(String targetPrice, Locale locale) {
            return priceCodeList.asMap(locale).get(targetPrice);  // (1)
@@ -1287,7 +1287,7 @@ Controller(Service)クラスでrefreshメソッドを呼び出す方法
 
       @Inject
       @Named(value = "CL_AUTHORITIES") // (2)
-      protected ReloadableCodeList codeListItem; // (3)
+      ReloadableCodeList codeListItem; // (3)
 
       @Override
       public void refresh() { // (4)

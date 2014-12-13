@@ -905,7 +905,7 @@ bean定義したSequencerからシーケンス値を取得する。
     // (1)
     @Inject
     @Named("articleIdSequencer") // (2)
-    private Sequencer<String> articleIdSequencer;
+    Sequencer<String> articleIdSequencer;
 
     // omitted
 

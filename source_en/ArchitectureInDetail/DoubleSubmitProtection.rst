@@ -542,7 +542,7 @@ Using PRG (Post-Redirect-Get) pattern
     public class PostRedirectGetExampleController {
 
         @Inject
-        protected UserService userService;
+        UserService userService;
 
         @ModelAttribute
         public PostRedirectGetForm setUpForm() {

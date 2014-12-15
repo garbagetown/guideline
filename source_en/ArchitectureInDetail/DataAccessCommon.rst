@@ -890,7 +890,7 @@ Fetch sequence value from Sequencer for which bean is defined.
     // (1)
     @Inject
     @Named("articleIdSequencer") // (2)
-    private Sequencer<String> articleIdSequencer;
+    Sequencer<String> articleIdSequencer;
 
     // omitted
 

@@ -110,7 +110,7 @@ Classes provided by Spring Web for uploading a file are as follows:
 
  .. tip::
 
-    In this guideline, it is a prerequisite to use File Upload functionality implemented through Servlet 3.0. However, Spring Web also provides an \ `implementation class for "Apache Commons FileUpload"<http://docs.spring.io/spring/docs/3.2.x/spring-framework-reference/html/mvc.html#mvc-multipart-resolver-commons>`_\" .
+    In this guideline, it is a prerequisite to use File Upload functionality implemented through Servlet 3.0. However, Spring Web also provides an \ `implementation class for "Apache Commons FileUpload" <http://docs.spring.io/spring/docs/3.2.x/spring-framework-reference/html/mvc.html#mvc-multipart-resolver-commons>`_\ .
     The difference in implementation of upload processes is absorbed by \ ``MultipartResolver``\  and \ ``MultipartFile``\  objects; hence it does not affect Controller implementation.
     It should be used when a servlet container (Tomcat6 etc.) not supported by Servlet3.0 needs to be used.
 

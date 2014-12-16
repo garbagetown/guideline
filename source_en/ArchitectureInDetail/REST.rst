@@ -4150,7 +4150,7 @@ Resolving error codes and messages using ExceptionCodeResolver
     org.hibernate.validator.constraints.URL.message              = "{0}" must be a valid URL.
     
     # for common library
-    org.terasoluna.gfw.common.codelist.ExistInCodeList = "{0}" must exist in code list of {codeListId}.
+    org.terasoluna.gfw.common.codelist.ExistInCodeList.message = "{0}" must exist in code list of {codeListId}.
 
 - | :file:`xxx-domain/src/main/resources/i18n/domain-messages.properties`
   | Message corresponding to error code (exception code) is set for the error in domain layer.

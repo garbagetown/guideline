@@ -115,7 +115,7 @@ Setting \ ``<sec:http>``\  element
        :widths: 15 85
 
        * - Element name
-     - Description
+         - Description
        * - | \ ``<form-login>``\ 
          - | \ ``org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter``\  is enabled.
            | UsernamePasswordAuthenticationFilter is the Filter that performs authentication by extracting username and password from the request at the time of POST method.
@@ -182,11 +182,11 @@ spring-security.xml
      - | Specify the path that performs authentication process in \ ``login-processing-url``\  attribute. When not specified,"j_spring_security_check" will be the default path.
        | **This guideline recommends changing to a system specific value rather than using the default value  "j_spring_security_check", mentioned above.**\ In this example, "/authentication" is specified.
    * - | (4)
-    -  | After a successful login, specify whether it should always transit to the path specified in \ ``default-target-url``\ , in the \ ``always-use-default-target``\  attribute.
+     - | After a successful login, specify whether it should always transit to the path specified in \ ``default-target-url``\ , in the \ ``always-use-default-target``\  attribute.
        | By default it is set as \ ``false``\ . When set as \ ``false``\  and when the base handler class for successful authentication namely, \ ``org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler``\  is specified as
        | redirect destination, it transits to the specified destination. If the redirect destination is not specified, it transits to the path specified in \ ``default-target-url``\ .
    * - | (5)
-       | In case of failed authentication, specify the destination in \ ``authentication-failure-url``\ .
+     - | In case of failed authentication, specify the destination in \ ``authentication-failure-url``\ .
        | When \ ``authentication-failure-handler-ref``\  attribute is not specified, irrespective of the type of authentication error, it uniformly transits to the destination specified for this setting.
    * - | (6)
      - | Specify the handler class to be called in case of a failed authentication, in \ ``default-target-url``\  attribute.
@@ -683,7 +683,8 @@ Accessing \ ``UserDetails``\  in JSP
 
 .. note::
   
-   \ ``UserDetails``\  created by \ ``JdbcDaoImpl``\  which is explained in :ref:`userDetailsService`\ , stores only the minimum required information such as "User ID" and "Authority".
+  \ ``UserDetails``\  created by \ ``JdbcDaoImpl``\  which is explained in :ref:`userDetailsService`\ , stores only the minimum required information such as "User ID" and "Authority".
+
   When other information related to the user such as "User name" etc. is required to be displayed as screen fields, it is necessary to extend \ ``UserDetails``\  and  \ ``UserDetailsService``\ .
   For extension methods, please refer, \ :ref:`extendsuserdetailsservice`\ .
 
@@ -1360,7 +1361,7 @@ Extending \ ``AuthenticationProvider``\
 | and \ ``getCredentials``\  method (to fetch information that guarantees validity of principal) in the class that implements  \ ``Authentication``\ .
 
 | Here, the case that requires authentication information other than user name and password for authentication, is considered. To access these values in \ ``AuthenticationProvider``\ ,
-it is necessary to create a class that inherits
+ it is necessary to create a class that inherits.
 
 * \ ``org.springframework.security.authentication.UsernamePasswordAuthenticationToken``\ 
 * \ ``org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter``\ 

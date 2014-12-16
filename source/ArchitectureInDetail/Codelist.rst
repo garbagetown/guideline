@@ -667,6 +667,27 @@ Javaクラスでのコードリスト使用
 
 | BeanValidationや、メッセージ出力方法の詳細については、 :doc:`Validation` を参照されたい。
 
+以下に、共通ライブラリから提供しているデフォルトのメッセージ定義を示す。
+メッセージは、アプリケーションの要件に合わせて変更すること。
+
+.. code-block:: properties
+
+    org.terasoluna.gfw.common.codelist.ExistInCodeList.message = Does not exist in {codeListId}
+
+.. note::
+
+    terasoluna-gfw-common 1.1.0.RELEASEより、
+    プロパティキーの形式を、Bean Validationのスタンダードな形式(アノテーションのFQCN + \ ``.message``\ )に変更している。
+
+    version 1.0.x.RELEASEのデフォルトのメッセージ定義は以下の通り。
+
+     .. code-block:: properties
+
+        org.terasoluna.gfw.common.codelist.ExistInCodeList = Does not exist in {codeListId}
+
+    アプリケーション要件に合わせてメッセージを変更している場合は、
+    version 1.0.x.RELEASEからversion 1.1.0.RELEASE以降にバージョンアップする際にプロパティキーの変更が必要になる。
+
 |
 
 @ExistInCodeList の設定例

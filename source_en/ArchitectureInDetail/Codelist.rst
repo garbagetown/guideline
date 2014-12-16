@@ -667,6 +667,27 @@ Input validation of code value using codelist
 
 | For details on BeanValidation and message output method, refer to :doc:`Validation`.
 
+See below the default message definition that provided by common library.
+Please change the message to fit the application requirements.
+
+.. code-block:: properties
+
+    org.terasoluna.gfw.common.codelist.ExistInCodeList.message = Does not exist in {codeListId}
+
+.. note::
+
+    In the terasoluna-gfw-common 1.1.0.RELEASE or later,
+    the property key has been changed to standard format of Bean Validation(FQCN of annotation class + \ ``.message``\).
+
+    See below the default message definition in the version 1.0.x.RELEASE.
+
+     .. code-block:: properties
+
+        org.terasoluna.gfw.common.codelist.ExistInCodeList = Does not exist in {codeListId}
+
+    If have change the message to fit the application requirements,
+    need to change the property key when migrate to the version 1.1.0.RELEASE from the version 1.0.x.RELEASE.
+
 |
 
 Example of @ExistInCodeList settings

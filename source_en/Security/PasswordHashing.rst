@@ -25,12 +25,12 @@ Overview
 | the \ ``matches (String rawPassword, String encodedPassword)``\  method.
 
 .. figure:: ./images/PasswordEncoder_class.png 
-
    :alt: PasswordEncoder Class Diagram
    :width: 80%
    :align: center
 
    **Picture - PasswordEncoder Class Diagram**
+
 |
 
 How to use
@@ -194,7 +194,7 @@ StandardPasswordEncoder
 
 | The salt passed from argument and assigned at the beginning of encodedPassword, is split and the two values namely, the value hashed by salt + secret + rawPassword
 | and the value without salt assigned at the beginning of encodedPassword, are compared.
-\
+
 
 Configuration example of StandardPasswordEncoder
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -275,7 +275,7 @@ For example we may consider a case wherein the existing hashing system is as fol
 
 | In this case, it is recommended to use the class that implements \ ``org.springframework.security.authentication.encoding.PasswordEncoder``\  of a different package
 | rather than the class that implements \ ``org.springframework.security.crypto.password.PasswordEncoder``\ .
-\
+
  .. warning::
 
      In versions prior to Spring Security 3.1.4, the class that implements  \ ``org.springframework.security.authentication.encoding.PasswordEncoder``\  was used for hashing. However,

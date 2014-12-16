@@ -53,7 +53,7 @@ Access authorization (JSP)
    :alt: Authorization(JSP)
    :width: 60%
 
-    **Picture - Authorization(JSP)**
+   **Picture - Authorization(JSP)**
 
 #. The servlet generated from JSP inquires with access authorization manager.
 #. Access authorization manager checks the user authority and access authorization information.
@@ -69,8 +69,7 @@ Access authorization (Method)
    :alt: Authorization(Method)
    :width: 60%
 
-
-    **Picture - Authorization(Method)**
+   **Picture - Authorization(Method)**
 
 #. Spring container generates an interceptor for the target object on the basis of access authorization information and interrupts the process.
 #. Interceptor inquires with access authorization manager on the basis of set roles.
@@ -525,7 +524,7 @@ Common settings
 
 
 How to use it in access authorization (request URL) and access authorization (JSP)
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 | How to set role hierarchy for request URL and JSP is explained here.
 
 * spring-security.xml

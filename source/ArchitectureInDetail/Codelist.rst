@@ -56,6 +56,9 @@ Overview
    * - ``org.terasoluna.gfw.common.codelist.JdbcCodeList``
      - DBから対象のコードをSQLで取得して使用する。
      - YES
+   * - ``org.terasoluna.gfw.common.codelist.EnumCodeList``
+     - \ ``Enum``\ クラスに定義した定数からコードリストを作成する際に使用する。
+     - NO
    * - ``org.terasoluna.gfw.common.codelist.i18n.SimpleI18nCodeList``
      - java.util.Localeに応じたコードリストを使用する。
      - NO
@@ -67,7 +70,6 @@ Overview
 .. figure:: ./images/codelist-class-diagram.png
    :alt: codelist class diagram
    :align: center
-   :width: 70%
 
    **Picture - Image of codelist class diagram**
 
@@ -81,6 +83,7 @@ How to use
  * :ref:`codelist-simple`
  * :ref:`codelist-number`
  * :ref:`codelist-jdbc`
+ * :ref:`codelist-enum`
  * :ref:`codelisti18n`
  * :ref:`codelist-validate`
 
@@ -739,6 +742,179 @@ Javaクラスでのコードリスト使用
 
        ``@ExistInCodeList`` の入力チェックでサポートしている型は、 ``String`` または ``Character`` のみである。
        そのため、 ``@ExistInCodeList`` をつけるフィールドは意味的に整数型であっても、Stringで定義する必要がある。(年・月・日等)
+
+|
+
+
+.. _codelist-enum:
+
+EnumCodeListの使用方法
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+\ ``org.terasoluna.gfw.common.codelist.EnumCodeList``\ は、
+\ ``Enum``\ クラスに定義した定数からコードリストを作成するクラスである。
+
+.. note::
+
+    以下の条件に一致するアプリケーションでコードリストを扱う場合は、
+    \ ``EnumCodeList``\ を使用して、コードリストのラベルを\ ``Enum``\ クラスで管理することを検討してほしい。
+    コードリストのラベルを\ ``Enum``\ クラスで管理することで、
+    コード値に紐づく情報と操作を\ ``Enum``\ クラスに集約する事ができる。
+
+    * コード値を\ ``Enum``\ クラスで管理する必要がある(つまり、Javaのロジックでコード値を意識した処理を行う必要がある)
+    * UIの国際化(多言語化)の必要がない
+
+|
+
+以下に、\ ``EnumCodeList``\ の使用イメージを示す。
+
+.. figure:: ./images/codelist-enum.png
+   :alt: codelist enum
+   :width: 100%
+
+.. note::
+
+    \ ``EnumCodeList``\ では、\ ``Enum``\ クラスからコードリストを作成するために必要な情報(コード値とラベル)を取得するためのインタフェースとして、
+    \ ``org.terasoluna.gfw.common.codelist.EnumCodeList.CodeListItem``\ インタフェースを提供している。
+
+    \ ``EnumCodeList``\を使用する場合は、作成する\ ``Enum``\ クラスで\ ``EnumCodeList.CodeListItem``\ インタフェースを実装する必要がある。
+
+|
+
+コードリスト設定例
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+**Enumクラスの作成**
+
+\ ``EnumCodeList``\ を使用する場合は、
+\ ``EnumCodeList.CodeListItem``\ インタフェースを実装した\ ``Enum``\ クラスを作成する。
+以下に作成例を示す。
+
+.. code-block:: java
+
+    package com.example.domain.model;
+
+    import org.terasoluna.gfw.common.codelist.EnumCodeList;
+
+    public enum OrderStatus
+        // (1)
+        implements EnumCodeList.CodeListItem {
+
+        // (2)
+        RECEIVED  ("1", "Received"),
+        SENT      ("2", "Sent"),
+        CANCELLED ("3","Cancelled");
+
+        // (3)
+        private final String value;
+        private final String label;
+
+        // (4)
+        private OrderStatus(String codeValue, String codeLabel) {
+            this.value = codeValue;
+            this.label = codeLabel;
+        }
+
+        // (5)
+        @Override
+        public String getCodeValue() {
+            return value;
+        }
+
+        // (6)
+        @Override
+        public String getCodeLabel() {
+            return label;
+        }
+
+    }
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - 項番
+      - 説明
+    * - | (1)
+      - コードリストとして使用する\ ``Enum``\ クラスでは、
+        共通ライブラリから提供している\ ``org.terasoluna.gfw.common.codelist.EnumCodeList.EnumCodeList``\ インタフェースを実装する。
+
+        \ ``EnumCodeList.EnumCodeList``\ インタフェースには、コードリストを作成するために必要な情報(コード値とラベル)を取得するためのメソッドとして、
+
+        * コード値を取得する\ ``getCodeValue()``\ メソッド
+        * ラベルを取得する\ ``getCodeLabel()``\ メソッド
+
+        が定義されている。
+    * - | (2)
+      - 定数を定義する。
+
+        定数を生成する際に、コードリストを作成するために必要な情報(コード値とラベル)を指定する。
+
+        上記例では、以下の3つの定数を定義している。
+
+        * \ ``RECEIVED``\ (コード値=\ ``"1"``\ , ラベル=\ ``"Received"``\ )
+        * \ ``SENT``\  (コード値=\ ``"2"``\ , ラベル=\ ``"Sent"``\ )
+        * \ ``CANCELLED``\  (コード値=\ ``"3"``\ , ラベル=\ ``"Cancelled"``\ )
+
+        .. note::
+
+            \ ``EnumCodeList``\ を使用した際のコードリストの並び順は、定数の定義順となる。
+
+    * - | (3)
+      - コードリストを作成するために必要な情報(コード値とラベル)を保持するプロパティを用意する。
+    * - | (4)
+      - コードリストを作成するために必要な情報(コード値とラベル)を受け取るコンストラクタを用意する。
+    * - | (5)
+      - 定数が保持するコード値を返却する。
+
+        このメソッドは、\ ``EnumCodeList.EnumCodeList``\ インタフェースで定義されているメソッドであり、
+        \ ``EnumCodeList``\ が定数からコード値を取得する際に呼び出す。
+    * - | (6)
+      - 定数が保持するラベルを返却する。
+
+        このメソッドは、\ ``EnumCodeList.EnumCodeList``\ インタフェースで定義されているメソッドであり、
+        \ ``EnumCodeList``\ が定数からラベルを取得する際に呼び出す。
+
+|
+
+**bean定義ファイル(xxx-codelist.xml)の定義**
+
+コードリスト用のbean定義ファイルに、\ ``EnumCodeList``\を定義する。
+以下に定義例を示す。
+
+.. code-block:: xml
+
+    <bean id="CL_ORDERSTATUS"
+          class="org.terasoluna.gfw.common.codelist.EnumCodeList"> <!-- (7) -->
+        <constructor-arg value="com.example.domain.model.OrderStatus" /> <!-- (8) -->
+    </bean>
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - 項番
+      - 説明
+    * - | (7)
+      - コードリストの実装クラスとして、\ ``EnumCodeList``\ クラスを指定する。
+    * - | (8)
+      - \ ``EnumCodeList``\ クラスのコンストラクタに、\ ``EnumCodeList.CodeListItem``\ インタフェースを実装した\ ``Enum``\ クラスのFQCNを指定する。
+
+|
+
+JSPでのコードリスト使用
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+JSPでコードリストを使用する方法については、前述した :ref:`clientSide` を参照されたい。
+
+|
+
+Javaクラスでのコードリスト使用
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Javaクラスでコードリストを使用する方法については、
+前述した :ref:`serverSide` を参照されたい。
 
 |
 

@@ -4172,9 +4172,9 @@ ExceptionCodeResolverを使ったエラーコードとメッセージの解決
     # for bean validation of standard
     javax.validation.constraints.AssertFalse.message = "{0}" must be false.
     javax.validation.constraints.AssertTrue.message  = "{0}" must be true.
-    javax.validation.constraints.DecimalMax.message  = "{0}" must be less than or equal to {value}.
-    javax.validation.constraints.DecimalMin.message  = "{0}" must be greater than or equal to {value}.
-    javax.validation.constraints.Digits.message      = "{0}" numeric value out of bounds. (<{integer} digits>.<{fraction} digits> expected)
+    javax.validation.constraints.DecimalMax.message  = "{0}" must be less than ${inclusive == true ? 'or equal to ' : ''}{value}.
+    javax.validation.constraints.DecimalMin.message  = "{0}" must be greater than ${inclusive == true ? 'or equal to ' : ''}{value}.
+    javax.validation.constraints.Digits.message      = "{0}" numeric value out of bounds (<{integer} digits>.<{fraction} digits> expected).
     javax.validation.constraints.Future.message      = "{0}" must be in the future.
     javax.validation.constraints.Max.message         = "{0}" must be less than or equal to {value}.
     javax.validation.constraints.Min.message         = "{0}" must be greater than or equal to {value}.
@@ -4185,16 +4185,26 @@ ExceptionCodeResolverを使ったエラーコードとメッセージの解決
     javax.validation.constraints.Size.message        = "{0}" size must be between {min} and {max}.
     
     # for bean validation of hibernate
-    org.hibernate.validator.constraints.CreditCardNumber.message = "{0}" invalid credit card number.
-    org.hibernate.validator.constraints.Email.message            = "{0}" not a well-formed email address.
-    org.hibernate.validator.constraints.Length.message           = "{0}" length must be between {min} and {max}.
-    org.hibernate.validator.constraints.NotBlank.message         = "{0}" may not be empty.
-    org.hibernate.validator.constraints.NotEmpty.message         = "{0}" may not be empty.
-    org.hibernate.validator.constraints.Range.message            = "{0}" must be between {min} and {max}.
-    org.hibernate.validator.constraints.SafeHtml.message         = "{0}" may have unsafe html content.
-    org.hibernate.validator.constraints.ScriptAssert.message     = "{0}" script expression "{script}" didn't evaluate to true.
-    org.hibernate.validator.constraints.URL.message              = "{0}" must be a valid URL.
-    
+    org.hibernate.validator.constraints.CreditCardNumber.message        = "{0}" invalid credit card number.
+    org.hibernate.validator.constraints.EAN.message                     = "{0}" invalid {type} barcode.
+    org.hibernate.validator.constraints.Email.message                   = "{0}" not a well-formed email address.
+    org.hibernate.validator.constraints.Length.message                  = "{0}" length must be between {min} and {max}.
+    org.hibernate.validator.constraints.LuhnCheck.message               = "{0}" The check digit for ${validatedValue} is invalid, Luhn Modulo 10 checksum failed.
+    org.hibernate.validator.constraints.Mod10Check.message              = "{0}" The check digit for ${validatedValue} is invalid, Modulo 10 checksum failed.
+    org.hibernate.validator.constraints.Mod11Check.message              = "{0}" The check digit for ${validatedValue} is invalid, Modulo 11 checksum failed.
+    org.hibernate.validator.constraints.ModCheck.message                = "{0}" The check digit for ${validatedValue} is invalid, ${modType} checksum failed.
+    org.hibernate.validator.constraints.NotBlank.message                = "{0}" may not be empty.
+    org.hibernate.validator.constraints.NotEmpty.message                = "{0}" may not be empty.
+    org.hibernate.validator.constraints.ParametersScriptAssert.message  = "{0}" script expression "{script}" didn't evaluate to true.
+    org.hibernate.validator.constraints.Range.message                   = "{0}" must be between {min} and {max}.
+    org.hibernate.validator.constraints.SafeHtml.message                = "{0}" may have unsafe html content.
+    org.hibernate.validator.constraints.ScriptAssert.message            = "{0}" script expression "{script}" didn't evaluate to true.
+    org.hibernate.validator.constraints.URL.message                     = "{0}" must be a valid URL.
+
+    org.hibernate.validator.constraints.br.CNPJ.message                 = "{0}" invalid Brazilian corporate taxpayer registry number (CNPJ).
+    org.hibernate.validator.constraints.br.CPF.message                  = "{0}" invalid Brazilian individual taxpayer registry number (CPF).
+    org.hibernate.validator.constraints.br.TituloEleitoral.message      = "{0}" invalid Brazilian Voter ID card number.
+
     # for common library
     org.terasoluna.gfw.common.codelist.ExistInCodeList.message   = "{0}" must exist in code list of {codeListId}.
 

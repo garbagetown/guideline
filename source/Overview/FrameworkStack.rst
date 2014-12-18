@@ -29,13 +29,13 @@ DIコンテナ
 DIコンテナとしてSpringを利用する。
 
 
-* `Spring Framework 4.0 <http://projects.spring.io/spring-framework/>`_
+* `Spring Framework 4.1 <http://projects.spring.io/spring-framework/>`_
 
 MVCフレームワーク
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Web MVCフレームワークとしてSpring MVCを利用する。
 
-* `Spring MVC 4.0 <http://docs.spring.io/spring/docs/4.0.8.RELEASE/spring-framework-reference/html/mvc.html>`_
+* `Spring MVC 4.1 <http://docs.spring.io/spring/docs/4.1.3.RELEASE/spring-framework-reference/html/mvc.html>`_
 
 O/R Mapper
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -46,7 +46,7 @@ O/R Mapper
 
   * プロバイダは、\ `Hibernate 4.3 <http://docs.jboss.org/hibernate/orm/4.3/manual/en-US/html_single/>`_\ を使用する。
 
-* `MyBatis 3 <http://mybatis.github.io/mybatis-3/>`_
+* `MyBatis 3.2 <http://mybatis.github.io/mybatis-3/>`_
 
   * Spring Frameworkとの連携ライブラリとして、\ `MyBatis-Spring <http://mybatis.github.io/spring/>`_\ を使用する。
 
@@ -99,7 +99,7 @@ JSPをTiles化する場合は、
 
   * 実装は、\ `Hibernate Validator 5.1 <http://docs.jboss.org/hibernate/validator/5.1/reference/en-US/html/>`_\ を利用する。
 
-* 相関チェックには\ `Bean Validation <http://download.oracle.com/otn-pub/jcp/bean_validation-1_1-fr-eval-spec/bean-validation-specification.pdf>`_\ 、もしくは\ `Spring Validation <http://docs.spring.io/spring/docs/4.0.8.RELEASE/spring-framework-reference/html/validation.html#validator>`_\ を利用する。
+* 相関チェックには\ `Bean Validation <http://download.oracle.com/otn-pub/jcp/bean_validation-1_1-fr-eval-spec/bean-validation-specification.pdf>`_\ 、もしくは\ `Spring Validation <http://docs.spring.io/spring/docs/4.1.3.RELEASE/spring-framework-reference/html/validation.html#validator>`_\ を利用する。
 
   * 使い分けについては\ :doc:`../ArchitectureInDetail/Validation`\ を参照されたい。
 
@@ -137,7 +137,7 @@ version 1.1.0.RELEASEで利用するOSSの一覧を以下に示す。
     への依存関係を解決しており、
     TERASOLUNA Global Frameworkで使用するOSSのバージョンは、原則として、Spring IO platformの定義に準じている。
 
-    なお、version 1.1.0.RELEASEで指定しているSpring IO platformのバージョンは、`1.0.3.RELEASE <http://docs.spring.io/platform/docs/1.0.3.RELEASE/reference/htmlsingle/>`_\ である。
+    なお、version 1.1.0.RELEASEで指定しているSpring IO platformのバージョンは、`1.1.0.RELEASE <http://docs.spring.io/platform/docs/1.1.0.RELEASE/reference/htmlsingle/>`_\ である。
 
 .. tabularcolumns:: |p{0.15\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|p{0.05\linewidth}|p{0.05\linewidth}|
 .. list-table::
@@ -154,79 +154,79 @@ version 1.1.0.RELEASEで利用するOSSの一覧を以下に示す。
     * - Spring
       - org.springframework
       - spring-aop
-      - 4.0.8.RELEASE
+      - 4.1.3.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-aspects
-      - 4.0.8.RELEASE
+      - 4.1.3.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-beans
-      - 4.0.8.RELEASE
+      - 4.1.3.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-context
-      - 4.0.8.RELEASE
+      - 4.1.3.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-context-support
-      - 4.0.8.RELEASE
+      - 4.1.3.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-core
-      - 4.0.8.RELEASE
+      - 4.1.3.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-expression
-      - 4.0.8.RELEASE
+      - 4.1.3.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-jdbc
-      - 4.0.8.RELEASE
+      - 4.1.3.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-orm
-      - 4.0.8.RELEASE
+      - 4.1.3.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-tx
-      - 4.0.8.RELEASE
+      - 4.1.3.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-web
-      - 4.0.8.RELEASE
+      - 4.1.3.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-webmvc
-      - 4.0.8.RELEASE
+      - 4.1.3.RELEASE
       - \*
       -
     * - Spring
       - org.springframework.data
       - spring-data-commons
-      - 1.8.4.RELEASE
+      - 1.9.1.RELEASE
       - \*
       -
     * - Spring
@@ -294,7 +294,7 @@ version 1.1.0.RELEASEで利用するOSSの一覧を以下に示す。
       - hibernate-jpa-2.1-api
       - 1.0.0.Final
       - \*
-      - \*1
+      - \*1 \*5
     * - JPA(Hibernate)
       - org.javassist
       - javassist
@@ -312,7 +312,7 @@ version 1.1.0.RELEASEで利用するOSSの一覧を以下に示す。
       - jboss-logging-annotations
       - 1.2.0.Final
       - \*
-      - \*1 \*5 \*7
+      - \*1 \*5 \*6
     * - JPA(Hibernate)
       - org.jboss.spec.javax.transaction
       - jboss-transaction-api_1.2_spec
@@ -322,7 +322,7 @@ version 1.1.0.RELEASEで利用するOSSの一覧を以下に示す。
     * - JPA(Hibernate)
       - org.springframework.data
       - spring-data-jpa
-      - 1.6.4.RELEASE
+      - 1.7.1.RELEASE
       - \*
       - \*1
     * - MyBatis3
@@ -412,25 +412,25 @@ version 1.1.0.RELEASEで利用するOSSの一覧を以下に示す。
     * - JSON
       - com.fasterxml.jackson.core
       - jackson-annotations
-      - 2.3.4
+      - 2.4.4
       - \*
       -
     * - JSON
       - com.fasterxml.jackson.core
       - jackson-core
-      - 2.3.4
+      - 2.4.4
       - \*
       -
     * - JSON
       - com.fasterxml.jackson.core
       - jackson-databind
-      - 2.3.4
+      - 2.4.4
       - \*
       -
     * - JSON
       - com.fasterxml.jackson.datatype
       - jackson-datatype-joda
-      - 2.3.4
+      - 2.4.4
       - \*
       -
     * - 入力チェック
@@ -442,7 +442,7 @@ version 1.1.0.RELEASEで利用するOSSの一覧を以下に示す。
     * - 入力チェック
       - org.hibernate
       - hibernate-validator
-      - 5.0.3.Final
+      - 5.1.3.Final
       - \*
       -
     * - 入力チェック
@@ -450,7 +450,7 @@ version 1.1.0.RELEASEで利用するOSSの一覧を以下に示す。
       - jboss-logging
       - 3.1.3.GA
       - \*
-      - \*5 \*6
+      - \*5
     * - 入力チェック
       - com.fasterxml
       - classmate
@@ -478,13 +478,13 @@ version 1.1.0.RELEASEで利用するOSSの一覧を以下に示す。
     * - Bean変換
       - org.apache.commons
       - commons-lang3
-      - 3.1
+      - 3.3.2
       - \*
       - \*4
     * - 日付操作
       - joda-time
       - joda-time
-      - 2.3
+      - 2.5
       - \*
       -
     * - 日付操作
@@ -568,7 +568,7 @@ version 1.1.0.RELEASEで利用するOSSの一覧を以下に示す。
     * - Tiles
       - org.apache.tiles
       - tiles-request-api
-      - 1.0.1
+      - 1.0.6
       - \*
       - \*4
     * - Tiles
@@ -608,8 +608,6 @@ version 1.1.0.RELEASEで利用するOSSの一覧を以下に示す。
 #. | 共通ライブラリに依存しないが、TERASOLUNA Global Frameworkでアプリケーションを開発する場合に、利用することを推奨しているライブラリ
 #. | Spring IO platformでサポートしているライブラリが個別に依存しているライブラリ
    | (Spring IO platformとしては依存関係の管理は行っていないライブラリ)
-#. | 複数のライブラリから異なるバージョンへの依存があるライブラリ
-   | (TERASOLUNA Global Framework側で共存可能なバージョンを明示的に指定しているライブラリ)
 #. | Spring IO platformで適用されるバージョンが、BetaやRC(Release Candidate)であるライブラリ
    | (TERASOLUNA Global Framework側でGAのバージョンを明示的に指定しているライブラリ)
 

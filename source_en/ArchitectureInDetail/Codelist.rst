@@ -658,90 +658,6 @@ Using codelist in Java class
 
 |
 
-.. _codelist-validate:
-
-Input validation of code value using codelist
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-| When checking whether the input value is the key value defined in codelist,
-| ``org.terasoluna.gfw.common.codelist.ExistInCodeList`` annotation for BeanValidation is provided in common library.
-
-| For details on BeanValidation and message output method, refer to :doc:`Validation`.
-
-See below the default message definition that provided by common library.
-Please change the message to fit the application requirements.
-
-.. code-block:: properties
-
-    org.terasoluna.gfw.common.codelist.ExistInCodeList.message = Does not exist in {codeListId}
-
-.. note::
-
-    In the terasoluna-gfw-common 1.1.0.RELEASE or later,
-    the property key has been changed to standard format of Bean Validation(FQCN of annotation class + \ ``.message``\).
-
-    See below the default message definition in the version 1.0.x.RELEASE.
-
-     .. code-block:: properties
-
-        org.terasoluna.gfw.common.codelist.ExistInCodeList = Does not exist in {codeListId}
-
-    If have change the message to fit the application requirements,
-    need to change the property key when migrate to the version 1.1.0.RELEASE from the version 1.0.x.RELEASE.
-
-|
-
-Example of @ExistInCodeList settings
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-| See below the example of input validation method using codelist.
-
-**Bean definition file**
-
-- xxx-codelist.xml
-
-.. code-block:: xml
-
-    <bean id="CL_GENDER" class="org.terasoluna.gfw.common.codelist.SimpleMapCodeList">
-        <property name="map">
-            <map>
-                <entry key="M" value="Male" />
-                <entry key="F" value="Female" />
-            </map>
-        </property>
-    </bean>
-
-**Form object**
-
-.. code-block:: java
-
-    public class Person {
-        @ExistInCodeList(codeListId = "CL_GENDER")  // (1)
-        private String gender;
-
-        // getter and setter omitted
-    }
-
-.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
-.. list-table::
-   :header-rows: 1
-   :widths: 10 90
-
-   * - Sr. No.
-     - Description
-   * - | (1)
-     - | Set ``@ExistInCodeList`` annotation for the field for which input is to be validated,
-       | and specify the target codelist in codeListId.
-
-As a result of above settings, when characters other than M, F are stored in ``gender``, the system throws an error.
-
-|
-
-    .. tip::
-
-       ``@ExistInCodeList`` input validation supports only ``String`` or ``Character`` data types.
-       Therefore, even if the fields with ``@ExistInCodeList`` may contain integer values, they should be defined as String data type. (such as Year/Month/Day)
-
-|
-
 .. _codelisti18n:
 
 How to use SimpleI18nCodeList
@@ -1099,6 +1015,89 @@ Using codelist in Java class
 
 |
 
+.. _codelist-validate:
+
+Input validation of code value using codelist
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+| When checking whether the input value is the key value defined in codelist,
+| ``org.terasoluna.gfw.common.codelist.ExistInCodeList`` annotation for BeanValidation is provided in common library.
+
+| For details on BeanValidation and message output method, refer to :doc:`Validation`.
+
+See below the default message definition that provided by common library.
+Please change the message to fit the application requirements.
+
+.. code-block:: properties
+
+    org.terasoluna.gfw.common.codelist.ExistInCodeList.message = Does not exist in {codeListId}
+
+.. note::
+
+    In the terasoluna-gfw-common 1.1.0.RELEASE or later,
+    the property key has been changed to standard format of Bean Validation(FQCN of annotation class + \ ``.message``\).
+
+    See below the default message definition in the version 1.0.x.RELEASE.
+
+     .. code-block:: properties
+
+        org.terasoluna.gfw.common.codelist.ExistInCodeList = Does not exist in {codeListId}
+
+    If have change the message to fit the application requirements,
+    need to change the property key when migrate to the version 1.1.0.RELEASE from the version 1.0.x.RELEASE.
+
+|
+
+Example of @ExistInCodeList settings
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+| See below the example of input validation method using codelist.
+
+**Bean definition file**
+
+- xxx-codelist.xml
+
+.. code-block:: xml
+
+    <bean id="CL_GENDER" class="org.terasoluna.gfw.common.codelist.SimpleMapCodeList">
+        <property name="map">
+            <map>
+                <entry key="M" value="Male" />
+                <entry key="F" value="Female" />
+            </map>
+        </property>
+    </bean>
+
+**Form object**
+
+.. code-block:: java
+
+    public class Person {
+        @ExistInCodeList(codeListId = "CL_GENDER")  // (1)
+        private String gender;
+
+        // getter and setter omitted
+    }
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+   :header-rows: 1
+   :widths: 10 90
+
+   * - Sr. No.
+     - Description
+   * - | (1)
+     - | Set ``@ExistInCodeList`` annotation for the field for which input is to be validated,
+       | and specify the target codelist in codeListId.
+
+As a result of above settings, when characters other than M, F are stored in ``gender``, the system throws an error.
+
+|
+
+    .. tip::
+
+       ``@ExistInCodeList`` input validation supports only ``String`` or ``Character`` data types.
+       Therefore, even if the fields with ``@ExistInCodeList`` may contain integer values, they should be defined as String data type. (such as Year/Month/Day)
+
+|
 
 How to extend
 --------------------------------------------------------------------------------

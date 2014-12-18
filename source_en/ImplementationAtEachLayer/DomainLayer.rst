@@ -1530,6 +1530,23 @@ Information required for "Declarative transaction management"
 | Specify \ ``@Transactional``\  annotation for at class level or method level which are considered as target of transaction management and specify the information required for
 | transaction control in attributes of \ ``@Transactional``\  annotation.
 
+ .. note::
+
+    In this guideline, has assumed to be used the \ ``@org.springframework.transaction.annotation.Transactional``\  annotation of Spring Framework.
+
+ .. tip::
+
+    Since Spring 4, can be used the \ ``@javax.transaction.Transactional``\  annotation of JTA 1.2.
+
+    However in this guideline, has recommended to be used \ ``@Transactional``\  annotation of Spring Framework that can be specify information required for "Declarative transaction management" more finely.
+
+    If use the \ ``@Transactinal``\  annotation of the Spring Framework, following attributes can be specified.
+
+    * \ ``NESTED``\  (using JDBC's savepoint) as an attribute value of the propagation method of transaction(\ ``propagation``\  attribute).
+    * Isolation level of transaction(\ ``isolation``\  attribute)
+    * Timeout of transaction(\ ``timeout``\  attribute)
+    * Read-only flag of transaction(\ ``readOnly``\  attribute)
+
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.10\linewidth}|p{0.80\linewidth}|
  .. list-table::
     :header-rows: 1

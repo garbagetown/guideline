@@ -1883,7 +1883,7 @@ Pagination search (TERASOLUNA DAO standard function system)
              created_at DESC
      </select>
 
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|    * - order_id(PK)
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :header-rows: 1
     :widths: 10 90

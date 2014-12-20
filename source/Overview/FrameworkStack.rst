@@ -664,47 +664,121 @@ Javaソースコードを含まないものは、ライブラリの依存関係�
 
 terasoluna-gfw-common
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-* 共通例外機構
 
-  * 例外クラス
-  * 例外ロガー
-  * 例外コード
-  * 例外ログ出力インターセプタ
+terasoluna-gfw-commonは以下の部品を提供している。
 
-* システム日付
-* コードリスト
-* 処理結果メッセージ
-* クエリー(SQL, JPQL)エスケープ
-* シーケンサ
+.. tabularcolumns:: |p{0.30\linewidth}|p{0.35\linewidth}|p{0.30\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 20 30 50
 
+    * - 分類
+      - 部品名
+      - 説明
+    * - :doc:`../ArchitectureInDetail/ExceptionHandling`
+      - 例外クラス
+      - 汎用的に使用できる例外クラスを提供する。
+    * -
+      - 例外ロガー
+      - プリケーション内で発生した例外をログに出力するためのロガークラスを提供する。
+    * -
+      - 例外コード
+      - 例外クラスに対応する例外コード(メッセージID)を解決するための仕組み(クラス)を提供する。
+    * -
+      - 例外ログ出力インターセプタ
+      - ドメイン層で発生した例外をログ出力するためのインターセプタクラス(AOP)を提供する。
+    * - :doc:`../ArchitectureInDetail/SystemDate`
+      - システム時刻ファクトリ
+      - システム時刻を取得するためのクラスを提供する。
+    * - :doc:`../ArchitectureInDetail/Codelist`
+      - コードリスト
+      - コードリストを生成するためのクラスを提供する。
+    * - :doc:`../ArchitectureInDetail/DataAccessCommon`
+      - クエリエスケープ
+      - SQL及びJPQLにバインドする値のエスケープ処理を行うクラスを提供する。
+    * -
+      - シーケンサ
+      - シーケンス値を取得するためのクラスを提供する。
 
 terasoluna-gfw-web
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-* トランザクショントークン機構
-* 共通例外ハンドラ
-* コードリスト埋込インターセプタ
-* 汎用ダウンロードView
-* MDC情報ログ出力用サーブレットフィルタ群
 
-  * 親サーブレットフィルタ
-  * トラッキングIDログ出力用サーブレットフィルタ
-  * MDCクリアサーブレットフィルタ
+terasoluna-gfw-webは以下の部品を提供している。
 
-* EL関数群
+.. tabularcolumns:: |p{0.30\linewidth}|p{0.35\linewidth}|p{0.30\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 20 30 50
 
-  * XSS対策
-  * URLエンコーディング
-  * JavaBeansのクエリパラメータ展開
-
-* ページネーション出力JSPタグ
-* 結果メッセージ出力JSPタグ
-
+    * - 分類
+      - 部品名
+      - 説明
+    * - :doc:`../ArchitectureInDetail/DoubleSubmitProtection`
+      - トランザクショントークンチェック
+      - リクエストの二重送信からWebアプリケーションを守るための仕組み(クラス)を提供する。
+    * - :doc:`../ArchitectureInDetail/ExceptionHandling`
+      - 例外ハンドラ
+      - 共通ライブラリが提供する例外ハンドリングの部品と連携するための例外ハンドラクラス(Spring MVC提供のクラスのサブクラス)を提供する。
+    * -
+      - 例外ログ出力インターセプタ
+      - Spring MVCの例外ハンドラがハンドリングした例外をログ出力するためのインターセプタクラス(AOP)を提供する。
+    * - :doc:`../ArchitectureInDetail/Codelist`
+      - コードリスト埋込インターセプタ
+      - Viewからコードリストを取得できるようにするために、コードリストの情報をリクエストスコープに格納するためのインターセプタクラス(Spring MVC Interceptor)を提供する。
+    * - :doc:`../ArchitectureInDetail/FileDownload`
+      - 汎用ダウンロードView
+      - ストリームから取得したデータを、ダウンロード用のストリームに出力するための抽象クラスを提供する。
+    * - :doc:`../ArchitectureInDetail/Logging`
+      - トラッキングID格納用サーブレットフィルタ
+      - トレーサビリティを向上させるために、
+        クライアントから指定されたトラッキングIDを、ロガーのMDC(Mapped Diagnostic Context)、リクエストスコープ、レスポンスヘッダに設定するためのサーブレットフィルタクラスを提供する。
+        (クライアントからトラッキングIDの指定がない場合は、本クラスでトラッキングIDを生成する)
+    * -
+      - 汎用MDC格納用サーブレットフィルタ
+      - ロガーのMDCに任意の値を設定するための抽象クラスを提供する。
+    * -
+      - MDCクリア用サーブレットフィルタ
+      - ロガーのMDCに格納されている情報をクリアするためのサーブレットフィルタクラスを提供する。
+    * - :doc:`../ArchitectureInDetail/Pagination`
+      - ページネーションリンク表示用のJSPタグ
+      - Spring Data Commons提供のクラスと連携してページネーションリンクを表示するためのJSPタグライブラリを提供する。
+    * - :doc:`../ArchitectureInDetail/MessageManagement`
+      - 結果メッセージ表示用のJSPタグ
+      - 処理結果を表示するためのJSPタグライブラリを提供する。
+    * - :ref:`TagLibAndELFunctionsOverviewELFunctions`
+      - XSS対策用EL関数
+      - XSS対策用のEL関数を提供する。
+    * -
+      - URL用EL関数
+      - URLエンコーディングなどのURL用のEL関数を提供する。
+    * -
+      - DOM変換用EL関数
+      - DOM文字列に変換するためのEL関数を提供する。
+    * -
+      - ユーティリティEL関数
+      - 汎用的なユーティリティ処理を行うためのEL関数を提供する。
 
 terasoluna-gfw-security-web
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* 認証ユーザ名ログ出力用サーブレットフィルタ
-* オープンリダイレクト脆弱性対策リダイレクトハンドラ
+terasoluna-gfw-security-webは以下の部品を提供している。
+
+.. tabularcolumns:: |p{0.30\linewidth}|p{0.35\linewidth}|p{0.30\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 20 30 50
+
+    * - 分類
+      - 部品名
+      - 説明
+    * - :doc:`../ArchitectureInDetail/Logging`
+      - 認証ユーザ名格納用サーブレットフィルタ
+      - トレーサビリティを向上させるために、
+        認証ユーザ名をロガーのMDCに設定するためのサーブレットフィルタクラスを提供する。
+    * - :doc:`../Security/Authentication`
+      - リダイレクト先の指定が可能な認証成功ハンドラ
+      - 認証が成功した際に、Webアプリケーション内の任意のパスにリダイレクトするためのハンドラクラスを提供する。
+
 
 .. raw:: latex
 

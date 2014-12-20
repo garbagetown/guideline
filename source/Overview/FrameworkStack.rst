@@ -68,7 +68,7 @@ View
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ViewにはJSPを利用する。
 
-JSPをTiles化する場合は、
+Viewのレイアウトを共通化する場合は、
 
 * `Apache Tiles 3.0 <http://tiles.apache.org/framework/index.html>`_
 

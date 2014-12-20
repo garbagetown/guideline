@@ -67,7 +67,7 @@ View
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 JSP is used as View.
 
-For using Tiled JSP, use the following.
+If standardize layout of view, use the following.
 
 * `Apache Tiles 2.2 <http://tiles.apache.org/2.2/framework/index.html>`_
 

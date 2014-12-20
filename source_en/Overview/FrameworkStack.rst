@@ -10,7 +10,7 @@ Stack of TERASOLUNA Global Framework
 Summary of Software Framework of TERASOLUNA Global Framework
 --------------------------------------------------------------------------------
 
-Software Framework being used in TERASOLUNA Global Framework is not a proprietory Framework but a combination of various OSS technologies around Spring Framework.
+Software Framework being used in TERASOLUNA Global Framework is not a proprietory Framework but a combination of various OSS technologies around \ `Spring Framework <http://projects.spring.io/spring-framework/>`_\ .
 
 .. figure:: images/introduction-software-framework.png
    :width: 80%
@@ -28,7 +28,7 @@ DI Container
 Spring is used as DI Container.
 
 
-* `Spring Framework 3.2 <http://spring.io/>`_
+* `Spring Framework 3.2 <http://docs.spring.io/spring/docs/3.2.x/spring-framework-reference/html/beans.html>`_
 
 MVC Framework
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

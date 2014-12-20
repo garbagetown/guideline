@@ -10,7 +10,7 @@ TERASOLUNA Global Frameworkのスタック
 TERASOLUNA Global FrameworkのSoftware Framework概要
 --------------------------------------------------------------------------------
 
-TERASOLUNA Global Frameworkで使用するSoftware Frameworkは独自のフレームワークではなく、Spring Frameworkを中心としたOSSの組み合わせである。
+TERASOLUNA Global Frameworkで使用するSoftware Frameworkは独自のフレームワークではなく、\ `Spring Framework <http://projects.spring.io/spring-framework/>`_\ を中心としたOSSの組み合わせである。
 
 .. figure:: images/introduction-software-framework.png
    :width: 95%
@@ -26,10 +26,10 @@ TERASOLUNA Global Frameworkを構成するライブラリを以下に示す。
 
 DIコンテナ
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-DIコンテナとしてSpringを利用する。
+DIコンテナとしてSpring Frameworkを利用する。
 
 
-* `Spring Framework 4.1 <http://projects.spring.io/spring-framework/>`_
+* `Spring Framework 4.1 <http://docs.spring.io/spring/docs/4.1.3.RELEASE/spring-framework-reference/html/beans.html>`_
 
 MVCフレームワーク
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

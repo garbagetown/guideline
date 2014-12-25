@@ -21,7 +21,7 @@ Each layer has the following components.
 
 
 
-Application layer and layer depends on domain layer, however
+Both application layer and infrastructure layer depend on domain layer, however
 \ **domain layer should not depend on other layers.**
 There can be changes in the application layer with the changes in domain layer,
 However, there should be no changes in domain layer with the changes in application layer.
@@ -46,26 +46,28 @@ Application layer
 
 Application layer does the wiring part of the application.
 
-In this layer, provide the following implementations.
+In this layer, it provides the following implementations:
 
 * Provides UI(User Interface) to input and output information.
-* Handles request from client.
-* Validates input data from client.
-* Calls domain layer component corresponding to the request from client.
+* Handles the request from clients.
+* Validates the input data from a clients
+* Calls components in the domain layer corresponding to the request from clients.
 
-**This layer's implementations should be as thin as possible and should not contain any business rules.**
+**This layer should be as thin as possible and should not contain any business rules.**
 
 Controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Controller's mainly responsibilities are following.
+Controller is mainly responsible for the below:
 
-* Control of screen flow (request mapping and return the view corresponding to processing result)
-* Calls Service of domain layer (execute main logic corresponding to the request)
+* Controls of screen flow (mapping the request to the corresponding process and returning the result)
+* Calls services in the domain layer (executing main logic corresponding to the request)
 
 In Spring MVC, POJO class having ``@Controller`` annotation becomes the Controller class.
 
-|
+.. note::
+
+  When storing the data in the session, controllers also have a role to controll the lifecycle of objects in the session.
 
 View
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -87,10 +89,10 @@ In Spring MVC, all this is done by ``View`` class.
 Form
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Form's mainly responsibilities are following.
+Form's main responsibilities are the following:
 
 * Represents the form of HTML. (sending form information to the Controller, or outputting the processing result data to form of HTML)
-* Definitions of input validation rules. (adding annotations of Bean Validation)
+* Defines validation rules for input data. (by adding annotations of Bean Validation)
 
 In Spring MVC, form object are the POJO class that store request parameters. It is called as form backing bean.
 
@@ -142,12 +144,12 @@ Domain layer
 
 Domain layer is the core of the application, and execute business rules.
 
-In this layer, provide the following implementations.
+In this layer, it provides the following implementations.
 
-* Domain Object
-* Checks business rules corresponding to Domain Object (checks like whether there is sufficient balance when crediting amount into the account)
-* Execute business rules (Reflect values corresponding to business rules)
-* CRUD operation for Domain Object
+* DomainObject
+* Checking business rules corresponding to the DomainObject (like whether there is sufficient balance when crediting amount into the account)
+* Executing business rules (reflects values corresponding to business rules)
+* Executing CRUD operations for the DomainObject
 
 Domain layer is not so thick as compared to other layers and is reusable.
 
@@ -193,7 +195,7 @@ Service
 
 Provides the business logic.
 
-In this guideline, recommend to provide the transaction boundary at the method of Service.
+In this guideline, it is recommended to draw the transaction boundary at the method of Service.
 
 .. note::
 
@@ -217,11 +219,11 @@ Represents implementation of Repository interface of domain layer. It covers lif
 
 With the help of this structure, it is possible to hide implementation details from domain layer.
 
-Depending on your requirements, this is also the transaction boundary.
+This layer also can be the transaction boundary depending on the requirements.
 
 .. tip::
 
-    When using Spring Data JPA, a few RepositoryImpls are created by Spring Data JPA automatically.
+    When using Spring Data JPA or MyBatis3, most RepositoryImpls are created automatically.
 
 |
 
@@ -233,10 +235,10 @@ This function is provided by JPA, MyBatis and Spring JDBC.
 
 Specifically, the following classes are the O/R Mapper.
 
-* In case of using JPA, \ ``EntityManager``\
-* In case of using MyBatis3, Mapper interface or \ ``SqlSession``\
-* In case of using MyBatis2 (TERASOLUNA DAO), \ ``QueryDAO``\ or \ ``UpdateDAO``\
-* In case if using Spring JDBC, \ ``JdbcTemplate``\
+* \ ``EntityManager``\  in case of using JPA,
+* Mapper interface or \ ``SqlSession``\  in case of using MyBatis3
+* \ ``QueryDAO``\  or \ ``UpdateDAO``\  in case of using MyBatis2(TERASOLUNA DAO)
+* \ ``JdbcTemplate``\  in case of using plain Spring JDBC
 
 O/R Mapper used for implementation of Repository.
 
@@ -249,9 +251,9 @@ O/R Mapper used for implementation of Repository.
 Integration System Connector
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Integration System Connector integrate a data store other than the database; such as messaging system, Key-Value-Store, Web service, existing legacy system, external system etc.
+It integrates a data store other than the database; such as messaging system, Key-Value-Store, Web service, existing legacy system, external system etc.
 
-Integration System Connector used for implementation of Repository.
+It is also used for implementation of Repository.
 
 |
 
@@ -604,11 +606,11 @@ Recommended structure of [projectName]-web
     * - | (6)
       - Define the messages and other contents to be used for screen display (internationalization).
     * - | (7)
-      - Directory to store static resources(css、js、image, etc)
+      - Store static resources(css、js、image, etc)
     * - | (8)
       - Store View(jsp) files.
     * - | (9)
-      - JavaEE Web Application definitions
+      - Servlet definitions
 
 |
 
@@ -643,17 +645,17 @@ The recommended structure of [projectName]-env project is below:
     * - No.
       - Details
     * - | (1)
-      - Directory to manage environment dependency files of all environments.
+      - Directory to define configurations depends on the environment for all environments.
     * - | (2)
-      - Directory to manage environment dependency files per environment.
+      - Directory to define configurations depeands on each environment.
 
-        Directory name, specify a name to identify the environment.
+        The directory name is used as the name to identify the environment.
     * - | (3)
-      - Directory to manage configuration files per environment.
+      - Directory to define configurations depeands on each environment.
 
-        Sub directory structure and managed configuration files is same as (4).
+        The sub directory structure and files are same as (4).
     * - | (4)
-      - Directory to manage configuration files on the local development environment.
+      - Directory to define configurations depeands on the local development environment.
     * - | (5)
       - Bean definitions that depend on the local development environment (like dataSource etc).
     * - | (6)

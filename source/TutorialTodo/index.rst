@@ -2154,7 +2154,7 @@ Serviceの作成
 * Todoの削除→deleteメソッド
 
 
-実装クラスのFQCNは、\ ``todo.domain.service.TodoServiceImpl``\とする。
+実装クラスのFQCNは、\ ``todo.domain.service.todo.TodoServiceImpl``\とする。
 
  .. code-block:: java
     :emphasize-lines: 19, 20, 25-26, 28-29, 32-33, 37-38, 44, 57-58, 61-62

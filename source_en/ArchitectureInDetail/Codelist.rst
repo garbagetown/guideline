@@ -201,8 +201,8 @@ codelist can be set automatically in request scope and can be easily referred fr
        | In the above example, only the data in which id is defined in "CL\_XXX" format is targeted. In that case, bean definition wherein id does not start with "CL\_" should not be imported.
        | beanID defined in "CL\_" can be used in JSP since it is set in the request scope.
        |
-       | The \ ``codeListIdPattern``\  property can be omit.
-       | If omit the \ ``codeListIdPattern``\  property, can be used all \ ``CodeList``\  in JSP.
+       | \ ``codeListIdPattern``\  property can be omitted.
+       | If omitting \ ``codeListIdPattern``\  property, all of \ ``CodeList``\s (all beans which implements ``org.terasoluna.gfw.common.codelist.CodeList``) are available in JSP.
 
 |
 
@@ -315,9 +315,8 @@ NumberRangeCodeList has the following features:
 
 |
 
-Here, describe the Ascending \ ``NumberRangeCodeList``\ .
-How to create the Descending \ ``NumberRangeCodeList``\  or change interval , refer to ":ref:`CodeListAppendixNumberRangeCodeListVariation`".
-
+The information here describes how to configure the ascending \ ``NumberRangeCodeList``\ .
+For how to create the descending \ ``NumberRangeCodeList``\  or change interval, refer to ":ref:`CodeListAppendixNumberRangeCodeListVariation`".
 |
 
 Example of codelist settings

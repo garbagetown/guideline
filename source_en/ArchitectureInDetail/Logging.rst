@@ -109,7 +109,7 @@ Output contents of log
 
      However, note that the vulnerabilities of the system may be exposed if errors are displayed on the screen along with the failure details.
 
-     In common library, provide a mechanism(components) to include the message ID(exception code) to the log and the screen when occurred exception.
+     In common library, the mechanism(component) is provided to include the message ID(exception code) into the log and the screen when an exception is occurred.
      Details refer to ":doc:`ExceptionHandling`".
 
 2. | Traceability
@@ -328,14 +328,14 @@ logback.xml
 
 .. tip:: **About LTSV(Labeled Tab Separated Value)**
 
-    \ `LTSV <http://ltsv.org/>`_\  is one of text data formats, and mainly use the as log format.
+    \ `LTSV <http://ltsv.org/>`_\  is one of text data formats, and mainly used as the log format.
 
-    LTSV is log format that can parse easily by program because has following features.
+    For log fomart, LTSV is easy to parse using some tools because it has following features.
 
-    * It's easy to split the field as compared to other delimiters because using the tabs as field delimiters.
-    * Even if changed the field definition(changing the position of field or adding the field or removing the field), it does not affect to parsing because include a label(name) into the field.
+    * It's easy to split the field compared to other delimiters because tabs is used as field delimiters.
+    * Even if the field definition (changing the position of field or adding the field or removing the field) is changed, it does not affect to parsing because of including a label(name) in the field.
 
-    Also as one of features, there are that can be perform minimal format by simply pasted into an Excel.
+    It is also one of features that there are that pasting on the Excel can format it with the least effort.
 
 |
 

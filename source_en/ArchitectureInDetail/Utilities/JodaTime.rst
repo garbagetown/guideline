@@ -32,8 +32,7 @@ Fetching current time
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 | As per the requirements, any of the following classes can be used. 
-| ``org.joda.time.DateTime`` , ``org.joda.time.LocalDate`` , ``org.joda.time.LocalTime`` and 
-| ``org.joda.time.DateMidnight``. The usage method is shown below.
+| ``org.joda.time.DateTime`` , ``org.joda.time.LocalDate`` and ``org.joda.time.LocalTime``. The usage method is shown below.
 
 1. Use ``org.joda.time.DateTime`` to fetch time up to milliseconds.
 
@@ -53,17 +52,17 @@ Fetching current time
 
    LocalTime localTime = new LocalTime();
 
-4. Use ``org.joda.time.DateMidnight`` to fetch the current date and time set at midnight.
+4. Use ``org.joda.time.DateTime.withTimeAtStartOfDay()`` to fetch the current date with the time set to start of day.
 
 .. code-block:: java
 
-   DateMidnight dateMidnight = new DateMidnight();
+   DateTime dateTimeAtStartOfDay = new DateTime().withTimeAtStartOfDay();
 
 |
 
     .. note::
 
-        LocalDate and LocalTime do not have the TimeZone information, however, DateMidnight has TimeZone information.
+        LocalDate and LocalTime do not have the TimeZone information.
 
     .. note::
 
@@ -76,13 +75,12 @@ Fetching current time
 
         Refer to :doc:`../SystemDate` for using DateFactory.
 
-        LocalDate, LocalTime and DateMidnight can be generated in the following way.
+        LocalDate and LocalTime can be generated in the following way.
 
             .. code-block:: java
 
                 LocalDate localDate = dataFactory.newDateTime().toLocalDate();
                 LocalTime localTime = dataFactory.newDateTime().toLocalTime();
-                DateMidnight dateMidnight = dataFactory.newDateTime().toDateMidnight();
 
 
 

@@ -469,22 +469,26 @@ Basically, application development is possible using TERASOLUNA Global Framework
       - | general-purpose functionality irrespective of Web
       - | Yes
     * - | (2)
+      - | terasoluna-gfw-jodatime
+      - | Functionality that depend on the Joda Time
+      - | Yes
+    * - | (3)
       - | terasoluna-gfw-web
       - | Group of functionalities for creating web application
       - | Yes
-    * - | (3)
+    * - | (4)
       - | terasoluna-gfw-jpa
       - | Dependency definition for using JPA
       - | No
-    * - | (4)
+    * - | (5)
       - | terasoluna-gfw-mybatis2
       - | Dependency definition for using MyBatis2
       - | No
-    * - | (5)
+    * - | (6)
       - | terasoluna-gfw-security-core
       - | Dependency definition for using Spring Security (other than Web).
       - | No
-    * - | (6)
+    * - | (7)
       - | terasoluna-gfw-security-web
       - | Dependency definition for using Spring Security (related to Web) and extended classes of Spring Security.
       - | Yes
@@ -520,7 +524,7 @@ terasoluna-gfw-common provide following components.
       - Provide interceptor class of AOP for logging the exception that occurred in domain layer.
     * - :doc:`../ArchitectureInDetail/SystemDate`
       - System Date Time Factory
-      - Provide classes for acquiring the system date time.
+      - Provide classes for retrieving the system date time.
     * - :doc:`../ArchitectureInDetail/Codelist`
       - CodeList
       - Provide classes for generating CodeList.
@@ -529,7 +533,24 @@ terasoluna-gfw-common provide following components.
       - Provide class for escape processing of value to bind into the SQL and JPQL.
     * -
       - Sequencer
-      - Provide classes for acquiring the sequence value.
+      - Provide classes for retrieving the sequence value.
+
+terasoluna-gfw-jodatime
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+terasoluna-gfw-jodatime provide following components.
+
+.. tabularcolumns:: |p{0.30\linewidth}|p{0.35\linewidth}|p{0.30\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 20 30 50
+
+    * - Classification
+      - Component Name
+      - Description
+    * - :doc:`../ArchitectureInDetail/SystemDate`
+      - System Date Time Factory for Joda Time
+      - Provide classes for retrieving the system date time using the Joda Time API.
 
 terasoluna-gfw-web
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -557,10 +578,10 @@ terasoluna-gfw-web provide following components.
       - Provide interceptor class of AOP for logging the exception that handled by Spring MVC.
     * - :doc:`../ArchitectureInDetail/Codelist`
       - Populate CodeList interceptor
-      - Provide interceptor class of Spring MVC for storing CodeList information into request scope, for the purpose of acquiring CodeList from View.
+      - Provide interceptor class of Spring MVC for storing CodeList information into request scope, for the purpose of retrieving CodeList from View.
     * - :doc:`../ArchitectureInDetail/FileDownload`
       - General Download View
-      - Provide abstract class for acquiring data from input stream and writing to stream for download.
+      - Provide abstract class for retrieving data from input stream and writing to stream for download.
     * - :doc:`../ArchitectureInDetail/Logging`
       - ServletFilter for storing Tracking ID
       - Provide Servlet Filter class for setting Tracking ID into MDC(Mapped Diagnostic Context) and request scope and response header, for the purpose of improving traceability.

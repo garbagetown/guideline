@@ -1682,7 +1682,7 @@ JavaScriptを使用したページリンクの無効化
     <%-- (2) --%>
     <script type="text/javascript">
         $(function(){
-            $(".disabled a").on("click", function(){
+            $(document).on("click", ".disabled a", function(){
                 return false;
             });
         });

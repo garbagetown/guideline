@@ -322,7 +322,7 @@ Spring Dataより提供されているページ検索用の機能は、以下の
 
  .. note:: **「Page Link URL」のデフォルト値について**
 
-    リンクの状態が ``"disabled"`` の場合は ``"#"`` 、 ``"disabled"`` 以外の場合は ``"?page={page}&size={size}"`` となる。
+    リンクの状態が ``"disabled"`` の場合は ``"javascript:void(0)"`` 、 ``"disabled"`` 以外の場合は ``"?page={page}&size={size}"`` となる。
 
     「Page Link URL」は、JSPタグライブラリのパラメータの指定によって別の値に変更することができる。
 
@@ -473,7 +473,6 @@ JSPタグライブラリのパラメータに値を指定することで、デ�
     * - 1.
       - disabledHref
       - | ``"disabled"`` 状態のリンクの「Page Link URL」に設定する値を指定する。
-        | 例) \javascript:void(0);\
     * - 2.
       - pathTmpl
       - | 「Page Link URL」に設定するリクエストパスのテンプレートを指定する。
@@ -508,8 +507,17 @@ JSPタグライブラリのパラメータに値を指定することで、デ�
 
  .. note:: **disabledHrefの設定値について**
 
-    デフォルトでは、 ``disabledHref`` には ``"#"`` が設定されているため、ページリンクを押すとフォーカスがページのトップに移動する。
-    ページリンク押下時の動作を完全に無効化したい場合は、 ``"javascript:void(0);"`` を指定する必要がある。
+    デフォルトでは、\ ``disabledHref``\ 属性には\ ``"javascript:void(0)"``\ が設定されている。
+    ページリンク押下時の動作を無効化するだけであれば、デフォルトのままでよい。
+
+    ただし、デフォルトの状態でページリンクにフォーカスを移動又はマウスオーバーした場合、
+    ブラウザのステータスバーに\ ``"javascript:void(0)"``\ が表示されることがある。
+    この挙動を変えたい場合は、JavaScriptを使用してページリンク押下時の動作を無効化する必要がある。
+    実装例については、「:ref:`PaginationHowToUseDisablePageLinkUsingJavaScript`」を参照されたい。
+
+    terasoluna-gfw-web 1.1.0.RELEASEより、\ ``disabledHref``\ 属性のデフォルト値を\ ``"#"``\から\ ``"javascript:void(0)"``\ に変更している。
+    この変更を行うことで、\ ``"disabled"``\ 状態のページリンクを押下した際に、フォーカスがページのトップへ移動しないようになっている。
+
 
  .. note:: **パス変数(プレースホルダ)について**
 
@@ -554,7 +562,7 @@ JSPタグライブラリのパラメータに値を指定することで、デ�
   .. code-block:: jsp
 
     <t:pagination page="${page}"
-        disabledHref="javascript:void(0);"
+        disabledHref="#"
         pathTmpl="${pageContext.request.contextPath}/article/list/{page}/{size}"
         queryTmpl="sort={sortOrderProperty},{sortOrderDirection}"
         criteriaQuery="${f:query(articleSearchCriteriaForm)}" />
@@ -1091,8 +1099,8 @@ JSPの実装(基本編)
  .. code-block:: html
 
      <ul>
-        <li class="disabled"><a href="#">&lt;&lt;</a></li>
-        <li class="disabled"><a href="#">&lt;</a></li>
+        <li class="disabled"><a href="javascript:void(0)">&lt;&lt;</a></li>
+        <li class="disabled"><a href="javascript:void(0)">&lt;</a></li>
         <li class="active"><a href="?page=0&size=6">1</a></li>
         <li><a href="?page=1&size=6">2</a></li>
         <li><a href="?page=2&size=6">3</a></li>
@@ -1650,6 +1658,60 @@ JSPの実装(動作編)
       - | クライアントからソート条件を指定する場合は、 ソート条件を指定するためのパラメータを追加する。
         | ソート条件を指定するためのパラメータの仕様については、「 :ref:`ページ検索用のリクエストパラメータについて <pagination_overview_pagesearch_requestparameter>` 」を参照されたい。
         | 上記例では、publishedDateの昇順と降順をプルダウンで選択できるようにしている。
+
+|
+
+.. _PaginationHowToUseDisablePageLinkUsingJavaScript:
+
+JavaScriptを使用したページリンクの無効化
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+デフォルトでは、\ ``"disabled"``\ 状態のページリンク押下時の動作を無効化するために、\ ``<t:pagination>``\ タグの\ ``disabledHref``\ 属性に\ ``"javascript:void(0)"``\ を設定している。
+この状態でページリンクにフォーカスを移動又はマウスオーバーすると、 ブラウザのステータスバーに\ ``"javascript:void(0)"``\ が表示されることがある。
+この挙動を変えたい場合は、JavaScriptを使用してページリンク押下時の動作を無効化する必要がある。
+
+以下に実装例を示す。
+
+**JSP**
+
+.. code-block:: jsp
+
+    <%-- (1) --%>
+    <script type="text/javascript"
+            src="${pageContext.request.contextPath}/resources/vendor/js/jquery.js"></script>
+
+    <%-- (2) --%>
+    <script type="text/javascript">
+        $(function(){
+            $(document).on("click", ".disabled a", function(){
+                return false;
+            });
+        });
+    </script>
+
+    <%-- ... --%>
+
+    <%-- (3) --%>
+    <t:pagination page="${page}" disabledHref="#" />
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - 項番
+      - 説明
+    * - | (1)
+      - jQueryのjsファイルを読み込む。
+
+        上記例では、JavaScriptを使用してページリンク押下時の動作を無効化するためにjQueryのAPIを利用する。
+    * - | (2)
+      - jQueryのAPIを使用して、\ ``"disabled"``\ 状態のページリンクのクリックイベントを無効化する。
+    * - | (3)
+      - \ ``disabledHref``\ 属性に\ ``"#"``\ 又は\ ``""``\ を指定する。
+
+        上記例では\ ``"#"``\ 指定している。
+        これは、仮にJavaScriptによる無効化が適用されなかった場合に、リクエストが送信されないようにするための安全策である。
+        安全策が不要な場合は、\ ``""``\ でよい。
 
 |
 

@@ -1266,7 +1266,7 @@ It illustrates a codelist for creating a list of current year and the next year.
     public class DepYearCodeList extends AbstractCodeList { // (2)
 
         @Inject
-        DateFactory dateFactory; // (3)
+        JodaTimeDateFactory dateFactory; // (3)
 
         @Override
         public Map<String, String> asMap() {  // (4)
@@ -1299,9 +1299,9 @@ It illustrates a codelist for creating a list of current year and the next year.
      - | Inherit ``org.terasoluna.gfw.common.codelist.AbstractCodeList``.
        | When creating the list of current year and next year, reloading is not necessary since it is created dynamically by calculating from system date.
    * - | (3)
-     - | ``org.terasoluna.gfw.common.date.DateFactory`` creating the Date class of system date is injected.
-       | Current year and next year can be fetched using ``DateFactory``.
-       | Class that implements DateFactory interface should be set in advance in bean definition file.
+     - | ``org.terasoluna.gfw.common.date.jodatime.JodaTimeDateFactory`` creating the Date class of system date is injected.
+       | Current year and next year can be fetched using ``JodaTimeDateFactory``.
+       | Class that implements ``JodaTimeDateFactory`` interface should be set in advance in bean definition file.
    * - | (4)
      - | Override ``asMap()`` method and create the list of current year and next year.
        | Implementation differs with every created codelist.

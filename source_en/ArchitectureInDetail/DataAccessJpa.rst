@@ -4194,7 +4194,7 @@ Extended example of changing the method to create the values to be used is shown
     public class AuditDateTimeProvider implements DateTimeProvider {
 
         @Inject
-        DateFactory dateFactory;
+        JodaTimeDateFactory dateFactory;
 
         // (3)
         public DateTime getDateTime() {
@@ -4217,8 +4217,8 @@ Extended example of changing the method to create the values to be used is shown
         | Bean can be defined in Bean definition file without assigning ``@Component`` annotation.
     * - | (3)
       - | Return the instances to be set in the properties of entity operation date-time (Created Date-Time or Last Modified Date-Time).
-        | In the above example, the instances fetched from ``org.terasoluna.gfw.common.date.DateFactory`` of common library are returned as Operation Date-Time.
-        | For details on ``DateFactory``, refer to ":doc:`SystemDate`".
+        | In the above example, the instances fetched from ``org.terasoluna.gfw.common.date.jodatime.JodaTimeDateFactory`` of common library are returned as Operation Date-Time.
+        | For details on ``JodaTimeDateFactory``, refer to ":doc:`SystemDate`".
 
 - ``infra.xml``
 

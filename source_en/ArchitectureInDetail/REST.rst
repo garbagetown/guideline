@@ -6362,7 +6362,7 @@ MemberServiceImpl.java
     import org.terasoluna.examples.rest.domain.model.Member;
     import org.terasoluna.examples.rest.domain.model.MemberCredential;
     import org.terasoluna.examples.rest.domain.repository.member.MemberRepository;
-    import org.terasoluna.gfw.common.date.DateFactory;
+    import org.terasoluna.gfw.common.date.jodatime.JodaTimeDateFactory;
     import org.terasoluna.gfw.common.exception.BusinessException;
     import org.terasoluna.gfw.common.exception.ResourceNotFoundException;
     import org.terasoluna.gfw.common.message.ResultMessages;
@@ -6381,7 +6381,7 @@ MemberServiceImpl.java
         Sequencer<String> sequencer;
     
         @Inject
-        DateFactory dateFactory;
+        JodaTimeDateFactory dateFactory;
     
         @Inject
         PasswordEncoder passwordEncoder;

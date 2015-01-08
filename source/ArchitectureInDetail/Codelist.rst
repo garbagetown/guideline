@@ -1450,7 +1450,7 @@ JdbcCodeListのrefreshメソッドをServiceクラスで呼び出す場合の実
     public class DepYearCodeList extends AbstractCodeList { // (2)
 
         @Inject
-        DateFactory dateFactory; // (3)
+        JodaTimeDateFactory dateFactory; // (3)
 
         @Override
         public Map<String, String> asMap() {  // (4)
@@ -1483,8 +1483,8 @@ JdbcCodeListのrefreshメソッドをServiceクラスで呼び出す場合の実
      - | ``org.terasoluna.gfw.common.codelist.AbstractCodeList`` を継承する。
        | 今年と来年の年のリストを作る時、動的にシステム日付から算出して作成しているため、リロードは不要。
    * - | (3)
-     - | システム日付のDateクラスを作成する ``org.terasoluna.gfw.common.date.DateFactory`` をインジェクトしている。
-       | ``DateFactory`` を利用して今年と来年の年を取得することができる。
+     - | システム日付のDateクラスを作成する ``org.terasoluna.gfw.common.date.jodatime.JodaTimeDateFactory`` をインジェクトしている。
+       | ``JodaTimeDateFactory`` を利用して今年と来年の年を取得することができる。
        | 事前に、bean定義ファイルにDataFactory実装クラスを設定する必要がある。
    * - | (4)
      - | ``asMap()`` メソッドをオーバライドして、今年と来年の年のリストを作成する。

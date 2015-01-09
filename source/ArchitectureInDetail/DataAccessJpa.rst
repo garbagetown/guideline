@@ -345,7 +345,7 @@ EntityManagerの設定
         | (1)で設定済みのbeanを指定する。
     * - | (8)
       - | Hibernateから提供されている ``EntityManager`` の動作設定を指定する。
-        | 詳細については「`Hibernate Reference Documentation <http://docs.jboss.org/hibernate/orm/4.2/manual/en-US/html/ch03.html#configuration-optional>`_\」を参照されたい。
+        | 詳細については「`Hibernate Reference Documentation <http://docs.jboss.org/hibernate/orm/4.3/manual/en-US/html/ch03.html#configuration-optional>`_\」を参照されたい。
 \
 
  .. tip::
@@ -1043,7 +1043,7 @@ Queryメソッドの追加
    文法はSQLに似ているが、永続層(DB)のレコードを直接操作するのではなく、永続層のレコードにマッピングされているEntityを操作することになる。
    Entityに対して行った操作の永続層(DB)への反映は、JPAプロバイダ(Hibernate)によって行われる。
 
-   JPQLの詳細については、`JSR 317: Java Persistence API, Version 2.0のSpecification(PDF)「Chapter 4 Query Language」(P.131-178) <http://download.oracle.com/otn-pub/jcp/persistence-2.0-fr-eval-oth-JSpec/persistence-2_0-final-spec.pdf>`_\ を参照されたい。
+   JPQLの詳細については、`JSR 338: Java Persistence API, Version 2.1のSpecification(PDF)「Chapter 4 Query Language」 <http://download.oracle.com/otn-pub/jcp/persistence-2_1-fr-eval-spec/JavaPersistence.pdf>`_\ を参照されたい。
 
 Queryメソッドを定義する
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1138,7 +1138,7 @@ Entityのロックを取得する
       - 説明
     * - | (1)
       - | ``@Lock`` アノテーションのvalue属性にロックモードを指定する。
-        | 指定可能なロックモードについては、`Java Platform, Enterprise Edition API Specification <http://docs.oracle.com/javaee/6/api/javax/persistence/LockModeType.html>`_\ を参照されたい。
+        | 指定可能なロックモードについては、`Java Platform, Enterprise Edition API Specification <http://docs.oracle.com/javaee/7/api/javax/persistence/LockModeType.html>`_\ を参照されたい。
     * - | (2)
       - | JPQLから変換されたNativeなSQL。(使用DBはPostgreSQL)
         | 例では、``LockModeType.PESSIMISTIC_WRITE`` を指定しているので、SQLに"FOR UPDATE"句が追加される。
@@ -1232,7 +1232,7 @@ value属性にQueryヒント( ``@javax.persistence.QueryHint`` )を指定する�
  .. note:: **Hibernateで指定できるQueryヒントについて**
 
     JPA仕様で決められているQueryヒントは以下の通り。
-    詳細は、`JSR 317: Java Persistence API, Version 2.0のSpecification(PDF) <http://download.oracle.com/otn-pub/jcp/persistence-2.0-fr-eval-oth-JSpec/persistence-2_0-final-spec.pdf>`_\ を参照されたい。
+    詳細は、`JSR 338: Java Persistence API, Version 2.1のSpecification(PDF) <http://download.oracle.com/otn-pub/jcp/persistence-2_1-fr-eval-spec/JavaPersistence.pdf>`_\ を参照されたい。
 
     * ``javax.persistence.query.timeout``
     * ``javax.persistence.lock.timeout``
@@ -2535,7 +2535,7 @@ ID(Primary Key)がわかっている場合は、Repositryインタフェース�
       - 説明
     * - | (1)
       - | value属性を指定しない場合は、 IDの昇順となる。
-        | 詳細は、 `JSR 317: Java Persistence API, Version 2.0のSpecification(PDF)「OrderBy Annotation」(P.404-406) <http://download.oracle.com/otn-pub/jcp/persistence-2.0-fr-eval-oth-JSpec/persistence-2_0-final-spec.pdf>`_\
+        | 詳細は、 `JSR 338: Java Persistence API, Version 2.1のSpecification(PDF)「11.1.42 OrderBy Annotation」 <http://download.oracle.com/otn-pub/jcp/persistence-2_1-fr-eval-spec/JavaPersistence.pdf>`_\
 
  .. todo::
 
@@ -2737,11 +2737,11 @@ Entityを追加したい場合は、Entityオブジェクトを生成し、Repos
 
  .. note :: **ID採番用のアノテーションについて**
 
-    各アノテーションの詳細は、`JSR 317: Java Persistence API, Version 2.0のSpecification(PDF) <http://download.oracle.com/otn-pub/jcp/persistence-2.0-fr-eval-oth-JSpec/persistence-2_0-final-spec.pdf>`_\ を参照されたい。
+    各アノテーションの詳細は、`JSR 318: Java Persistence API, Version 2.1のSpecification(PDF) <http://download.oracle.com/otn-pub/jcp/persistence-2_1-fr-eval-spec/JavaPersistence.pdf>`_\ を参照されたい。
 
-    * ``@GeneratedValue`` : P.375-376
-    * ``@SequenceGenerator`` : P.413-414
-    * ``@TableGenerator`` : P.415-417
+    * ``@GeneratedValue`` : 11.1.20 GeneratedValue Annotation
+    * ``@SequenceGenerator`` : 11.1.48 SequenceGenerator Annotation
+    * ``@TableGenerator`` : 11.1.50 TableGenerator Annotation
 
  .. note :: **IDの採番方法について**
 

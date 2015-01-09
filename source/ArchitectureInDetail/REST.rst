@@ -1774,8 +1774,9 @@ RESTful Web Serviceで必要となるSpring MVCのコンポーネントを有効
 
     * Deprecated一覧
 
-     * http://fasterxml.github.io/jackson-core/javadoc/2.3.0/deprecated-list.html
-     * http://fasterxml.github.io/jackson-databind/javadoc/2.3.0/deprecated-list.html
+     * http://fasterxml.github.io/jackson-core/javadoc/2.4/deprecated-list.html
+     * http://fasterxml.github.io/jackson-databind/javadoc/2.4/deprecated-list.html
+     * http://fasterxml.github.io/jackson-annotations/javadoc/2.4/deprecated-list.html
 
 |
 

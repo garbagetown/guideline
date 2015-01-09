@@ -1780,8 +1780,9 @@ Settings for activating the Spring MVC components necessary for RESTful Web Serv
 
     * Deprecated List
 
-     * http://fasterxml.github.io/jackson-core/javadoc/2.3.0/deprecated-list.html
-     * http://fasterxml.github.io/jackson-databind/javadoc/2.3.0/deprecated-list.html
+     * http://fasterxml.github.io/jackson-core/javadoc/2.4/deprecated-list.html
+     * http://fasterxml.github.io/jackson-databind/javadoc/2.4/deprecated-list.html
+     * http://fasterxml.github.io/jackson-annotations/javadoc/2.4/deprecated-list.html
 
 |
 

@@ -1507,13 +1507,13 @@ How to extend
     import org.apache.commons.io.filefilter.FileFilterUtils;
     import org.apache.commons.io.filefilter.IOFileFilter;
     import org.springframework.beans.factory.annotation.Value;
-    import org.terasoluna.gfw.common.date.DateFactory;
+    import org.terasoluna.gfw.common.date.jodatime.JodaTimeDateFactory;
     
     // (1)
     public class UnnecessaryFilesCleaner {
     
         @Inject
-        DateFactory dateFactory;
+        JodaTimeDateFactory dateFactory;
     
         @Value("${app.upload.temporaryFileSavedPeriodMinutes}")
         private int savedPeriodMinutes;

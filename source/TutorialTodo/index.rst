@@ -1182,7 +1182,7 @@ O/R Mapperに依存しないブランクプロジェクト、JPA用のブラン�
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-        <bean id="dateFactory" class="org.terasoluna.gfw.common.date.DefaultDateFactory" />
+        <bean id="dateFactory" class="org.terasoluna.gfw.common.date.jodatime.DefaultJodaTimeDateFactory" />
 
         <!-- (1) -->
         <bean id="realDataSource" class="org.apache.commons.dbcp2.BasicDataSource"
@@ -1268,7 +1268,7 @@ MyBatis3用のブランクプロジェクトを作成した場合
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-        <bean id="dateFactory" class="org.terasoluna.gfw.common.date.DefaultDateFactory" />
+        <bean id="dateFactory" class="org.terasoluna.gfw.common.date.jodatime.DefaultJodaTimeDateFactory" />
 
         <!-- (1) -->
         <bean id="realDataSource" class="org.apache.commons.dbcp2.BasicDataSource"

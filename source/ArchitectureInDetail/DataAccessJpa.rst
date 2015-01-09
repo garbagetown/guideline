@@ -4197,7 +4197,7 @@ Spring Data JPAでは、新たに作成されたEntityと更新されたEntity�
     public class AuditDateTimeProvider implements DateTimeProvider {
 
         @Inject
-        DateFactory dateFactory;
+        JodaTimeDateFactory dateFactory;
 
         // (3)
         public DateTime getDateTime() {
@@ -4220,8 +4220,8 @@ Spring Data JPAでは、新たに作成されたEntityと更新されたEntity�
         | ``@Component`` アノテーションを付けずに、Bean定義ファイルにbean定義してもよい。
     * - | (3)
       - | Entityの操作日時(作成日時、最終更新日時)のプロパティに設定するインスタンスを返却する。
-        | 上記例では、共通ライブラリから提供している ``org.terasoluna.gfw.common.date.DateFactory`` から取得したインスタンスを操作日時として返却している。
-        | ``DateFactory`` の詳細については、「:doc:`SystemDate`」を参照されたい。
+        | 上記例では、共通ライブラリから提供している ``org.terasoluna.gfw.common.date.jodatime.JodaTimeDateFactory`` から取得したインスタンスを操作日時として返却している。
+        | ``JodaTimeDateFactory`` の詳細については、「:doc:`SystemDate`」を参照されたい。
 
 - ``infra.xml``
 

@@ -66,14 +66,14 @@ Fetching current time
 
     .. note::
 
-        It is recommended that you use \ ``org.terasoluna.gfw.common.date.DateFactory``\, 
+        It is recommended that you use \ ``org.terasoluna.gfw.common.date.jodatime.JodaTimeDateFactory``\,
         for fetching instance of DateTime, LocalDate and LocalTime at the time of fetching current time.        
 
             .. code-block:: java
 
                 DateTime dateTime = dataFactory.newDateTime();
 
-        Refer to :doc:`../SystemDate` for using DateFactory.
+        Refer to :doc:`../SystemDate` for using ``JodaTimeDateFactory``.
 
         LocalDate and LocalTime can be generated in the following way.
 
@@ -97,7 +97,7 @@ Fetching current time by specifying the time zone
     DateTime dateTime = new DateTime(DateTimeZone.forID("Asia/Tokyo"));
 
 
-\ ``org.terasoluna.gfw.common.date.DateFactory``\ is used as follows:
+\ ``org.terasoluna.gfw.common.date.jodatime.JodaTimeDateFactory``\ is used as follows:
 
 .. code-block:: java
 

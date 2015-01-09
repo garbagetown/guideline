@@ -558,7 +558,7 @@ Settings for validating Spring Data JPA
     * - 4.
       - query-lookup-strategy
       - | Specify the method to Lookup the query to be executed when query method is called.
-        | By default, it is ``"CREATE_IF_NOT_FOUND"``. For details, refer to `Spring Data JPA - Reference Documentation "Query lookup strategies" <http://static.springsource.org/spring-data/jpa/docs/1.3.4.RELEASE/reference/html/repositories.html#repositories.query-methods.query-lookup-strategies>`_\ . Use the default settings if there is no specific reason.
+        | By default, it is ``"CREATE_IF_NOT_FOUND"``. For details, refer to `Spring Data JPA - Reference Documentation "Query lookup strategies" <http://docs.spring.io/spring-data/jpa/docs/1.7.1.RELEASE/reference/html/#repositories.query-methods.query-lookup-strategies>`_\ . Use the default settings if there is no specific reason.
     * - 5.
       - factory-class
       - | Specify Factory for generating class to implement the process when the method of Repository interface is called.
@@ -1098,7 +1098,7 @@ Specifying query to be executed
     #. Create a query (JPQL) from method name and use it.
     #. An error occurs when query (JPQL) cannot be created from method name.
 
-    For details on Query Lookup methods, refer to `Spring Data JPA - Reference Documentation "1.2.2 Defining query methods" -  "Query lookup strategies" <http://static.springsource.org/spring-data/data-jpa/docs/1.3.4.RELEASE/reference/html/repositories.html#repositories.query-methods.query-lookup-strategies>`_\ .
+    For details on Query Lookup methods, refer to `Spring Data JPA - Reference Documentation "Defining query methods" -  "Query lookup strategies" <http://docs.spring.io/spring-data/jpa/docs/1.7.1.RELEASE/reference/html/#repositories.query-methods.query-lookup-strategies>`_\ .
 
 Fetching entity lock
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1494,19 +1494,19 @@ For naming conventions for creating JPQL, refer to the following pages.
       - Reference page
       - Description
     * - 1.
-      - `Spring Data JPA - "Query creation" of Reference Documentation "1.2.2 Defining query methods" <http://static.springsource.org/spring-data/data-jpa/docs/1.3.4.RELEASE/reference/html/repositories.html#repositories.query-methods.query-creation>`_\
+      - `Spring Data JPA - "Query creation" of Reference Documentation "Defining query methods" <http://docs.spring.io/spring-data/jpa/docs/1.7.1.RELEASE/reference/html/#repositories.query-methods.query-creation>`_\
       - This section describes method to specify Distinct, ORDER BY and Case insensitive.
     * - 2.
-      - `Spring Data JPA - "Property expressions" of Reference Documentation "1.2.2 Defining query methods" <http://static.springsource.org/spring-data/data-jpa/docs/1.3.4.RELEASE/reference/html/repositories.html#d0e379>`_\
+      - `Spring Data JPA - "Property expressions" of Reference Documentation "Defining query methods" <http://docs.spring.io/spring-data/jpa/docs/1.7.1.RELEASE/reference/html/#repositories.query-methods.query-property-expressions>`_\
       - This section describes method to specify the nested entity property in condition.
     * - 3.
-      - `Spring Data JPA - "Special parameter handling" of Reference Documentation "1.2.2 Defining query methods" <http://static.springsource.org/spring-data/data-jpa/docs/1.3.4.RELEASE/reference/html/repositories.html#repositories.special-parameters>`_\
+      - `Spring Data JPA - "Special parameter handling" of Reference Documentation "Defining query methods" <http://docs.spring.io/spring-data/jpa/docs/1.7.1.RELEASE/reference/html/#repositories.special-parameters>`_\
       - This section describes special method arguments (``Pageable`` , ``Sort``).
     * - 4.
-      - `Spring Data JPA - Reference Documentation "2.2.2. Query creation" <http://static.springsource.org/spring-data/data-jpa/docs/1.3.4.RELEASE/reference/html/jpa.repositories.html#jpa.query-methods.query-creation>`_\
+      - `Spring Data JPA - "Query creation" of Reference Documentation "Query methods" <http://docs.spring.io/spring-data/jpa/docs/1.7.1.RELEASE/reference/html/#jpa.query-methods.query-creation>`_\
       - This section describes naming conventions (keywords) for creating JPQL.
     * - 5.
-      - `Spring Data JPA - Reference Documentation "Appendix B. Repository query keywords" <http://static.springsource.org/spring-data/data-jpa/docs/1.3.4.RELEASE/reference/html/repository-query-keywords.html>`_\
+      - `Spring Data JPA - Reference Documentation "Appendix C. Repository query keywords" <http://docs.spring.io/spring-data/jpa/docs/1.7.1.RELEASE/reference/html/#repository-query-keywords>`_\
       - This section describes naming conventions (keywords) for creating JPQL.
 
 See the example below.

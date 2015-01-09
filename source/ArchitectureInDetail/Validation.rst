@@ -67,7 +67,7 @@ Webアプリケーションの入力チェックには、サーバサイドで�
    * - 相関項目チェック
      - | 複数のフィールドを比較するチェック
      - | パスワードと確認用パスワードの一致チェック
-     - | `org.springframework.validation.Validator <http://docs.spring.io/spring/docs/3.2.x/spring-framework-reference/html/validation.html#validator>`_\ インタフェースを実装したValidationクラス
+     - | `org.springframework.validation.Validator <http://docs.spring.io/spring/docs/4.1.3.RELEASE/spring-framework-reference/html/validation.html#validator>`_\ インタフェースを実装したValidationクラス
        | または Bean Validation
 
 
@@ -2345,7 +2345,7 @@ ValidationMessages.propertiesでシステムで利用するデフォルトのメ
 
 .. note::
 
-  application-messages.propertiesのメッセージキーの形式は、\ `これ以外にも用意されている <http://docs.spring.io/spring/docs/3.2.x/javadoc-api/org/springframework/validation/DefaultMessageCodesResolver.html>`_\ が、
+  application-messages.propertiesのメッセージキーの形式は、\ `これ以外にも用意されている <http://docs.spring.io/spring/docs/4.1.3.RELEASE/javadoc-api/org/springframework/validation/DefaultMessageCodesResolver.html>`_\ が、
   デフォルトメッセージを一部上書きする目的で使用するのであれば、基本的に、\ ``アノテーション名.フォーム属性名.プロパティ名``\ 形式でよい。
 
 |
@@ -3395,7 +3395,7 @@ application-messages.propertiesに以下の定義を行った場合、
 
 .. tip::
 
-  メッセージキーのルールの詳細は、\ `Javadoc <http://docs.spring.io/spring/docs/3.2.x/javadoc-api/org/springframework/validation/DefaultMessageCodesResolver.html>`_\ を参照されたい。
+  メッセージキーのルールの詳細は、\ `Javadoc <http://docs.spring.io/spring/docs/4.1.3.RELEASE/javadoc-api/org/springframework/validation/DefaultMessageCodesResolver.html>`_\ を参照されたい。
 
 
 .. _Validation_string_trimmer_editor:

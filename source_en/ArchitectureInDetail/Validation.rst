@@ -65,7 +65,7 @@ Input validation is classified into single item check and correlation item check
    * - Correlation item check
      - | Check comparing multiple fields
      - | Password and confirm password check
-     - | Bean Validation or Validation class implementing `org.springframework.validation.Validator <http://docs.spring.io/spring/docs/3.2.x/spring-framework-reference/html/validation.html#validator>`_\
+     - | Bean Validation or Validation class implementing `org.springframework.validation.Validator <http://docs.spring.io/spring/docs/4.1.3.RELEASE/spring-framework-reference/html/validation.html#validator>`_\
        | interface
 
 
@@ -2200,7 +2200,7 @@ Error messages are changed as follows.
 
 .. note::
 
-  \ `There are other formats  <http://docs.spring.io/spring/docs/3.2.x/javadoc-api/org/springframework/validation/DefaultMessageCodesResolver.html>`_\ as well for the message key application-messages.properties.
+  \ `There are other formats  <http://docs.spring.io/spring/docs/4.1.3.RELEASE/javadoc-api/org/springframework/validation/DefaultMessageCodesResolver.html>`_\ as well for the message key application-messages.properties.
   However, if it is used with the purpose of overwriting some default messages, it should be in \ ``[annotation name].[form attribute name].[property name]``\  format.
 
 |
@@ -3214,7 +3214,7 @@ Error message gets changed as shown below.
 
 .. tip::
 
-  Refer to \ `Javadoc <http://docs.spring.io/spring/docs/3.2.x/javadoc-api/org/springframework/validation/DefaultMessageCodesResolver.html>`_\ for the details of message key rules.
+  Refer to \ `Javadoc <http://docs.spring.io/spring/docs/4.1.3.RELEASE/javadoc-api/org/springframework/validation/DefaultMessageCodesResolver.html>`_\ for the details of message key rules.
 
 .. _Validation_string_trimmer_editor:
 

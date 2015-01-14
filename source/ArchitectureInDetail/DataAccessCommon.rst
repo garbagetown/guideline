@@ -767,8 +767,7 @@ LIKE検索時のエスケープについて
 
 共通ライブラリから提供しているエスケープ用のメソッドについて
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-| 共通ライブラリから提供している\ ``QueryEscapeUtils``\ クラスのエスケープ用メソッドの一覧を、以下に示す。
-| 具体的な使用例については、How to useの\ :ref:`data-access-common_howtouse_like_escape`\ を参照されたい。
+共通ライブラリから提供している\ ``QueryEscapeUtils``\ クラスのエスケープ用メソッドの一覧を、以下に示す。
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.35\linewidth}|p{0.55\linewidth}|
  .. list-table::

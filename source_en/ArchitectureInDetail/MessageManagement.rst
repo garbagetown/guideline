@@ -883,12 +883,12 @@ Fundamentally the following message types are created.
   * - | warn
     - | \ ``ResultMessages.warn()``\
     - | alert alert-warn
-    - | This type is deprecated because added "warning" as new message type from terasoluna-gfw-common 1.1.0.RELEASE.
+    - | This type is deprecated because added "warning" as new message type from terasoluna-gfw-common 5.0.0.RELEASE.
       | **This message type might be removed in the future.**
   * - | warning
     - | \ ``ResultMessages.warning()``\
     - | alert alert-warning
-    - | Added this message type to support \ `Alerts component <http://getbootstrap.com/components/#alerts>`_\  of \ `Bootstrap(CSS Framework) <http://getbootstrap.com/>`_\  from the terasoluna-gfw-common 1.1.0.RELEASE.
+    - | Added this message type to support \ `Alerts component <http://getbootstrap.com/components/#alerts>`_\  of \ `Bootstrap(CSS Framework) <http://getbootstrap.com/>`_\  from the terasoluna-gfw-common 5.0.0.RELEASE.
   * - | error
     - | \ ``ResultMessages.error()``\
     - | alert alert-error

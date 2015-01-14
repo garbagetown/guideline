@@ -123,7 +123,7 @@ Chromeのアプリケーション一覧を開く(ブラウザのアドレスバ�
      -DarchetypeCatalog=http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-snapshots^
      -DarchetypeGroupId=org.terasoluna.gfw.blank^
      -DarchetypeArtifactId=terasoluna-gfw-web-blank-mybatis3-archetype^
-     -DarchetypeVersion=1.1.0-SNAPSHOT^
+     -DarchetypeVersion=5.0.0-SNAPSHOT^
      -DgroupId=todo^
      -DartifactId=todo-api^
      -Dversion=1.0-SNAPSHOT
@@ -136,7 +136,7 @@ Chromeのアプリケーション一覧を開く(ブラウザのアドレスバ�
     More?      -DarchetypeCatalog=http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-snapshots^
     More?      -DarchetypeGroupId=org.terasoluna.gfw.blank^
     More?      -DarchetypeArtifactId=terasoluna-gfw-web-blank-mybatis3-archetype^
-    More?      -DarchetypeVersion=1.1.0-SNAPSHOT^
+    More?      -DarchetypeVersion=5.0.0-SNAPSHOT^
     More?      -DgroupId=todo^
     More?      -DartifactId=todo-api^
     More?      -Dversion=1.0-SNAPSHOT
@@ -152,9 +152,9 @@ Chromeのアプリケーション一覧を開く(ブラウザのアドレスバ�
     [INFO]
     [INFO] --- maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom ---
     [INFO] Generating project in Batch mode
-    [INFO] Archetype repository missing. Using the one from [org.terasoluna.gfw.blank:terasoluna-gfw-web-blank-mybatis3-archetype:1.1.0-BUILD-SNAPSHOT -> http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-snapshots] found in catalog http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-snapshotsT/maven-metadata.xml (817 B at 0.2 KB/sec)
+    [INFO] Archetype repository missing. Using the one from [org.terasoluna.gfw.blank:terasoluna-gfw-web-blank-mybatis3-archetype:5.0.0-BUILD-SNAPSHOT -> http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-snapshots] found in catalog http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-snapshotsT/maven-metadata.xml (817 B at 0.2 KB/sec)
     [INFO] ----------------------------------------------------------------------------
-    [INFO] Using following parameters for creating project from Archetype: terasoluna-gfw-web-blank-mybatis3-archetype:1.1.0-SNAPSHOT
+    [INFO] Using following parameters for creating project from Archetype: terasoluna-gfw-web-blank-mybatis3-archetype:5.0.0-SNAPSHOT
     [INFO] ----------------------------------------------------------------------------
     [INFO] Parameter: groupId, Value: todo
     [INFO] Parameter: artifactId, Value: todo-api

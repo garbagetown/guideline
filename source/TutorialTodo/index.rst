@@ -220,7 +220,7 @@ Delete TODO
      -DarchetypeCatalog=http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-snapshots^
      -DarchetypeGroupId=org.terasoluna.gfw.blank^
      -DarchetypeArtifactId=terasoluna-gfw-web-blank-mybatis3-archetype^
-     -DarchetypeVersion=1.1.0-SNAPSHOT^
+     -DarchetypeVersion=5.0.0-SNAPSHOT^
      -DgroupId=todo^
      -DartifactId=todo^
      -Dversion=1.1.1-SNAPSHOT

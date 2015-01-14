@@ -135,7 +135,7 @@ Spring Dataより提供されているページ検索用の機能は、以下の
 
  .. note:: **Spring Data CommonsのAPI仕様の変更に伴う注意点**
 
-    terasoluna-gfw-common 1.1.0.RELEASE以上が依存するspring-data-commons(1.9.1.RELEASE以上)では、
+    terasoluna-gfw-common 5.0.0.RELEASE以上が依存するspring-data-commons(1.9.1.RELEASE以上)では、
     ページ検索機能用のインタフェース(\ ``org.springframework.data.domain.Page``\ )とクラス(\ ``org.springframework.data.domain.PageImpl``\ と\ ``org.springframework.data.domain.Sort.Order``\ )のAPI仕様が変更になっている。
 
     具体的には、
@@ -326,7 +326,7 @@ Spring Dataより提供されているページ検索用の機能は、以下の
 
     「Page Link URL」は、JSPタグライブラリのパラメータの指定によって別の値に変更することができる。
 
-    terasoluna-gfw-web 1.1.0.RELEASEより、\ ``"active"``\ 状態のリンクのデフォルト値を\ ``"?page={page}&size={size}"``\から\ ``"javascript:void(0)"``\に変更している。
+    terasoluna-gfw-web 5.0.0.RELEASEより、\ ``"active"``\ 状態のリンクのデフォルト値を\ ``"?page={page}&size={size}"``\から\ ``"javascript:void(0)"``\に変更している。
     これは、メジャーなWebサイトのページネーションリンクの実装やメジャーなCSSライブラリ(Bootstrapなど)の実装に合わせるためである。
 
 .. _pagination_overview_paginationlink_pagelinktext:
@@ -506,7 +506,7 @@ JSPタグライブラリのパラメータに値を指定することで、デ�
       - | \ ``"active"``\ 状態のページリンクを押下した際に、該当ページを再表示するためのリクエストを送信するためのフラグ。
         | \ ``true``\ を指定する事で、「Page Link URL」に該当ページを再表示するためのURL(デフォルト値は\ ``"?page={page}&size={size}"``\ )が設定される。(デフォルト値は\ ``false``\で、「Page Link URL」には\ ``disabledHref``\ 属性の値が設定される)
         |
-        | terasoluna-gfw-web 1.1.0.RELEASE以上で利用可能なパラメータである。
+        | terasoluna-gfw-web 5.0.0.RELEASE以上で利用可能なパラメータである。
 
  .. note:: **disabledHrefの設定値について**
 
@@ -518,7 +518,7 @@ JSPタグライブラリのパラメータに値を指定することで、デ�
     この挙動を変えたい場合は、JavaScriptを使用してページリンク押下時の動作を無効化する必要がある。
     実装例については、「:ref:`PaginationHowToUseDisablePageLinkUsingJavaScript`」を参照されたい。
 
-    terasoluna-gfw-web 1.1.0.RELEASEより、\ ``disabledHref``\ 属性のデフォルト値を\ ``"#"``\から\ ``"javascript:void(0)"``\ に変更している。
+    terasoluna-gfw-web 5.0.0.RELEASEより、\ ``disabledHref``\ 属性のデフォルト値を\ ``"#"``\から\ ``"javascript:void(0)"``\ に変更している。
     この変更を行うことで、\ ``"disabled"``\ 状態のページリンクを押下した際に、フォーカスがページのトップへ移動しないようになっている。
 
 

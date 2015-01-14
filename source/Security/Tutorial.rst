@@ -90,7 +90,7 @@ URL一覧を以下に示す。
      -DarchetypeCatalog=http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-snapshots^
      -DarchetypeGroupId=org.terasoluna.gfw.blank^
      -DarchetypeArtifactId=terasoluna-gfw-web-blank-mybatis3-archetype^
-     -DarchetypeVersion=1.1.0-SNAPSHOT^
+     -DarchetypeVersion=5.0.0-SNAPSHOT^
      -DgroupId=com.example.security^
      -DartifactId=first-springsecurity^
      -Dversion=1.1.1-SNAPSHOT
@@ -103,7 +103,7 @@ URL一覧を以下に示す。
     More?  -DarchetypeCatalog=http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-snapshots^
     More?  -DarchetypeGroupId=org.terasoluna.gfw.blank^
     More?  -DarchetypeArtifactId=terasoluna-gfw-web-blank-mybatis3-archetype^
-    More?  -DarchetypeVersion=1.1.0-SNAPSHOT^
+    More?  -DarchetypeVersion=5.0.0-SNAPSHOT^
     More?  -DgroupId=com.example.security^
     More?  -DartifactId=first-springsecurity^
     More?  -Dversion=1.1.1-SNAPSHOT
@@ -119,9 +119,9 @@ URL一覧を以下に示す。
     [INFO]
     [INFO] --- maven-archetype-plugin:2.2:generate (default-cli) @ standalone-pom ---
     [INFO] Generating project in Batch mode
-    [INFO] Archetype repository missing. Using the one from [org.terasoluna.gfw.blank:terasoluna-gfw-web-blank-mybatis3-archetype:1.1.0-BUILD-SNAPSHOT -> http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-snapshots] found in catalog http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-snapshots
+    [INFO] Archetype repository missing. Using the one from [org.terasoluna.gfw.blank:terasoluna-gfw-web-blank-mybatis3-archetype:5.0.0-BUILD-SNAPSHOT -> http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-snapshots] found in catalog http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-snapshots
     [INFO] ----------------------------------------------------------------------------
-    [INFO] Using following parameters for creating project from Archetype: terasoluna-gfw-web-blank-mybatis3-archetype:1.1.0-SNAPSHOT
+    [INFO] Using following parameters for creating project from Archetype: terasoluna-gfw-web-blank-mybatis3-archetype:5.0.0-SNAPSHOT
     [INFO] ----------------------------------------------------------------------------
     [INFO] Parameter: groupId, Value: com.example.security
     [INFO] Parameter: artifactId, Value: first-springsecurity

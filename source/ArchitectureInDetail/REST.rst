@@ -2628,7 +2628,7 @@ URIで指定されたMemberリソースのコレクションをページ検索�
 
  .. note:: **Spring Data CommonsのAPI仕様の変更に伴う注意点**
 
-    terasoluna-gfw-common 1.1.0.RELEASE以上が依存するspring-data-commons(1.9.1.RELEASE以上)では、
+    terasoluna-gfw-common 5.0.0.RELEASE以上が依存するspring-data-commons(1.9.1.RELEASE以上)では、
     ページ検索機能用のインタフェース(\ ``org.springframework.data.domain.Page``\ )とクラス(\ ``org.springframework.data.domain.PageImpl``\ と\ ``org.springframework.data.domain.Sort.Order``\ )のAPI仕様が変更になっている。
 
     具体的には、

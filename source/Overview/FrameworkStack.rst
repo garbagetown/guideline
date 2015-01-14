@@ -121,11 +121,11 @@ Viewのレイアウトを共通化する場合は、
 利用するOSSのバージョン
 --------------------------------------------------------------------------------
 
-version 1.1.0.RELEASEで利用するOSSの一覧を以下に示す。
+version 5.0.0.RELEASEで利用するOSSの一覧を以下に示す。
 
 .. tip::
 
-    version 1.1.0.RELEASEより、
+    version 5.0.0.RELEASEより、
     `Spring IO platform <http://platform.spring.io/platform/>`_\ を親プロジェクトに指定する構成を採用している。
 
     Spring IO platformを親プロジェクトに指定することで、
@@ -137,7 +137,7 @@ version 1.1.0.RELEASEで利用するOSSの一覧を以下に示す。
     への依存関係を解決しており、
     TERASOLUNA Global Frameworkで使用するOSSのバージョンは、原則として、Spring IO platformの定義に準じている。
 
-    なお、version 1.1.0.RELEASEで指定しているSpring IO platformのバージョンは、`1.1.0.RELEASE <http://docs.spring.io/platform/docs/1.1.0.RELEASE/reference/htmlsingle/>`_\ である。
+    なお、version 5.0.0.RELEASEで指定しているSpring IO platformのバージョンは、`1.1.0.RELEASE <http://docs.spring.io/platform/docs/1.1.0.RELEASE/reference/htmlsingle/>`_\ である。
 
 .. tabularcolumns:: |p{0.15\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|p{0.05\linewidth}|p{0.05\linewidth}|
 .. list-table::

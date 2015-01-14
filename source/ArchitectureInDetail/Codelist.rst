@@ -1105,7 +1105,7 @@ BeanValidationや、メッセージ出力方法の詳細については、 :doc:
 
 .. note::
 
-    terasoluna-gfw-common 1.1.0.RELEASEより、
+    terasoluna-gfw-common 5.0.0.RELEASEより、
     プロパティキーの形式を、Bean Validationのスタンダードな形式(アノテーションのFQCN + \ ``.message``\ )に変更している。
 
     version 1.0.x.RELEASEのデフォルトのメッセージ定義は以下の通り。
@@ -1115,7 +1115,7 @@ BeanValidationや、メッセージ出力方法の詳細については、 :doc:
         org.terasoluna.gfw.common.codelist.ExistInCodeList = Does not exist in {codeListId}
 
     アプリケーション要件に合わせてメッセージを変更している場合は、
-    version 1.0.x.RELEASEからversion 1.1.0.RELEASE以降にバージョンアップする際にプロパティキーの変更が必要になる。
+    version 1.0.x.RELEASEからversion 5.0.0.RELEASE以降にバージョンアップする際にプロパティキーの変更が必要になる。
 
 |
 

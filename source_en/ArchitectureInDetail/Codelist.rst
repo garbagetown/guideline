@@ -923,7 +923,7 @@ Please change the message to fit the application requirements.
 
 .. note::
 
-    In the terasoluna-gfw-common 1.1.0.RELEASE or later,
+    In the terasoluna-gfw-common 5.0.0.RELEASE or later,
     the property key has been changed to standard format of Bean Validation(FQCN of annotation class + \ ``.message``\).
 
     See below the default message definition in the version 1.0.x.RELEASE.
@@ -933,7 +933,7 @@ Please change the message to fit the application requirements.
         org.terasoluna.gfw.common.codelist.ExistInCodeList = Does not exist in {codeListId}
 
     If have change the message to fit the application requirements,
-    need to change the property key when migrate to the version 1.1.0.RELEASE from the version 1.0.x.RELEASE.
+    need to change the property key when migrate to the version 5.0.0.RELEASE from the version 1.0.x.RELEASE.
 
 |
 

@@ -456,10 +456,10 @@ pom.xml settings
         <dependency>
             <groupId>org.terasoluna.gfw</groupId>
             <artifactId>terasoluna-gfw-mybatis3</artifactId>
-            <version>1.1.0.RELEASE</version>
+            <version>5.0.0.RELEASE</version>
         </dependency>
         
-    In the above example, 1.1.0.RELEASE is specified. However, version used in the project should be specified.
+    In the above example, 5.0.0.RELEASE is specified. However, version used in the project should be specified.
 
 |
 

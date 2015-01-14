@@ -890,12 +890,12 @@ infoメッセージを表示したい場合は、次のように\ ``ResultMessag
   * - | warn
     - | \ ``ResultMessages.warn()``\
     - | alert alert-warn
-    - | メッセージタイプ「warning」の追加に伴い、terasoluna-gfw-common 1.1.0.RELEASEから非推奨。
+    - | メッセージタイプ「warning」の追加に伴い、terasoluna-gfw-common 5.0.0.RELEASEから非推奨。
       | \ **このメッセージタイプは将来削除される可能性がある。**\
   * - | warning
     - | \ ``ResultMessages.warning()``\
     - | alert alert-warning
-    - | CSSフレームワークである\ `Bootstrap <http://getbootstrap.com/>`_ の\ `Alertsコンポーネント <http://getbootstrap.com/components/#alerts>`_\ で用意されているメッセージタイプをデフォルトでサポートするために、terasoluna-gfw-common 1.1.0.RELEASEから追加。
+    - | CSSフレームワークである\ `Bootstrap <http://getbootstrap.com/>`_ の\ `Alertsコンポーネント <http://getbootstrap.com/components/#alerts>`_\ で用意されているメッセージタイプをデフォルトでサポートするために、terasoluna-gfw-common 5.0.0.RELEASEから追加。
   * - | error
     - | \ ``ResultMessages.error()``\
     - | alert alert-error

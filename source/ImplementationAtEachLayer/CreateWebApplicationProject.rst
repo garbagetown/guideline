@@ -101,7 +101,7 @@ groupId、artifactId、version、package を指定する。
 .. code-block:: console
 
     [INFO] ----------------------------------------------------------------------------
-    [INFO] Using following parameters for creating project from Archetype: terasoluna-gfw-multi-web-blank-mybatis3-archetype:1.1.0-SNAPSHOT
+    [INFO] Using following parameters for creating project from Archetype: terasoluna-gfw-multi-web-blank-mybatis3-archetype:5.0.0-SNAPSHOT
     [INFO] ----------------------------------------------------------------------------
     [INFO] Parameter: groupId, Value: com.example.todo
     [INFO] Parameter: artifactId, Value: todo
@@ -1532,8 +1532,8 @@ Maven Archetypeで作成したプロジェクトのプロジェクト階層の�
         Maven Archetypeで作成したプロジェクトはマルチモジュール構成となっており、
         親プロジェクトと各サブモジュールは相互参照の関係になっている。
 
-        version 1.1.0.RELEASE用のMaven Archetypeで作成したプロジェクトでは、
-        親プロジェクトとして「org.terasoluna.gfw:terasoluna-gfw-parent:1.1.0.RELEASE」を指定している。
+        version 5.0.0.RELEASE用のMaven Archetypeで作成したプロジェクトでは、
+        親プロジェクトとして「org.terasoluna.gfw:terasoluna-gfw-parent:5.0.0.RELEASE」を指定している。
     * - | (2)
       - TERASOLUNA Global Framework Parentプロジェクト。
 
@@ -1559,12 +1559,12 @@ Maven Archetypeで作成したプロジェクトのプロジェクト階層の�
 
 .. tip::
 
-    version 1.1.0.RELEASEより、Spring IO Platformを親プロジェクトに指定する構成に変更しており、
+    version 5.0.0.RELEASEより、Spring IO Platformを親プロジェクトに指定する構成に変更しており、
     推奨ライブラリのバージョン管理をSpring IO Platformに委譲するスタイルを採用している。
 
 .. warning::
 
-    version 1.1.0.RELEASEより、Spring IO Platformを親プロジェクトに指定する構成に変更したため、
+    version 5.0.0.RELEASEより、Spring IO Platformを親プロジェクトに指定する構成に変更したため、
     依存ライブラリのバージョンを管理するためのプロパティの名前が大幅に変更されている。
 
     そのため、プロジェクト側でプロパティ値を上書きしている場合は、version 1.0.xからバージョンアップする際は注意が必要である。

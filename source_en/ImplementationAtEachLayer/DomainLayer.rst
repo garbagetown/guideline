@@ -1532,20 +1532,21 @@ Information required for "Declarative transaction management"
 
  .. note::
 
-    In this guideline, has assumed to be used the \ ``@org.springframework.transaction.annotation.Transactional``\  annotation of Spring Framework.
+    In this guideline it is assumed that the Spring Framework \ ``@org.springframework.transaction.annotation.Transactional`` \ annotation is used.
 
  .. tip::
 
-    Since Spring 4, can be used the \ ``@javax.transaction.Transactional``\  annotation of JTA 1.2.
+    Since Spring 4, \ ``@javax.transaction.Transactional`` \ annotation added in JTA 1.2 can be used.
+    
 
-    However in this guideline, has recommended to be used \ ``@Transactional``\  annotation of Spring Framework that can be specify information required for "Declarative transaction management" more finely.
+    However in this guideline, it is recommended to use \ ``@Transactional``\  annotation of Spring Framework that can specify information required for "Declarative transaction management" more finely.
 
-    If use the \ ``@Transactinal``\  annotation of the Spring Framework, following attributes can be specified.
+    Following attributes can be specified if Spring Framework \ ``@Transactinal``\  annotation is used.
 
-    * \ ``NESTED``\  (using JDBC's savepoint) as an attribute value of the propagation method of transaction(\ ``propagation``\  attribute).
-    * Isolation level of transaction(\ ``isolation``\  attribute)
-    * Timeout of transaction(\ ``timeout``\  attribute)
-    * Read-only flag of transaction(\ ``readOnly``\  attribute)
+    * \ ``NESTED``\  (JDBC savepoint) as an attribute value of the propagation method of transaction (\ ``propagation``\  attribute).
+    * Isolation level of transaction (\ ``isolation``\  attribute)
+    * Timeout of transaction (\ ``timeout``\  attribute)
+    * Read-only flag of transaction (\ ``readOnly``\  attribute)
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.10\linewidth}|p{0.80\linewidth}|
  .. list-table::

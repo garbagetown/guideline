@@ -12,7 +12,7 @@ Overview
 
 This section explains how to manage properties.
 
-Value that need to manage as properties, can be classified into following two.
+Value that needs to be managed as properties can be classified into following two categories.
 
 
 .. tabularcolumns:: |p{0.10\linewidth}|p{0.20\linewidth}|p{0.35\linewidth}|p{0.35\linewidth}|
@@ -23,47 +23,47 @@ Value that need to manage as properties, can be classified into following two.
     * - Sr. No.
       - Classification
       - Description
-      - Examples
+      - Example
     * - 1.
-      - Environment dependent settings
-      - This settings need to change the value to specify according to the environment in which the application is running.
+      - Environment dependent setting
+      - The setting needs to be changed according to the environment on which the application is running.
 
-        This settings depend on non-functional requirements as system constitution.
-      - * Connection information of database(connection URL, connection user, password, etc)
-        * Saving destination of files(directory paths, etc)
+        It depends on non-functional requirements such as system configuration.
+      - * Database connection information (connection URL, connection user, password, etc)
+        * Destination of the file storage (directory path etc)
         * more ...
     * - 2.
       - Application settings
-      - This settings change to customize the behavior of the application.
+      - The settings that can be customize the application behavior.
 
-        This settings depend on functional requirements.
+        It depends on functional requirements.
       - * Password valid days
         * Reservation period days
         * more ...
 
 .. note::
 
-    In this guideline, recommend to manage these settings as properties(properties file).
+    In this guideline, it is recommended to manage these settings as properties (properties file).
 
-    If apply the mechanism that acquire these settings from the properties,
-    don't need to re-build the application when have changed these settings.
-    So that becomes possible to release the tested application to the production environment.
+    If an application is mechanized such a way that acquires setting from the properties,
+    there is no need to re-build the application even if there is any changes in these values.
+    Therefore it is possible to release the tested application on production environment.
 
 
     About how to release the tested application, refer to ":doc:`../Appendix/EnvironmentIndependency`".
 
 .. tip::
 
-    Value that are managed as properties can be acquired from JVM system properties(-D option) or OS environment variables.
+    Values that are managed as properties can be acquired from JVM system properties (-D option) or OS environment variables.
     About access order, refer to ":ref:`PropertiesManagementHowToUse`".
 
 |
 
 
-Value that are managed as properties can be used at the following two locations.
+Values that are managed as properties can be used at the following two locations.
 
 * Bean definition file
-* Managing Java class by DI container
+* Java classes managed by DI container
 
 |
 

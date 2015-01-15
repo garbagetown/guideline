@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'TERASOLUNA Global Framework Development Guideline'
-copyright = u'2013-2014, NTT DATA'
+copyright = u'2013-2015, NTT DATA'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

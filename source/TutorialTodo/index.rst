@@ -1170,86 +1170,10 @@ todo-env.xmlの確認
 
 \ :file:`todo-env.xml`\ には、デプロイする環境によって設定が異なるコンポーネントの設定を行う。
 
-データベースにアクセスしないブランクプロジェクトを作成した際は、\ :file:`todo-env.xml`\ は作成されない。
-
 作成したブランクプロジェクトの\ ``src/main/resources/META-INF/spring/todo-env.xml``\ は、以下のような設定となっている。
 
-JPA用のブランクプロジェクトを作成した場合のtodo-env.xml
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-.. code-block:: xml
-    :emphasize-lines: 8, 22, 27
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <beans xmlns="http://www.springframework.org/schema/beans"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-
-        <bean id="dateFactory" class="org.terasoluna.gfw.common.date.jodatime.DefaultJodaTimeDateFactory" />
-
-        <!-- (1) -->
-        <bean id="realDataSource" class="org.apache.commons.dbcp2.BasicDataSource"
-            destroy-method="close">
-            <property name="driverClassName" value="${database.driverClassName}" />
-            <property name="url" value="${database.url}" />
-            <property name="username" value="${database.username}" />
-            <property name="password" value="${database.password}" />
-            <property name="defaultAutoCommit" value="false" />
-            <property name="maxTotal" value="${cp.maxActive}" />
-            <property name="maxIdle" value="${cp.maxIdle}" />
-            <property name="minIdle" value="${cp.minIdle}" />
-            <property name="maxWaitMillis" value="${cp.maxWait}" />
-        </bean>
-
-        <!-- (2) -->
-        <bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
-            <constructor-arg index="0" ref="realDataSource" />
-        </bean>
-
-        <!-- (3) -->
-        <bean id="transactionManager"
-            class="org.springframework.orm.jpa.JpaTransactionManager">
-            <property name="entityManagerFactory" ref="entityManagerFactory" />
-        </bean>
-        <!--  REMOVE THIS LINE IF YOU USE MyBatis2
-        <bean id="transactionManager"
-            class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-            <property name="dataSource" ref="dataSource" />
-        </bean>
-              REMOVE THIS LINE IF YOU USE MyBatis2  -->
-        <!-- (3) -->
-        <!--  REMOVE THIS LINE IF YOU USE MyBatis3
-        <bean id="transactionManager"
-            class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-            <property name="dataSource" ref="dataSource" />
-        </bean>
-              REMOVE THIS LINE IF YOU USE MyBatis3  -->
-    </beans>
-
-.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
-.. list-table::
-   :header-rows: 1
-   :widths: 10 90
-
-
-   * - 項番
-     - 説明
-   * - | (1)
-     - | 実データソースの設定。
-   * - | (2)
-     - | データソースの設定。
-       | JDBC関連のログを出力する機能をもったデータソースを指定している。
-       | \ ``net.sf.log4jdbc.Log4jdbcProxyDataSource``\ を使用すると、SQLなどのJDBC関連のログを出力できるため、デバッグに役立つ情報を出力することができる。
-   * - | (3)
-     - | トランザクションマネージャの設定。
-       | id属性には、\ ``transactionManager``\ を指定する。
-       | 別の名前を指定する場合は、\ ``<tx:annotation-driven>``\ タグにもトランザクションマネージャ名を指定する必要がある。
-       |
-       | ブランクプロジェクトでは、JPAのAPIを使用してトランザクションを制御するクラス(\ ``org.springframework.orm.jpa.JpaTransactionManager``\)が設定されている。
-
-
-MyBatis3用のブランクプロジェクトを作成した場合のtodo-env.xml
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+ここでは、MyBatis3用のブランクプロジェクトに格納されるファイルを例に説明する。
+なお、データベースにアクセスしないブランクプロジェクトを作成した際は、\ :file:`todo-env.xml`\ は作成されない。
 
 .. code-block:: xml
     :emphasize-lines: 8, 22, 39
@@ -1321,6 +1245,17 @@ MyBatis3用のブランクプロジェクトを作成した場合のtodo-env.xml
        |
        | ブランクプロジェクトでは、JDBCのAPIを使用してトランザクションを制御するクラス(\ ``org.springframework.jdbc.datasource.DataSourceTransactionManager``\)が設定されている。
 
+.. note::
+
+    JPA用のブランクプロジェクトを作成した場合は、トランザクションマネージャには、
+    JPAのAPIを使用してトランザクションを制御するクラス(\ ``org.springframework.orm.jpa.JpaTransactionManager``\)が設定されている。
+
+     .. code-block:: xml
+
+        <bean id="transactionManager"
+            class="org.springframework.orm.jpa.JpaTransactionManager">
+            <property name="entityManagerFactory" ref="entityManagerFactory" />
+        </bean>
 
 |
 

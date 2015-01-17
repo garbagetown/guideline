@@ -458,1223 +458,15 @@ Root Directoryに \ ``C:\work\todo``\ を設定し、Projectsにtodoのpom.xml�
 --------------------------------------------------------------------------------
 チュートリアルを進める上で必要となる設定の多くは、作成したブランクプロジェクトに既に設定済みの状態である。
 
-ここでは、アプリケーションを動かすためにどのような設定ファイルが必要なのかを理解するために、 設定ファイルの確認をしていく。
+チュートリアルを実施するだけであれば、これらの設定の理解は必須ではないが、
+アプリケーションを動かすためにどのような設定が必要なのかを理解しておくことを推奨する。
+
+アプリケーションを動かすために必要な設定(設定ファイル)の解説については、「:ref:`TutorialTodoAppendixExpoundConfigurations`」を参照されたい。
 
 .. note::
  
-    まず、手を動かしてTodoアプリを作成したい場合は、本節を読み飛ばしてもよいが、
-    Todoアプリを作成した後に必ず一読して頂きたい。
-
-
-web.xmlの確認
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-\ :file:`web.xml`\ には、WebアプリケーションとしてTodoアプリをデプロイするための設定を行う。
-
-作成したブランクプロジェクトの\ :file:`src/main/webapp/WEB-INF/web.xml`\ は、以下のような設定となっている。
-
-.. code-block:: xml
-    :emphasize-lines: 2, 6, 22, 78, 95, 106, 120 
-
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!-- (1) -->
-    <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-        version="3.0">
-        <!-- (2) -->
-        <listener>
-            <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-        </listener>
-        <listener>
-            <listener-class>org.terasoluna.gfw.web.logging.HttpSessionEventLoggingListener</listener-class>
-        </listener>
-        <context-param>
-            <param-name>contextConfigLocation</param-name>
-            <!-- Root ApplicationContext -->
-            <param-value>
-                classpath*:META-INF/spring/applicationContext.xml
-                classpath*:META-INF/spring/spring-security.xml
-            </param-value>
-        </context-param>
-
-        <!-- (3) -->
-        <filter>
-            <filter-name>MDCClearFilter</filter-name>
-            <filter-class>org.terasoluna.gfw.web.logging.mdc.MDCClearFilter</filter-class>
-        </filter>
-        <filter-mapping>
-            <filter-name>MDCClearFilter</filter-name>
-            <url-pattern>/*</url-pattern>
-        </filter-mapping>
-
-        <filter>
-            <filter-name>exceptionLoggingFilter</filter-name>
-            <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-        </filter>
-        <filter-mapping>
-            <filter-name>exceptionLoggingFilter</filter-name>
-            <url-pattern>/*</url-pattern>
-        </filter-mapping>
-
-        <filter>
-            <filter-name>XTrackMDCPutFilter</filter-name>
-            <filter-class>org.terasoluna.gfw.web.logging.mdc.XTrackMDCPutFilter</filter-class>
-        </filter>
-        <filter-mapping>
-            <filter-name>XTrackMDCPutFilter</filter-name>
-            <url-pattern>/*</url-pattern>
-        </filter-mapping>
-
-        <filter>
-            <filter-name>CharacterEncodingFilter</filter-name>
-            <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-            <init-param>
-                <param-name>encoding</param-name>
-                <param-value>UTF-8</param-value>
-            </init-param>
-            <init-param>
-                <param-name>forceEncoding</param-name>
-                <param-value>true</param-value>
-            </init-param>
-        </filter>
-        <filter-mapping>
-            <filter-name>CharacterEncodingFilter</filter-name>
-            <url-pattern>/*</url-pattern>
-        </filter-mapping>
-
-        <filter>
-            <filter-name>springSecurityFilterChain</filter-name>
-            <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-        </filter>
-
-        <filter-mapping>
-            <filter-name>springSecurityFilterChain</filter-name>
-            <url-pattern>/*</url-pattern>
-        </filter-mapping>
-
-
-        <!-- (4) -->
-        <servlet>
-            <servlet-name>appServlet</servlet-name>
-            <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-            <init-param>
-                <param-name>contextConfigLocation</param-name>
-                <!-- ApplicationContext for Spring MVC -->
-                <param-value>classpath*:META-INF/spring/spring-mvc.xml</param-value>
-            </init-param>
-            <load-on-startup>1</load-on-startup>
-        </servlet>
-
-        <servlet-mapping>
-            <servlet-name>appServlet</servlet-name>
-            <url-pattern>/</url-pattern>
-        </servlet-mapping>
-
-        <!-- (5) -->
-        <jsp-config>
-            <jsp-property-group>
-                <url-pattern>*.jsp</url-pattern>
-                <el-ignored>false</el-ignored>
-                <page-encoding>UTF-8</page-encoding>
-                <scripting-invalid>false</scripting-invalid>
-                <include-prelude>/WEB-INF/views/common/include.jsp</include-prelude>
-            </jsp-property-group>
-        </jsp-config>
-
-        <!-- (6) -->
-        <error-page>
-            <error-code>500</error-code>
-            <location>/WEB-INF/views/common/error/systemError.jsp</location>
-        </error-page>
-        <error-page>
-            <error-code>404</error-code>
-            <location>/WEB-INF/views/common/error/resourceNotFoundError.jsp</location>
-        </error-page>
-        <error-page>
-            <exception-type>java.lang.Exception</exception-type>
-            <location>/WEB-INF/views/common/error/unhandledSystemError.html</location>
-        </error-page>
-
-        <!-- (7) -->
-        <session-config>
-            <!-- 30min -->
-            <session-timeout>30</session-timeout>
-        </session-config>
-
-    </web-app>
-
-.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
-.. list-table::
-   :header-rows: 1
-   :widths: 10 90
-
-   * - 項番
-     - 説明
-   * - | (1)
-     - | Servlet3.0を使用するための宣言。
-   * - | (2)
-     - | サーブレットコンテキストリスナーの定義。
-
-       ブランクプロジェクトでは、
-       
-       * アプリケーション全体で使用される\ ``ApplicationContext``\を作成するための\ ``ContextLoaderListener``\
-       * HttpSessionに対する操作をログ出力するための \ ``HttpSessionEventLoggingListener``\
-
-       が設定済みである。
-   * - | (3)
-     - | サーブレットフィルタの定義。
-
-       ブランクプロジェクトでは、
-       
-       * 共通ライブラリから提供しているサーブレットフィルタ
-       * Spring Frameworkから提供されている文字エンコーディングを指定するための\ ``CharacterEncodingFilter``\
-       * Spring Securityから提供されている認証・認可用のサーブレットフィルタ
-
-       が設定済みである。
-   * - | (4)
-     - | Spring MVCのエントリポイントとなるDispatcherServletの定義。
-       |
-       | DispatcherServletの中で使用する\ ``ApplicationContext``\を、(2)で作成した\ ``ApplicatnionContext``\の子として作成する。
-       | (2)で作成した\ ``ApplicatnionContext``\を親にすることで、(2)で読み込まれたコンポーネントも使用することができる。
-   * - | (5)
-     - | JSPの共通定義。
-     
-       ブランクプロジェクトでは、
-       
-       * JSP内でEL式が使用可能な状態
-       * JSPのページエンコーディングとしてUTF-8
-       * JSP内でスクリプティングが使用可能な状態
-       * 各JSPの先頭でインクルードするJSPとして、\ :file:`/WEB-INF/views/common/include.jsp`\
-
-       が設定済みである。
-   * - | (6)
-     - | エラーページの定義。
-     
-       ブランクプロジェクトでは、
-       
-       * サーブレットコンテナにHTTPステータスコードとして、\ ``404``\又は\ ``500``\が応答
-       * サーブレットコンテナに例外が通知
-
-       された際の遷移先が定義済みである。
-   * - | (7)
-     - | セッション管理の定義。
-     
-       ブランクプロジェクトでは、
-       
-       * セッションタイムアウトとして、30分
-
-       が定義済みである。
-
-
-|
-
-インクルードJSPの確認
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-インクルードJSPには、全てのJSPに適用するJSPの設定や、タグライブラリの設定を行う。
-
-作成したブランクプロジェクトの\ :file:`src/main/webapp/WEB-INF/views/common/include.jsp`\ は、以下のような設定となっている。
-
-.. code-block:: jsp
-    :emphasize-lines: 1, 3, 6, 9, 11 
-
-    <!-- (1) -->
-    <%@ page session="false"%>
-    <!-- (2) -->
-    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-    <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-    <!-- (3) -->
-    <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-    <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-    <!-- (4) -->
-    <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
-    <!-- (5) -->
-    <%@ taglib uri="http://terasoluna.org/functions" prefix="f"%>
-    <%@ taglib uri="http://terasoluna.org/tags" prefix="t"%>
-
-.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
-.. list-table::
-   :header-rows: 1
-   :widths: 10 90
-
-   * - 項番
-     - 説明
-   * - | (1)
-     - | JSP実行時にセッションを作成しないようにするための定義。
-   * - | (2)
-     - | 標準タグライブラリの定義。
-   * - | (3)
-     - | Spring MVC用タグライブラリの定義。
-   * - | (4)
-     - | Spring Security用タグライブラリの定義(本チュートリアルでは使用しない。)
-   * - | (5)
-     - | 共通ライブラリで提供されている、EL関数、タグライブラリの定義。
-
-|
-
-Bean定義ファイルの確認
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-作成したブランクプロジェクトには、以下のBean定義ファイルとプロパティファイルが作成される。
-
-* :file:`src/main/resources/META-INF/spring/applicationContext.xml`
-* :file:`src/main/resources/META-INF/spring/todo-domain.xml`
-* :file:`src/main/resources/META-INF/spring/todo-infra.xml`
-* :file:`src/main/resources/META-INF/spring/todo-infra.properties`
-* :file:`src/main/resources/META-INF/spring/todo-env.xml`
-* :file:`src/main/resources/META-INF/spring/spring-mvc.xml`
-* :file:`src/main/resources/META-INF/spring/spring-security.xml`
-
-.. note::
- 
-    O/R Mapperに依存しないブランクプロジェクトを作成した場合は、\ ``todo-infra.properties``\ と\ ``todo-env.xml``\ は作成されない。
-
-.. note::
-
-    本ガイドラインでは、Bean定義ファイルを役割(層)ごとにファイルを分割することを推奨している。
-    
-    これは、どこに何が定義されているか想像しやすく、メンテナンス性が向上するからである。
-    今回のチュートリアルのような小さなアプリケーションでは効果はないが、アプリケーションの規模が大きくなるにつれ、効果が大きくなる。
-
-|
-
-applicationContext.xmlの確認
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-\ :file:`applicationContext.xml`\ には、Todoアプリ全体に関わる設定を行う。
-
-| 作成したブランクプロジェクトの\ :file:`src/main/resources/META-INF/spring/applicationContext.xml`\  は、以下のような設定となっている。
-| なお、チュートリアルで使用しないコンポーネントについての説明は割愛する。
-
-.. code-block:: xml
-    :emphasize-lines: 9-10, 14-16, 18-19
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <beans xmlns="http://www.springframework.org/schema/beans"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-        xmlns:aop="http://www.springframework.org/schema/aop"
-        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
-
-        <!-- (1) -->
-        <import resource="classpath:/META-INF/spring/todo-domain.xml" />
-
-        <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
-
-        <!-- (2) -->
-        <context:property-placeholder
-            location="classpath*:/META-INF/spring/*.properties" />
-
-        <!-- (3) -->
-        <bean class="org.dozer.spring.DozerBeanMapperFactoryBean">
-            <property name="mappingFiles"
-                value="classpath*:/META-INF/dozer/**/*-mapping.xml" />
-        </bean>
-
-        <!-- Message -->
-        <bean id="messageSource"
-            class="org.springframework.context.support.ResourceBundleMessageSource">
-            <property name="basenames">
-                <list>
-                    <value>i18n/application-messages</value>
-                </list>
-            </property>
-        </bean>
-
-        <!-- Exception Code Resolver. -->
-        <bean id="exceptionCodeResolver"
-            class="org.terasoluna.gfw.common.exception.SimpleMappingExceptionCodeResolver">
-            <!-- Setting and Customization by project. -->
-            <property name="exceptionMappings">
-                <map>
-                    <entry key="ResourceNotFoundException" value="e.xx.fw.5001" />
-                    <entry key="InvalidTransactionTokenException" value="e.xx.fw.7001" />
-                    <entry key="BusinessException" value="e.xx.fw.8001" />
-                    <entry key=".DataAccessException" value="e.xx.fw.9002" />
-                </map>
-            </property>
-            <property name="defaultExceptionCode" value="e.xx.fw.9001" />
-        </bean>
-
-        <!-- Exception Logger. -->
-        <bean id="exceptionLogger"
-            class="org.terasoluna.gfw.common.exception.ExceptionLogger">
-            <property name="exceptionCodeResolver" ref="exceptionCodeResolver" />
-        </bean>
-
-        <!-- Filter. -->
-        <bean id="exceptionLoggingFilter"
-            class="org.terasoluna.gfw.web.exception.ExceptionLoggingFilter" >
-            <property name="exceptionLogger" ref="exceptionLogger" />
-        </bean>
-
-    </beans>
-
-.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
-.. list-table::
-   :header-rows: 1
-   :widths: 10 90
-
-   * - 項番
-     - 説明
-   * - | (1)
-     - | ドメイン層に関するBean定義ファイルをimportする。
-   * - | (2)
-     - | プロパティファイルの読み込み設定を行う。
-       | \ ``src/main/resources/META-INF/spring``\ 直下の任意のプロパティファイルを読み込む。
-       | この設定により、プロパティファイルの値をBean定義ファイル内で\ ``${propertyName}``\ 形式で埋め込んだり、Javaクラスに\ ``@Value("${propertyName}")``\ でインジェクションすることができる。
-   * - | (3)
-     - | Bean変換用ライブラリDozerのMapperを定義する。
-       | マッピングファイルに関して `Dozerマニュアル <http://dozer.sourceforge.net/documentation/mappings.html>`_ を参照されたい。)
-
-.. tip::
-
-    エディタの「Configure Namespaces」タブにて、以下のようにチェックを入れると、
-    チェックしたXMLスキーマが有効になり、XML編集時にCtrl+Spaceを使用して入力を補完することができる。
-
-    「Namespace Versions」にはバージョンなしのxsdファイルを選択することを推奨する。
-    バージョンなしのxsdファイルを選択することで、常にjarに含まれる最新のxsdが使用されるため、
-    Springのバージョンアップを意識する必要がなくなる。
-
-     .. figure:: ./images/image021.jpg
-        :width: 90%
-
-     .. figure:: ./images/image023.png
-        :width: 60%
-
-|
-
-todo-domain.xmlの確認
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-\ :file:`todo-domain.xml`\ には、Todoアプリのドメイン層に関わる設定を行う。
-
-| 作成したブランクプロジェクトの\ :file:`src/main/resources/META-INF/spring/todo-domain.xml`\ は、以下のような設定となっている。
-| なお、チュートリアルで使用しないコンポーネントについての説明は割愛する。
-
-.. code-block:: xml
-    :emphasize-lines: 9-10, 13-14
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <beans xmlns="http://www.springframework.org/schema/beans"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-        xmlns:aop="http://www.springframework.org/schema/aop"
-        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
-
-        <!-- (1) -->
-        <import resource="classpath:META-INF/spring/todo-infra.xml" />
-        <import resource="classpath*:META-INF/spring/**/*-codelist.xml" />
-
-        <!-- (2) -->
-        <context:component-scan base-package="todo.domain" />
-
-        <!-- AOP. -->
-        <bean id="resultMessagesLoggingInterceptor"
-            class="org.terasoluna.gfw.common.exception.ResultMessagesLoggingInterceptor">
-            <property name="exceptionLogger" ref="exceptionLogger" />
-        </bean>
-        <aop:config>
-            <aop:advisor advice-ref="resultMessagesLoggingInterceptor"
-                pointcut="@within(org.springframework.stereotype.Service)" />
-        </aop:config>
-
-    </beans>
-
-.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
-.. list-table::
-   :header-rows: 1
-   :widths: 10 90
-
-   * - 項番
-     - 説明
-   * - | (1)
-     - | インフラストラクチャ層に関するBean定義ファイルをimportする。
-   * - | (2)
-     - | ドメイン層のクラスを管理するtodo.domainパッケージ配下をcomponent-scan対象とする。
-       | これにより、todo.domainパッケージ配下のクラスに ``@Repository`` , ``@Service`` などのアノテーションを付けることで、Spring Framerowkが管理するBeanとして登録される。
-       | 登録されたクラス(Bean)は、ControllerやServiceクラスにDIする事で、利用する事が出来る。
-
-
-.. note::
- 
-    O/R Mapperに依存するブランクプロジェクトを作成した場合は、\ ``@Transactional``\アノテーションによるトランザクション管理を有効にするために、
-    \ ``<tx:annotation-driven>``\タグを設定されている。
-
-     .. code-block:: xml
-        :emphasize-lines: 9-10, 12-13
-
-         <tx:annotation-driven />
-
-|
-
-todo-infra.xmlの確認
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-\ :file:`todo-infra.xml`\ には、Todoアプリのインフラストラクチャ層に関わる設定を行う。
-
-作成したブランクプロジェクトの\ :file:`src/main/resources/META-INF/spring/todo-infra.xml`\ は、
-以下のような設定となっている。
-
-\ :file:`todo-infra.xml`\は、インフラストラクチャ層によって設定が大きく異なるため、
-ブランクプロジェクト毎に説明を行う。
-作成したブランクプロジェクト以外の説明は読み飛ばしてもよい。
-
-
-O/R Mapperに依存しないブランクプロジェクトを作成した場合
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-O/R Mapperに依存しないブランクプロジェクトを作成した場合、以下のように空定義のファイルが作成される。
-
-.. code-block:: xml
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <beans xmlns="http://www.springframework.org/schema/beans"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-
-
-    </beans>
-
-MyBatis3用のブランクプロジェクトを作成した場合
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-MyBatis3用のブランクプロジェクトを作成した場合、以下のような設定となっている。
-
-.. code-block:: xml
-   :emphasize-lines: 11-12, 14-16, 17-18, 19-20, 23-25
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <beans xmlns="http://www.springframework.org/schema/beans"
-           xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="
-            http://www.springframework.org/schema/beans
-            http://www.springframework.org/schema/beans/spring-beans.xsd
-            http://mybatis.org/schema/mybatis-spring
-            http://mybatis.org/schema/mybatis-spring.xsd">
-
-         <!-- (1) -->
-        <import resource="classpath:/META-INF/spring/todo-env.xml" />
-
-         <!-- (2) -->
-        <!-- define the SqlSessionFactory -->
-        <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-             <!-- (3) -->
-            <property name="dataSource" ref="dataSource" />
-             <!-- (4) -->
-            <property name="configLocation" value="classpath:/META-INF/mybatis/mybatis-config.xml" />
-        </bean>
-
-         <!-- (5) -->
-        <!-- scan for Mappers -->
-        <mybatis:scan base-package="todo.domain.repository" />
-
-    </beans>
-
-.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
-.. list-table::
-   :header-rows: 1
-   :widths: 10 90
-
-   * - 項番
-     - 説明
-   * - | (1)
-     - | 環境依存するコンポーネント(データソースやトランザクションマネージャなど)を定義するBean定義ファイルをimportする。
-   * - | (2)
-     - | \ ``SqlSessionFactory``\ を生成するためのコンポーネントとして、\ ``SqlSessionFactoryBean``\ をbean定義する。
-   * - | (3)
-     - | \ ``dataSource``\ プロパティに、設定済みのデータソースのbeanを指定する。
-       |
-       | MyBatis3の処理の中でSQLを発行する際は、ここで指定したデータソースからコネクションが取得される。
-   * - | (4)
-     - | \ ``configLocation``\ プロパティに、MyBatis設定ファイルのパスを指定する。
-       |
-       | ここで指定したファイルは\ ``SqlSessionFactory``\ を生成する時に読み込まれる。
-   * - | (5)
-     - | Mapperインタフェースをスキャンするために\ ``<mybatis:scan>``\ を定義し、\ ``base-package``\ 属性には、
-       | Mapperインタフェースが格納されている基底パッケージを指定する。
-       |
-       | 指定されたパッケージ配下に格納されている Mapperインタフェースがスキャンされ、
-       | スレッドセーフなMapperオブジェクト(MapperインタフェースのProxyオブジェクト)が自動的に生成される。
-
-.. note::
- 
-    \ :file:`mybatis-config.xml`\ は、MyBatis3自体の動作設定を行う設定ファイルである。
-    
-    ブランクプロジェクトでは、デフォルトで以下の設定が行われている。
-
-     .. code-block:: xml
-
-        <?xml version="1.0" encoding="UTF-8" ?>
-        <!DOCTYPE configuration
-          PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
-          "http://mybatis.org/dtd/mybatis-3-config.dtd">
-        <configuration>
-
-            <!-- See http://mybatis.github.io/mybatis-3/configuration.html#settings -->
-            <settings>
-                <setting name="mapUnderscoreToCamelCase" value="true" />
-                <setting name="lazyLoadingEnabled" value="true" />
-                <setting name="aggressiveLazyLoading" value="false" />
-        <!--
-                <setting name="defaultExecutorType" value="REUSE" />
-                <setting name="jdbcTypeForNull" value="NULL" />
-                <setting name="proxyFactory" value="JAVASSIST" />
-                <setting name="localCacheScope" value="STATEMENT" />
-        -->
-            </settings>
-
-            <typeAliases>
-                <package name="todo.domain.model" />
-                <package name="todo.domain.repository" />
-        <!--
-                <package name="todo.infra.mybatis.typehandler" />
-        -->
-            </typeAliases>
-
-            <typeHandlers>
-        <!--
-                <package name="todo.infra.mybatis.typehandler" />
-        -->
-            </typeHandlers>
-
-        </configuration>
-
-JPA用のブランクプロジェクトを作成した場合
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-JPA用のブランクプロジェクトを作成した場合、以下のような設定となっている。
-
-.. code-block:: xml
-    :emphasize-lines: 9-10, 12-13, 15-17, 22-24, 26-27, 30-31
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <beans xmlns="http://www.springframework.org/schema/beans"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-        xmlns:util="http://www.springframework.org/schema/util"
-        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
-            http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
-
-        <!-- (1) -->
-        <import resource="classpath:/META-INF/spring/todo-env.xml" />
-
-        <!-- (2) -->
-        <jpa:repositories base-package="todo.domain.repository"></jpa:repositories>
-
-        <!-- (3) -->
-        <bean id="jpaVendorAdapter"
-            class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-            <property name="showSql" value="false" />
-            <property name="database" value="${database}" />
-        </bean>
-
-        <!-- (4) -->
-        <bean
-            class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
-            id="entityManagerFactory">
-            <!-- (5) -->
-            <property name="packagesToScan" value="todo.domain.model" />
-            <property name="dataSource" ref="dataSource" />
-            <property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
-            <!-- (6) -->
-            <property name="jpaPropertyMap">
-                <util:map>
-                    <entry key="hibernate.hbm2ddl.auto" value="none" />
-                    <entry key="hibernate.ejb.naming_strategy"
-                        value="org.hibernate.cfg.ImprovedNamingStrategy" />
-                    <entry key="hibernate.connection.charSet" value="UTF-8" />
-                    <entry key="hibernate.show_sql" value="false" />
-                    <entry key="hibernate.format_sql" value="false" />
-                    <entry key="hibernate.use_sql_comments" value="true" />
-                    <entry key="hibernate.jdbc.batch_size" value="30" />
-                    <entry key="hibernate.jdbc.fetch_size" value="100" />
-                </util:map>
-            </property>
-        </bean>
-    
-    </beans>
-
-.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
-.. list-table::
-   :header-rows: 1
-   :widths: 10 90
-
-   * - 項番
-     - 説明
-   * - | (1)
-     - | 環境依存するコンポーネント(データソースやトランザクションマネージャなど)を定義するBean定義ファイルをimportする。
-   * - | (2)
-     - | Spring Data JPAを使用して、Repositoryインタフェースから実装クラスを自動生成する。
-       | \ ``<jpa:repository>``\ タグの\ ``base-package``\ 属性に、Repositoryを格納するパッケージを指定する。
-   * - | (3)
-     - | JPAの実装ベンダの設定を行う。
-       | JPA実装として、Hibernateを使うため、\ ``HibernateJpaVendorAdapter``\ を定義している。
-   * - | (4)
-     - | \ ``EntityManager``\ の定義を行う。
-   * - | (5)
-     - | JPAのエンティティとして扱うクラスが格納されているパッケージ名を指定する。
-   * - | (6)
-     - | Hibernateに関する詳細な設定を行う。
- 
-|
-
-todo-infra.propertiesの確認
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-\ :file:`todo-infra.properties`\ には、Todoアプリのインフラストラクチャ層の環境依存値の設定を行う。
-
-O/R Mapperに依存しないブランクプロジェクトを作成した際は、\ :file:`todo-infra.properties`\ は作成されない。
-
-作成したブランクプロジェクトの\ :file:`src/main/resources/META-INF/spring/todo-infra.properties`\ は、
-以下のような設定となっている。
-
-.. code-block:: properties
-    :emphasize-lines: 1, 7
-
-    # (1)
-    database=H2
-    database.url=jdbc:h2:mem:todo;DB_CLOSE_DELAY=-1;
-    database.username=sa
-    database.password=
-    database.driverClassName=org.h2.Driver
-    # (2)
-    # connection pool
-    cp.maxActive=96
-    cp.maxIdle=16
-    cp.minIdle=0
-    cp.maxWait=60000
-
-.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
-.. list-table::
-   :header-rows: 1
-   :widths: 10 90
-
-
-   * - 項番
-     - 説明
-   * - | (1)
-     - | データベースに関する設定を行う。
-       | 本チュートリアルでは、データベースのセットアップの手間を省くため、H2 Databaseを使用する。
-   * - | (2)
-     - | コネクションプールに関する設定。
-
-
-.. note::
- 
-    これらの設定値は、\ :file:`todo-env.xml`\から参照されている。
-
-|
-
-todo-env.xmlの確認
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-\ :file:`todo-env.xml`\ には、デプロイする環境によって設定が異なるコンポーネントの設定を行う。
-
-作成したブランクプロジェクトの\ ``src/main/resources/META-INF/spring/todo-env.xml``\ は、以下のような設定となっている。
-
-ここでは、MyBatis3用のブランクプロジェクトに格納されるファイルを例に説明する。
-なお、データベースにアクセスしないブランクプロジェクトを作成した際は、\ :file:`todo-env.xml`\ は作成されない。
-
-.. code-block:: xml
-    :emphasize-lines: 8, 22, 39
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <beans xmlns="http://www.springframework.org/schema/beans"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-
-        <bean id="dateFactory" class="org.terasoluna.gfw.common.date.jodatime.DefaultJodaTimeDateFactory" />
-
-        <!-- (1) -->
-        <bean id="realDataSource" class="org.apache.commons.dbcp2.BasicDataSource"
-            destroy-method="close">
-            <property name="driverClassName" value="${database.driverClassName}" />
-            <property name="url" value="${database.url}" />
-            <property name="username" value="${database.username}" />
-            <property name="password" value="${database.password}" />
-            <property name="defaultAutoCommit" value="false" />
-            <property name="maxTotal" value="${cp.maxActive}" />
-            <property name="maxIdle" value="${cp.maxIdle}" />
-            <property name="minIdle" value="${cp.minIdle}" />
-            <property name="maxWaitMillis" value="${cp.maxWait}" />
-        </bean>
-
-        <!-- (2) -->
-        <bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
-            <constructor-arg index="0" ref="realDataSource" />
-        </bean>
-
-        <!--  REMOVE THIS LINE IF YOU USE JPA
-        <bean id="transactionManager"
-            class="org.springframework.orm.jpa.JpaTransactionManager">
-            <property name="entityManagerFactory" ref="entityManagerFactory" />
-        </bean>
-              REMOVE THIS LINE IF YOU USE JPA  -->
-        <!--  REMOVE THIS LINE IF YOU USE MyBatis2
-        <bean id="transactionManager"
-            class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-            <property name="dataSource" ref="dataSource" />
-        </bean>
-              REMOVE THIS LINE IF YOU USE MyBatis2  -->
-        <!-- (3) -->
-        <bean id="transactionManager"
-            class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-            <property name="dataSource" ref="dataSource" />
-        </bean>
-    </beans>
-
-
-.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
-.. list-table::
-   :header-rows: 1
-   :widths: 10 90
-
-
-   * - 項番
-     - 説明
-   * - | (1)
-     - | 実データソースの設定。
-   * - | (2)
-     - | データソースの設定。
-       | JDBC関連のログを出力する機能をもったデータソースを指定している。
-       | \ ``net.sf.log4jdbc.Log4jdbcProxyDataSource``\ を使用すると、SQLなどのJDBC関連のログを出力できるため、デバッグに役立つ情報を出力することができる。
-   * - | (3)
-     - | トランザクションマネージャの設定。
-       | id属性には、\ ``transactionManager``\ を指定する。
-       | 別の名前を指定する場合は、\ ``<tx:annotation-driven>``\ タグにもトランザクションマネージャ名を指定する必要がある。
-       |
-       | ブランクプロジェクトでは、JDBCのAPIを使用してトランザクションを制御するクラス(\ ``org.springframework.jdbc.datasource.DataSourceTransactionManager``\)が設定されている。
-
-.. note::
-
-    JPA用のブランクプロジェクトを作成した場合は、トランザクションマネージャには、
-    JPAのAPIを使用してトランザクションを制御するクラス(\ ``org.springframework.orm.jpa.JpaTransactionManager``\)が設定されている。
-
-     .. code-block:: xml
-
-        <bean id="transactionManager"
-            class="org.springframework.orm.jpa.JpaTransactionManager">
-            <property name="entityManagerFactory" ref="entityManagerFactory" />
-        </bean>
-
-|
-
-spring-mvc.xmlの確認
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-\ :file:`spring-mvc.xml`\ には、Spring MVCに関する定義を行う。
-
-| 作成したブランクプロジェクトの\ :file:`src/main/resources/META-INF/spring/spring-mvc.xml`\ は、以下のような設定となっている。
-| なお、チュートリアルで使用しないコンポーネントについての説明は割愛する。
-
-.. code-block:: xml
-    :emphasize-lines: 12, 16, 28, 31, 37, 71
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <beans xmlns="http://www.springframework.org/schema/beans"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-        xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:util="http://www.springframework.org/schema/util"
-        xmlns:aop="http://www.springframework.org/schema/aop"
-        xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
-        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
-
-        <!-- (1) -->
-        <context:property-placeholder
-            location="classpath*:/META-INF/spring/*.properties" />
-
-        <!-- (2) -->
-        <mvc:annotation-driven>
-            <mvc:argument-resolvers>
-                <bean
-                    class="org.springframework.data.web.PageableHandlerMethodArgumentResolver" />
-                <bean
-                    class="org.springframework.security.web.bind.support.AuthenticationPrincipalArgumentResolver" />
-            </mvc:argument-resolvers>
-        </mvc:annotation-driven>
-
-        <mvc:default-servlet-handler />
-
-        <!-- (3) -->
-        <context:component-scan base-package="todo.app" />
-
-        <!-- (4) -->
-        <mvc:resources mapping="/resources/**"
-            location="/resources/,classpath:META-INF/resources/"
-            cache-period="#{60 * 60}" />
-
-        <mvc:interceptors>
-            <!-- (5) -->
-            <mvc:interceptor>
-                <mvc:mapping path="/**" />
-                <mvc:exclude-mapping path="/resources/**" />
-                <mvc:exclude-mapping path="/**/*.html" />
-                <bean
-                    class="org.terasoluna.gfw.web.logging.TraceLoggingInterceptor" />
-            </mvc:interceptor>
-            <mvc:interceptor>
-                <mvc:mapping path="/**" />
-                <mvc:exclude-mapping path="/resources/**" />
-                <mvc:exclude-mapping path="/**/*.html" />
-                <bean
-                    class="org.terasoluna.gfw.web.token.transaction.TransactionTokenInterceptor" />
-            </mvc:interceptor>
-            <mvc:interceptor>
-                <mvc:mapping path="/**" />
-                <mvc:exclude-mapping path="/resources/**" />
-                <mvc:exclude-mapping path="/**/*.html" />
-                <bean class="org.terasoluna.gfw.web.codelist.CodeListInterceptor">
-                    <property name="codeListIdPattern" value="CL_.+" />
-                </bean>
-            </mvc:interceptor>
-            <!--  REMOVE THIS LINE IF YOU USE JPA
-            <mvc:interceptor>
-                <mvc:mapping path="/**" />
-                <mvc:exclude-mapping path="/resources/**" />
-                <mvc:exclude-mapping path="/**/*.html" />
-                <bean
-                    class="org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor" />
-            </mvc:interceptor>
-                REMOVE THIS LINE IF YOU USE JPA  -->
-        </mvc:interceptors>
-
-        <!-- (6) -->
-        <!-- Settings View Resolver. -->
-        <mvc:view-resolvers>
-            <mvc:jsp prefix="/WEB-INF/views/" />
-        </mvc:view-resolvers>
-
-        <bean id="requestDataValueProcessor"
-            class="org.terasoluna.gfw.web.mvc.support.CompositeRequestDataValueProcessor">
-            <constructor-arg>
-                <util:list>
-                    <bean class="org.springframework.security.web.servlet.support.csrf.CsrfRequestDataValueProcessor" />
-                    <bean
-                        class="org.terasoluna.gfw.web.token.transaction.TransactionTokenRequestDataValueProcessor" />
-                </util:list>
-            </constructor-arg>
-        </bean>
-
-        <!-- Setting Exception Handling. -->
-        <!-- Exception Resolver. -->
-        <bean class="org.terasoluna.gfw.web.exception.SystemExceptionResolver">
-            <property name="exceptionCodeResolver" ref="exceptionCodeResolver" />
-            <!-- Setting and Customization by project. -->
-            <property name="order" value="3" />
-            <property name="exceptionMappings">
-                <map>
-                    <entry key="ResourceNotFoundException" value="common/error/resourceNotFoundError" />
-                    <entry key="BusinessException" value="common/error/businessError" />
-                    <entry key="InvalidTransactionTokenException" value="common/error/transactionTokenError" />
-                    <entry key=".DataAccessException" value="common/error/dataAccessError" />
-                </map>
-            </property>
-            <property name="statusCodes">
-                <map>
-                    <entry key="common/error/resourceNotFoundError" value="404" />
-                    <entry key="common/error/businessError" value="409" />
-                    <entry key="common/error/transactionTokenError" value="409" />
-                    <entry key="common/error/dataAccessError" value="500" />
-                </map>
-            </property>
-            <property name="defaultErrorView" value="common/error/systemError" />
-            <property name="defaultStatusCode" value="500" />
-        </bean>
-        <!-- Setting AOP. -->
-        <bean id="handlerExceptionResolverLoggingInterceptor"
-            class="org.terasoluna.gfw.web.exception.HandlerExceptionResolverLoggingInterceptor">
-            <property name="exceptionLogger" ref="exceptionLogger" />
-        </bean>
-        <aop:config>
-            <aop:advisor advice-ref="handlerExceptionResolverLoggingInterceptor"
-                pointcut="execution(* org.springframework.web.servlet.HandlerExceptionResolver.resolveException(..))" />
-        </aop:config>
-
-    </beans>
-
-
-.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
-.. list-table::
-   :header-rows: 1
-   :widths: 10 90
-
-   * - 項番
-     - 説明
-   * - | (1)
-     - | プロパティファイルの読み込み設定を行う。
-
-       | src/main/resources/META-INF/spring直下の任意のプロパティファイルを読み込む。
-       | この設定により、プロパティファイルの値をBean定義ファイル内で\ ``${propertyName}``\ 形式で埋め込んだり、Javaクラスに\ ``@Value("${propertyName}")``\ でインジェクションすることができる。
-   * - | (2)
-     - | Spring MVCのアノテーションベースのデフォルト設定を行う。
-   * - | (3)
-     - | アプリケーション層のクラスを管理するtodo.appパッケージ配下をcomponent-scan対象とする。
-   * - | (4)
-     - | 静的リソース(css, images, jsなど)アクセスのための設定を行う。
-
-       | \ ``mapping``\ 属性にURLのパスを、\ ``location``\ 属性に物理的なパスの設定を行う。
-       | この設定の場合\ ``<contextPath>/rerources/app/css/styles.css``\ に対してリクエストが来た場合、\ ``WEB-INF/resources/app/css/styles.css``\ を探し、見つからなければクラスパス上(\ ``src/main/resources``\ やjar内)の\ ``META-INF/resources/app/css/styles.css``\ を探す。
-       | どこにも\ ``styles.css``\ が格納されていない場合は、404エラーを返す。
-
-       | ここでは\ ``cache-period``\ 属性で静的リソースのキャッシュ時間(3600秒=60分)も設定している。
-       | \ ``cache-period="3600"``\ と設定しても良いが、60分であることを明示するために `SpEL <http://docs.spring.io/spring/docs/4.1.4.RELEASE/spring-framework-reference/html/expressions.html#expressions-beandef-xml-based>`_ を使用して \ ``cache-period="#{60 * 60}"``\  と書く方が分かりやすい。
-   * - | (5)
-     - | コントローラ処理のTraceログを出力するインターセプタを設定する。
-       | \ ``/resources``\ 配下を除く任意のパスに適用されるように設定する。
-   * - | (6)
-     - | \ ``ViewResolver``\ の設定を行う。
-       | この設定により、例えばコントローラからview名として\ ``"hello"``\が返却された場合には\ ``/WEB-INF/views/hello.jsp``\ が実行される。
-
-       .. tip::
-
-           \ ``<mvc:view-resolvers>``\ 要素はSpring Framework 4.1から追加されたXML要素である。
-           \ ``<mvc:view-resolvers>``\ 要素を使用すると、\ ``ViewResolver``\ をシンプルに定義することが出来る。
-
-           従来通り\ ``<bean>``\ 要素を使用した場合の定義例を以下に示す。
-
-            .. code-block:: xml
-
-               <bean id="viewResolver"
-                   class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-                   <property name="prefix" value="/WEB-INF/views/" />
-                   <property name="suffix" value=".jsp" />
-               </bean>
-
-.. note::
- 
-    JPA用のブランクプロジェクトを作成した場合は、\ ``<mvc:interceptors>``\ の定義として、
-    \ ``OpenEntityManagerInViewInterceptor``\ の定義が有効な状態となっている。
-    
-     .. code-block:: xml
-    
-        <mvc:interceptor>
-            <mvc:mapping path="/**" />
-            <mvc:exclude-mapping path="/resources/**" />
-            <mvc:exclude-mapping path="/**/*.html" />
-            <bean
-                class="org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor" />
-        </mvc:interceptor>
-
-    \ ``OpenEntityManagerInViewInterceptor``\ は、\ ``EntityManager``\ のライフサイクルの開始と終了を行う\ ``Interceptor``\ である。
-    この設定を追加することで、アプリケーション層(Controllerや、Viewクラス)でのLazy Loadが、サポートされる。
-
-|
-
-spring-security.xmlの確認
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-\ :file:`spring-security.xml`\ には、Spring Securityに関する定義を行う。
-
-| 作成したブランクプロジェクトの\ :file:`src/main/resources/META-INF/spring/spring-security.xml`\ は、以下のような設定となっている。
-| なお、本チュートリアルではSpring Securityの設定ファイルの説明は割愛する。Spring Securityの設定ファイルについては、「:doc:`../Security/Tutorial`」を参照されたい。
-
-.. code-block:: xml
-
-    <?xml version="1.0" encoding="UTF-8"?>
-    <beans xmlns="http://www.springframework.org/schema/beans"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sec="http://www.springframework.org/schema/security"
-        xmlns:context="http://www.springframework.org/schema/context"
-        xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
-            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
-
-        <sec:http pattern="/resources/**" security="none"/>
-        <sec:http auto-config="true" use-expressions="true">
-            <sec:headers>
-                <sec:cache-control />
-                <sec:content-type-options />
-                <sec:hsts />
-                <sec:frame-options />
-                <sec:xss-protection />
-            </sec:headers>
-            <sec:csrf />
-            <sec:access-denied-handler ref="accessDeniedHandler"/>
-            <sec:custom-filter ref="userIdMDCPutFilter" after="ANONYMOUS_FILTER"/>
-            <sec:session-management />
-        </sec:http>
-
-        <sec:authentication-manager></sec:authentication-manager>
-
-        <!-- Change View for CSRF or AccessDenied -->
-        <bean id="accessDeniedHandler"
-            class="org.springframework.security.web.access.DelegatingAccessDeniedHandler">
-            <constructor-arg index="0">
-                <map>
-                    <entry
-                        key="org.springframework.security.web.csrf.InvalidCsrfTokenException">
-                        <bean
-                            class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
-                            <property name="errorPage"
-                                value="/WEB-INF/views/common/error/invalidCsrfTokenError.jsp" />
-                        </bean>
-                    </entry>
-                    <entry
-                        key="org.springframework.security.web.csrf.MissingCsrfTokenException">
-                        <bean
-                            class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
-                            <property name="errorPage"
-                                value="/WEB-INF/views/common/error/missingCsrfTokenError.jsp" />
-                        </bean>
-                    </entry>
-                </map>
-            </constructor-arg>
-            <constructor-arg index="1">
-                <bean
-                    class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
-                    <property name="errorPage"
-                        value="/WEB-INF/views/common/error/accessDeniedError.jsp" />
-                </bean>
-            </constructor-arg>
-        </bean>
-
-        <!-- Put UserID into MDC -->
-        <bean id="userIdMDCPutFilter" class="org.terasoluna.gfw.security.web.logging.UserIdMDCPutFilter">
-        </bean>
-
-    </beans>
-
-|
-
-logback.xmlの確認
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-\ :file:`logback.xml`\ には、ログ出力に関する定義を行う。
-
-| 作成したブランクプロジェクトの\ :file:`src/main/resources/logback.xml`\ は、以下のような設定となっている。
-| なお、チュートリアルで使用しないログ設定についての説明は割愛する。
-
-.. code-block:: xml
-    :emphasize-lines: 4, 36, 45
-
-    <!DOCTYPE logback>
-    <configuration>
-
-        <!-- (1) -->
-        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-            <encoder>
-                <pattern><![CDATA[date:%d{yyyy-MM-dd HH:mm:ss}\tthread:%thread\tX-Track:%X{X-Track}\tlevel:%-5level\tlogger:%-48logger{48}\tmessage:%msg%n]]></pattern>
-            </encoder>
-        </appender>
-
-        <appender name="APPLICATION_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>log/todo-application.log</file>
-            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                <fileNamePattern>log/todo-application-%d{yyyyMMdd}.log</fileNamePattern>
-                <maxHistory>7</maxHistory>
-            </rollingPolicy>
-            <encoder>
-                <charset>UTF-8</charset>
-                <pattern><![CDATA[date:%d{yyyy-MM-dd HH:mm:ss}\tthread:%thread\tX-Track:%X{X-Track}\tlevel:%-5level\tlogger:%-48logger{48}\tmessage:%msg%n]]></pattern>
-            </encoder>
-        </appender>
-
-        <appender name="MONITORING_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>log/todo-monitoring.log</file>
-            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                <fileNamePattern>log/todo-monitoring-%d{yyyyMMdd}.log</fileNamePattern>
-                <maxHistory>7</maxHistory>
-            </rollingPolicy>
-            <encoder>
-                <charset>UTF-8</charset>
-                <pattern><![CDATA[date:%d{yyyy-MM-dd HH:mm:ss}\tX-Track:%X{X-Track}\tlevel:%-5level\tmessage:%msg%n]]></pattern>
-            </encoder>
-        </appender>
-
-        <!-- Application Loggers -->
-        <!-- (2) -->
-        <logger name="todo">
-            <level value="debug" />
-        </logger>
-
-        <!-- TERASOLUNA -->
-        <logger name="org.terasoluna.gfw">
-            <level value="debug" />
-        </logger>
-        <!-- (3) -->
-        <logger name="org.terasoluna.gfw.web.logging.TraceLoggingInterceptor">
-            <level value="trace" />
-        </logger>
-        <logger name="org.terasoluna.gfw.common.exception.ExceptionLogger">
-            <level value="info" />
-        </logger>
-        <logger name="org.terasoluna.gfw.common.exception.ExceptionLogger.Monitoring" additivity="false">
-            <level value="error" />
-            <appender-ref ref="MONITORING_LOG_FILE" />
-        </logger>
-
-        <!-- 3rdparty Loggers -->
-        <logger name="org.springframework">
-            <level value="warn" />
-        </logger>
-
-        <logger name="org.springframework.web.servlet">
-            <level value="info" />
-        </logger>
-
-        <!--  REMOVE THIS LINE IF YOU USE JPA
-        <logger name="org.hibernate.engine.transaction">
-            <level value="debug" />
-        </logger>
-              REMOVE THIS LINE IF YOU USE JPA  -->
-        <!--  REMOVE THIS LINE IF YOU USE MyBatis2
-        <logger name="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-            <level value="debug" />
-        </logger>
-              REMOVE THIS LINE IF YOU USE MyBatis2  -->
-        <!--  REMOVE THIS LINE IF YOU USE MyBatis3
-        <logger name="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-            <level value="debug" />
-        </logger>
-              REMOVE THIS LINE IF YOU USE MyBatis3  -->
-
-        <logger name="jdbc.sqltiming">
-            <level value="debug" />
-        </logger>
-
-        <root level="warn">
-            <appender-ref ref="STDOUT" />
-            <appender-ref ref="APPLICATION_LOG_FILE" />
-        </root>
-
-    </configuration>
-
-.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
-.. list-table::
-   :header-rows: 1
-   :widths: 10 90
-
-
-   * - 項番
-     - 説明
-   * - | (1)
-     - | 標準出力でログを出力するアペンダを設定。
-   * - | (2)
-     - | todoパッケージ以下はdebugレベル以上を出力するように設定。
-   * - | (3)
-     - | spring-mvc.xmlに設定した\ ``TraceLoggingInterceptor``\ に出力されるようにtraceレベルで設定。
-
-
-.. note::
- 
-    O/R Mapperを使用するブランクプロジェクトを作成した場合は、トランザクション制御関連のログを出力するロガーが有効な状態となっている。
-    
-    * JPA用のブランクプロジェクト
-    
-     .. code-block:: xml
-
-        <logger name="org.hibernate.engine.transaction">
-            <level value="debug" />
-        </logger>
-
-    * MyBatis3用のブランクプロジェクト
-
-     .. code-block:: xml
-
-        <logger name="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-            <level value="debug" />
-        </logger>
+    まず、手を動かしてTodoアプリケーションを作成したい場合は、設定ファイルの確認は読み飛ばしてもよいが、
+    Todoアプリケーションを作成した後に一読して頂きたい。
 
 |
 
@@ -4346,6 +3138,1230 @@ Service及びアプリケーション層を作成後にAPサーバーを起動�
 * ページング処理を追加する → :doc:`../ArchitectureInDetail/Pagination`
 * 例外ハンドリングを加える → :doc:`../ArchitectureInDetail/ExceptionHandling`
 * 二重送信を防止する(トランザクショントークンチェックを追加する) → :doc:`../ArchitectureInDetail/DoubleSubmitProtection`
+
+|
+
+Appendix
+================================================================================
+
+.. _TutorialTodoAppendixExpoundConfigurations:
+
+設定ファイルの解説
+--------------------------------------------------------------------------------
+
+アプリケーションを動かすためにどのような設定が必要なのかを理解するために、設定ファイルの解説を行う。
+ここでは、チュートリアルで作成するTodoアプリケーションで使用しない設定については、解説を割愛している箇所がある。
+
+web.xml
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+\ :file:`web.xml`\ には、WebアプリケーションとしてTodoアプリをデプロイするための設定を行う。
+
+作成したブランクプロジェクトの\ :file:`src/main/webapp/WEB-INF/web.xml`\ は、以下のような設定となっている。
+
+.. code-block:: xml
+    :emphasize-lines: 2, 6, 22, 78, 95, 106, 120
+
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!-- (1) -->
+    <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+        version="3.0">
+        <!-- (2) -->
+        <listener>
+            <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+        </listener>
+        <listener>
+            <listener-class>org.terasoluna.gfw.web.logging.HttpSessionEventLoggingListener</listener-class>
+        </listener>
+        <context-param>
+            <param-name>contextConfigLocation</param-name>
+            <!-- Root ApplicationContext -->
+            <param-value>
+                classpath*:META-INF/spring/applicationContext.xml
+                classpath*:META-INF/spring/spring-security.xml
+            </param-value>
+        </context-param>
+
+        <!-- (3) -->
+        <filter>
+            <filter-name>MDCClearFilter</filter-name>
+            <filter-class>org.terasoluna.gfw.web.logging.mdc.MDCClearFilter</filter-class>
+        </filter>
+        <filter-mapping>
+            <filter-name>MDCClearFilter</filter-name>
+            <url-pattern>/*</url-pattern>
+        </filter-mapping>
+
+        <filter>
+            <filter-name>exceptionLoggingFilter</filter-name>
+            <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        </filter>
+        <filter-mapping>
+            <filter-name>exceptionLoggingFilter</filter-name>
+            <url-pattern>/*</url-pattern>
+        </filter-mapping>
+
+        <filter>
+            <filter-name>XTrackMDCPutFilter</filter-name>
+            <filter-class>org.terasoluna.gfw.web.logging.mdc.XTrackMDCPutFilter</filter-class>
+        </filter>
+        <filter-mapping>
+            <filter-name>XTrackMDCPutFilter</filter-name>
+            <url-pattern>/*</url-pattern>
+        </filter-mapping>
+
+        <filter>
+            <filter-name>CharacterEncodingFilter</filter-name>
+            <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+            <init-param>
+                <param-name>encoding</param-name>
+                <param-value>UTF-8</param-value>
+            </init-param>
+            <init-param>
+                <param-name>forceEncoding</param-name>
+                <param-value>true</param-value>
+            </init-param>
+        </filter>
+        <filter-mapping>
+            <filter-name>CharacterEncodingFilter</filter-name>
+            <url-pattern>/*</url-pattern>
+        </filter-mapping>
+
+        <filter>
+            <filter-name>springSecurityFilterChain</filter-name>
+            <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        </filter>
+
+        <filter-mapping>
+            <filter-name>springSecurityFilterChain</filter-name>
+            <url-pattern>/*</url-pattern>
+        </filter-mapping>
+
+
+        <!-- (4) -->
+        <servlet>
+            <servlet-name>appServlet</servlet-name>
+            <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+            <init-param>
+                <param-name>contextConfigLocation</param-name>
+                <!-- ApplicationContext for Spring MVC -->
+                <param-value>classpath*:META-INF/spring/spring-mvc.xml</param-value>
+            </init-param>
+            <load-on-startup>1</load-on-startup>
+        </servlet>
+
+        <servlet-mapping>
+            <servlet-name>appServlet</servlet-name>
+            <url-pattern>/</url-pattern>
+        </servlet-mapping>
+
+        <!-- (5) -->
+        <jsp-config>
+            <jsp-property-group>
+                <url-pattern>*.jsp</url-pattern>
+                <el-ignored>false</el-ignored>
+                <page-encoding>UTF-8</page-encoding>
+                <scripting-invalid>false</scripting-invalid>
+                <include-prelude>/WEB-INF/views/common/include.jsp</include-prelude>
+            </jsp-property-group>
+        </jsp-config>
+
+        <!-- (6) -->
+        <error-page>
+            <error-code>500</error-code>
+            <location>/WEB-INF/views/common/error/systemError.jsp</location>
+        </error-page>
+        <error-page>
+            <error-code>404</error-code>
+            <location>/WEB-INF/views/common/error/resourceNotFoundError.jsp</location>
+        </error-page>
+        <error-page>
+            <exception-type>java.lang.Exception</exception-type>
+            <location>/WEB-INF/views/common/error/unhandledSystemError.html</location>
+        </error-page>
+
+        <!-- (7) -->
+        <session-config>
+            <!-- 30min -->
+            <session-timeout>30</session-timeout>
+        </session-config>
+
+    </web-app>
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+   :header-rows: 1
+   :widths: 10 90
+
+   * - 項番
+     - 説明
+   * - | (1)
+     - | Servlet3.0を使用するための宣言。
+   * - | (2)
+     - | サーブレットコンテキストリスナーの定義。
+
+       ブランクプロジェクトでは、
+
+       * アプリケーション全体で使用される\ ``ApplicationContext``\を作成するための\ ``ContextLoaderListener``\
+       * HttpSessionに対する操作をログ出力するための \ ``HttpSessionEventLoggingListener``\
+
+       が設定済みである。
+   * - | (3)
+     - | サーブレットフィルタの定義。
+
+       ブランクプロジェクトでは、
+
+       * 共通ライブラリから提供しているサーブレットフィルタ
+       * Spring Frameworkから提供されている文字エンコーディングを指定するための\ ``CharacterEncodingFilter``\
+       * Spring Securityから提供されている認証・認可用のサーブレットフィルタ
+
+       が設定済みである。
+   * - | (4)
+     - | Spring MVCのエントリポイントとなるDispatcherServletの定義。
+       |
+       | DispatcherServletの中で使用する\ ``ApplicationContext``\を、(2)で作成した\ ``ApplicatnionContext``\の子として作成する。
+       | (2)で作成した\ ``ApplicatnionContext``\を親にすることで、(2)で読み込まれたコンポーネントも使用することができる。
+   * - | (5)
+     - | JSPの共通定義。
+
+       ブランクプロジェクトでは、
+
+       * JSP内でEL式が使用可能な状態
+       * JSPのページエンコーディングとしてUTF-8
+       * JSP内でスクリプティングが使用可能な状態
+       * 各JSPの先頭でインクルードするJSPとして、\ :file:`/WEB-INF/views/common/include.jsp`\
+
+       が設定済みである。
+   * - | (6)
+     - | エラーページの定義。
+
+       ブランクプロジェクトでは、
+
+       * サーブレットコンテナにHTTPステータスコードとして、\ ``404``\又は\ ``500``\が応答
+       * サーブレットコンテナに例外が通知
+
+       された際の遷移先が定義済みである。
+   * - | (7)
+     - | セッション管理の定義。
+
+       ブランクプロジェクトでは、
+
+       * セッションタイムアウトとして、30分
+
+       が定義済みである。
+
+|
+
+インクルードJSP
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+インクルードJSPには、全てのJSPに適用するJSPの設定や、タグライブラリの設定を行う。
+
+作成したブランクプロジェクトの\ :file:`src/main/webapp/WEB-INF/views/common/include.jsp`\ は、以下のような設定となっている。
+
+.. code-block:: jsp
+    :emphasize-lines: 1, 3, 6, 9, 11
+
+    <!-- (1) -->
+    <%@ page session="false"%>
+    <!-- (2) -->
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+    <!-- (3) -->
+    <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+    <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+    <!-- (4) -->
+    <%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
+    <!-- (5) -->
+    <%@ taglib uri="http://terasoluna.org/functions" prefix="f"%>
+    <%@ taglib uri="http://terasoluna.org/tags" prefix="t"%>
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+   :header-rows: 1
+   :widths: 10 90
+
+   * - 項番
+     - 説明
+   * - | (1)
+     - | JSP実行時にセッションを作成しないようにするための定義。
+   * - | (2)
+     - | 標準タグライブラリの定義。
+   * - | (3)
+     - | Spring MVC用タグライブラリの定義。
+   * - | (4)
+     - | Spring Security用タグライブラリの定義(本チュートリアルでは使用しない。)
+   * - | (5)
+     - | 共通ライブラリで提供されている、EL関数、タグライブラリの定義。
+
+|
+
+Bean定義ファイル
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+作成したブランクプロジェクトには、以下のBean定義ファイルとプロパティファイルが作成される。
+
+* :file:`src/main/resources/META-INF/spring/applicationContext.xml`
+* :file:`src/main/resources/META-INF/spring/todo-domain.xml`
+* :file:`src/main/resources/META-INF/spring/todo-infra.xml`
+* :file:`src/main/resources/META-INF/spring/todo-infra.properties`
+* :file:`src/main/resources/META-INF/spring/todo-env.xml`
+* :file:`src/main/resources/META-INF/spring/spring-mvc.xml`
+* :file:`src/main/resources/META-INF/spring/spring-security.xml`
+
+.. note::
+
+    O/R Mapperに依存しないブランクプロジェクトを作成した場合は、\ ``todo-infra.properties``\ と\ ``todo-env.xml``\ は作成されない。
+
+.. note::
+
+    本ガイドラインでは、Bean定義ファイルを役割(層)ごとにファイルを分割することを推奨している。
+
+    これは、どこに何が定義されているか想像しやすく、メンテナンス性が向上するからである。
+    今回のチュートリアルのような小さなアプリケーションでは効果はないが、アプリケーションの規模が大きくなるにつれ、効果が大きくなる。
+
+|
+
+applicationContext.xml
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+\ :file:`applicationContext.xml`\ には、Todoアプリ全体に関わる設定を行う。
+
+| 作成したブランクプロジェクトの\ :file:`src/main/resources/META-INF/spring/applicationContext.xml`\  は、以下のような設定となっている。
+| なお、チュートリアルで使用しないコンポーネントについての説明は割愛する。
+
+.. code-block:: xml
+    :emphasize-lines: 9-10, 14-16, 18-19
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+        <!-- (1) -->
+        <import resource="classpath:/META-INF/spring/todo-domain.xml" />
+
+        <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+
+        <!-- (2) -->
+        <context:property-placeholder
+            location="classpath*:/META-INF/spring/*.properties" />
+
+        <!-- (3) -->
+        <bean class="org.dozer.spring.DozerBeanMapperFactoryBean">
+            <property name="mappingFiles"
+                value="classpath*:/META-INF/dozer/**/*-mapping.xml" />
+        </bean>
+
+        <!-- Message -->
+        <bean id="messageSource"
+            class="org.springframework.context.support.ResourceBundleMessageSource">
+            <property name="basenames">
+                <list>
+                    <value>i18n/application-messages</value>
+                </list>
+            </property>
+        </bean>
+
+        <!-- Exception Code Resolver. -->
+        <bean id="exceptionCodeResolver"
+            class="org.terasoluna.gfw.common.exception.SimpleMappingExceptionCodeResolver">
+            <!-- Setting and Customization by project. -->
+            <property name="exceptionMappings">
+                <map>
+                    <entry key="ResourceNotFoundException" value="e.xx.fw.5001" />
+                    <entry key="InvalidTransactionTokenException" value="e.xx.fw.7001" />
+                    <entry key="BusinessException" value="e.xx.fw.8001" />
+                    <entry key=".DataAccessException" value="e.xx.fw.9002" />
+                </map>
+            </property>
+            <property name="defaultExceptionCode" value="e.xx.fw.9001" />
+        </bean>
+
+        <!-- Exception Logger. -->
+        <bean id="exceptionLogger"
+            class="org.terasoluna.gfw.common.exception.ExceptionLogger">
+            <property name="exceptionCodeResolver" ref="exceptionCodeResolver" />
+        </bean>
+
+        <!-- Filter. -->
+        <bean id="exceptionLoggingFilter"
+            class="org.terasoluna.gfw.web.exception.ExceptionLoggingFilter" >
+            <property name="exceptionLogger" ref="exceptionLogger" />
+        </bean>
+
+    </beans>
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+   :header-rows: 1
+   :widths: 10 90
+
+   * - 項番
+     - 説明
+   * - | (1)
+     - | ドメイン層に関するBean定義ファイルをimportする。
+   * - | (2)
+     - | プロパティファイルの読み込み設定を行う。
+       | \ ``src/main/resources/META-INF/spring``\ 直下の任意のプロパティファイルを読み込む。
+       | この設定により、プロパティファイルの値をBean定義ファイル内で\ ``${propertyName}``\ 形式で埋め込んだり、Javaクラスに\ ``@Value("${propertyName}")``\ でインジェクションすることができる。
+   * - | (3)
+     - | Bean変換用ライブラリDozerのMapperを定義する。
+       | マッピングファイルに関して `Dozerマニュアル <http://dozer.sourceforge.net/documentation/mappings.html>`_ を参照されたい。)
+
+.. tip::
+
+    エディタの「Configure Namespaces」タブにて、以下のようにチェックを入れると、
+    チェックしたXMLスキーマが有効になり、XML編集時にCtrl+Spaceを使用して入力を補完することができる。
+
+    「Namespace Versions」にはバージョンなしのxsdファイルを選択することを推奨する。
+    バージョンなしのxsdファイルを選択することで、常にjarに含まれる最新のxsdが使用されるため、
+    Springのバージョンアップを意識する必要がなくなる。
+
+     .. figure:: ./images/image021.jpg
+        :width: 90%
+
+     .. figure:: ./images/image023.png
+        :width: 60%
+
+|
+
+todo-domain.xml
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+\ :file:`todo-domain.xml`\ には、Todoアプリのドメイン層に関わる設定を行う。
+
+| 作成したブランクプロジェクトの\ :file:`src/main/resources/META-INF/spring/todo-domain.xml`\ は、以下のような設定となっている。
+| なお、チュートリアルで使用しないコンポーネントについての説明は割愛する。
+
+.. code-block:: xml
+    :emphasize-lines: 9-10, 13-14
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+        <!-- (1) -->
+        <import resource="classpath:META-INF/spring/todo-infra.xml" />
+        <import resource="classpath*:META-INF/spring/**/*-codelist.xml" />
+
+        <!-- (2) -->
+        <context:component-scan base-package="todo.domain" />
+
+        <!-- AOP. -->
+        <bean id="resultMessagesLoggingInterceptor"
+            class="org.terasoluna.gfw.common.exception.ResultMessagesLoggingInterceptor">
+            <property name="exceptionLogger" ref="exceptionLogger" />
+        </bean>
+        <aop:config>
+            <aop:advisor advice-ref="resultMessagesLoggingInterceptor"
+                pointcut="@within(org.springframework.stereotype.Service)" />
+        </aop:config>
+
+    </beans>
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+   :header-rows: 1
+   :widths: 10 90
+
+   * - 項番
+     - 説明
+   * - | (1)
+     - | インフラストラクチャ層に関するBean定義ファイルをimportする。
+   * - | (2)
+     - | ドメイン層のクラスを管理するtodo.domainパッケージ配下をcomponent-scan対象とする。
+       | これにより、todo.domainパッケージ配下のクラスに ``@Repository`` , ``@Service`` などのアノテーションを付けることで、Spring Framerowkが管理するBeanとして登録される。
+       | 登録されたクラス(Bean)は、ControllerやServiceクラスにDIする事で、利用する事が出来る。
+
+.. note::
+
+    O/R Mapperに依存するブランクプロジェクトを作成した場合は、\ ``@Transactional``\アノテーションによるトランザクション管理を有効にするために、
+    \ ``<tx:annotation-driven>``\タグを設定されている。
+
+     .. code-block:: xml
+        :emphasize-lines: 9-10, 12-13
+
+         <tx:annotation-driven />
+
+|
+
+todo-infra.xml
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+\ :file:`todo-infra.xml`\ には、Todoアプリのインフラストラクチャ層に関わる設定を行う。
+
+作成したブランクプロジェクトの\ :file:`src/main/resources/META-INF/spring/todo-infra.xml`\ は、
+以下のような設定となっている。
+
+\ :file:`todo-infra.xml`\は、インフラストラクチャ層によって設定が大きく異なるため、
+ブランクプロジェクト毎に説明を行う。
+作成したブランクプロジェクト以外の説明は読み飛ばしてもよい。
+
+
+O/R Mapperに依存しないブランクプロジェクトを作成した場合のtodo-infra.xml
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+O/R Mapperに依存しないブランクプロジェクトを作成した場合、以下のように空定義のファイルが作成される。
+
+.. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    </beans>
+
+MyBatis3用のブランクプロジェクトを作成した場合のtodo-infra.xml
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+MyBatis3用のブランクプロジェクトを作成した場合、以下のような設定となっている。
+
+.. code-block:: xml
+   :emphasize-lines: 11-12, 14-16, 17-18, 19-20, 23-25
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+           xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://mybatis.org/schema/mybatis-spring
+            http://mybatis.org/schema/mybatis-spring.xsd">
+
+         <!-- (1) -->
+        <import resource="classpath:/META-INF/spring/todo-env.xml" />
+
+         <!-- (2) -->
+        <!-- define the SqlSessionFactory -->
+        <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+             <!-- (3) -->
+            <property name="dataSource" ref="dataSource" />
+             <!-- (4) -->
+            <property name="configLocation" value="classpath:/META-INF/mybatis/mybatis-config.xml" />
+        </bean>
+
+         <!-- (5) -->
+        <!-- scan for Mappers -->
+        <mybatis:scan base-package="todo.domain.repository" />
+
+    </beans>
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+   :header-rows: 1
+   :widths: 10 90
+
+   * - 項番
+     - 説明
+   * - | (1)
+     - | 環境依存するコンポーネント(データソースやトランザクションマネージャなど)を定義するBean定義ファイルをimportする。
+   * - | (2)
+     - | \ ``SqlSessionFactory``\ を生成するためのコンポーネントとして、\ ``SqlSessionFactoryBean``\ をbean定義する。
+   * - | (3)
+     - | \ ``dataSource``\ プロパティに、設定済みのデータソースのbeanを指定する。
+       |
+       | MyBatis3の処理の中でSQLを発行する際は、ここで指定したデータソースからコネクションが取得される。
+   * - | (4)
+     - | \ ``configLocation``\ プロパティに、MyBatis設定ファイルのパスを指定する。
+       |
+       | ここで指定したファイルは\ ``SqlSessionFactory``\ を生成する時に読み込まれる。
+   * - | (5)
+     - | Mapperインタフェースをスキャンするために\ ``<mybatis:scan>``\ を定義し、\ ``base-package``\ 属性には、
+       | Mapperインタフェースが格納されている基底パッケージを指定する。
+       |
+       | 指定されたパッケージ配下に格納されている Mapperインタフェースがスキャンされ、
+       | スレッドセーフなMapperオブジェクト(MapperインタフェースのProxyオブジェクト)が自動的に生成される。
+
+.. note::
+
+    \ :file:`mybatis-config.xml`\ は、MyBatis3自体の動作設定を行う設定ファイルである。
+
+    ブランクプロジェクトでは、デフォルトで以下の設定が行われている。
+
+     .. code-block:: xml
+
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <!DOCTYPE configuration
+          PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+          "http://mybatis.org/dtd/mybatis-3-config.dtd">
+        <configuration>
+
+            <!-- See http://mybatis.github.io/mybatis-3/configuration.html#settings -->
+            <settings>
+                <setting name="mapUnderscoreToCamelCase" value="true" />
+                <setting name="lazyLoadingEnabled" value="true" />
+                <setting name="aggressiveLazyLoading" value="false" />
+        <!--
+                <setting name="defaultExecutorType" value="REUSE" />
+                <setting name="jdbcTypeForNull" value="NULL" />
+                <setting name="proxyFactory" value="JAVASSIST" />
+                <setting name="localCacheScope" value="STATEMENT" />
+        -->
+            </settings>
+
+            <typeAliases>
+                <package name="todo.domain.model" />
+                <package name="todo.domain.repository" />
+        <!--
+                <package name="todo.infra.mybatis.typehandler" />
+        -->
+            </typeAliases>
+
+            <typeHandlers>
+        <!--
+                <package name="todo.infra.mybatis.typehandler" />
+        -->
+            </typeHandlers>
+
+        </configuration>
+
+JPA用のブランクプロジェクトを作成した場合のtodo-infra.xml
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+JPA用のブランクプロジェクトを作成した場合、以下のような設定となっている。
+
+.. code-block:: xml
+    :emphasize-lines: 9-10, 12-13, 15-17, 22-24, 26-27, 30-31
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+        xmlns:util="http://www.springframework.org/schema/util"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+            http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+        <!-- (1) -->
+        <import resource="classpath:/META-INF/spring/todo-env.xml" />
+
+        <!-- (2) -->
+        <jpa:repositories base-package="todo.domain.repository"></jpa:repositories>
+
+        <!-- (3) -->
+        <bean id="jpaVendorAdapter"
+            class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+            <property name="showSql" value="false" />
+            <property name="database" value="${database}" />
+        </bean>
+
+        <!-- (4) -->
+        <bean
+            class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+            id="entityManagerFactory">
+            <!-- (5) -->
+            <property name="packagesToScan" value="todo.domain.model" />
+            <property name="dataSource" ref="dataSource" />
+            <property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
+            <!-- (6) -->
+            <property name="jpaPropertyMap">
+                <util:map>
+                    <entry key="hibernate.hbm2ddl.auto" value="none" />
+                    <entry key="hibernate.ejb.naming_strategy"
+                        value="org.hibernate.cfg.ImprovedNamingStrategy" />
+                    <entry key="hibernate.connection.charSet" value="UTF-8" />
+                    <entry key="hibernate.show_sql" value="false" />
+                    <entry key="hibernate.format_sql" value="false" />
+                    <entry key="hibernate.use_sql_comments" value="true" />
+                    <entry key="hibernate.jdbc.batch_size" value="30" />
+                    <entry key="hibernate.jdbc.fetch_size" value="100" />
+                </util:map>
+            </property>
+        </bean>
+
+    </beans>
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+   :header-rows: 1
+   :widths: 10 90
+
+   * - 項番
+     - 説明
+   * - | (1)
+     - | 環境依存するコンポーネント(データソースやトランザクションマネージャなど)を定義するBean定義ファイルをimportする。
+   * - | (2)
+     - | Spring Data JPAを使用して、Repositoryインタフェースから実装クラスを自動生成する。
+       | \ ``<jpa:repository>``\ タグの\ ``base-package``\ 属性に、Repositoryを格納するパッケージを指定する。
+   * - | (3)
+     - | JPAの実装ベンダの設定を行う。
+       | JPA実装として、Hibernateを使うため、\ ``HibernateJpaVendorAdapter``\ を定義している。
+   * - | (4)
+     - | \ ``EntityManager``\ の定義を行う。
+   * - | (5)
+     - | JPAのエンティティとして扱うクラスが格納されているパッケージ名を指定する。
+   * - | (6)
+     - | Hibernateに関する詳細な設定を行う。
+
+|
+
+todo-infra.properties
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+\ :file:`todo-infra.properties`\ には、Todoアプリのインフラストラクチャ層の環境依存値の設定を行う。
+
+O/R Mapperに依存しないブランクプロジェクトを作成した際は、\ :file:`todo-infra.properties`\ は作成されない。
+
+作成したブランクプロジェクトの\ :file:`src/main/resources/META-INF/spring/todo-infra.properties`\ は、
+以下のような設定となっている。
+
+.. code-block:: properties
+    :emphasize-lines: 1, 7
+
+    # (1)
+    database=H2
+    database.url=jdbc:h2:mem:todo;DB_CLOSE_DELAY=-1;
+    database.username=sa
+    database.password=
+    database.driverClassName=org.h2.Driver
+    # (2)
+    # connection pool
+    cp.maxActive=96
+    cp.maxIdle=16
+    cp.minIdle=0
+    cp.maxWait=60000
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+   :header-rows: 1
+   :widths: 10 90
+
+
+   * - 項番
+     - 説明
+   * - | (1)
+     - | データベースに関する設定を行う。
+       | 本チュートリアルでは、データベースのセットアップの手間を省くため、H2 Databaseを使用する。
+   * - | (2)
+     - | コネクションプールに関する設定。
+
+
+.. note::
+
+    これらの設定値は、\ :file:`todo-env.xml`\から参照されている。
+
+|
+
+todo-env.xml
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+\ :file:`todo-env.xml`\ には、デプロイする環境によって設定が異なるコンポーネントの設定を行う。
+
+作成したブランクプロジェクトの\ ``src/main/resources/META-INF/spring/todo-env.xml``\ は、以下のような設定となっている。
+
+ここでは、MyBatis3用のブランクプロジェクトに格納されるファイルを例に説明する。
+なお、データベースにアクセスしないブランクプロジェクトを作成した際は、\ :file:`todo-env.xml`\ は作成されない。
+
+.. code-block:: xml
+    :emphasize-lines: 8, 22, 39
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+        <bean id="dateFactory" class="org.terasoluna.gfw.common.date.jodatime.DefaultJodaTimeDateFactory" />
+
+        <!-- (1) -->
+        <bean id="realDataSource" class="org.apache.commons.dbcp2.BasicDataSource"
+            destroy-method="close">
+            <property name="driverClassName" value="${database.driverClassName}" />
+            <property name="url" value="${database.url}" />
+            <property name="username" value="${database.username}" />
+            <property name="password" value="${database.password}" />
+            <property name="defaultAutoCommit" value="false" />
+            <property name="maxTotal" value="${cp.maxActive}" />
+            <property name="maxIdle" value="${cp.maxIdle}" />
+            <property name="minIdle" value="${cp.minIdle}" />
+            <property name="maxWaitMillis" value="${cp.maxWait}" />
+        </bean>
+
+        <!-- (2) -->
+        <bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+            <constructor-arg index="0" ref="realDataSource" />
+        </bean>
+
+        <!--  REMOVE THIS LINE IF YOU USE JPA
+        <bean id="transactionManager"
+            class="org.springframework.orm.jpa.JpaTransactionManager">
+            <property name="entityManagerFactory" ref="entityManagerFactory" />
+        </bean>
+              REMOVE THIS LINE IF YOU USE JPA  -->
+        <!--  REMOVE THIS LINE IF YOU USE MyBatis2
+        <bean id="transactionManager"
+            class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+            <property name="dataSource" ref="dataSource" />
+        </bean>
+              REMOVE THIS LINE IF YOU USE MyBatis2  -->
+        <!-- (3) -->
+        <bean id="transactionManager"
+            class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+            <property name="dataSource" ref="dataSource" />
+        </bean>
+    </beans>
+
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+   :header-rows: 1
+   :widths: 10 90
+
+   * - 項番
+     - 説明
+   * - | (1)
+     - | 実データソースの設定。
+   * - | (2)
+     - | データソースの設定。
+       | JDBC関連のログを出力する機能をもったデータソースを指定している。
+       | \ ``net.sf.log4jdbc.Log4jdbcProxyDataSource``\ を使用すると、SQLなどのJDBC関連のログを出力できるため、デバッグに役立つ情報を出力することができる。
+   * - | (3)
+     - | トランザクションマネージャの設定。
+       | id属性には、\ ``transactionManager``\ を指定する。
+       | 別の名前を指定する場合は、\ ``<tx:annotation-driven>``\ タグにもトランザクションマネージャ名を指定する必要がある。
+       |
+       | ブランクプロジェクトでは、JDBCのAPIを使用してトランザクションを制御するクラス(\ ``org.springframework.jdbc.datasource.DataSourceTransactionManager``\)が設定されている。
+
+.. note::
+
+    JPA用のブランクプロジェクトを作成した場合は、トランザクションマネージャには、
+    JPAのAPIを使用してトランザクションを制御するクラス(\ ``org.springframework.orm.jpa.JpaTransactionManager``\)が設定されている。
+
+     .. code-block:: xml
+
+        <bean id="transactionManager"
+            class="org.springframework.orm.jpa.JpaTransactionManager">
+            <property name="entityManagerFactory" ref="entityManagerFactory" />
+        </bean>
+
+|
+
+spring-mvc.xml
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+\ :file:`spring-mvc.xml`\ には、Spring MVCに関する定義を行う。
+
+| 作成したブランクプロジェクトの\ :file:`src/main/resources/META-INF/spring/spring-mvc.xml`\ は、以下のような設定となっている。
+| なお、チュートリアルで使用しないコンポーネントについての説明は割愛する。
+
+.. code-block:: xml
+    :emphasize-lines: 12, 16, 28, 31, 37, 71
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:util="http://www.springframework.org/schema/util"
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+        <!-- (1) -->
+        <context:property-placeholder
+            location="classpath*:/META-INF/spring/*.properties" />
+
+        <!-- (2) -->
+        <mvc:annotation-driven>
+            <mvc:argument-resolvers>
+                <bean
+                    class="org.springframework.data.web.PageableHandlerMethodArgumentResolver" />
+                <bean
+                    class="org.springframework.security.web.bind.support.AuthenticationPrincipalArgumentResolver" />
+            </mvc:argument-resolvers>
+        </mvc:annotation-driven>
+
+        <mvc:default-servlet-handler />
+
+        <!-- (3) -->
+        <context:component-scan base-package="todo.app" />
+
+        <!-- (4) -->
+        <mvc:resources mapping="/resources/**"
+            location="/resources/,classpath:META-INF/resources/"
+            cache-period="#{60 * 60}" />
+
+        <mvc:interceptors>
+            <!-- (5) -->
+            <mvc:interceptor>
+                <mvc:mapping path="/**" />
+                <mvc:exclude-mapping path="/resources/**" />
+                <mvc:exclude-mapping path="/**/*.html" />
+                <bean
+                    class="org.terasoluna.gfw.web.logging.TraceLoggingInterceptor" />
+            </mvc:interceptor>
+            <mvc:interceptor>
+                <mvc:mapping path="/**" />
+                <mvc:exclude-mapping path="/resources/**" />
+                <mvc:exclude-mapping path="/**/*.html" />
+                <bean
+                    class="org.terasoluna.gfw.web.token.transaction.TransactionTokenInterceptor" />
+            </mvc:interceptor>
+            <mvc:interceptor>
+                <mvc:mapping path="/**" />
+                <mvc:exclude-mapping path="/resources/**" />
+                <mvc:exclude-mapping path="/**/*.html" />
+                <bean class="org.terasoluna.gfw.web.codelist.CodeListInterceptor">
+                    <property name="codeListIdPattern" value="CL_.+" />
+                </bean>
+            </mvc:interceptor>
+            <!--  REMOVE THIS LINE IF YOU USE JPA
+            <mvc:interceptor>
+                <mvc:mapping path="/**" />
+                <mvc:exclude-mapping path="/resources/**" />
+                <mvc:exclude-mapping path="/**/*.html" />
+                <bean
+                    class="org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor" />
+            </mvc:interceptor>
+                REMOVE THIS LINE IF YOU USE JPA  -->
+        </mvc:interceptors>
+
+        <!-- (6) -->
+        <!-- Settings View Resolver. -->
+        <mvc:view-resolvers>
+            <mvc:jsp prefix="/WEB-INF/views/" />
+        </mvc:view-resolvers>
+
+        <bean id="requestDataValueProcessor"
+            class="org.terasoluna.gfw.web.mvc.support.CompositeRequestDataValueProcessor">
+            <constructor-arg>
+                <util:list>
+                    <bean class="org.springframework.security.web.servlet.support.csrf.CsrfRequestDataValueProcessor" />
+                    <bean
+                        class="org.terasoluna.gfw.web.token.transaction.TransactionTokenRequestDataValueProcessor" />
+                </util:list>
+            </constructor-arg>
+        </bean>
+
+        <!-- Setting Exception Handling. -->
+        <!-- Exception Resolver. -->
+        <bean class="org.terasoluna.gfw.web.exception.SystemExceptionResolver">
+            <property name="exceptionCodeResolver" ref="exceptionCodeResolver" />
+            <!-- Setting and Customization by project. -->
+            <property name="order" value="3" />
+            <property name="exceptionMappings">
+                <map>
+                    <entry key="ResourceNotFoundException" value="common/error/resourceNotFoundError" />
+                    <entry key="BusinessException" value="common/error/businessError" />
+                    <entry key="InvalidTransactionTokenException" value="common/error/transactionTokenError" />
+                    <entry key=".DataAccessException" value="common/error/dataAccessError" />
+                </map>
+            </property>
+            <property name="statusCodes">
+                <map>
+                    <entry key="common/error/resourceNotFoundError" value="404" />
+                    <entry key="common/error/businessError" value="409" />
+                    <entry key="common/error/transactionTokenError" value="409" />
+                    <entry key="common/error/dataAccessError" value="500" />
+                </map>
+            </property>
+            <property name="defaultErrorView" value="common/error/systemError" />
+            <property name="defaultStatusCode" value="500" />
+        </bean>
+        <!-- Setting AOP. -->
+        <bean id="handlerExceptionResolverLoggingInterceptor"
+            class="org.terasoluna.gfw.web.exception.HandlerExceptionResolverLoggingInterceptor">
+            <property name="exceptionLogger" ref="exceptionLogger" />
+        </bean>
+        <aop:config>
+            <aop:advisor advice-ref="handlerExceptionResolverLoggingInterceptor"
+                pointcut="execution(* org.springframework.web.servlet.HandlerExceptionResolver.resolveException(..))" />
+        </aop:config>
+
+    </beans>
+
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+   :header-rows: 1
+   :widths: 10 90
+
+   * - 項番
+     - 説明
+   * - | (1)
+     - | プロパティファイルの読み込み設定を行う。
+
+       | src/main/resources/META-INF/spring直下の任意のプロパティファイルを読み込む。
+       | この設定により、プロパティファイルの値をBean定義ファイル内で\ ``${propertyName}``\ 形式で埋め込んだり、Javaクラスに\ ``@Value("${propertyName}")``\ でインジェクションすることができる。
+   * - | (2)
+     - | Spring MVCのアノテーションベースのデフォルト設定を行う。
+   * - | (3)
+     - | アプリケーション層のクラスを管理するtodo.appパッケージ配下をcomponent-scan対象とする。
+   * - | (4)
+     - | 静的リソース(css, images, jsなど)アクセスのための設定を行う。
+
+       | \ ``mapping``\ 属性にURLのパスを、\ ``location``\ 属性に物理的なパスの設定を行う。
+       | この設定の場合\ ``<contextPath>/rerources/app/css/styles.css``\ に対してリクエストが来た場合、\ ``WEB-INF/resources/app/css/styles.css``\ を探し、見つからなければクラスパス上(\ ``src/main/resources``\ やjar内)の\ ``META-INF/resources/app/css/styles.css``\ を探す。
+       | どこにも\ ``styles.css``\ が格納されていない場合は、404エラーを返す。
+
+       | ここでは\ ``cache-period``\ 属性で静的リソースのキャッシュ時間(3600秒=60分)も設定している。
+       | \ ``cache-period="3600"``\ と設定しても良いが、60分であることを明示するために `SpEL <http://docs.spring.io/spring/docs/4.1.4.RELEASE/spring-framework-reference/html/expressions.html#expressions-beandef-xml-based>`_ を使用して \ ``cache-period="#{60 * 60}"``\  と書く方が分かりやすい。
+   * - | (5)
+     - | コントローラ処理のTraceログを出力するインターセプタを設定する。
+       | \ ``/resources``\ 配下を除く任意のパスに適用されるように設定する。
+   * - | (6)
+     - | \ ``ViewResolver``\ の設定を行う。
+       | この設定により、例えばコントローラからview名として\ ``"hello"``\が返却された場合には\ ``/WEB-INF/views/hello.jsp``\ が実行される。
+
+       .. tip::
+
+           \ ``<mvc:view-resolvers>``\ 要素はSpring Framework 4.1から追加されたXML要素である。
+           \ ``<mvc:view-resolvers>``\ 要素を使用すると、\ ``ViewResolver``\ をシンプルに定義することが出来る。
+
+           従来通り\ ``<bean>``\ 要素を使用した場合の定義例を以下に示す。
+
+            .. code-block:: xml
+
+               <bean id="viewResolver"
+                   class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+                   <property name="prefix" value="/WEB-INF/views/" />
+                   <property name="suffix" value=".jsp" />
+               </bean>
+
+.. note::
+
+    JPA用のブランクプロジェクトを作成した場合は、\ ``<mvc:interceptors>``\ の定義として、
+    \ ``OpenEntityManagerInViewInterceptor``\ の定義が有効な状態となっている。
+
+     .. code-block:: xml
+
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />
+            <mvc:exclude-mapping path="/resources/**" />
+            <mvc:exclude-mapping path="/**/*.html" />
+            <bean
+                class="org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor" />
+        </mvc:interceptor>
+
+    \ ``OpenEntityManagerInViewInterceptor``\ は、\ ``EntityManager``\ のライフサイクルの開始と終了を行う\ ``Interceptor``\ である。
+    この設定を追加することで、アプリケーション層(Controllerや、Viewクラス)でのLazy Loadが、サポートされる。
+
+|
+
+spring-security.xml
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+\ :file:`spring-security.xml`\ には、Spring Securityに関する定義を行う。
+
+| 作成したブランクプロジェクトの\ :file:`src/main/resources/META-INF/spring/spring-security.xml`\ は、以下のような設定となっている。
+| なお、本チュートリアルではSpring Securityの設定ファイルの説明は割愛する。Spring Securityの設定ファイルについては、「:doc:`../Security/Tutorial`」を参照されたい。
+
+.. code-block:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sec="http://www.springframework.org/schema/security"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+        <sec:http pattern="/resources/**" security="none"/>
+        <sec:http auto-config="true" use-expressions="true">
+            <sec:headers>
+                <sec:cache-control />
+                <sec:content-type-options />
+                <sec:hsts />
+                <sec:frame-options />
+                <sec:xss-protection />
+            </sec:headers>
+            <sec:csrf />
+            <sec:access-denied-handler ref="accessDeniedHandler"/>
+            <sec:custom-filter ref="userIdMDCPutFilter" after="ANONYMOUS_FILTER"/>
+            <sec:session-management />
+        </sec:http>
+
+        <sec:authentication-manager></sec:authentication-manager>
+
+        <!-- Change View for CSRF or AccessDenied -->
+        <bean id="accessDeniedHandler"
+            class="org.springframework.security.web.access.DelegatingAccessDeniedHandler">
+            <constructor-arg index="0">
+                <map>
+                    <entry
+                        key="org.springframework.security.web.csrf.InvalidCsrfTokenException">
+                        <bean
+                            class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
+                            <property name="errorPage"
+                                value="/WEB-INF/views/common/error/invalidCsrfTokenError.jsp" />
+                        </bean>
+                    </entry>
+                    <entry
+                        key="org.springframework.security.web.csrf.MissingCsrfTokenException">
+                        <bean
+                            class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
+                            <property name="errorPage"
+                                value="/WEB-INF/views/common/error/missingCsrfTokenError.jsp" />
+                        </bean>
+                    </entry>
+                </map>
+            </constructor-arg>
+            <constructor-arg index="1">
+                <bean
+                    class="org.springframework.security.web.access.AccessDeniedHandlerImpl">
+                    <property name="errorPage"
+                        value="/WEB-INF/views/common/error/accessDeniedError.jsp" />
+                </bean>
+            </constructor-arg>
+        </bean>
+
+        <!-- Put UserID into MDC -->
+        <bean id="userIdMDCPutFilter" class="org.terasoluna.gfw.security.web.logging.UserIdMDCPutFilter">
+        </bean>
+
+    </beans>
+
+|
+
+logback.xml
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+\ :file:`logback.xml`\ には、ログ出力に関する定義を行う。
+
+| 作成したブランクプロジェクトの\ :file:`src/main/resources/logback.xml`\ は、以下のような設定となっている。
+| なお、チュートリアルで使用しないログ設定についての説明は割愛する。
+
+.. code-block:: xml
+    :emphasize-lines: 4, 36, 45
+
+    <!DOCTYPE logback>
+    <configuration>
+
+        <!-- (1) -->
+        <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern><![CDATA[date:%d{yyyy-MM-dd HH:mm:ss}\tthread:%thread\tX-Track:%X{X-Track}\tlevel:%-5level\tlogger:%-48logger{48}\tmessage:%msg%n]]></pattern>
+            </encoder>
+        </appender>
+
+        <appender name="APPLICATION_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>log/todo-application.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>log/todo-application-%d{yyyyMMdd}.log</fileNamePattern>
+                <maxHistory>7</maxHistory>
+            </rollingPolicy>
+            <encoder>
+                <charset>UTF-8</charset>
+                <pattern><![CDATA[date:%d{yyyy-MM-dd HH:mm:ss}\tthread:%thread\tX-Track:%X{X-Track}\tlevel:%-5level\tlogger:%-48logger{48}\tmessage:%msg%n]]></pattern>
+            </encoder>
+        </appender>
+
+        <appender name="MONITORING_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>log/todo-monitoring.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>log/todo-monitoring-%d{yyyyMMdd}.log</fileNamePattern>
+                <maxHistory>7</maxHistory>
+            </rollingPolicy>
+            <encoder>
+                <charset>UTF-8</charset>
+                <pattern><![CDATA[date:%d{yyyy-MM-dd HH:mm:ss}\tX-Track:%X{X-Track}\tlevel:%-5level\tmessage:%msg%n]]></pattern>
+            </encoder>
+        </appender>
+
+        <!-- Application Loggers -->
+        <!-- (2) -->
+        <logger name="todo">
+            <level value="debug" />
+        </logger>
+
+        <!-- TERASOLUNA -->
+        <logger name="org.terasoluna.gfw">
+            <level value="debug" />
+        </logger>
+        <!-- (3) -->
+        <logger name="org.terasoluna.gfw.web.logging.TraceLoggingInterceptor">
+            <level value="trace" />
+        </logger>
+        <logger name="org.terasoluna.gfw.common.exception.ExceptionLogger">
+            <level value="info" />
+        </logger>
+        <logger name="org.terasoluna.gfw.common.exception.ExceptionLogger.Monitoring" additivity="false">
+            <level value="error" />
+            <appender-ref ref="MONITORING_LOG_FILE" />
+        </logger>
+
+        <!-- 3rdparty Loggers -->
+        <logger name="org.springframework">
+            <level value="warn" />
+        </logger>
+
+        <logger name="org.springframework.web.servlet">
+            <level value="info" />
+        </logger>
+
+        <!--  REMOVE THIS LINE IF YOU USE JPA
+        <logger name="org.hibernate.engine.transaction">
+            <level value="debug" />
+        </logger>
+              REMOVE THIS LINE IF YOU USE JPA  -->
+        <!--  REMOVE THIS LINE IF YOU USE MyBatis2
+        <logger name="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+            <level value="debug" />
+        </logger>
+              REMOVE THIS LINE IF YOU USE MyBatis2  -->
+        <!--  REMOVE THIS LINE IF YOU USE MyBatis3
+        <logger name="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+            <level value="debug" />
+        </logger>
+              REMOVE THIS LINE IF YOU USE MyBatis3  -->
+
+        <logger name="jdbc.sqltiming">
+            <level value="debug" />
+        </logger>
+
+        <root level="warn">
+            <appender-ref ref="STDOUT" />
+            <appender-ref ref="APPLICATION_LOG_FILE" />
+        </root>
+
+    </configuration>
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+   :header-rows: 1
+   :widths: 10 90
+
+
+   * - 項番
+     - 説明
+   * - | (1)
+     - | 標準出力でログを出力するアペンダを設定。
+   * - | (2)
+     - | todoパッケージ以下はdebugレベル以上を出力するように設定。
+   * - | (3)
+     - | spring-mvc.xmlに設定した\ ``TraceLoggingInterceptor``\ に出力されるようにtraceレベルで設定。
+
+
+.. note::
+
+    O/R Mapperを使用するブランクプロジェクトを作成した場合は、トランザクション制御関連のログを出力するロガーが有効な状態となっている。
+
+    * JPA用のブランクプロジェクト
+
+     .. code-block:: xml
+
+        <logger name="org.hibernate.engine.transaction">
+            <level value="debug" />
+        </logger>
+
+    * MyBatis3用のブランクプロジェクト
+
+     .. code-block:: xml
+
+        <logger name="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+            <level value="debug" />
+        </logger>
 
 .. raw:: latex
 

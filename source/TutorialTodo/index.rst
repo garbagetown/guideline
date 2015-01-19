@@ -61,10 +61,8 @@
 
 TODOを管理するアプリケーションを作成する。TODOの一覧表示、TODOの登録、TODOの完了、TODOの削除を行える。
 
-
 .. figure:: ./images/image001.png
-    :width: 60%
-
+    :width: 50%
 
 .. _app-requirement:
 
@@ -2095,80 +2093,80 @@ JSPの修正
 .. code-block:: jsp
     :emphasize-lines: 56-67
 
-        <!DOCTYPE html>
-        <html>
-        <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Todo List</title>
-        </head>
-        <style type="text/css">
-        .strike {
-            text-decoration: line-through;
-        }
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Todo List</title>
+    </head>
+    <style type="text/css">
+    .strike {
+        text-decoration: line-through;
+    }
 
-        .alert {
-            border: 1px solid;
-        }
+    .alert {
+        border: 1px solid;
+    }
 
-        .alert-error {
-            background-color: #c60f13;
-            border-color: #970b0e;
-            color: white;
-        }
+    .alert-error {
+        background-color: #c60f13;
+        border-color: #970b0e;
+        color: white;
+    }
 
-        .alert-success {
-            background-color: #5da423;
-            border-color: #457a1a;
-            color: white;
-        }
+    .alert-success {
+        background-color: #5da423;
+        border-color: #457a1a;
+        color: white;
+    }
 
-        .text-error {
-            color: #c60f13;
-        }
-        </style>
-        <body>
-            <h1>Todo List</h1>
+    .text-error {
+        color: #c60f13;
+    }
+    </style>
+    <body>
+        <h1>Todo List</h1>
 
-            <div id="todoForm">
-                <t:messagesPanel />
+        <div id="todoForm">
+            <t:messagesPanel />
 
-                <form:form
-                    action="${pageContext.request.contextPath}/todo/create"
-                    method="post" modelAttribute="todoForm">
-                    <form:input path="todoTitle" />
-                    <form:errors path="todoTitle" cssClass="text-error" />
-                    <input type="submit" value="Create Todo" />
-                </form:form>
-            </div>
-            <hr />
-            <div id="todoList">
-                <ul>
-                    <c:forEach items="${todos}" var="todo">
-                        <li><c:choose>
-                                <c:when test="${todo.finished}">
-                                    <span class="strike">${f:h(todo.todoTitle)}</span>
-                                </c:when>
-                                <c:otherwise>
-                                    ${f:h(todo.todoTitle)}
-                                    <!-- (1) -->
-                                    <form:form
-                                        action="${pageContext.request.contextPath}/todo/finish"
-                                        method="post"
-                                        modelAttribute="todoForm"
-                                        cssStyle="display: inline-block;">
-                                        <!-- (2) -->
-                                        <form:hidden path="todoId"
-                                            value="${f:h(todo.todoId)}" />
-                                        <input type="submit" name="finish"
-                                            value="Finish" />
-                                    </form:form>
-                                </c:otherwise>
-                            </c:choose></li>
-                    </c:forEach>
-                </ul>
-            </div>
-        </body>
-        </html>
+            <form:form
+                action="${pageContext.request.contextPath}/todo/create"
+                method="post" modelAttribute="todoForm">
+                <form:input path="todoTitle" />
+                <form:errors path="todoTitle" cssClass="text-error" />
+                <input type="submit" value="Create Todo" />
+            </form:form>
+        </div>
+        <hr />
+        <div id="todoList">
+            <ul>
+                <c:forEach items="${todos}" var="todo">
+                    <li><c:choose>
+                            <c:when test="${todo.finished}">
+                                <span class="strike">${f:h(todo.todoTitle)}</span>
+                            </c:when>
+                            <c:otherwise>
+                                ${f:h(todo.todoTitle)}
+                                <!-- (1) -->
+                                <form:form
+                                    action="${pageContext.request.contextPath}/todo/finish"
+                                    method="post"
+                                    modelAttribute="todoForm"
+                                    cssStyle="display: inline-block;">
+                                    <!-- (2) -->
+                                    <form:hidden path="todoId"
+                                        value="${f:h(todo.todoId)}" />
+                                    <input type="submit" name="finish"
+                                        value="Finish" />
+                                </form:form>
+                            </c:otherwise>
+                        </c:choose></li>
+                </c:forEach>
+            </ul>
+        </div>
+    </body>
+    </html>
 
 
 .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
@@ -2544,6 +2542,7 @@ CSSファイルの使用
 
     .alert {
         border: 1px solid;
+        margin-bottom: 5px;
     }
 
     .alert-error {
@@ -2560,6 +2559,14 @@ CSSファイルの使用
 
     .text-error {
         color: #c60f13;
+    }
+
+    .alert ul {
+        margin: 15px 0px 15px 0px;
+    }
+
+    #todoList li {
+        margin-top: 5px;
     }
 
 |
@@ -2638,6 +2645,12 @@ JSPからCSSファイルを読み込む。
    * - | (1)
      - | JSPファイルからスタイルシートの定義を削除し、代わりにスタイルシートを定義したCSSファイルを読み込む。
 
+|
+
+CSSファイルを適用すると、以下のようなレイアウトになる。
+
+.. figure:: ./images/list-screen-css.png
+    :width: 40%
 
 |
 
@@ -2745,7 +2758,7 @@ Package Explorer上で右クリック -> New -> File を選択し、「New File�
       - 入力値
     * - 1
       - Enter or select the parent folder
-      - ``src/main/resources/todo/domain/repository/todo``
+      - ``todo/src/main/resources/todo/domain/repository/todo``
     * - 2
       - File name
       - ``TodoRepository.xml``

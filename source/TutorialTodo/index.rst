@@ -191,7 +191,7 @@ Delete TODO
 * MyBatis3を使用してデータベースにアクセスするRepositoryImpl
 * Spring Data JPAの使用してデータベースにアクセスするRepositoryImpl
 
-の3種類を用意している。
+の3種類を用意している。用途に応じていずれかを選択する。
 
 プロジェクトの作成
 --------------------------------------------------------------------------------
@@ -221,6 +221,8 @@ Delete TODO
 
 |
 
+.. _TutorialCreatePlainBlankProject:
+
 O/R Mapperに依存しないブランクプロジェクトの作成
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -238,6 +240,8 @@ O/R Mapperに依存しないブランクプロジェクトの作成
      -DartifactId=todo^
      -Dversion=1.0.0-SNAPSHOT
 
+.. _TutorialCreateMyBatis3BlankProject:
+
 MyBatis3用のブランクプロジェクトの作成
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -254,6 +258,8 @@ MyBatis3を使用してデータベースにアクセスするRepositoryImpl用�
      -DgroupId=todo^
      -DartifactId=todo^
      -Dversion=1.0.0-SNAPSHOT
+
+.. _TutorialCreateJPABlankProject:
 
 JPA用のブランクプロジェクトの作成
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -354,6 +360,51 @@ Root Directoryに \ ``C:\work\todo``\ を設定し、Projectsにtodoのpom.xml�
 
 |
 
+**[MyBatis3用のブランクプロジェクトを作成した場合の構成]**
+
+.. code-block:: console
+
+    src
+      └main
+          ├java
+          │  └todo
+          │    ├ app
+          │    │   └todo
+          │    └domain
+          │        ├model
+          │        ├repository
+          │        │   └todo
+          │        └service
+          │            └todo
+          ├resources
+          │  ├META-INF
+          │  │  ├mybatis ... (8)
+          │  │  └spring
+          │  └todo
+          │    └domain
+          │        └repository ... (9)
+          │             └todo
+          └wepapp
+              └WEB-INF
+                  └views
+
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - 項番
+      - 説明
+    * - | (8)
+      - MyBatis関連の設定ファイルを格納するディレクトリ。
+    * - | (9)
+      - MyBatisのMapperファイルを格納するディレクトリ。
+
+        本チュートリアルでは、Todoオブジェクト用のRepositoryのMapperファイルを格納するためのディレクトリを作成する。
+
+|
+
 **[O/R Mapperに依存しないブランクプロジェクト、JPA用のブランクプロジェクト用を作成した場合の構成]**
 
 .. code-block:: console
@@ -404,51 +455,6 @@ Root Directoryに \ ``C:\work\todo``\ を設定し、Projectsにtodoのpom.xml�
       - spring関連の設定ファイルを格納するディレクトリ。
     * - | (7)
       - jspを格納するディレクトリ。
-
-|
-
-**[MyBatis3用のブランクプロジェクトを作成した場合の構成]**
-
-.. code-block:: console
-
-    src
-      └main
-          ├java
-          │  └todo
-          │    ├ app
-          │    │   └todo
-          │    └domain
-          │        ├model
-          │        ├repository
-          │        │   └todo
-          │        └service
-          │            └todo
-          ├resources
-          │  ├META-INF
-          │  │  ├mybatis ... (8)
-          │  │  └spring
-          │  └todo
-          │    └domain
-          │        └repository ... (9)
-          │             └todo
-          └wepapp
-              └WEB-INF
-                  └views
-
-
-.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
-.. list-table::
-    :header-rows: 1
-    :widths: 10 90
-
-    * - 項番
-      - 説明
-    * - | (8)
-      - MyBatis関連の設定ファイルを格納するディレクトリ。
-    * - | (9)
-      - MyBatisのMapperファイルを格納するディレクトリ。
-
-        本チュートリアルでは、Todoオブジェクト用のRepositoryのMapperファイルを格納するためのディレクトリを作成する。
 
 |
 
@@ -1389,7 +1395,7 @@ Controllerの実装
             return form;
         }
 
-        @RequestMapping("list") // (3)
+        @RequestMapping(value = "list") // (3)
         public String list(Model model) {
             Collection<Todo> todos = todoService.findAll();
             model.addAttribute("todos", todos); // (4)
@@ -2525,7 +2531,7 @@ JSPの修正
 CSSファイルの使用
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-チュートリアルで作成したアプリケーションでは、スタイルシートの定義をJSPファイルの中で指定していたが、
+これまでスタイルシートをJSPファイルの中で直接定義していたが、
 実際のアプリケーションを開発する場合は、CSSファイルに定義するのが一般的である。
 
 ここでは、スタイルシートをCSSファイルに定義する方法について説明する。
@@ -2726,6 +2732,7 @@ MyBatis3を使用したインフラストラクチャ層の作成
 --------------------------------------------------------------------------------
 
 ここでは、MyBatis3を使用してインフラストラクチャ層のRepositoryImplを作成する方法について説明する。
+:ref:`TutorialCreateMyBatis3BlankProject`\ でプロジェクト作成していることが前提である。
 
 Spring Data JPAを使用する場合は、本節を読み飛ばして、\ :ref:`using_SpringDataJPA`\ に進んでよい。
 
@@ -2739,7 +2746,7 @@ TodoRepositoryImplの作成
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 MyBatis3を使用する場合、RepositoryImplはRepositoryインタフェース(Mapperインタフェース)から自動生成される。
-そのため、\ ``TodoRepositoryImpl``\ の作成は不要である。
+そのため、\ ``TodoRepositoryImpl``\ の作成は不要である。作成した場合は削除すること。
 
 Mapperファイルの作成
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2944,6 +2951,7 @@ Spring Data JPAを使用したインフラストラクチャ層の作成
 --------------------------------------------------------------------------------
 
 ここでは、\ `Spring Data JPA <http://www.springsource.org/spring-data/jpa>`_\ を使用してインフラストラクチャ層のRepositoryImplを作成する方法について説明する。
+:ref:`TutorialCreateJPABlankProject`\ でプロジェクト作成していることが前提である。
 
 Entityの修正
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3102,7 +3110,7 @@ TodoRepositoryImplの作成
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Spring Data JPAを使用する場合、RepositoryImplはRepositoryインタフェースから自動生成される。
-そのため、\ ``TodoRepositoryImpl``\ の作成は不要である。
+そのため、\ ``TodoRepositoryImpl``\ の作成は不要である。作成した場合は削除すること。
 
 |
 

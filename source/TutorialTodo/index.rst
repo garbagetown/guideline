@@ -401,7 +401,7 @@ Root Directoryに \ ``C:\work\todo``\ を設定し、Projectsにtodoのpom.xml�
     * - | (8)
       - MyBatis関連の設定ファイルを格納するディレクトリ。
     * - | (9)
-      - MyBatisのMapperファイルを格納するディレクトリ。
+      - SQLを記述するMyBatisのMapperファイルを格納するディレクトリ。
 
         本チュートリアルでは、Todoオブジェクト用のRepositoryのMapperファイルを格納するためのディレクトリを作成する。
 

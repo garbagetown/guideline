@@ -1869,7 +1869,7 @@ HTTPレスポンスBODYにエラー情報を出力するための実装
             if (body == null) {
                 responseBody = createApiError(request, "E999", ex.getMessage());
             }
-            return new ResponseEntity<Object>(responseBody, headers, status);
+            return ResponseEntity.status(status).headers(headers).body(responseBody);
         }
 
         private ApiError createApiError(WebRequest request, String errorCode,
@@ -1945,7 +1945,7 @@ HTTPレスポンスBODYにエラー情報を出力するための実装
             if (body == null) {
                 responseBody = createApiError(request, "E999", ex.getMessage());
             }
-            return new ResponseEntity<Object>(responseBody, headers, status);
+            return ResponseEntity.status(status).headers(headers).body(responseBody);
         }
     
         private ApiError createApiError(WebRequest request, String errorCode,
@@ -2047,7 +2047,7 @@ HTTPレスポンスBODYにエラー情報を出力するための実装
             if (body == null) {
                 responseBody = createApiError(request, "E999", ex.getMessage());
             }
-            return new ResponseEntity<Object>(responseBody, headers, status);
+            return ResponseEntity.status(status).headers(headers).body(responseBody);
         }
 
         private ApiError createApiError(WebRequest request, String errorCode,
@@ -2158,7 +2158,7 @@ HTTPレスポンスBODYにエラー情報を出力するための実装
             if (body == null) {
                 responseBody = createApiError(request, "E999", ex.getMessage());
             }
-            return new ResponseEntity<Object>(responseBody, headers, status);
+            return ResponseEntity.status(status).headers(headers).body(responseBody);
         }
 
         private ApiError createApiError(WebRequest request, String errorCode,
@@ -2274,7 +2274,7 @@ HTTPレスポンスBODYにエラー情報を出力するための実装
             if (body == null) {
                 responseBody = createApiError(request, "E999", ex.getMessage());
             }
-            return new ResponseEntity<Object>(responseBody, headers, status);
+            return ResponseEntity.status(status).headers(headers).body(responseBody);
         }
 
         private ApiError createApiError(WebRequest request, String errorCode,

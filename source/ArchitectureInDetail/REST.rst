@@ -2585,7 +2585,7 @@ URIで指定されたMemberリソースのコレクションをページ検索�
                 
                     // omitted
                     
-                    return new ResponseEntity(responseResource, HttpStatus.OK);
+                    return ResponseEntity.ok().body(responseResource);
                 }
 
             応答するステータスコードを処理内容や処理結果に応じて変える必要がある場合は、上記実装例の様に、\ ``org.springframework.http.ResponseEntity``\を使用する事になる。
@@ -3446,7 +3446,7 @@ RESTful Web Serviceで発生した例外のハンドリング方法について�
                 apiError = body;
             }
             // (9)
-            return new ResponseEntity<>(apiError, headers, status);
+            return ResponseEntity.status(status).headers(headers).body(apiError);
         }
         
         // omitted
@@ -4359,7 +4359,7 @@ Filterでエラーが発生した場合や\ ``HttpServletResponse#sendError``\�
             ApiError apiError = apiErrorCreator.createApiError(request, errorCode,
                     httpStatus.getReasonPhrase());
             // (7)
-            return new ResponseEntity<>(apiError, httpStatus);
+            return ResponseEntity.status(httpStatus).body(apiError);
         }
     
     }
@@ -4905,7 +4905,7 @@ POST時のLocationヘッダの設定
 * REST APIの処理で、作成したリソースのURIをLocationヘッダに設定する。
 
  .. code-block:: java
-    :emphasize-lines: 12, 22, 26, 30
+    :emphasize-lines: 11, 21, 25
 
     @RequestMapping("members")
     @RestController
@@ -4914,8 +4914,7 @@ POST時のLocationヘッダの設定
         // omitted
 
         @RequestMapping(method = RequestMethod.POST)
-        @ResponseStatus(HttpStatus.CREATED)
-        public HttpEntity<MemberResource> postMembers(
+        public ResponseEntity<MemberResource> postMembers(
                 @RequestBody @Validated({ PostMembers.class, Default.class })
                 MemberResource requestedResource,
                 // (1)
@@ -4933,11 +4932,7 @@ POST時のLocationヘッダの設定
                     .buildAndExpand(responseResource.getMemberId()).toUri();
     
             // (3)
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.setLocation(createdUri);
-    
-            // (4)
-            return new HttpEntity<>(responseResource, responseHeaders);
+            return ResponseEntity.created(createdUri).body(responseResource);
         }
 
         // omitted
@@ -4969,10 +4964,11 @@ POST時のLocationヘッダの設定
         | 
         | 必要に応じてリンク情報に設定するURIを組み立てるためのメソッドを実装すること。
     * - | (3)
-      - | 作成したリソースのURIをLocationヘッダに設定する。
-    * - | (4)
-      - | \ ``org.springframework.http.HttpEntity``\に、Resourceオブジェクトとレスポンスヘッダに設定する情報を格納し、返却する。
+      - | 以下のパラメータを使用して\ ``org.springframework.http.ResponseEntity``\ を生成し返却する。
 
+        * ステータスコード : 201(Created)
+        * Locationヘッダ : 作成したリソースのURI
+        * レスポンスBODY : 作成したResourceオブジェクト
 
  .. tip::
 
@@ -5050,7 +5046,7 @@ OPTIONSメソッドの実装
   | URIで指定されたリソースでサポートされているHTTPメソッド(REST API)のリストを応答する処理を実装する。
 
  .. code-block:: java
-    :emphasize-lines: 8, 13, 16
+    :emphasize-lines: 11, 14
 
     @RequestMapping("members")
     @RestController
@@ -5059,17 +5055,17 @@ OPTIONSメソッドの実装
         // omitted
 
         @RequestMapping(value = "{memberId}", method = RequestMethod.OPTIONS)
-        // (1)
-        @ResponseStatus(HttpStatus.OK)
-        public HttpEntity<Void> optionsMember(
+        public ResponseEntity<Void> optionsMember(
             @PathVariable("memberId") String memberId) {
 
-            // (2)
+            // (1)
             memberSevice.getMember(memberId);
 
-            // (3)
-            return RestResponseUtils.createEntityOfOptions(
-                HttpMethod.GET, HttpMethod.HEAD, HttpMethod.PUT, HttpMethod.DELETE);
+            // (2)
+            return ResponseEntity
+                    .ok()
+                    .allow(HttpMethod.GET, HttpMethod.HEAD, HttpMethod.PUT,
+                            HttpMethod.DELETE, HttpMethod.OPTIONS).build();
         }
     
         // omitted
@@ -5085,35 +5081,9 @@ OPTIONSメソッドの実装
     * - 項番
       - 説明
     * - | (1)
-      - | メソッドアノテーションとして、\ ``@ResponseStatus``\アノテーションを付与し、応答するステータスコードを指定する。
-        | \ ``@ResponseStatus``\アノテーションのvalue属性には、200(OK)を設定する。
-    * - | (2)
       - | ドメイン層のServiceのメソッドを呼び出し、パス変数から取得したIDに一致するリソースが存在するかチェックを行う。
-    * - | (3)
+    * - | (2)
       - | **URIで指定されたリソースでサポートされているHTTPメソッドを、Allowヘッダに設定する。**
-        | 上記例では、 ユーティリティメソッドを呼び出して、HTTPメソッドの一覧が設定されたレスポンスエンティティを生成している。
-
-|
-
-* | ユーティリティメソッド
-  | URIで指定されたリソースでサポートされているHTTPメソッド(API)のリストを応答する処理は、全てのリソースで同じようなロジックを組む事になるため、ユーティリティメソッド化した方がよい。
-
- .. code-block:: java
-
-    public static HttpEntity<Void> createEntityOfOptions(
-            HttpMethod... allowedMethods) {
-
-        Set<HttpMethod> allowedMethodSet = new LinkedHashSet<>(
-                Arrays.asList(allowedMethods));
-        if (!allowedMethodSet.contains(HttpMethod.OPTIONS)) {
-            allowedMethodSet.add(HttpMethod.OPTIONS);
-        }
-
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.setAllow(allowedMethodSet);
-
-        return new HttpEntity<>(responseHeaders);
-    }
 
 |
 
@@ -5789,7 +5759,7 @@ ApiGlobalExceptionHandler.java
             } else {
                 apiError = body;
             }
-            return new ResponseEntity<>(apiError, headers, status);
+            return ResponseEntity.status(status).headers(headers).body(apiError);
         }
     
         @Override

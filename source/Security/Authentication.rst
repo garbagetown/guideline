@@ -1693,21 +1693,33 @@ How to extend
 
 Appendix
 --------------------------------------------------------------------------------
-| Spring Securityを使用した認証では、認証に成功した場合設定ファイルに記述したパスに遷移する。
-| 「続きを読むにはログインする必要がある」のような業務要件がある場合、
-| ログイン後の遷移先を動的に変更したい場合がある。
+
+遷移先の指定が可能な認証成功ハンドラ
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Spring Securityを使用した認証では、認証に成功した場合は、
+
+* bean定義ファイル(\ ``spring-security.xml``\ )に記述したパス(\ ``<form-login>``\ 要素の\ ``default-target-url``\ 属性に指定したパス)
+* ログイン前にアクセスした「認証が必要な保護ページ」を表示するためのパス
+
+に遷移する。
+
+共通ライブラリでは、Spring Securityが提供している機能に加えて、
+遷移先のパスをリクエストパラメータで指定できるクラス(\ ``org.terasoluna.gfw.web.security.RedirectAuthenticationHandler``\ )を提供している。
+
+\ ``RedirectAuthenticationHandler``\ は、以下のような仕組みを実現するために作成されたクラスである。
+
+* ページを表示するためにログインを行う必要がある
+* ログイン後の遷移先のページをJSP側(遷移元のJSP)で指定したい
 
 .. figure:: ./images/Authentication_Appendix_ScreenFlow.png
    :alt: Authentication_Appendix_Screen_Flow
-   :width: 60%
+   :width: 70%
    :align: center
 
    **Picture - Screen_Flow**
 
-| そのような場合、共通ライブラリで提供している、
-| \ ``org.terasoluna.gfw.web.security.RedirectAuthenticationHandler``\ を使用する。
-
-| RedirectAuthenticationHandlerを使用した設定例を、下記に示す。
+| \ ``RedirectAuthenticationHandler``\ の使用例を、下記に示す。
 
 **遷移元画面のJSPの記述例**
 
@@ -1729,10 +1741,10 @@ Appendix
    * - 項番
      - 説明
    * - | (1)
-     - | リダイレクトURLの設定
-       | hidden項目の「redirectTo」に遷移先のURLを設定する。
-       | nameに指定する値は、後述する設定ファイルに記載する、
-       | targetUrlParameterと一致させること。
+     - | hidden項目として、「ログイン成功後に遷移するページのURL」を設定する。
+       | hidden項目のフィールド名(リクエストパラメータ名)は「\ ``redirectTo``\ 」を指定する。
+       |
+       | フィールド名(リクエストパラメータ名)は、\ ``RedirectAuthenticationHandler``\ の\ ``targetUrlParameter``\ プロパティの値と一致させる必要がある。
 
 **ログイン画面のJSPの記述例**
 
@@ -1754,37 +1766,37 @@ Appendix
    * - 項番
      - 説明
    * - | (1)
-     - | リダイレクトURLの設定
-       | 遷移元画面からリクエストパラメータで渡された、
-       | リダイレクトURLをhidden項目に設定する。
+     - | hidden項目として、遷移元画面からリクエストパラメータで渡された「ログイン成功後に遷移するページのURL」を設定する。
+       | hidden項目のフィールド名(リクエストパラメータ名)は「\ ``redirectTo``\ 」を指定する。
+       |
+       | フィールド名(リクエストパラメータ名)は、\ ``RedirectAuthenticationHandler``\ の\ ``targetUrlParameter``\ プロパティの値と一致させる必要がある。
 
 **Spring Security 設定ファイル**
 
 .. code-block:: xml
 
   <sec:http auto-config="true">
-                  <!-- omitted -->
-      <sec:form-login login-page="/login" default-target-url="/"
-          always-use-default-target="false"
+      <!-- omitted -->
+      <!-- (1) -->
+      <sec:form-login
+          login-page="/login"
+          login-processing-url="/authentication"
           authentication-failure-handler-ref="authenticationFailureHandler"
           authentication-success-handler-ref="authenticationSuccessHandler" />
-                                                                      <!-- (1) -->
-                  <!-- omitted -->
+      <!-- omitted -->
   </sec:http>
 
+  <!-- (2) -->
   <bean id="authenticationSuccessHandler"
       class="org.terasoluna.gfw.web.security.RedirectAuthenticationHandler">
-                                                                      <!-- (2) -->
-      <property name="targetUrlParameter" value="redirectTo"/>        <!-- (3) -->
   </bean>
 
+  <!-- (3) -->
   <bean id="authenticationFailureHandler"
       class="org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler">
-                                                                      <!-- (4) -->
-      <property name="defaultFailureUrl" value="/login?error=true"/> <!-- (5) -->
-      <property name="useForward" value="true"/>                     <!-- (6) -->
+      <property name="defaultFailureUrl" value="/login?error=true"/> <!-- (4) -->
+      <property name="useForward" value="true"/> <!-- (5) -->
   </bean>
-                  <!-- omitted -->
 
 .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
 .. list-table::
@@ -1794,33 +1806,34 @@ Appendix
    * - 項番
      - 説明
    * - | (1)
-     - | authentication-failure-handler-ref(認証エラー時のハンドラ設定)と
-       | authentication-success-handler-ref(認証成功時のハンドラ設定)のBeanIdを指定する。
+     - | \ ``authentication-failure-handler-ref``\ (認証エラー時のハンドラ設定)と\ ``authentication-success-handler-ref``\ (認証成功時のハンドラ設定)のBeanIdを指定する。
    * - | (2)
-     - | authentication-success-handler-refの参照クラスとして
-       | \ ``org.terasoluna.gfw.web.security.RedirectAuthenticationHandler``\ を設定する。
+     - | \ ``authentication-success-handler-ref``\ から参照されるbeanとして\ ``org.terasoluna.gfw.web.security.RedirectAuthenticationHandler``\ を定義する。
    * - | (3)
-     - | 前述したJSPのhiddenに記載した値と一致させること。
-       | 本例では、「redirectTo」を指定する。省略した場合、「redirectTo」が設定される。
+     - | \ ``authentication-failure-handler-ref``\ から参照されるbeanとして\ ``org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler``\ を定義する。
    * - | (4)
-     - | authentication-failure-handler-refの参照クラスとして
-       | \ ``org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler``\ を設定する。
+     - | 認証失敗時の遷移先パスを指定する。
+       | 上記例では、ログイン画面のパスと認証エラー後の遷移であることを示すクエリ(\ ``error=true``\ )を設定している。
    * - | (5)
-     - | 認証失敗時の遷移先パスにはログイン画面のパス、エラーを示すクエリを設定する。
-   * - | (6)
-     - | 本機能を使用する場合はuseForwardをtrueに指定する必要がある。
-       | trueに指定することで、redirectでの遷移から、forwardでの遷移となる。
-       | リクエストパラメータにリダイレクト先のURLを保持しているため、
-       | forwardにすることでリクエストパラメータを保持したままにする必要がある。
+     - | **本機能を使用する場合はuseForwardをtrueに指定する必要がある。**
+       | \ ``true``\に指定することで、認証失敗時に表示する画面(ログイン画面)に遷移する際に、RedirectではなくForwardが使用される。
+
+       | これは、認証処理を行うリクエストのリクエストパラメータの中に「ログイン成功後に遷移するページのURL」を含める必要があるためである。
+       | Redirectを使用して認証エラー画面を表示してしまうと、「ログイン成功後に遷移するページのURL」がリクエストパラメータから引き継ぎことが出来ないため、ログインが成功しても指定した画面に遷移することが出来ない。
+       | この事象を回避するためには、Forwardを使用して「ログイン成功後に遷移するページのURL」をリクエストパラメータから引き継げるようにしておく必要がある。
 
 .. tip::
-  RedirectAuthenticationHandlerは、オープンリダイレクタ脆弱性対策が施されているため、
-  拡張せずに「http://google.com」のような、外部サイトへの遷移をすることはできない。
-  別ドメインに移動したいときは、\ ``org.springframework.security.web.RedirectStrategy``\ を実装したクラスを作成する必要がある。
-  RedirectStrategyを実装したクラスは、セッターインジェクションでRedirectAuthenticationHandlerのtargetUrlParameterRedirectStrategyに設定する。
-  拡張する際の注意点としては、redirectToの値を改竄されても問題ない作りにする必要がある。
-  たとえば、リダイレクト先のURLを直接指定せず番号指定にする（ページ番号指定）、
-  リダイレクト先のドメインをチェックする等のいずれか対応が必要となる。
+
+  \ ``RedirectAuthenticationHandler``\ は、オープンリダイレクタ脆弱性対策が施されているため、
+  「http://google.com」のような外部サイトへ遷移をすることはできない。
+  外部サイトへ移動したい場合は、\ ``org.springframework.security.web.RedirectStrategy``\ を実装したクラスを作成し、
+  \ ``RedirectAuthenticationHandler``\ の\ ``targetUrlParameterRedirectStrategy``\ プロパティにインジェクションすることで実現する事ができる。
+
+  拡張する際の注意点としては、\ ``redirectTo``\ の値を改竄されても問題が発生しないようにする必要がある。
+  たとえば、以下のような対策が考えられる。
+
+  * 遷移先のURLを直接指定するのではなく、ページ番号などのIDを指定してIDに対応するURLにリダイレクトする。
+  * 遷移先のURLをチェックし、ホワイトリストに一致するURLのみリダイレクトする。
 
 .. raw:: latex
 

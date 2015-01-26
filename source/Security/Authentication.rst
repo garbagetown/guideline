@@ -189,10 +189,10 @@ spring-security.xml
      - | \ ``authentication-failure-url``\ に認証失敗時の遷移先を設定する。
        | \ ``authentication-failure-handler-ref``\ 属性の指定がない場合、認証エラーの種別を問わず、一律、本設定の遷移先に遷移する。
    * - | (6)
-     - | \ ``default-target-url``\ 属性に認証失敗時に呼ばれる、ハンドラクラスを指定する。
+     - | \ ``authentication-failure-handler-ref``\ 属性に認証失敗時に呼ばれる、ハンドラクラスを指定する。
        | 詳細は、\ :ref:`authentication-failure-handler-ref`\ を参照されたい。
    * - | (7)
-     - | \ ``default-target-url``\ 属性に認証成功時に呼ばれる、ハンドラクラスを指定する。
+     - | \ ``authentication-success-handler-ref``\ 属性に認証成功時に呼ばれる、ハンドラクラスを指定する。
 
 上記以外の属性については、\ `Spring Securityのマニュアル <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#nsa-form-login>`_\ を参照されたい。
 

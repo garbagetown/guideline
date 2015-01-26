@@ -174,20 +174,31 @@ spring-security.xml
      - 説明
    * - | (1)
      - | \ ``login-page``\ 属性にログインフォーム画面のパスを指定する。
-       | 「未認証ユーザ」が「認証ユーザ」しかアクセスできないページにアクセスした際に、
-       | 強制リダイレクトさせるパス。
+       | 指定がない場合、「/spring_security_login」がデフォルトのパスになり、Spring Securityが用意しているログイン画面が使用される。
+       | 「未認証ユーザ」が「認証ユーザ」しかアクセスできないページにアクセスした際に、本パスにリダイレクトされる。
+
+       | **本ガイドラインでは、上記のデフォルト値「/spring_security_login」を使用せず、システム独自の値に変更することを推奨する。**\ この例では"/login"を指定している。
    * - | (2)
-     - | \ ``default-target-url``\ 属性に認証成功時の遷移先パスを指定する。指定がない場合、"/"が、デフォルトのパスになる。
+     - | \ ``default-target-url``\ 属性に認証成功時の遷移先パスを指定する。
+       | 指定がない場合、「/」が、デフォルトのパスになる。
+
+       | \ ``authentication-success-handler-ref``\ 属性の指定がある場合、本設定は使用されない。
    * - | (3)
-     - | \ ``login-processing-url``\ 属性に認証処理を行うパスを指定する。指定がない場合、「j_spring_security_check」がデフォルトのパスになる。
-       | **本ガイドラインでは、上記のデフォルト値「j_spring_security_check」を使用せず、システム独自の値に変更することを推奨する。**\ この例では"/authentication"を指定している。
+     - | \ ``login-processing-url``\ 属性に認証処理を行うパスを指定する。
+       | 指定がない場合、「/j_spring_security_check」がデフォルトのパスになる。
+
+       | **本ガイドラインでは、上記のデフォルト値「/j_spring_security_check」を使用せず、システム独自の値に変更することを推奨する。**\ この例では"/authentication"を指定している。
    * - | (4)
-     - | ログイン成功後に\ ``default-target-url``\ に指定したパスに常に遷移するかどうかを\ ``always-use-default-target``\ 属性に設定する。
-       | デフォルトは、\ ``false``\ である。\ ``false``\ に設定されている場合、認証成功のハンドラの基底クラスである\ ``org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler``\ で
-       | リダイレクト先が指定されていれば、指定先に遷移する。指定がない場合、\ ``default-target-url``\ に指定したパスに遷移する。
+     - | \ ``always-use-default-target``\ 属性に、ログイン成功後に\ ``default-target-url``\ に指定したパスに常に遷移するかどうかを設定する。
+       | \ ``true``\ が指定されている場合、\ ``default-target-url``\ に指定したパスに常に遷移する。
+       | \ ``false``\ (デフォルト)が指定されている場合、「ログイン前にアクセスしようとした保護ページを表示するためのパス」又は「\ ``default-target-url``\ に指定したパス」のいずれかに遷移する。
+
+       | \ ``authentication-success-handler-ref``\ 属性の指定がある場合、本設定は使用されない。
    * - | (5)
      - | \ ``authentication-failure-url``\ に認証失敗時の遷移先を設定する。
-       | \ ``authentication-failure-handler-ref``\ 属性の指定がない場合、認証エラーの種別を問わず、一律、本設定の遷移先に遷移する。
+       | 指定がない場合、\ ``login-page``\ 属性に指定したパスが適用される。
+
+       | \ ``authentication-failure-handler-ref``\ 属性の指定がある場合、本設定は使用されない。
    * - | (6)
      - | \ ``authentication-failure-handler-ref``\ 属性に認証失敗時に呼ばれる、ハンドラクラスを指定する。
        | 詳細は、\ :ref:`authentication-failure-handler-ref`\ を参照されたい。
@@ -196,7 +207,7 @@ spring-security.xml
 
 上記以外の属性については、\ `Spring Securityのマニュアル <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#nsa-form-login>`_\ を参照されたい。
 
-.. warning:: **Spring Security のデフォルト値「j_spring_security_check」の使用を推奨しない理由**
+.. warning:: **Spring Security のデフォルト値「/spring_security_login, /j_spring_security_check」の使用を推奨しない理由**
 
   デフォルト値を使用している場合、そのアプリケーションが、Spring Securityを使用していることについて、露見してしまう。
   そのため、Spring Securityの脆弱性が発見された場合、脆弱性をついた攻撃を受けるリスクが高くなる。
@@ -265,6 +276,21 @@ spring-security.xml
          | 「\ ``<t:messagesPanel>``\ 」タグの使用方法は、\ :doc:`../ArchitectureInDetail/MessageManagement`\ を参照されたい。
 
 
+ .. note:: **認証エラーの例外オブジェクトにJSPからアクセスする際に必要な設定について**
+
+    認証エラーの例外オブジェクトは、セッションスコープに\ ``"SPRING_SECURITY_LAST_EXCEPTION"``\ という属性名で格納されている。
+    JSPからセッションスコープに格納されているオブジェクトにアクセスするためには、JSPの\ ``page``\ ディレクティブの\ ``session``\ 属性を\ ``true``\ にする必要がある。
+
+    * ``src/main/webapp/WEB-INF/views/common/include.jsp``
+
+     .. code-block:: jsp
+
+        <%@ page session="true"%>
+
+    ブランクプロジェクトのデフォルト設定では、JSPからセッションスコープにアクセスできないようになっている。
+    これは、安易にセッションが使用されないようにするためである。
+
+
 * spring-mvc.xml
 
   ログインフォームを表示するControllerを定義する。
@@ -285,7 +311,7 @@ spring-security.xml
          | この単純なコントローラはJavaによる実装が不要である。
          
    
-  .. note::
+  .. tip::
    
       上記の設定は次のControllerと同義である。
       
@@ -302,11 +328,6 @@ spring-security.xml
           }
 
       単純にview名を返すだけのメソッドが一つだけあるControllerが必要であれば、\ ``<mvc:view-controller>``\ を使用すればよい。
-      
-      ログインフォームをController経由で表示するメリットは、CSRFトークンを自動で埋め込める点にある。Controllerを経由しない場合は、
-      \ :doc:`Tutorial`\ で実施したようにjspに直接CSRFトークンを埋め込む必要がある。
-      
-      チュートリアルではController作成の説明を省くために、ログインフォームの表示はControllerを経由していない。CSRF対策の詳細は\ :doc:`CSRF`\ を参照されたい。
 
 
 ログインフォームの属性名変更

@@ -716,7 +716,8 @@ JSPで\ ``UserDetails``\ にアクセスする
 Spring Securityにおけるセッション管理
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 | ログイン時のセッション情報の生成方式や、例外発生時の設定を行う方法について説明する。
-| \ ``<session-management>``\ タグを指定することで、\ ``org.springframework.security.web.session.SessionManagementFilter``\ が有効になる。
+| \ ``<session-management>``\ タグを指定することで、セッションの管理方法をカスタマイズする事ができる。
+
 | 以下にspring-security.xmlの設定例を示す。
 
 
@@ -739,40 +740,56 @@ Spring Securityにおけるセッション管理
    * - 項番
      - 説明
    * - | (1)
-     - | \ ``create-session``\ 属性でセッションの作成方針を指定する。
+     - | \ ``<http>``\ タグの\ ``create-session``\ 属性には、セッションの作成方針を指定する。
        | 以下の値を指定することができる。
-       | \ ``always``\ : Spring Securityは、既存のセッションがない場合にセッションを新規作成する、セッションが存在すれば、再利用する。
-       | \ ``ifRequired``\ : Spring Securityは、セッションが必要であれば作成する。デフォルトの設定である。セッションがすでにあれば、作成せずに再利用する。
-       | \ ``never``\ : Spring Securityは、セッションを作成しないが、セッションが存在すれば、再利用する。
-       | \ ``stateless``\ : Spring Securityは、セッションを作成しない、セッションが存在しても使用しない。そのため、毎回認証を行う必要がある。
+
+       * | \ ``always``\ :
+         | Spring Securityは、既存のセッションがない場合にセッションを新規作成する、セッションが存在すれば、再利用する。
+
+       * | \ ``ifRequired``\ : (デフォルト)
+         | Spring Securityは、セッションが必要であれば作成する。セッションがすでにあれば、作成せずに再利用する。
+
+       * | \ ``never``\ :
+         | Spring Securityは、セッションを作成しないが、セッションが存在すれば、再利用する。
+
+       * | \ ``stateless``\ :
+         | Spring Securityは、セッションを作成しない、セッションが存在しても使用しない。そのため、毎回認証を行う必要がある。
    * - | (2)
-     - | \ ``invalid-session-url``\ 属性で無効なセッションIDがリクエストされた場合に遷移するパスを指定する。
-       | 設定しない場合、\ ``org.springframework.security.web.session.SimpleRedirectInvalidSessionStrategy``\
-       | の設定に依存したパスに遷移する。
+     - | \ ``invalid-session-url``\ 属性には、無効なセッションIDがリクエストされた場合に遷移するパスを指定する。
+       | 指定しない場合、セッションの存在チェックは実行されずに後続処理が呼び出される。
    * - | (3)
-     - | \ ``org.springframework.security.web.authentication.session.SessionAuthenticationStrategy``\ で
-       | 例外が発生した場合、遷移するパスに\ ``session-authentication-error-url``\ 属性に指定する。
-       | 指定しない場合、\ ``org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler``\
-       | の設定に依存する。
-   * - | (4)
-     - | \ ``session-fixation-protection``\ 属性でセッション管理方式を指定する。
-       | 以下の値を指定することができる。
-       | \ ``migrateSession``\ ：ログイン前のセッション情報を引き継ぎ（コピー）、IDのみ新規作成する。デフォルトの設定である。
-       | \ ``newSession``\ ：ログイン前のセッション情報を引き継がず、ID、セッション内容を新規作成する。
+     - | \ ``session-authentication-error-url``\ 属性には、\ ``org.springframework.security.web.authentication.session.SessionAuthenticationStrategy``\ で例外が発生した場合に遷移するパスを指定する。
+       | 指定しない場合、レスポンスコードに「401 Unauthorized」が設定され、エラー応答が行われる。
        |
-       | 本機能の目的は、新しいセッションIDをログイン毎に割り振ることで、\ `セッション・フィクセーション攻撃 <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#ns-session-fixation>`_\を防ぐことにある。そのため、明確な意図がない限り、デフォルトの設定を推奨する。
+       | 本設定は、\ ``<form-login>``\ タグを使用して認証を行う場合は使用されない。\ ``SessionAuthenticationStrategy``\ で発生した例外は、\ ``<form-login>``\ タグの\ ``authentication-failure-url``\ 属性 又は\ ``authentication-failure-handler-ref``\ 属性の定義に応じてハンドリングされる。
+   * - | (4)
+     - | \ ``session-fixation-protection``\ 属性には、認証成功時のセッション管理方式を指定する。
+       | 以下の値を指定することができる。
+
+       * | \ ``none``\ ：
+         | ログイン前のセッションをそのまま利用する。
+
+       * | \ ``migrateSession``\ ： (デフォルト)
+         | ログイン前のセッションを破棄して新しいセッションを新たに作成し、ログイン前のセッションに格納していた情報を引き継ぐ。
+
+       * | \ ``newSession``\ ：
+         | ログイン前のセッションを破棄して新しいセッションを新たに作成し、ログイン前のセッションに格納していた情報は引き継がない。
+
+       | 本機能の目的は、新しいセッションIDをログイン毎に割り振ることで、\ `セッション・フィクセーション攻撃 <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#ns-session-fixation>`_\を防ぐことにある。そのため、明確な意図がない限り、デフォルト値を使用することを推奨する。
 
 .. _authentication_control-user-samatime-session:
 
 Concurrent Session Controlの利用設定
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-| Spring Securityでは、1ユーザが保持できる最大セッション数を、任意に変更できる機能(\ `Concurrent Session Control <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#concurrent-sessions>`_\ )を提供している。
+| Spring Securityでは、1ユーザが同時にログインできるセッション数を制御する機能(\ `Concurrent Session Control <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#concurrent-sessions>`_\ )を提供している。
 | ここでいうユーザとは、\ ``Authentication.getPrincipal()``\ で取得される、認証ユーザーオブジェクトのことである。
 
 .. note::
 
    この機能はアプリケーションサーバが1台構成、またはセッションサーバやクラスタによるセッションレプリケーションを実施している（つまり、全てのアプリケーションが同じセッション領域を利用している）場合に有効である。
    複数台または複数インスタンスで構成していて、セッション領域が別々に存在する場合は、本機能では同時ログインを制御できないので注意すること。
+
+|
 
 | 最大セッション数を超えた場合の制御方法は、次のパターンが存在する。業務要件によって使い分けること。
 
@@ -804,7 +821,8 @@ Concurrent Session Controlの利用設定
 \ ``<sec:concurrency-control>``\ の設定
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-``<sec:session-management>``\ 要素では\ ``session-authentication-strategy-ref``\ 属性を指定せず、\ ``<sec:session-management>``\ 要素の子要素として\ `<sec:concurrency-control> <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#ns-concurrent-sessions>`_\ 要素を使用することもできる。
+Concurrent Session Controlを利用する場合は、
+\ ``<sec:session-management>``\ 要素の子要素として\ `<sec:concurrency-control> <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#ns-concurrent-sessions>`_\ 要素を指定する。
 
 .. code-block:: xml
 
@@ -813,16 +831,16 @@ Concurrent Session Controlの利用設定
         <sec:concurrency-control
             error-if-maximum-exceeded="true"
             max-sessions="2"
-            expired-url="/alreadyLogin.jsp" /><!-- 属性の指定順番で(1)～(3) -->
+            expired-url="/expiredSessionError.jsp" /><!-- 属性の指定順番で(1)～(3) -->
         </sec:session-management>
     </sec:session-management>
   </sec:http>
 
 
-.. tabularcolumns:: |p{0.05\linewidth}|p{0.20\linewidth}|p{0.35\linewidth}|p{0.10\linewidth}|p{0.30\linewidth}|
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.20\linewidth}|p{0.30\linewidth}|p{0.10\linewidth}|p{0.30\linewidth}|
 .. list-table::
    :header-rows: 1
-   :widths: 5 20 35 10 30
+   :widths: 10 20 30 10 30
 
    * - 項番
      - 属性名
@@ -831,21 +849,21 @@ Concurrent Session Controlの利用設定
      - デフォルト値説明
    * - | (1)
      - | \ ``error-if-maximum-exceeded``\
-     - | 新規ログインの可否。
-       | \ ``true``\ を設定することによりmax-sessionsの数を越えた場合、新規ログインを受け付けない。エラー後は\ ``<sec:form-login>``\要素の\ ``authentication-failure-url``\属性で指定したurlへ遷移することになる。（先勝ち）
+     - | ログイン可能な最大セッション数を超えている状態でログイン要求があった場合の挙動を指定する。
+       | \ ``true``\ を設定した場合、認証エラーを発生させて、新規ログインを受け付けない。（先勝ち）
      - | false
-     - | 後からログインが可能となり、max-sessionsの数を越えた場合、先にログインしていたセッションが無効となる。先にログインしていたユーザは次のリクエストで\ ``expired-url``\属性で指定したurlへ遷移することになる。（後勝ち）
+     - | ログインが可能となり、最も使用されていない(最終アクセス時刻が最も古い)セッションが無効化される。無効化されたセッションを利用しているクライアントからリクエストが発生した場合は、\ ``expired-url``\属性で指定したURLへ遷移する。（後勝ち）
    * - | (2)
      - | \ ``max-sessions``\
-     - | 1ユーザでログイン可能なセッション数を決定する。
+     - | 1ユーザでログイン可能な最大セッション数を指定する。
        | 2を設定した場合、同じユーザで2つのセッションでログインが可能となる。
      - | 1
-     - | デフォルトは1ユーザのみ
+     - | デフォルトは1セッションのみ
    * - | (3)
      - | \ ``expired-url``\
-     - | セッションが無効化された場合に遷移するURL。
+     - | 無効化されたセッションを利用しているクライアントからリクエストが発生した場合に遷移するURL。
      - | 無し
-     - | 動作としては先頭ページ"/"
+     - | セッションが無効化されたことを通知する固定メッセージが応答される。
 
 .. _authentication_session-authentication-strategy-ref:
 

@@ -769,8 +769,11 @@ Spring Securityにおけるセッション管理
        * | \ ``none``\ ：
          | ログイン前のセッションをそのまま利用する。
 
-       * | \ ``migrateSession``\ ： (デフォルト)
+       * | \ ``migrateSession``\ ： (Servlet 3.0以前のコンテナ上でのデフォルト)
          | ログイン前のセッションを破棄して新しいセッションを新たに作成し、ログイン前のセッションに格納していた情報を引き継ぐ。
+
+       * | \ ``changeSessionId``\ ： (Servlet 3.1以降のコンテナ上でのデフォルト)
+         | Servlet 3.1から追加された\ ``javax.servlet.http.HttpServletRequest#changeSessionId()``\ メソッドを使用してセッションIDを変更する。
 
        * | \ ``newSession``\ ：
          | ログイン前のセッションを破棄して新しいセッションを新たに作成し、ログイン前のセッションに格納していた情報は引き継がない。

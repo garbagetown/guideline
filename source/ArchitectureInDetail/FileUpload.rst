@@ -1645,6 +1645,8 @@ How to extend
 
 Appendix
 --------------------------------------------------------------------------------
+セキュリティ問題の考慮
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 | ファイルのアップロード機能を提供する場合、以下のようなセキュリティ問題を考慮する必要がある。
 
 #. :ref:`file-upload_security_related_warning_points_dos`
@@ -1656,7 +1658,7 @@ Appendix
 .. _file-upload_security_related_warning_points_dos:
 
 アップロード機能に対するDos攻撃
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 アップロード機能に対するDos攻撃とは、巨大なサイズのファイルを連続してアップロードしてサーバに対して負荷を掛けることで、
 サーバのダウンや、レスポンス速度の低下を狙った攻撃方法のことである。
 
@@ -1668,7 +1670,7 @@ Appendix
 .. _file-upload_security_related_warning_points_server_scripting:
 
 アップロードしたファイルをWebサーバ上で実行する攻撃
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 | アップロードしたファイルをWebサーバ上で実行する攻撃とは、Webサーバ(アプリケーションサーバ)で実行可能なスクリプトファイル(php, asp, aspx, jspなど)をアップロードし実行することで、Webサーバ内のファイルの閲覧・改竄・削除を行う攻撃方法のことである。
 | また、Webサーバを踏み台とすることで、Webサーバと同一ネットワーク上に存在する別のサーバに対して、攻撃することもできる。
 
@@ -1678,6 +1680,120 @@ Appendix
 * アップロード可能なファイルの拡張子を制限し、Webサーバ(アプリケーションサーバ)で実行可能なスクリプトファイルが、アップロードされないようにする。
 
 いずれかの対策を行うことで攻撃を防ぐことができるが、両方とも対策しておくことを推奨する。
+
+Commons FileUpload を使用したファイルのアップロード機能
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+| WebLogicにてServlet3.0を利用したmultipartを使用しているform内で、他の文字列フィールドに日本語文字列を指定すると文字化けが発生する。
+| マルチバイトの扱いに関するWebLogicの問題であると思われるが、この事象に対応する為、Commons FileUploadを使用したファイルのアップロード機能について説明する。
+
+- :file:`pom.xml`
+
+ .. code-block:: xml
+
+    <!-- omitted -->
+
+    <!-- (1) -->
+    <dependency>
+        <groupId>commons-fileupload</groupId>
+        <artifactId>commons-fileupload</artifactId>
+    </dependency>
+
+    <!-- omitted -->
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+ .. list-table::
+   :header-rows: 1
+   :widths: 10 90
+
+   * - | 項番
+     - | 説明
+   * - | (1)
+     - | \ ``commons-fileupload``\を依存アーティファクトとして追加する。
+
+|
+
+- :file:`spring-mvc.xml`
+
+ .. code-block:: xml
+
+    <!-- (1) -->
+    <bean id="filterMultipartResolver"
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="#{462+10000000}" /><!-- (2) -->
+    </bean>
+
+    <!-- ... -->
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+ .. list-table::
+   :header-rows: 1
+   :widths: 10 90
+
+   * - | 項番
+     - | 説明
+   * - | (1)
+     - | \ ``CommonsMultipartResolver``\のbean定義を行う。
+   * - | (2)
+     - | ヘッダのサイズはAPサーバ、環境に依存するので変更すること。ファイルの最大値はシステムに合わせて変更すること。
+     
+|
+
+- :file:`web.xml`
+
+ .. code-block:: xml
+
+    <web-app xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+        version="3.0">
+
+        <servlet>
+            <servlet-class>
+                org.springframework.web.servlet.DispatcherServlet
+            </servlet-class>
+            <!-- omitted -->
+
+            <!-- (1) -->
+            <!--
+            <multipart-config>
+                <max-file-size>5242880</max-file-size>
+                <max-request-size>27262976</max-request-size>
+                <file-size-threshold>0</file-size-threshold>
+            </multipart-config>
+            -->
+        </servlet>
+
+        <!-- (2) -->
+        <filter>
+            <filter-name>MultipartFilter</filter-name>
+            <filter-class>org.springframework.web.multipart.support.MultipartFilter</filter-class>
+            <init-param>
+                <param-name>multipartResolverBeanName</param-name>
+                <param-value>filterMultipartResolver</param-value>
+            </init-param>
+        </filter>
+        <filter-mapping>
+            <filter-name>MultipartFilter</filter-name>
+            <url-pattern>/*</url-pattern>
+        </filter-mapping>
+
+        <!-- omitted -->
+
+    </web-app>
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+ .. list-table::
+   :header-rows: 1
+   :widths: 10 90
+
+   * - 項番
+     - 説明
+   * - | (1)
+     - | ファイルアップロードを使用するServletの\ ``<servlet>``\ 要素から、\ ``<multipart-config>``\ 要素を削除する。
+   * - | (2)
+     - | Servlet FliterとしてCommons FileUploadを使用した \ ``MultipartFilter``\ を定義する。
+
+|
 
 .. raw:: latex
 

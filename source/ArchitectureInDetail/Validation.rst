@@ -2113,6 +2113,21 @@ Spring MVCによるBean Validationのエラーメッセージは、以下の順�
 .. figure:: ./images_Validation/validations-message-properties-position-image.png
   :width: 40%
 
+.. warning::
+
+    \ ``ValidationMessages.properties``\ ファイルは、クラスパスの直下に複数存在させてはいけない。
+
+    クラスパスの直下に複数の\ ``ValidationMessages.properties``\ ファイルが存在する場合、
+    いずれか１つのファイルが読み込まれ、他のファイルが読み込まれないため、適切なメッセージが表示されない可能性がある。
+
+    * マルチプロジェクト構成を採用する場合は、\ ``ValidationMessages.properties``\ ファイルを複数のプロジェクトに配置しないように注意すること。
+    * Bean Validation用の共通部品をjarファイルとして配布する際に、\ ``ValidationMessages.properties``\ ファイルをjarファイルの中に含めないように注意すること。
+
+    なお、version 1.0.2.RELEASE以降の `ブランクプロジェクト <https://github.com/terasolunaorg/terasoluna-gfw-web-multi-blank>`_ \ からプロジェクトを生成した場合は、
+    \ ``xxx-web/src/main/resources``\ の直下に\ ``ValidationMessages.properties``\ が格納されている。
+
+|
+
 
 本ガイドラインでは、以下のように定義を分けることを推奨する。
 

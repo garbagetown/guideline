@@ -1747,8 +1747,7 @@ Spring Securityから提供されている\ `認証プロバイダ <http://docs.
         class="com.example.app.common.security.CompanyIdUsernamePasswordAuthenticationFilter">
         <!-- (5) -->
         <property name="requiresAuthenticationRequestMatcher">
-            <bean id="filterProcessUrlRequestMatcher"
-                class="org.springframework.security.web.authentication.logout.LogoutFilter$FilterProcessUrlRequestMatcher">
+            <bean class="org.springframework.security.web.authentication.logout.LogoutFilter$FilterProcessUrlRequestMatcher">
                 <constructor-arg value="/authentication" />
             </bean>
         </property>
@@ -1758,15 +1757,13 @@ Spring Securityから提供されている\ `認証プロバイダ <http://docs.
         <property name="sessionAuthenticationStrategy" ref="sessionAuthenticationStrategy" />
         <!-- (8) -->
         <property name="authenticationFailureHandler">
-            <bean id="authenticationFailureHandler"
-                class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+            <bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
                 <constructor-arg value="/login?error=true" />
             </bean>
         </property>
         <!-- (9) -->
         <property name="authenticationSuccessHandler">
-            <bean id="authenticationSuccessHandler"
-                class="org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler" />
+            <bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler" />
         </property>
     </bean>
 
@@ -1785,12 +1782,10 @@ Spring Securityから提供されている\ `認証プロバイダ <http://docs.
         class="org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy">
         <constructor-arg>
             <util:list>
-                <bean
-                    class="org.springframework.security.web.csrf.CsrfAuthenticationStrategy">
+                <bean class="org.springframework.security.web.csrf.CsrfAuthenticationStrategy">
                     <constructor-arg ref="csrfTokenRepository" />
                 </bean>
-                <bean
-                    class="org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy" />
+                <bean class="org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy" />
             </util:list>
         </constructor-arg>
     </bean>

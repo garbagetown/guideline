@@ -5240,22 +5240,31 @@ RESTful Web Service向けのリクエストに対して、CSRF対策の処理が
 * :file:`spring-security.xml`
 
  .. code-block:: xml
-    :emphasize-lines: 3-9
+    :emphasize-lines: 3-10
 
     <!-- omitted -->
 
     <!-- (1) -->
-    <sec:http pattern="/api/v1/**"
-        auto-config="true" use-expressions="true" create-session="stateless">
-        <!--<sec:custom-filter ref="csrfFilter" before="LOGOUT_FILTER"/>--> <!-- (2) -->
-        <sec:custom-filter ref="userIdMDCPutFilter" after="ANONYMOUS_FILTER"/>
-        <!--<sec:session-management session-authentication-strategy-ref="sessionAuthenticationStrategy" />--> <!-- (3) -->
+    <sec:http
+        pattern="/api/v1/**"
+        auto-config="true"
+        use-expressions="true"
+        create-session="stateless">
+        <sec:headers />
     </sec:http>
 
     <sec:http auto-config="true" use-expressions="true">
-        <sec:custom-filter ref="csrfFilter" before="LOGOUT_FILTER"/>
+        <sec:headers>
+            <sec:cache-control />
+            <sec:content-type-options />
+            <sec:hsts />
+            <sec:frame-options />
+            <sec:xss-protection />
+        </sec:headers>
+        <sec:csrf />
+        <sec:access-denied-handler ref="accessDeniedHandler"/>
         <sec:custom-filter ref="userIdMDCPutFilter" after="ANONYMOUS_FILTER"/>
-        <sec:session-management session-authentication-strategy-ref="sessionAuthenticationStrategy" />
+        <sec:session-management />
     </sec:http>
 
     <!-- omitted -->
@@ -5272,10 +5281,8 @@ RESTful Web Service向けのリクエストに対して、CSRF対策の処理が
        | \ ``<sec:http>``\要素の\ ``pattern``\属性に、REST API用のリクエストパスのURLパターンを指定している。
        | 上記例では、\ ``/api/v1/``\で始まるリクエストパスをREST API用のリクエストパスとして扱う。
        | また、\ ``create-session``\属性を\ ``stateless``\とする事で、Spring Securityの処理でセッションが使用されなくなる。
-   * - | (2)
-     - | CSRF対策を無効化するために、CSRF対策用のServlet Filterの定義をコメントアウトしている。実際は、物理的に削除してよい。
-   * - | (3)
-     - | セッションを使用しないため、セッション管理に関係するコンポーネントへの参照定義をコメントアウトしている。実際は、物理的に削除してよい。
+       |
+       | CSRF対策を無効化するために、\ ``<sec:csrf>``\ 要素は指定していない。
 
 |
 

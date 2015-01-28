@@ -755,8 +755,9 @@ Spring Securityにおけるセッション管理
        * | \ ``stateless``\ :
          | Spring Securityは、セッションを作成しない、セッションが存在しても使用しない。そのため、毎回認証を行う必要がある。
    * - | (2)
-     - | \ ``invalid-session-url``\ 属性には、無効なセッションIDがリクエストされた場合に遷移するパスを指定する。
+     - | \ ``invalid-session-url``\ 属性には、無効なセッションIDがリクエストされた(セッションタイムアウトが発生した)場合に遷移するパスを指定する。
        | 指定しない場合、セッションの存在チェックは実行されずに後続処理が呼び出される。
+       | 詳細は、「:ref:`authentication_session-timeout`」を参照されたい。
    * - | (3)
      - | \ ``session-authentication-error-url``\ 属性には、\ ``org.springframework.security.web.authentication.session.SessionAuthenticationStrategy``\ で例外が発生した場合に遷移するパスを指定する。
        | 指定しない場合、レスポンスコードに「401 Unauthorized」が設定され、エラー応答が行われる。
@@ -779,6 +780,58 @@ Spring Securityにおけるセッション管理
          | ログイン前のセッションを破棄して新しいセッションを新たに作成し、ログイン前のセッションに格納していた情報は引き継がない。
 
        | 本機能の目的は、新しいセッションIDをログイン毎に割り振ることで、\ `セッション・フィクセーション攻撃 <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#ns-session-fixation>`_\を防ぐことにある。そのため、明確な意図がない限り、デフォルト値を使用することを推奨する。
+
+|
+
+.. _authentication_session-timeout:
+
+セッションタイムアウトの検出
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+セッションタイムアウトを検出したい場合は、
+\ ``invalid-session-url``\ 属性にセッションタイムアウトが発生した際に遷移するパスを指定すればよい。
+
+\ ``invalid-session-url``\ 属性を指定すると、
+\ ``http``\ 要素の\ ``pattern``\ 属性に指定したパスパターンに一致する全てのリクエストに対して、
+セッションの存在チェック(リクエストされたセッションIDの存在チェック)が行われる。
+
+.. note::
+
+    セッションタイムアウトを検出するパスと検出しないパスが混在する場合は、\ ``http``\ 要素を複数定義する必要がある。
+    \ ``http``\ 要素を複数定義すると、設定が冗長になりメンテナンス性が低下する事があるので注意が必要である。
+
+    セッションタイムアウトを検出するために設定が冗長になる場合は、適用パスや除外パスの指定ができるカスタムフィルタを作成することを検討してほしい。
+    カスタムフィルタを作成する際には、Spring Securityから提供されている以下のクラスを利用又は参考にするとよい。
+
+    * | ``org.springframework.security.web.session.SessionManagementFilter``
+      | セッションの存在チェック(リクエストされたセッションIDの存在チェック)を行う処理が実装されている。
+
+    * | ``org.springframework.security.web.session.SimpleRedirectInvalidSessionStrategy``
+      | セッションタイムアウト(無効なセッションID)を検出した後の処理が実装されている。
+      | デフォルトでは、セッションを生成した後に指定されたパスへリダイレクトする。
+
+    * | ``org.springframework.security.web.util.matcher.RequestMatcher``
+      | リクエストのマッチング判定を行うためのインタフェースであり、適用パスや除外パスの判定処理で利用できる。
+      | 同じパッケージ内にいくつかの便利な実装クラスが提供されている。
+
+.. note::
+
+    \ ``<csrf>``\ 要素を指定して\ :doc:`CSRF`\ を行っている場合は、CSRF対策機能によってセッションタイムアウトが検出されるケースがある。
+
+    以下に、CSRF対策機能によってセッションタイムアウトが検出される条件を示す。
+
+    * CSRFトークンの保存先をHTTPセッション(デフォルト)にしている。
+    * HTTPセッションからCSRFトークンが取得できない。
+    * \ :ref:`CSRFトークンのチェック対象になっているリクエスト <csrf_default-add-token-method>` \ である。
+
+    CSRF対策機能によってセッションタイムアウトが検出された場合は、以下のいずれかの動作となる。
+
+    * \ ``invalid-session-url``\ 属性の指定がある場合は、セッションを生成した後に\ ``invalid-session-url``\ に指定したパスへリダイレクトされる。
+    * \ ``invalid-session-url``\ 属性の指定がない場合は、\ ``<access-denied-handler>``\ 要素に指定した\ ``org.springframework.security.web.access.AccessDeniedHandler``\ の定義に従ったハンドリングが行われる。
+
+    \ ``AccessDeniedHandler``\ の定義方法については、「:ref:`csrf_spring-security-setting`」を参照されたい。
+
+|
 
 .. _authentication_control-user-samatime-session:
 

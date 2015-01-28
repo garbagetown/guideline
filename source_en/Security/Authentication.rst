@@ -1319,11 +1319,7 @@ How to use the created \ ``ReservationUserDetailsService``\  and \ ``Reservation
   .. code-block:: java
 
     @RequestMapping(method = RequestMethod.GET)
-    public String view(Principal principal, Model model) {
-        // get Authentication 
-        Authentication authentication = (Authentication) principal;
-        // get UserDetails
-        ReservationUserDetails userDetails = (ReservationUserDetails) authentication.getPrincipal();
+    public String view(@AuthenticationPrincipal ReservationUserDetails userDetails, Model model) {
         // get Customer
         Customer customer = userDetails.getCustomer(); // (1)
         // omitted ...

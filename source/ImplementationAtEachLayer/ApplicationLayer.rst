@@ -3587,6 +3587,8 @@ HandlerMethodArgumentResolverを実装してControllerの引数として受け�
 
            @ControllerAdvice(annotations = LoginFormModelAttributeSetter.LoginFormModelAttribute.class)
            public class LoginFormModelAttributeSetter {
+               @Target(ElementType.TYPE)
+               @Retention(RetentionPolicy.RUNTIME)
                public static @interface LoginFormModelAttribute {}
                // ...
            }

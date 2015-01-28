@@ -869,118 +869,27 @@ Concurrent Session Controlを利用する場合は、
 
 .. note::
 
-    \ ``<sec:concurrency-control>``\ の設定を使用せずに、``<sec:session-management>``\ 要素での\ ``session-authentication-strategy-ref``\ 属性を指定することでも同じ事が可能である。
-    \ ``session-authentication-strategy-ref``\ 属性で指定した場合の例を記載する。
-    
-    .. _authentication_user-not-used-most:
-    
-    1. 最も使用されていないユーザを無効にする場合
-    
-      spring-security.xmlに以下の設定を追加する。
-    
-      .. code-block:: xml
-    
-          <sec:http auto-config="true" >
-            <!-- omitted -->
-            <sec:session-management
-              session-authentication-strategy-ref="sessionStrategy" />  <!-- (1) -->
-    
-            <sec:custom-filter position="CONCURRENT_SESSION_FILTER" ref="concurrencyFilter" />  <!-- (5) -->
-            <!-- omitted -->
-          </sec:http>
-    
-          <bean id="sessionStrategy"
-              class="org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy">
-              <constructor-arg index="0">
-                  <list>
-                      <!-- omitted -->
-                      <bean class=
-                          "org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">  <!-- (2) -->
-                          <constructor-arg index="0" ref="sessionRegistry" />  <!-- (3) -->
-                          <property name="maximumSessions" value="2" />  <!-- (4) -->
-                      </bean>
-                  </list>
-              </constructor-arg>
-          </bean>
-    
-          <bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
-    
-          <bean id="concurrencyFilter"
-             class="org.springframework.security.web.session.ConcurrentSessionFilter">  <!-- (6) -->
-             <constructor-arg index="0" ref="sessionRegistry" />  <!-- (7) -->
-             <constructor-arg index="1" value="/alreadyLogin.jsp" />  <!-- (8) -->
-          </bean>
-          <!-- omitted -->
-    
-      .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
-      .. list-table::
-         :header-rows: 1
-         :widths: 10 90
-    
-         * - 項番
-           - 説明
-         * - | (1)
-           - | \ ``<sec:session-management>``\ 要素の\ ``session-authentication-strategy-ref``\ 属性にセッションの取り扱いを決めるidを指定する。\ ``org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy``\ を参照指定する。
-         * - | (2)
-           - | 同一ユーザでログインできる数を制限するために、CompositeSessionAuthenticationStrategyの第1引数に、
-             | \ ``org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy``\ を指定する。
-         * - | (3)
-           - | コンストラクタの第1引数に、\ ``org.springframework.security.core.session.SessionRegistryImpl``\ を参照指定する。
-         * - | (4)
-           - | \ ``maximumSessions``\ 属性に、1ユーザが許容する最大セッション数を定義することができる。
-             | 上記例では、2を指定しているため、1ユーザが許容するセッションは2つになる。
-             | ユーザーが複数のブラウザでログインした場合、使用した日時が最も古いセッションに対して期限切れにする。
-             | 指定しない場合、1（1ユーザが許容するセッションは1つ）が設定される。
-         * - | (5)
-           - | 期限切れになったセッションが遷移するパスを指定するために、\ ``<custom-filter>``\ 要素の、\ ``position``\ 属性に\ ``CONCURRENT_SESSION_FILTER``\ を指定する。
-         * - | (6)
-           - | \ ``org.springframework.security.web.session.ConcurrentSessionFilter``\ クラスをBean定義する。
-         * - | (7)
-           - | コンストラクタの第1引数に、\ ``org.springframework.security.core.session.SessionRegistryImpl``\ を参照指定する。
-         * - | (8)
-           - | コンストラクタの第2引数に、期限切れになったセッションが遷移するパスを指定する。
-    
-    2. 新規ログインを受け付けない
-    
-      spring-security.xmlに以下の設定を行う。
-    
-      .. code-block:: xml
-          :emphasize-lines: 16
-    
-          <bean id="concurrencyFilter"
-             class="org.springframework.security.web.session.ConcurrentSessionFilter">
-             <constructor-arg index="0" ref="sessionRegistry" />
-             <constructor-arg index="1" value="/" />
-          </bean>
-    
-          <bean id="sessionAuthenticationStrategy"
-              class="org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy">
-              <constructor-arg index="0">
-                  <list>
-                      <!-- omitted -->
-                      <bean class=
-                          "org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
-                          <constructor-arg index="0" ref="sessionRegistry" />
-                          <property name="maximumSessions" value="2" />
-                          <property name="exceptionIfMaximumExceeded" value="true"/> <!-- (1) -->
-                      </bean>
-                  </list>
-              </constructor-arg>
-          </bean>
-          <!-- omitted -->
-    
-      .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
-      .. list-table::
-         :header-rows: 1
-         :widths: 10 90
-    
-         * - 項番
-           - 説明
-         * - | (1)
-           - | \ ``exceptionIfMaximumExceeded``\ 属性を\ ``true``\ に設定することにより、 最大セッション数を超過した場合、
-             | \ ``org.springframework.security.web.authentication.session.SessionAuthenticationException``\ がスローされる。
-             | そのため、\ ``ConcurrentSessionFilter``\ の第2引数で定義したパスには遷移せず、\ ``<sec:form-login>``\ 要素の\ ``authentication-failure-url``\ 属性で指定したurlへ遷移するため注意すること。
-             | \ ``exceptionIfMaximumExceeded``\ 属性の設定を省略した場合は、\ ``false``\ が設定される。(後勝ち)
+    認証処理用のフィルタ(FORM_LOGIN_FILTER)をカスタマイズする場合は、
+    \ ``<sec:concurrency-control>``\ 要素の指定に加えて、以下の２つの\ ``SessionAuthenticationStrategy``\ クラスを有効化する必要がある。
+
+    * | ``org.springframework.security.web.authentication.session.ConcurrentSessionControlAuthenticationStrategy``
+      | 認証成功後にログインユーザ毎のセッション数をチェックするクラス。
+
+    * | ``org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy``
+      | 認証に成功したセッションをセッション管理領域に登録するクラス。
+
+    version 1.0.x.RELEASEで依存しているSpring Security 3.1では、\ ``org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy``\ というクラスが提供されていたが、
+    Spring Security 3.2より非推奨のAPIになっている。
+    Spring Security 3.1からSpring Security 3.2以降にバージョンアップする場合は、以下のクラスを組み合わせて使用するように変更する必要がある。
+
+    * ``ConcurrentSessionControlAuthenticationStrategy`` (Spring Security 3.2で追加)
+    * ``RegisterSessionAuthenticationStrategy`` (Spring Security 3.2で追加)
+    * ``org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy``
+
+    具体的な定義方法については、
+    `Spring Security Reference -Web Application Security (Concurrency Control)- <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#concurrent-sessions>`_ のサンプルコードを参考にされたい。
+
+|
 
 .. _authentication-failure-handler-ref:
 

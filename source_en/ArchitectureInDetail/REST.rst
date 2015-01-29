@@ -5213,22 +5213,31 @@ prevented for RESTful Web Service requests.
 * :file:`spring-security.xml`
 
  .. code-block:: xml
-    :emphasize-lines: 3-9
+    :emphasize-lines: 3-10
 
     <!-- omitted -->
 
     <!-- (1) -->
-    <sec:http pattern="/api/v1/**"
-        auto-config="true" use-expressions="true" create-session="stateless">
-        <!--<sec:custom-filter ref="csrfFilter" before="LOGOUT_FILTER"/>--> <!-- (2) -->
-        <sec:custom-filter ref="userIdMDCPutFilter" after="ANONYMOUS_FILTER"/>
-        <!--<sec:session-management session-authentication-strategy-ref="sessionAuthenticationStrategy" />--> <!-- (3) -->
+    <sec:http
+        pattern="/api/v1/**"
+        auto-config="true"
+        use-expressions="true"
+        create-session="stateless">
+        <sec:headers />
     </sec:http>
 
     <sec:http auto-config="true" use-expressions="true">
-        <sec:custom-filter ref="csrfFilter" before="LOGOUT_FILTER"/>
+        <sec:headers>
+            <sec:cache-control />
+            <sec:content-type-options />
+            <sec:hsts />
+            <sec:frame-options />
+            <sec:xss-protection />
+        </sec:headers>
+        <sec:csrf />
+        <sec:access-denied-handler ref="accessDeniedHandler"/>
         <sec:custom-filter ref="userIdMDCPutFilter" after="ANONYMOUS_FILTER"/>
-        <sec:session-management session-authentication-strategy-ref="sessionAuthenticationStrategy" />
+        <sec:session-management />
     </sec:http>
 
     <!-- omitted -->
@@ -5245,10 +5254,8 @@ prevented for RESTful Web Service requests.
        | URL pattern of REST API request path is specified in \ ``pattern``\  attribute of \ ``<sec:http>``\  element.
        | In the above example, request path starting with \ ``/api/v1/``\  is handled as the REST API request path.
        | Further, session is no longer used in Spring Security process by setting \ ``create-session``\  attribute to \ ``stateless``\ .
-   * - | (2)
-     - | Servlet Filter definition of CSRF measures is commented out, so as to disable the CSRF measures. It may be physically deleted in practice.
-   * - | (3)
-     - | The definition used for referring to session management related components is commented out as session is not used. Actually it is better to delete it physically.
+       |
+       | \ ``<sec: csrf>``\  element is not specified to disable the CSRF measures.
 
 |
 

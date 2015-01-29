@@ -1645,7 +1645,7 @@ How to extend
 
 Appendix
 --------------------------------------------------------------------------------
-セキュリティ問題の考慮
+ファイルアップロードに関するセキュリティ問題への考慮
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 | ファイルのアップロード機能を提供する場合、以下のようなセキュリティ問題を考慮する必要がある。
 
@@ -1681,24 +1681,24 @@ Appendix
 
 いずれかの対策を行うことで攻撃を防ぐことができるが、両方とも対策しておくことを推奨する。
 
-Commons FileUpload を使用したファイルのアップロード機能
+Commons FileUpload を使用したファイルのアップロード
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-| WebLogicにてServlet3.0を利用したmultipartを使用しているform内で、他の文字列フィールドに日本語文字列を指定すると文字化けが発生する。
-| マルチバイトの扱いに関するWebLogicの問題であると思われるが、この事象に対応する為、Commons FileUploadを使用したファイルのアップロード機能について説明する。
+WebLogic(12.1.3)など一部のサーバー上で\ ``StandardMultipartResolver``\ を利用すると、ファイルと一緒に送信するフィールドの日本語文字列が文字化けすることが確認されている。
+アプリケーションサーバーの問題であると思われるが、アプリケーションサーバー側で修正されない限り、ファイルと日本語文字列フィールドを同時に送信できない。
+
+暫定対処として、Commons FileUploadを使用したファイルのアップロードについて説明する。Commons FileUploadを使用すれば、上記問題は発生しない。
+
+Commons FileUploadを使用する場合は以下の設定を行う。
 
 - :file:`pom.xml`
 
  .. code-block:: xml
-
-    <!-- omitted -->
 
     <!-- (1) -->
     <dependency>
         <groupId>commons-fileupload</groupId>
         <artifactId>commons-fileupload</artifactId>
     </dependency>
-
-    <!-- omitted -->
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
@@ -1708,18 +1708,18 @@ Commons FileUpload を使用したファイルのアップロード機能
    * - | 項番
      - | 説明
    * - | (1)
-     - | \ ``commons-fileupload``\を依存アーティファクトとして追加する。
+     - | \ ``commons-fileupload``\を依存関係を追加する。バージョンはSpring IO Platformによって定義されているため、:file:`pom.xml`\ で指定しなくてよい。
 
 |
 
-- :file:`spring-mvc.xml`
+- :file:`applicationContext.xml`
 
  .. code-block:: xml
 
     <!-- (1) -->
-    <bean id="filterMultipartResolver"
+    <bean id="multipartResolver"
         class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <property name="maxUploadSize" value="#{462+10000000}" /><!-- (2) -->
+        <property name="maxUploadSize" value="10240000" /><!-- (2) -->
     </bean>
 
     <!-- ... -->
@@ -1732,11 +1732,15 @@ Commons FileUpload を使用したファイルのアップロード機能
    * - | 項番
      - | 説明
    * - | (1)
-     - | \ ``CommonsMultipartResolver``\のbean定義を行う。
+     - | Commons FileUploadを使用した\ ``MultipartResolver``\ 実装である\ ``CommonsMultipartResolver``\のbean定義を行う。
    * - | (2)
-     - | ヘッダのサイズはAPサーバ、環境に依存するので変更すること。ファイルの最大値はシステムに合わせて変更すること。
-     
-|
+     - | ファイルアップロードで許容する最大サイズを設定する。Commons FileUploadに場合、最大値はヘッダ含めたリクエスト全体のサイズであることに注意すること。
+       | また、デフォルト値は-1であり、無制限なので必ず値を設定すること。その他のプロパティは\ `JavaDoc <http://docs.spring.io/spring-framework/docs/4.1.4.RELEASE/javadoc-api/org/springframework/web/multipart/commons/CommonsMultipartResolver.html>`_\ を参照されたい。
+
+ .. warning::
+
+    Commons Fileuploadを使用する場合は、\ ``MultipartResolver``\ の定義を\ :file:`spring-mvc.xml`\ ではなく、\ :file:`applicationContext.xml`\ の設定を行う必要がある。
+    \ :file:`spring-mvc.xml`\ に定義がある場合は削除すること。
 
 - :file:`web.xml`
 
@@ -1748,29 +1752,16 @@ Commons FileUpload を使用したファイルのアップロード機能
         version="3.0">
 
         <servlet>
-            <servlet-class>
-                org.springframework.web.servlet.DispatcherServlet
-            </servlet-class>
+            <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
             <!-- omitted -->
-
             <!-- (1) -->
-            <!--
-            <multipart-config>
-                <max-file-size>5242880</max-file-size>
-                <max-request-size>27262976</max-request-size>
-                <file-size-threshold>0</file-size-threshold>
-            </multipart-config>
-            -->
+            <!-- <multipart-config>...</multipart-config> -->
         </servlet>
 
         <!-- (2) -->
         <filter>
             <filter-name>MultipartFilter</filter-name>
             <filter-class>org.springframework.web.multipart.support.MultipartFilter</filter-class>
-            <init-param>
-                <param-name>multipartResolverBeanName</param-name>
-                <param-value>filterMultipartResolver</param-value>
-            </init-param>
         </filter>
         <filter-mapping>
             <filter-name>MultipartFilter</filter-name>
@@ -1789,9 +1780,9 @@ Commons FileUpload を使用したファイルのアップロード機能
    * - 項番
      - 説明
    * - | (1)
-     - | ファイルアップロードを使用するServletの\ ``<servlet>``\ 要素から、\ ``<multipart-config>``\ 要素を削除する。
+     - | Commons FileUploadを使用する場合、\ ``DispatcherServler``\ の\ ``<multipart-config>``\ 要素は不要であるため、削除する。
    * - | (2)
-     - | Servlet FliterとしてCommons FileUploadを使用した \ ``MultipartFilter``\ を定義する。
+     - | Commons Fileuploadを使用する場合、\ :ref:`CSRF対策 <csrf_use-multipart-filter>`\ を有効にするため、 \ ``MultipartFilter``\ を定義する必要がある。
 
 |
 

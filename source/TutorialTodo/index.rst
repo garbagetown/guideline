@@ -13,9 +13,9 @@
 このチュートリアルで学ぶこと
 --------------------------------------------------------------------------------
 
-* TERASOLUNA Global Frameworkによる基本的なアプリケーションの開発方法
+* TERASOLUNA Server Framework for Java (5.x)による基本的なアプリケーションの開発方法
 * MavenおよびSTS(Eclipse)プロジェクトの構築方法
-* TERASOLUNA Global Frameworkの :doc:`../Overview/ApplicationLayering` に従った開発方法
+* TERASOLUNA Server Framework for Java (5.x)の :doc:`../Overview/ApplicationLayering` に従った開発方法
 
 
 対象読者
@@ -3141,11 +3141,11 @@ Service及びアプリケーション層を作成後にAPサーバーを起動�
 このチュートリアルでは、以下の内容を学習した。
 
 
-* TERASOLUNA Global Frameworkによる基本的なアプリケーションの開発方法
+* TERASOLUNA Server Framework for Java (5.x)による基本的なアプリケーションの開発方法
 
 * MavenおよびSTS(Eclipse)プロジェクトの構築方法
 
-* TERASOLUNA Global Frameworkのアプリケーションのレイヤ化に従った開発方法
+* TERASOLUNA Server Framework for Java (5.x)のアプリケーションのレイヤ化に従った開発方法
 
  * POJO(+ Spring)を使用したドメイン層の実装
  * POJO(+ Spring MVC)とJSPタグライブラリを使用したアプリケーション層の実装

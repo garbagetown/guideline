@@ -13,9 +13,9 @@ Introduction
 Points to study in this tutorial
 --------------------------------------------------------------------------------
 
-* Basic application development using TERASOLUNA Global Framework
+* Basic application development using TERASOLUNA Server Framework for Java (5.x)
 * Configuration of Maven and STS(Eclipse) project
-* Way of development using application layering of TERASOLUNA Global Framework.
+* Way of development using application layering of TERASOLUNA Server Framework for Java (5.x).
 
 
 Target readers
@@ -3144,11 +3144,11 @@ In the end...
 In this tutorial, following contents have been learnt.
 
 
-* How to develop basic applications by TERASOLUNA Global Framework
+* How to develop basic applications by TERASOLUNA Server Framework for Java (5.x)
 
 * How to build Maven as well as STS (Eclipse) project
 
-* Way of development using application layering of TERASOLUNA Global Framework.
+* Way of development using application layering of TERASOLUNA Server Framework for Java (5.x).
 
  * Implementation of domain layer with POJO(+ Spring)
  * Implementation of application layer with the use of JSP tag libraries and POJO(+ Spring MVC)

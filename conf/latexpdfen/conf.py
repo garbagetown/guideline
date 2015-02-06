@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# TERASOLUNA Global Framework Development Guideline documentation build configuration file, created by
+# TERASOLUNA Server Framework for Java (5.x) Development Guideline documentation build configuration file, created by
 # sphinx-quickstart on Mon Dec 16 11:30:40 2013.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -40,7 +40,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'TERASOLUNA Global Framework Development Guideline'
+project = u'TERASOLUNA Server Framework for Java (5.x) Development Guideline'
 copyright = u'2013-2015, NTT DATA'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -170,7 +170,7 @@ html_static_path = ['../../_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'TERASOLUNAGlobalFrameworkDevelopmentGuidelinedoc'
+htmlhelp_basename = 'TERASOLUNAServerFrameworkForJavaDevelopmentGuidelinedoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -210,7 +210,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'TERASOLUNAGlobalFrameworkDevelopmentGuideline.tex', u'TERASOLUNA Global Framework Development Guideline Documentation',
+  ('index', 'TERASOLUNAServerFrameworkForJavaDevelopmentGuideline.tex', u'TERASOLUNA Server Framework for Java (5.x) Development Guideline Documentation',
    u'NTT DATA', 'manual'),
 ]
 
@@ -240,7 +240,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'terasolunaglobalframeworkdevelopmentguideline', u'TERASOLUNA Global Framework Development Guideline Documentation',
+    ('index', 'terasolunaserverframeworkforjavadevelopmentguideline', u'TERASOLUNA Server Framework for Java (5.x) Development Guideline Documentation',
      [u'NTT DATA'], 1)
 ]
 
@@ -254,8 +254,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'TERASOLUNAGlobalFrameworkDevelopmentGuideline', u'TERASOLUNA Global Framework Development Guideline Documentation',
-   u'NTT DATA', 'TERASOLUNAGlobalFrameworkDevelopmentGuideline', 'One line description of project.',
+  ('index', 'TERASOLUNAServerFrameworkForJavaDevelopmentGuideline', u'TERASOLUNA Server Framework for Java (5.x) Development Guideline Documentation',
+   u'NTT DATA', 'TERASOLUNAServerFrameworkForJavaDevelopmentGuideline', 'One line description of project.',
    'Miscellaneous'),
 ]
 

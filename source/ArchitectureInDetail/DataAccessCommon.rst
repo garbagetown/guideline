@@ -28,9 +28,8 @@ Overview
 
 O/R Mapperに依存する部分については、
 
-* \ :doc:`DataAccessJpa`\
 * \ :doc:`DataAccessMyBatis3`\
-* \ :doc:`DataAccessMybatis2`\
+* \ :doc:`DataAccessJpa`\
 
 を参照されたい。
 
@@ -401,9 +400,8 @@ Bean定義したDataSouceを使用する場合の設定
 
 PlatformTransactionManagerについては、使用するO/R Mapperによって使うクラスがかわるので、詳細設定は、
 
-* \ :doc:`DataAccessJpa`\
 * \ :doc:`DataAccessMyBatis3`\
-* \ :doc:`DataAccessMybatis2`\
+* \ :doc:`DataAccessJpa`\
 
 を参照されたい。
 
@@ -890,9 +888,8 @@ LIKE検索を行う場合は、検索条件として使用する値を、LIKE検
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 LIKE検索時のエスケープ処理の実装例については、使用するO/R Mapper向けのドキュメントを参照されたい。
 
-* JPA(Spring Data JPA)を使用する場合は、\ :doc:`DataAccessJpa`\ の\ :ref:`data-access-jpa_howtouse_like_escape`\ を参照されたい。
 * MyBatis3を使用する場合は、\ :doc:`DataAccessMyBatis3`\ の\ :ref:`DataAccessMyBatis3HowToUseLikeEscape`\ を参照されたい。
-* MyBatis2(TERASOLUNA DAO)を使用する場合は、\ :doc:`DataAccessMybatis2`\ の\ :ref:`data-access-mybatis2_howtouse_like_escape`\ を参照されたい。
+* JPA(Spring Data JPA)を使用する場合は、\ :doc:`DataAccessJpa`\ の\ :ref:`data-access-jpa_howtouse_like_escape`\ を参照されたい。
 
 .. note::
 

@@ -179,30 +179,6 @@ Spring Framework提供のJDBCデータソース
     **JPA(Hibernate)を使用すると、現状意図しないエラーとなることが発覚している。**
 
     * 一意制約違反が発生した場合、\ ``DuplicateKeyException``\ ではなく、\ ``org.springframework.dao.DataIntegrityViolationException``\ が発生する。
-    * 悲観ロックに失敗した場合、\ ``PessimisticLockingFailureException``\ ではなく、\ ``org.springframework.dao.UncategorizedDataAccessException``\ の子クラスが発生する。
-
-    悲観エラー時に発生する\ ``UncategorizedDataAccessException``\ は、システムエラーに分類される例外なので、アプリケーションでハンドリングすることは推奨されないが、最悪ハンドリングを行う必要があるかもしれない。
-    原因例外には、悲観ロックエラーが発生したことを通知する例外が格納されているので、ハンドリングできる。
-
-    ⇒継続調査。
-
-    **現状以下の動作となる。**
-
-    * PostgreSQL + for update nowait
-
-      - org.springframework.orm.hibernate3.HibernateJdbcException
-      - Caused by: org.hibernate.PessimisticLockException
-
-    * Oracle + for update
-
-      - org.springframework.orm.hibernate3.HibernateSystemException
-      - Caused by: Caused by: org.hibernate.dialect.lock.PessimisticEntityLockException
-      - Caused by: org.hibernate.exception.LockTimeoutException
-
-    * Oracle / PostgreSQL + 一意制約
-
-      - org.springframework.dao.DataIntegrityViolationException
-      - Caused by: org.hibernate.exception.ConstraintViolationException
 
 
 下記は、一意制約違反を、ビジネス例外として扱う実装例である。
@@ -1088,18 +1064,22 @@ Spring Frameworkのデータアクセス例外へ変換する役割を持つク�
       - クラス名
       - 説明
     * - 1.
-      - | org.springframework.orm.hibernate3.
-        | SessionFactoryUtils
-      - JPA(Hibernateの実装)を使った場合、本クラスによって、O/R Mapper例外がSpring Frameworkのデータアクセス例外に変換される。
+      - | org.springframework.jdbc.support.
+        | SQLErrorCodeSQLExceptionTranslator
+      - MyBatisや、\ ``JdbcTemplate``\ を使った場合、本クラスによって、JDBC例外が、Spring Frameworkのデータアクセス例外に変換される。変換ルールは、XMLファイルに記載されており、デフォルトで使用されるXMLファイルは、\ ``spring-jdbc.jar``\ 内の\ ``org/springframework/jdbc/support/sql-error-codes.xml``\ となる。
+        クラスパス直下に、XMLファイル（\ ``sql-error-codes.xml``\ ）を配置することで、デフォルトの動作を変更することもできる。
     * - 2.
+      - | org.springframework.orm.jpa.vendor.
+        | HibernateJpaDialect
+      - JPA(Hibernateの実装)を使った場合、本クラスによって、O/R Mapper例外(Hibernateの例外)がSpring Frameworkのデータアクセス例外に変換される。
+    * - 3.
+      - | org.springframework.orm.jpa.
+        | EntityManagerFactoryUtils
+      - \ ``HibernateJpaDialect``\ で変換できない例外が発生した場合は、本クラスによって、JPA例外がSpring Frameworkのデータアクセス例外に変換される。
+    * - 4.
       - | org.hibernate.dialect.Dialect
         | のサブクラス
       - JPA(Hibernateの実装)を使った場合、本クラスによって、JDBC例外とO/R Mapper例外に変換される。
-    * - 3.
-      - | org.springframework.jdbc.support.
-        | SQLErrorCodeSQLExceptionTranslator
-      - MyBatisや、JdbcTemplateを使った場合、本クラスによって、JDBC例外が、Spring Frameworkのデータアクセス例外に変換される。変換ルールは、XMLファイルに記載されており、デフォルトで使用されるXMLファイルは、spring-jdbc.jar内のorg/springframework/jdbc/support/sql-error-codes.xmlとなる。
-        クラスパス直下に、XMLファイル（sql-error-codes.xml）を配置することで、デフォルトの動作を変更することもできる。
 
 .. _appendix_datasource_of_spring-label:
 

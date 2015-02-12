@@ -5730,7 +5730,7 @@ RepositoryのBean定義を行えばよい。
 
 バッチモードを使用する場合、Mapperインタフェースのメソッドから返却される更新結果は、
 
-* 返り値が数値(\ ``int``\や\ ``long``\)の場合は、\ ``0``\
+* 返り値が数値(\ ``int``\や\ ``long``\)の場合は、\ `固定値 <http://mybatis.github.io/mybatis-3/apidocs/reference/org/apache/ibatis/executor/BatchExecutor.html#BATCH_UPDATE_RETURN_VALUE>`_\ (\ ``org.apache.ibatis.executor.BatchExecutor#BATCH_UPDATE_RETURN_VALUE``\ )
 * 返り値が\ ``boolean``\の場合は、\ ``false``\
 
 が返却される。

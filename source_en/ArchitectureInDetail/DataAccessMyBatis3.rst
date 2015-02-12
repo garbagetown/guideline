@@ -5730,7 +5730,7 @@ When batch mode Repository is used, the validity of update results cannot be che
 
 Update results returned from Mapper interface method when a batch mode is used, are as follows.
 
-* \ ``0``\  when return value is numeric (\ ``int``\  or \ ``long``\ )
+* \ `Fixed value <http://mybatis.github.io/mybatis-3/apidocs/reference/org/apache/ibatis/executor/BatchExecutor.html#BATCH_UPDATE_RETURN_VALUE>`_\ (\ ``org.apache.ibatis.executor.BatchExecutor#BATCH_UPDATE_RETURN_VALUE``\ )  when return value is numeric (\ ``int``\  or \ ``long``\ )
 * \ ``false``\  when return value is \ ``boolean``\
 
 

@@ -126,9 +126,9 @@ version 5.0.0.RELEASEで利用するOSSの一覧を以下に示す。
 .. tip::
 
     version 5.0.0.RELEASEより、
-    `Spring IO platform <http://platform.spring.io/platform/>`_\ を親プロジェクトに指定する構成を採用している。
+    `Spring IO platform <http://platform.spring.io/platform/>`_\ の\ ``<dependencyManagement>``\ をインポートする構成を採用している。
 
-    Spring IO platformを親プロジェクトに指定することで、
+    Spring IO platformの\ ``<dependencyManagement>``\ をインポートすることで、
 
     * Spring Frameworkが提供しているライブラリ
     * Spring Frameworkが依存しているOSSライブラリ

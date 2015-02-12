@@ -46,11 +46,12 @@ Webアプリケーション向け開発プロジェクトの作成
       - terasoluna-gfw-multi-web-blank-mybatis3-archetype
       - O/R MapperとしてMyBatis3を使用するためのプロジェクトを生成するためのArchetype。
     * - 2.
-      - terasoluna-gfw-multi-web-blank-mybatis2-archetype
-      - O/R MapperとしてMyBatis2(with TERASOLUNA DAO)を使用するためのプロジェクトを生成するためのArchetype。
-    * - 3.
       - terasoluna-gfw-multi-web-blank-jpa-archetype
       - O/R MapperとしてJPA(with Spring Data JPA and Hibernate)を使用するためのプロジェクトを生成するためのArchetype。
+    * - 3.
+      - terasoluna-gfw-multi-web-blank-mybatis2-archetype
+      - O/R MapperとしてMyBatis2(with TERASOLUNA DAO)を使用するためのプロジェクトを生成するためのArchetype。
+        **(新規開発での使用は非推奨)**
 
 |
 
@@ -95,7 +96,7 @@ Webアプリケーション向け開発プロジェクトの作成
 
         * ``terasoluna-gfw-multi-web-blank-mybatis3-archetype``
         * ``terasoluna-gfw-multi-web-blank-jpa-archetype``
-        * ``terasoluna-gfw-multi-web-blank-mybatis2-archetype``
+        * ``terasoluna-gfw-multi-web-blank-mybatis2-archetype`` **(新規開発での使用は非推奨)**
 
         上記例では、\ ``terasoluna-gfw-multi-web-blank-mybatis3-archetype``\ を指定している。
     * - | \-DarchetypeVersion

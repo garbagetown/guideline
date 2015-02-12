@@ -1779,30 +1779,6 @@ Controllerで適切にハンドリングする必要がある。
       - | エラーハンドリングの処理を実装する。エラーを通知するためのメッセージ、画面表示に必要な情報（フォームやその他のモデル）を生成し、遷移先のview名を返却する。
         | エラーハンドリングの詳細については、\ :ref:`exception-handling-how-to-use-codingpoint-contoller-request-label`\ を参照されたい。
 
-.. todo::
-
-    **JPA(Hibernate)を使用すると、現状意図しないエラーとなることが発覚している。**
-
-    * 悲観ロックに失敗した場合、\ ``PessimisticLockingFailureException``\ ではなく、\ ``org.springframework.dao.UncategorizedDataAccessException``\ の子クラスが発生する。
-
-    悲観エラー時に発生する\ ``UncategorizedDataAccessException``\ は、システムエラーに分類される例外なので、
-    アプリケーションでハンドリングすることは推奨されないが、最悪ハンドリングを行う必要があるかもしれない。
-    原因例外には、悲観ロックエラーが発生したことを通知する例外が格納されているので、ハンドリングができる。
-
-    ⇒継続調査。
-
-    **現状以下の動作となる。**
-
-    * PostgreSQL + for update nowait
-
-      - org.springframework.orm.hibernate3.HibernateJdbcException
-      - Caused by: org.hibernate.PessimisticLockException
-
-    * Oracle + for update
-
-      - org.springframework.orm.hibernate3.HibernateSystemException
-      - Caused by: Caused by: org.hibernate.dialect.lock.PessimisticEntityLockException
-      - Caused by: org.hibernate.exception.LockTimeoutException
 
 .. raw:: latex
 

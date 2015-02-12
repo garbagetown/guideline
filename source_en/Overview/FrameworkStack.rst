@@ -125,10 +125,10 @@ List of OSS being used in version 5.0.0.RELEASE.
 
 .. tip::
 
-    Adopted the mechanism of specifying `Spring IO platform <http://platform.spring.io/platform/>`_\  into 
-    the parent project from version 5.0.0.RELEASE onwards.
+    From version 5.0.0.RELEASE onwards, 
+    adopted the mechanism of importing \ ``<dependencyManagement>`` \ of `Spring IO platform <http://platform.spring.io/platform/>`_\.
 
-    By specifying the Spring IO platform into parent project,
+    By importing the \ ``<dependencyManagement>`` \ of Spring IO platform,
 
     * Spring Framework offering library
     * Spring Framework dependent OSS library

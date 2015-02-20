@@ -3542,7 +3542,7 @@ applicationContext.xml
        | この設定により、プロパティファイルの値をBean定義ファイル内で\ ``${propertyName}``\ 形式で埋め込んだり、Javaクラスに\ ``@Value("${propertyName}")``\ でインジェクションすることができる。
    * - | (3)
      - | Bean変換用ライブラリDozerのMapperを定義する。
-       | マッピングファイルに関して `Dozerマニュアル <http://dozer.sourceforge.net/documentation/mappings.html>`_ を参照されたい。)
+       | (マッピングファイルに関しては `Dozerマニュアル <http://dozer.sourceforge.net/documentation/mappings.html>`_ を参照されたい。)
 
 .. tip::
 

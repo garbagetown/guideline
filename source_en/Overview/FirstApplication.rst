@@ -334,11 +334,11 @@ Next, Controller (\ ``com.example.helloworld.app.welcome.HomeController``\ ) for
    * - | (4)
      - It can be read automatically by DI container if ``@Controller`` annotation is used. As stated earlier in [explanation of Spring MVC configuration files (2)], it is the target of component-scan.
    * - | (5)
-     - It gets executed when the HTTP method is GET and the Resource is (or request URL) is "/".
+     - It gets executed when the HTTP method is GET or POST and the Resource is (or request URL) is "/".
    * - | (6)
      - Set \ ``Model`` \ object to be delivered to View.
    * - | (7)
-     - Return View name. "WEB-INF/views/home.jsp" is rendered as per the configuration [Explanation of Spring MVC configuration files (3)] .
+     - Return View name. "WEB-INF/views/welcome/home.jsp" is rendered as per the configuration [Explanation of Spring MVC configuration files (3)] .
 
 |
 

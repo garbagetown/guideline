@@ -3616,7 +3616,7 @@ todo-domain.xml
 .. note::
 
     O/R Mapperに依存するブランクプロジェクトを作成した場合は、\ ``@Transactional``\アノテーションによるトランザクション管理を有効にするために、
-    \ ``<tx:annotation-driven>``\タグを設定されている。
+    \ ``<tx:annotation-driven>``\タグが設定されている。
 
      .. code-block:: xml
         :emphasize-lines: 9-10, 12-13

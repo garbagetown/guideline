@@ -1653,7 +1653,7 @@ Spring Frameworkから提供されている「宣言型トランザクション�
 
     * コネクションプールからコネクションを取得する際に、ヘルスチェックを行う。
     * コネクションプールから取得したコネクションの自動コミットを無効にする。
-    * \ ``PlatformTransactionManager``\ として、\ ``DataSourceTransactionManager``\ 又は\ ``JpaTransactionManager``\ を使用する。(JTAを使用する場合は本事象は発生しない)
+    * \ ``PlatformTransactionManager``\ として、\ ``DataSourceTransactionManager``\ 又は\ ``JpaTransactionManager``\ を使用する。(\ ``JtaTransactionManager``\ を使用する場合は本事象は発生しない)
 
     **[本事象の発生が確認されているJDBCドライバ]**
 
@@ -1676,8 +1676,21 @@ Spring Frameworkから提供されている「宣言型トランザクション�
 
     * 本事象の再現確認は、PostgreSQL 9.3及びOracle 12cで行っており、他のデータベース及びバージョンでは行っていない。
     * PostgreSQL 9.3では、\ ``java.sql.Connection#setReadOnly(boolean)``\  メソッドを呼び出した際に\ ``SQLException``\ が発生する。
-    * JDBCドライバから発生する\ ``SQLException``\ はSpring Frameworkが行う例外処理によって無視されるため、アプリケーションの動作としてはエラーにはならないが、「読み取り専用のトランザクション」は有効にならない。
+    * \ :ref:`log4jdbc <DataAccessCommonDataSourceDebug>`\ を使用してSQLやJDBCのAPIの呼び出しをロギングしている場合、JDBCドライバから発生した\ ``SQLException``\ はERRORレベルでログに出力される。
+    * **JDBCドライバから発生するSQLExceptionはSpring Frameworkが行う例外処理によって無視されるため、アプリケーションの動作としてはエラーにはならないが、「読み取り専用のトランザクション」は有効にならない。**
     * Oracle 12cでは、本事象の発生は確認されていない。
+
+    **[参考]**
+
+    \ :ref:`log4jdbc <DataAccessCommonDataSourceDebug>`\ を使用して以下のようなログが出力された場合は、本事象に該当するケースとなる。
+
+     .. code-block:: log
+
+        date:2015-02-20 16:11:56	thread:main	user:	X-Track:	level:ERROR	logger:jdbc.audit                                      	message:3. Connection.setReadOnly(true)
+        org.postgresql.util.PSQLException: Cannot change transaction read-only property in the middle of a transaction.
+            at org.postgresql.jdbc2.AbstractJdbc2Connection.setReadOnly(AbstractJdbc2Connection.java:741) ~[postgresql-9.3-1102-jdbc41.jar:na]
+            ...
+
 
 トランザクションの伝播
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

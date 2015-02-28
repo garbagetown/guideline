@@ -5706,7 +5706,6 @@ RepositoryのBean定義を行えばよい。
 
     * トランザクションがコミットされる直前
     * クエリ(SELECT)を実行する直前
-    * 別の更新用メソッドを呼び出した直後
 
     Repositoryのメソッドの呼び出し順番に関する注意点は、「:ref:`DataAccessMyBatis3HowToExtendExecutorTypeBatchNotesMethodCallOrder`」を参照されたい。
 

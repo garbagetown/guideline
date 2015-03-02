@@ -1341,7 +1341,7 @@ The method of carrying forward the search conditions to the page navigation requ
 
     Refer [:ref:`TagLibAndELFunctionsHowToUseELFunctionQuery`] for detail specification of the \ ``f:query``\ (URL encoding specification etc).
 
-  .. warning:: **Operations when Query string created using f:query is specified in queryTmpl attribute**
+ .. warning:: **Operations when Query string created using f:query is specified in queryTmpl attribute**
 
     It has been found that specifying the query string generated using \ ``f:query``\  in queryTmpl attribute leads to duplication of URL encoding. Thus, special characters are not carried forward correctly.
     

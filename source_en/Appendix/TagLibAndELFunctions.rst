@@ -580,7 +580,7 @@ The \ ``f:br()`` \ is an EL Function which converts the new line character (\ ``
 
 .. tip::
 
-    If you want to display a string containing new line code as a newline on browser, it is necessary to convert the new line into \ `` to <br /> `` \ tag.
+    If you want to display a string containing new line code as a newline on browser, it is necessary to convert the new line code into \ `` <br /> `` \ tag.
 
     For example, if you want to display the string entered in the textarea (\ ``<textarea>``\ ) of the input screen as it is
     on the confirmation screen or completion screen, it is advisable to use this function.

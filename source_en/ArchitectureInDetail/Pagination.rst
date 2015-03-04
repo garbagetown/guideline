@@ -344,6 +344,8 @@ HTML of pagination link to be output using common library is as follows:
 
 |
 
+.. _pagination_overview_paginationlink_taglibparameters:
+
 Parameters of JSP tag library
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 Default operations can be changed by specifying values in parameters of JSP tag library.
@@ -972,6 +974,8 @@ An example to display the data fetched during page search is shown below.
 
 |
 
+.. _pagination_how_to_use_make_jsp_basic_paginationlink:
+
 Display of Pagination link
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 See the example below to display the link for page navigation (pagination link).
@@ -1281,6 +1285,8 @@ Example to display the display data range of the corresponding page is shown bel
 
 |
 
+.. _pagination_how_to_use_make_jsp_basic_search_criteria:
+
 Carrying forward search conditions using page link
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 The method of carrying forward the search conditions to the page navigation request is shown below.
@@ -1333,6 +1339,8 @@ The method of carrying forward the search conditions to the page navigation requ
     In case of JavaBean, property name is treated as request parameter name and in case of ``Map`` object, map key name is treated as request parameter.
     URL of the generated query string is encoded in UTF-8.
 
+    Refer [:ref:`TagLibAndELFunctionsHowToUseELFunctionQuery`] for detail specification of the \ ``f:query``\ (URL encoding specification etc).
+
  .. warning:: **Operations when Query string created using f:query is specified in queryTmpl attribute**
 
     It has been found that specifying the query string generated using \ ``f:query``\  in queryTmpl attribute leads to duplication of URL encoding. Thus, special characters are not carried forward correctly.
@@ -1366,6 +1374,8 @@ The method to carry forward the sort condition to page navigation request is as 
         | In the above example, ``"?page=0&size=20&sort=sort item, sort order(ASC or DESC)"`` is a query string.
 
 |
+
+.. _pagination_how_to_use_make_jsp_layout:
 
 Implementation of JSP (layout change)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

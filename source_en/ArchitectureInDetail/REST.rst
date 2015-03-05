@@ -2183,6 +2183,48 @@ Role of Resource class is as follows.
         | For input validation details, refer to "\ :doc:`Validation`\" .
 
 
+ .. warning:: **Measures to circular reference**
+
+     When you serialize a Resource class (JavaBean) in JSON or XML format and if property holds an object of cross reference relationship,
+     the \ ``StackOverflowError`` \ and \ ``OutOfMemoryError`` \ occurs due to circular reference henceforth it is necessary to take an attention.
+
+     In order to avoid a circular reference,
+
+     * \ ``@com.fasterxml.jackson.annotation.JsonIgnore`` \ annotation to exclude the property from serialization in case of serialized in JSON format using the Jackson
+     * \ ``@javax.xml.bind.annotation.XmlTransient`` \ annotation to exclude the property from serialization in case of serialized in XML format using the JAXB
+
+     can be added.
+
+     Below is the example of how to exclude specific field from serialization while serializing in JSON format using the Jackson.
+
+      .. code-block:: java
+
+          public class Order {
+              private String orderId;
+              private List<OrderLine> orderLines;
+              // ...
+          }
+
+      .. code-block:: java
+
+          public class OrderLine {
+              @JsonIgnore
+              private Order order;
+              private String itemCode;
+              private int quantity;
+              // ...
+          }
+
+      .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+      .. list-table::
+          :header-rows: 1
+          :widths: 10 90
+
+          * - Sr. No.
+            - Description
+          * - | (1)
+            - The \ ``@JsonIgnore`` \ annotation is added to exclude the property from serialization.
+
 |
 
 Example of Resource class creation is shown below.

@@ -188,7 +188,7 @@ Upload 3rd party artifact (ex. ojdbc6.jar)
 
 サードパーティ用リポジトリには、外部のリモートリポジトリでは公開されていないartifactを格納する。
 
-典型的な例が、ｏｒａｃｌｅのJDBCドライバ(ojdbc\*.jar)である。
+典型的な例が、oracleのJDBCドライバ(ojdbc\*.jar)である。
 RDBMSとしてoracleを使用する場合に必須だが、
 セントラルリポジトリはもちろん、インターネット上の公開リポジトリに格納されていることはほとんどない。
 そのため、組織内のパッケージリポジトリに格納しておく必要がある。
@@ -205,7 +205,7 @@ RDBMSとしてoracleを使用する場合に必須だが、
 4. ローカルPC上のojdbc6.jarファイルを選択し、 **Add Artifact** ボタンを押す。
  .. figure:: ./images/appendix-nexus-ojdbc6-selectfile.png
 
-5. 最後に**Upload Artifact(s)ボタンを押すと、リポジトリにjarファイルが格納される。
+5. 最後に **Upload Artifact(s)** ボタンを押すと、リポジトリにjarファイルが格納される。
  .. figure:: ./images/appendix-nexus-ojdbc6-upload.png
 
 以上でアップロード作業は完了。
@@ -225,7 +225,7 @@ use artifact
 そのプロジェクトのpom.xmlにdependencyタグを追加するだけである。
 
 **Browse Storage** タブから目的のartifactを選択すると、画面右側にdependencyタグのサンプルが表示される。
-それをpom.xmlにコピー＆ペーストするばよい。
+それをpom.xmlにコピー＆ペーストすればよい。
 
 .. figure:: ./images/appendix-nexus-ojdbc6-dependency-tag.png
 

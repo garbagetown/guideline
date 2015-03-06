@@ -3989,7 +3989,7 @@ Refer to "\ :ref:`service-return-systemerrormessage-label`\" for the details on 
         @ExceptionHandler(Exception.class)
         public ResponseEntity<Object> handleSystemError(Exception ex,
                 WebRequest request) {
-            return handleExceptionInternal(ex, null, null,
+            return handleExceptionInternal(ex, null, new HttpHeaders(),
                     HttpStatus.INTERNAL_SERVER_ERROR, request);
         }
     

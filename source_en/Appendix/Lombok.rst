@@ -424,7 +424,7 @@ How to exclude a specific field from string conversions are indicated below.
 How to exclude specific field from equals and hashCode
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-If \ ``equals`` \ method and \ ``hashCode`` \ methods are generated using Lombok annotation, 
+If \ ``equals`` \ method and \ ``hashCode`` \ method generated using Lombok annotation, 
 field that holds an object of cross reference relationship needs to be removed.
 
 If methods are generated without excluding these fields,

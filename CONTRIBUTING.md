@@ -4,14 +4,14 @@ This document describes how to contribute the Development Guideline updates.
 
 The Development Guideline is written by the reStructuredText format(`.rst`).
 We build to the HTML and PDF files using the [Sphinx](http://sphinx-doc.org/index.html).
-About Sphinx and reStructuredText format, refer to the [Sphinx documentation content](http://sphinx-doc.org/contents.html).
+About Sphinx and reStructuredText format, refer to the [Sphinx documentation contents](http://sphinx-doc.org/contents.html).
 
 Contribution procedures are follows:
 
 
 ## Create a new issue
 
-Please create a new issue from [here](https://github.com/terasolunaorg/guideline/issues/new) for contributing(bug report, improvement or new content), and get an issue number(tracking id).
+Please create a new issue from [here](https://github.com/terasolunaorg/guideline/issues/new?body=%23%23%20Description%0D%0A%28%2A%2ARequired%2A%2A%3A%20Please%20write%20issue%20description%29%0D%0A%0D%0A%23%23%20Possible%20Solutions%0D%0A%28Optional%3A%20Please%20write%20solutions%20of%20this%20issue%20you%20think%29%0D%0A%0D%0A%23%23%20Affects%20Version%2Fs%0D%0A%28%2A%2ARequired%2A%2A%3A%20Please%20select%20affected%20versions%29%0D%0A%2A%205.0.0.RELEASE%0D%0A%2A%201.0.2.RELEASE%0D%0A%0D%0A%23%23%20Fix%20Version%2Fs%0D%0A%28To%20be%20written%20later%20by%20project%20member%29%0D%0A%0D%0A%23%23%20Issue%20Links%0D%0A%28Optional%3A%20Please%20link%20to%20related%20issues%29%0D%0A%2A%20%23%7Bissue%20no%7D%0D%0A%2A%20or%20external%20url) for contributing(bug report, improvement or new content), and get an issue number(tracking id).
 
 > **Note: Supported language**
 >
@@ -20,6 +20,27 @@ Please create a new issue from [here](https://github.com/terasolunaorg/guideline
 * Please write the contribution overview into the title area.
 * Please write the contribution detail into the comment area.
 
+ e.g.)
+ ```
+ ## Description
+ In section 2.4.1.2 Domain Layer, there is a mistake in the below sentence.
+
+ `"Domain layer is not so thick as compared to other layers and is reusable."`
+
+ ## Possible Solutions
+ Modifying to `"Domain layer is independent from other layers and is reusable."`
+
+ ## Affects Version/s
+ * 5.0.0.RELEASE
+ * 1.0.2.RELEASE
+
+ ## Fix Version/s
+ (To be written later by project member)
+
+ ## Issue Links
+ * #999
+ * http://terasolunaorg.github.io/guideline/5.0.0.RELEASE/en/ImplementationAtEachLayer/DomainLayer.html
+ ```
 
 ## Fork a repository
 

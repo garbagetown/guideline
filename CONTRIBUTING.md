@@ -67,7 +67,7 @@ Please create a work branch on the master branch into your local repository.
 
 > **Note: Recommended work branch name**
 >
-> issues/{issue number}_{shot description}
+> issues/{issue number}_{short description}
 
 e.g.)
 

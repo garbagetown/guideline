@@ -132,7 +132,7 @@ For details, please refer to the [GitHub document-Creating a pull request-](http
 
 e.g.)
 
-```
-Title   : #999: Fixes typos in REST.rst
-Comment : Please review #999 .
-```
+| Area | Content |
+| ----- | --------- |
+| Title | #999: Fixes typos in REST.rst |
+| Comment | Please review #999 . |

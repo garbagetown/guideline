@@ -546,7 +546,7 @@ Spring Data JPAを有効化するための設定
     * - 1.
       - entity-manager-factory-ref
       - | Repositoryで使用する ``EntityManager`` を生成するためのFactoryを指定する。
-        | 通常指定する必要はないが、 ``EntityManager`` のFactoryを複数用意する場合は、使用するbeanの指定する必要がある。
+        | 通常指定する必要はないが、 ``EntityManager`` のFactoryを複数用意する場合は、使用するbeanを指定する必要がある。
     * - 2.
       - transaction-manager-ref
       - | Repositoryのメソッドが呼び出された際に使用する ``PlatformTransactionManager`` を指定する。
@@ -611,7 +611,7 @@ ControllerやJSP等のアプリケーション層でEntityのLazy Fetchを行う
 
 以下に ``OpenEntityManagerInViewInterceptor`` の設定例を示す。
 
-- spring-vmc.xml
+- spring-mvc.xml
 
  .. code-block:: xml
 
@@ -647,7 +647,7 @@ ControllerやJSP等のアプリケーション層でEntityのLazy Fetchを行う
 
 |
 
-| Servlet FilterでLazy Fetchが必要な場合は、 ``org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter`` を使用して、EntityManagerの生存期間をServlet Filter層までの伸ばす必要がある。
+| Servlet FilterでLazy Fetchが必要な場合は、 ``org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter`` を使用して、EntityManagerの生存期間をServlet Filter層まで伸ばす必要がある。
 | 例えば、 SpringSecurityの ``org.springframework.security.core.userdetails.UserDetailsService`` を拡張実装し、拡張した処理の中でEntityオブジェクトにアクセスする場合、このケースにあてはまる。
 | ただし、Lazy Fetchの必要がないのであれば、 ``EntityManager`` の生存期間をServlet Filter層まで伸ばす必要はない。
 
@@ -704,7 +704,7 @@ ControllerやJSP等のアプリケーション層でEntityのLazy Fetchを行う
 
 Repositoryインタフェースの作成
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Spring DataではEntity毎のRepositoryインタフェースを作成する方法として、以下3つつの方法を提供している。
+Spring DataではEntity毎のRepositoryインタフェースを作成する方法として、以下3つの方法を提供している。
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.35\linewidth}|p{0.55\linewidth}|
  .. list-table::
@@ -2674,7 +2674,7 @@ Entityを追加したい場合は、Entityオブジェクトを生成し、Repos
  .. note:: **mergeメソッドが呼び出されるデメリット**
 
     ``EntityManager`` のmergeメソッドは、Entityを ``EntityManager`` の管理対象にする際に、永続層(DB)から同じIDをもつEntityを取得する仕組みになっている。
-    Entityの追加処理としては、Entityの取得処理はは無駄な処理となる。高い性能要件があるアプリケーションの場合は、IDの採番タイミングを意識すること。
+    Entityの追加処理としては、Entityの取得処理は無駄な処理となる。高い性能要件があるアプリケーションの場合は、IDの採番タイミングを意識すること。
 
  .. note:: **制約エラーのハンドリング**
 
@@ -2753,7 +2753,7 @@ Entityを追加したい場合は、Entityオブジェクトを生成し、Repos
     * ``TABLE`` : 永続層(DB)のテーブルを使用してIDを採番する。
     * ``SEQUENCE`` : 永続層(DB)のシーケンスオブジェクトを使用してIDを採番する。
     * ``IDENTITY`` : 永続層(DB)のidentity列を使用してIDを採番する。
-    * ``AUTO`` : 永続層(DB)に最も適切な採番方法選択してIDを採番する。
+    * ``AUTO`` : 永続層(DB)に最も適切な採番方法を選択してIDを採番する。
 
     原則 ``AUTO`` は使用せず、明示的に使用するタイプを指定することを推奨する。
 
@@ -4079,7 +4079,7 @@ Spring Data JPAでは、新たに作成されたEntityと更新されたEntity�
     * - | (2)
       - | 作成日時を保持するフィールドに ``@org.springframework.data.annotation.CreatedDate`` アノテーションを付与する。
     * - | (3)
-      - | ``org.joda.time.DateTime`` 型を使用する場合は、をHibernateで扱えるようにするために、 フィールドに ``@org.hibernate.annotations.Type`` アノテーションを付与する。
+      - | ``org.joda.time.DateTime`` 型を使用する場合は、Hibernateで扱えるようにするために、 フィールドに ``@org.hibernate.annotations.Type`` アノテーションを付与する。
         | type属性は、 ``"org.jadira.usertype.dateandtime.joda.PersistentDateTime"`` 固定。最終更新日時のフィールドも同様。
     * - | (4)
       - | 作成日時を保持するフィールドの型は、 ``org.joda.time.DateTime`` 、``java.util.Date`` 、 ``java.lang.Long`` 、 ``long`` 型をサポートしている。
@@ -4254,7 +4254,7 @@ Spring Data JPAでは、新たに作成されたEntityと更新されたEntity�
 
  .. note:: **想定される適用ケース**
 
-    データの監査やデータの保存期間などの要件により、Entityを削除する際に、レコードの物理削除(DELETE)ではなく、論理削除(論理削除フラグのUPDATE)を行うようなアプリケーションで有効である。
+    データの監査やデータの保存期間などの要件により、Entityを削除する際に、レコードの物理削除(DELETE)ではなく、論理削除(論理削除フラグのUPDATE)を行うようなアプリケーションが有効である。
     このケースでは、アプリケーションとしては論理削除されたレコードは一律検索対象から除外する必要があるため、Queryひとつひとつに除外するための条件を加えるより、共通条件として指定した方がよい。
 
  .. warning:: **適用範囲について**

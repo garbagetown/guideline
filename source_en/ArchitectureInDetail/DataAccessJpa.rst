@@ -610,7 +610,7 @@ Considering the following perspectives, it is recommended that you use Lazy Fetc
 
 See the example of ``OpenEntityManagerInViewInterceptor`` settings below.
 
-- spring-vmc.xml
+- spring-mvc.xml
 
  .. code-block:: xml
 

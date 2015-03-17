@@ -619,7 +619,7 @@ NameとEmailが空文字であることに対するエラーメッセージと�
 .. note::
 
 
-   エラーメッセージまとめて表示する際に、\ ``<form:form>``\ タグの外に表示したい場合は以下のように\ ``<spring:nestedPath>``\ タグを使用する。
+   エラーメッセージをまとめて表示する際に、\ ``<form:form>``\ タグの外に表示したい場合は以下のように\ ``<spring:nestedPath>``\ タグを使用する。
 
      .. code-block:: jsp
        :emphasize-lines: 1,4

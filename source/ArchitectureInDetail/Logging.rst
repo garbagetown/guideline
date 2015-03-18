@@ -332,7 +332,7 @@ logback.xml
 
     LTSVは、
 
-    * フィールドの区切り文字としてタブを使用することで、他の区切り文字に比べてフォールドを分割しやすい。
+    * フィールドの区切り文字としてタブを使用することで、他の区切り文字に比べてフィールドを分割しやすい。
     * フィールドにラベル(名前)を設けることで、フィールド定義の変更(定義位置の変更、フィールドの追加、フィールドの削除)を行ってもパース処理には影響を与えない。
 
     また、エクセルに貼付けるだけで最低限のフォーマットが行える点も特徴の一つである。
@@ -418,16 +418,16 @@ SLF4Jのロガー(\ ``org.slf4j.Logger``\ )の各ログレベルに応じたメ�
     public class HomeController {
 
         private static final Logger logger = LoggerFactory
-                .getLogger(HomeController.class);
+                .getLogger(HomeController.class);   // (1)
 
         @RequestMapping(value = "/", method = { RequestMethod.GET,
                 RequestMethod.POST })
         public String home(Model model) {
-            logger.trace("This log is trace log.");
-            logger.debug("This log is debug log.");
-            logger.info("This log is info log.");
-            logger.warn("This log is warn log.");
-            logger.error("This log is error log.");
+            logger.trace("This log is trace log."); // (2)
+            logger.debug("This log is debug log."); // (3)
+            logger.info("This log is info log.");   // (4)
+            logger.warn("This log is warn log.");   // (5)
+            logger.error("This log is error log."); // (6)
             return "welcome/home";
         }
 
@@ -678,7 +678,7 @@ FilterでMDCに値をPutする
 
 | を提供している。
 
-| Filterで独自の値をMDCを追加したい場合は\ ``org.terasoluna.gfw.web.logging.mdc.XTrackMDCPutFilter``\ の実装を参考に
+| Filterで独自の値をMDCに追加したい場合は\ ``org.terasoluna.gfw.web.logging.mdc.XTrackMDCPutFilter``\ の実装を参考に
 | ``AbstractMDCPutFilter``\ を実装すればよい。
 
 MDCFilterの使用方法

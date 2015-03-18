@@ -1964,7 +1964,46 @@ Error message as shown below is displayed when form is sent by entering differen
            // omitted
        }
 
-implementation of input check of correlated items using Bean Validation
+.. note::
+
+   To change the check contents of correlated items check rules in accordance with validation group (for example: for implementing correlated items check only when specific validation group is specified, etc.), it is better to switch the process within validate method by implementing \ ``org.springframework.validation.SmartValidator``\  interface instead of implementing \ ``org.springframework.validation.Validator``\  interface.
+     .. code-block:: java
+
+       package com.example.sample.app.validation;
+
+       import org.apache.commons.lang3.ArrayUtils;
+       import org.springframework.stereotype.Component;
+       import org.springframework.validation.Errors;
+       import org.springframework.validation.SmartValidator;
+
+       @Component
+       public class PasswordEqualsValidator implements SmartValidator { // Implements SmartValidator instead of Validator interface
+
+           @Override
+           public boolean supports(Class<?> clazz) {
+               return PasswordResetForm.class.isAssignableFrom(clazz);
+           }
+
+           @Override
+           public void validate(Object target, Errors errors) {
+               validate(target, errors, new Object[] {});
+           }
+
+           @Override
+           public void validate(Object target, Errors errors, Object... validationHints) {
+               // Check validationHints(groups) and apply validation logic only when 'Update.class' is specified
+               if (ArrayUtils.contains(validationHints, Update.class)) {
+                   PasswordResetForm form = (PasswordResetForm) target;
+                   String password = form.getPassword();
+                   String confirmPassword = form.getConfirmPassword();
+
+                   // omitted...
+               }
+           }
+       }
+
+Implementation of input check of correlated items using Bean Validation
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 Independent validation rules should be added to implement validation of correlated items using Bean Validation.

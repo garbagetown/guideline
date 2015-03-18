@@ -2004,7 +2004,6 @@ Error message as shown below is displayed when form is sent by entering differen
 
 Implementation of input check of correlated items using Bean Validation
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 Independent validation rules should be added to implement validation of correlated items using Bean Validation.
 

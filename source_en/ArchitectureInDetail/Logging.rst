@@ -418,16 +418,16 @@ Log is output by calling a method according to each log level of SLF4J logger(\ 
     public class HomeController {
 
         private static final Logger logger = LoggerFactory
-                .getLogger(HomeController.class);
+                .getLogger(HomeController.class);   // (1)
 
         @RequestMapping(value = "/", method = { RequestMethod.GET,
                 RequestMethod.POST })
         public String home(Model model) {
-            logger.trace("This log is trace log.");
-            logger.debug("This log is debug log.");
-            logger.info("This log is info log.");
-            logger.warn("This log is warn log.");
-            logger.error("This log is error log.");
+            logger.trace("This log is trace log."); // (2)
+            logger.debug("This log is debug log."); // (3)
+            logger.info("This log is info log.");   // (4)
+            logger.warn("This log is warn log.");   // (5)
+            logger.error("This log is error log."); // (6)
             return "welcome/home";
         }
 

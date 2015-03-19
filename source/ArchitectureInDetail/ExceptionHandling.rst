@@ -88,9 +88,9 @@ Overview
        | 詳細は、\ :ref:`exception-handling-basic-flow-annotation-label`\ を参照されたい。
      - | 1. :ref:`exception-handling-class-from-first-label`
    * - | (3)
-     - | フレームワークから提供されているHanlderExceptionResolverの仕組みを使い、例外ハンドリングを行う。
+     - | フレームワークから提供されているHandlerExceptionResolverの仕組みを使い、例外ハンドリングを行う。
      - | サーブレット単位に、例外をハンドリングする場合に使用する。
-       | HanlderExceptionResolverは、\ ``<mvc:annotation-driven>``\ を指定した際に、自動的に、\ :ref:`登録されるクラス<ExceptionHandling-annotation-driven>`\ と、共通ライブラリから提供している\ ``SystemExceptionResolver``\ を使用する。
+       | HandlerExceptionResolverは、\ ``<mvc:annotation-driven>``\ を指定した際に、自動的に、\ :ref:`登録されるクラス<ExceptionHandling-annotation-driven>`\ と、共通ライブラリから提供している\ ``SystemExceptionResolver``\ を使用する。
        | 詳細は、\ :ref:`exception-handling-basic-flow-resolver-label`\ を参照されたい。
      - | 1. :ref:`exception-handling-class-systemerror-label`
        |
@@ -117,9 +117,9 @@ Overview
   - (1)と(2)はアプリケーション開発者が設計・実装する。
   - (3)と(4)はアプリケーションアーキテクトが設計・設定する。
 
-.. note:: **自動的に登録されるHanlderExceptionResolverについて**
+.. note:: **自動的に登録されるHandlerExceptionResolverについて**
 
-  <mvc:annotation-driven> を指定した際に、自動的に登録されるHanlderExceptionResolverの役割は、以下の通りである。
+  <mvc:annotation-driven> を指定した際に、自動的に登録されるHandlerExceptionResolverの役割は、以下の通りである。
 
   優先順は、以下の並び順の通りとなる。
 
@@ -152,7 +152,7 @@ Overview
 
 .. note:: **共通ライブラリから提供している SystemExceptionResolver の役割は？**
 
-  <mvc:annotation-driven> を指定した際に、自動的に登録されるHanlderExceptionResolverによって、
+  <mvc:annotation-driven> を指定した際に、自動的に登録されるHandlerExceptionResolverによって、
   ハンドリングされない例外をハンドリングするためのクラスである。
   そのため優先順は、DefaultHandlerExceptionResolverの後になるように設定する。
 
@@ -889,7 +889,7 @@ ResultMessagesを保持する例外(BisinessException,ResourceNotFoundException)
 
 アプリケーション層の設定
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-<mvc:annotation-driven> を指定した際に、自動的に登録されるHanlderExceptionResolverによって、ハンドリングされない例外をハンドリングするためのクラス（\ ``SystemExceptionResolver``\ ）を、bean定義に追加する。
+<mvc:annotation-driven> を指定した際に、自動的に登録されるHandlerExceptionResolverによって、ハンドリングされない例外をハンドリングするためのクラス（\ ``SystemExceptionResolver``\ ）を、bean定義に追加する。
 
 - **spring-mvc.xml**
 
@@ -945,7 +945,7 @@ ResultMessagesを保持する例外(BisinessException,ResourceNotFoundException)
         .. hint:: **DefaultHandlerExceptionResolverで行われる例外ハンドリングを無効化する方法**
 
             \ ``DefaultHandlerExceptionResolver``\ で例外ハンドリングされた場合、HTTPレスポンスコードは設定されるが、Viewの解決がされないため、Viewの解決は、\ ``web.xml``\ のError Pageで行う必要がある。
-            Viewの解決を\ ``web.xml``\ ではなく、\ ``HanlderExceptionResolver``\ で行いたい場合は、\ ``SystemExceptionResolver``\ の優先順位を「1」にすると、\ ``DefaultHandlerExceptionResolver``\ より前にハンドリング処理を実行することができる。
+            Viewの解決を\ ``web.xml``\ ではなく、\ ``HandlerExceptionResolver``\ で行いたい場合は、\ ``SystemExceptionResolver``\ の優先順位を「1」にすると、\ ``DefaultHandlerExceptionResolver``\ より前にハンドリング処理を実行することができる。
             \ ``DefaultHandlerExceptionResolver``\ でハンドリングされた場合の、HTTPレスポンスコードのマッピングについては、\ :ref:`exception-handling-appendix-defaulthandlerexceptionresolver-label`\ を参照されたい。
 
     * - | (4)
@@ -1809,7 +1809,7 @@ Appendix
    * - | (13)
      - | SystemException
        | Resolver
-     - | \ ``<mvc:annotation-driven>``\ を指定した際に、自動的に登録される\ ``HanlderExceptionResolver``\ によって、ハンドリングされない例外をハンドリングするためのクラス。
+     - | \ ``<mvc:annotation-driven>``\ を指定した際に、自動的に登録される\ ``HandlerExceptionResolver``\ によって、ハンドリングされない例外をハンドリングするためのクラス。
        | Spring MVCより提供されている\ ``SimpleMappingExceptionResolver``\ を継承し、例外コードのResultMessagesを、Viewから参照できるように機能追加を行っている。
    * - | (14)
      - | HandlerException
@@ -2112,7 +2112,7 @@ HandlerExceptionResolverLoggingInterceptorの設定項目について
      - | ignoreExceptions
      - | ``HandlerExceptionResolver`` によってハンドリングされた例外のうち、ログ出力しない例外クラスをリスト形式で指定する。
        | 指定した例外クラス及びサブクラスの例外が発生した場合、 本クラスでログの出力は行われない。
-       | 本項目に指定する例外クラスは、別の場所(別の仕組み)でログ出力さえっる例外のみ指定すること。
+       | 本項目に指定する例外クラスは、別の場所(別の仕組み)でログ出力される例外のみ指定すること。
      - | ``ResultMessagesNotificationException.class``
        |
        | ``ResultMessagesNotificationException.class`` 及びサブクラスの例外は、 ``ResultMessagesLoggingInterceptor`` でログ出力されるため、デフォルト設定として除外している。

@@ -174,20 +174,31 @@ spring-security.xml
      - Description
    * - | (1)
      - | Specify the login form screen path in \ ``login-page``\  attribute.
-       | An "unauthenticated user" is forcefully redirected to this path, when he tries to access the page that can be accessed only by
-       | an "authenticated user".
+       | When not specified, "/spring_security_login" will be default path and Login screen provided by Spring Security is used.
+       | When an "Unauthenticated user" accesses a page that can only be accessed by an "Authenticated user", the unauthenticated user is redirected to this path.
+
+       | **This guideline recommends changing to a system specific value rather than using the default value "/spring_security_login", mentioned above.**\ In this example, "/login" is specified.
    * - | (2)
-     - | Specify the destination path in \ ``default-target-url``\  attribute when authentication is successful. When it is not specified, "/" will be the default path.
+     - | In \ ``default-target-url``\  attribute, specify the destination path when authentication is successful. 
+       | When not specified, "/" will be the default path.
+
+       | When \ ``authentication-success-handler-ref``\ attribute is specified, this setting is not used.
    * - | (3)
-     - | Specify the path that performs authentication process in \ ``login-processing-url``\  attribute. When not specified,"j_spring_security_check" will be the default path.
+     - | Specify the path for performing authentication process in \ ``login-processing-url``\  attribute. 
+       | When not specified,"j_spring_security_check" will be the default path.
+
        | **This guideline recommends changing to a system specific value rather than using the default value  "j_spring_security_check", mentioned above.**\ In this example, "/authentication" is specified.
    * - | (4)
-     - | After a successful login, specify whether it should always transit to the path specified in \ ``default-target-url``\ , in the \ ``always-use-default-target``\  attribute.
-       | By default it is set as \ ``false``\ . When set as \ ``false``\  and when the base handler class for successful authentication namely, \ ``org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler``\  is specified as
-       | redirect destination, it transits to the specified destination. If the redirect destination is not specified, it transits to the path specified in \ ``default-target-url``\ .
+     - | In \ ``always-use-default-target``\  attribute, specify whether it should always transit to the path specified in \ ``default-target-url``\  after a successful login.
+       | When it is set as \ ``true``\ , it always transits to the path specified in \ ``default-target-url``\ .
+       | When it is set as \ ``false``\  (default), it transits either to the "path for displaying secure page which somebody has tried accessing before the login" or "path specified in \ ``default-target-url``\ ".
+
+       | When \ ``authentication-success-handler-ref``\  attribute is specified, this setting is not used. 
    * - | (5)
-     - | In case of failed authentication, specify the destination in \ ``authentication-failure-url``\ .
-       | When \ ``authentication-failure-handler-ref``\  attribute is not specified, irrespective of the type of authentication error, it uniformly transits to the destination specified for this setting.
+     - | In \ ``authentication-failure-url``\ , specify the destination when authentication fails.
+       | When not specified, path specified in  \ ``login-page``\  attribute is applicable.
+
+       | When \ ``authentication-failure-handler-ref``\  attribute is specified, this setting is not used.
    * - | (6)
      - | Specify the handler class to be called in case of a failed authentication, in \ ``authentication-failure-handler-ref``\  attribute.
        | For details, refer \ :ref:`authentication-failure-handler-ref`\ .
@@ -196,7 +207,7 @@ spring-security.xml
 
 For attributes other than those mentioned above, refer to \ `Spring Security manual <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#nsa-form-login>`_\ .
 
-.. warning:: **Why it is not recommended to use Spring Security default value, "j_spring_security_check".**
+.. warning:: **Why it is not recommended to use Spring Security default values, "/spring_security_login, /j_spring_security_check".**
 
   If default value is used, the fact that the application is using Spring Security is revealed.
   As a result, if any Spring Security related vulnerability is detected, there is a higher risk of receiving an attack due to the vulnerability.
@@ -265,6 +276,21 @@ Creating login form
          | For the details of "\ ``<t:messagesPanel>``\" tag, refer \ :doc:`../ArchitectureInDetail/MessageManagement`\ .
 
 
+ .. note:: **Regarding settings required for accessing exception object of authentication error from JSP**
+
+    Exception object of authentication error is stored in session scope with the attribute name \ ``"SPRING_SECURITY_LAST_EXCEPTION"``\ .
+    \ ``session``\ attribute of \ ``page``\ directive of JSP should be set to \ ``true``\  for accessing the object stored in session scope from JSP.
+
+    * ``src/main/webapp/WEB-INF/views/common/include.jsp``
+
+     .. code-block:: jsp
+
+        <%@ page session="true"%>
+
+    Default settings of blank project are such that session scope cannot be accessed from JSP.
+    This is to ensure that the session is not used easily.
+
+
 * spring-mvc.xml
 
   Define the Controller that displays login form.
@@ -285,7 +311,7 @@ Creating login form
          | This simple controller need not be implemented in Java.
          
    
-  .. note::
+  .. tip::
    
       Above settings are identical with next controller.
       
@@ -302,11 +328,6 @@ Creating login form
           }
 
       If the Controller with a single method that returns only the view name is necessary, \ ``<mvc:view-controller>``\  may be used.
-      
-      Advantage of displaying login form through a Controller is that, the CSRF token gets automatically embedded by this. When it is not displayed via a Controller,
-      the CSRF token needs to be embedded directly in jsp, as executed in \ :doc:`Tutorial`\ .
-      
-      The details of creating a Controller are omitted in the Tutorial. As a result, login form is not displayed through a Controller. For details on CSRF measures, refer \ :doc:`CSRF`\ .
 
 
 Changing attribute name of login form

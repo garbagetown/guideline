@@ -5705,7 +5705,6 @@ An implementation example on how to access database by using batch mode Reposito
 
     * Immediately before the transaction is committed
     * Immediately before executing the query (SELECT)
-    * Immediately after calling an other update method
 
     Notes of sequence of calling repository method refer to ":ref:`DataAccessMyBatis3HowToExtendExecutorTypeBatchNotesMethodCallOrder`".
 

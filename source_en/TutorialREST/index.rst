@@ -309,7 +309,7 @@ Error Response
 | The response specification of typical errors are described below.
 | Error patterns other than the below are also exists but description in the tutorial are omitted.
 
-﻿In the \ :doc:`../TutorialTodo/index`\, error messages are hardcoded in the program but in this tutorial, it is modified such a way that the error messages are retrieved from the property file based on error code.
+In the \ :doc:`../TutorialTodo/index`\, error messages are hardcoded in the program but in this tutorial, it is modified such a way that the error messages are retrieved from the property file based on error code.
 
 **[Response specification at the time of input check error]**
 
@@ -1720,7 +1720,7 @@ Define the error code corresponding to the error messages of the processing resu
 
 |
 
-| Define the error code corresponding to the input check error messages in the Bean Validation property file.
+| Define the error messages corresponding to input check error codes, in Bean Validation message properties file. 
 
 | Change the default message definition because the default message does not include the item name in the message
 | In this tutorial, only define the message corresponding to the rules (\ ``@NotNull`` \ and \ ``@Size``\ ) that are used in \ ``TodoResource`` \ class.

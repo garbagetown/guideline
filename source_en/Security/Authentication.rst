@@ -1842,21 +1842,30 @@ Here, add company identifier for the screen (JSP), introduced in \ :ref:`form-lo
 |
 Appendix
 --------------------------------------------------------------------------------
-| When performing authentication using Spring Security, transit to the path described in configuration file when authentication is successful.
-| When there is a business requirement such as "login to read more",
-| sometimes the transition destination after login needs to be changed dynamically.
+
+Authentication Success handler for which destination can be specified
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+In case of authentication using Spring Security, user is transited to the following two paths if authentication is successful.
+
+* Path described in bean definition file (\ ``spring-security.xml``\ ) (Path specified in \ ``default-target-url``\  attribute of \ ``<form-login>``\  element)
+* Path for displaying "Secure page for which authentication is necessary" which is accessed before the login.
+
+In common library, in addition to the functionality provided by Spring Security, 
+a class (\ ``org.terasoluna.gfw.web.security.RedirectAuthenticationHandler``\ ) is provided which can specify the destination path in request parameter.
+
+\ ``RedirectAuthenticationHandler``\  is a class, created for implementing the mechanism given below.
+
+* For performing login for page display
+* For specifying destination page after login at JSP side (source JSP)
 
 .. figure:: ./images/Authentication_Appendix_ScreenFlow.png
    :alt: Authentication_Appendix_Screen_Flow
-   :width: 60%
+   :width: 70%
    :align: center
 
    **Picture - Screen_Flow**
 
-| In such cases, use \ ``org.terasoluna.gfw.web.security.RedirectAuthenticationHandler``\
-| provided by common library.
-
-| Setting example using RedirectAuthenticationHandler is shown below.
+| Example of using \ ``RedirectAuthenticationHandler``\ is shown below.
 
 **Description example of source screen JSP**
 
@@ -1878,10 +1887,10 @@ Appendix
    * - Sr. No.
      - Description
    * - | (1)
-     - | Setting redirect URL
-       | Set the transition destination URL in the hidden "redirectTo" field.
-       | The value specified in name should be matched with targetUrlParameter
-       | described in configuration file explained later.
+     - | As hidden field, set the "URL of destination page after successful login".
+       | Specify "\ ``redirectTo``\ " as hidden field name (request parameter name).
+       | 
+       | Field name (request parameter name) should match with \ ``targetUrlParameter``\  property value of \ ``RedirectAuthenticationHandler``\ .
 
 **Description example of login screen JSP**
 
@@ -1903,73 +1912,74 @@ Appendix
    * - Sr. No.
      - Description
    * - | (1)
-     - | Set redirect URL
-       | Set the redirect URL passed from source screen using request parameter,
-       | to hidden field.
+     - | As hidden field, set the "URL of destination page after successful login", passed by request parameter from source screen.
+       | Specify "\ ``redirectTo``\ " as hidden field name (request parameter name).
+       | 
+       | Field name (request parameter name) should match with \ ``targetUrlParameter``\  property value of \ ``RedirectAuthenticationHandler``\ .
 
 **Spring Security configuration file**
 
 .. code-block:: xml
 
   <sec:http auto-config="true">
-                  <!-- omitted -->
-      <sec:form-login login-page="/login" default-target-url="/"
-          always-use-default-target="false"
+      <!-- omitted -->
+      <!-- (1) -->
+      <sec:form-login
+          login-page="/login"
+          login-processing-url="/authentication"
           authentication-failure-handler-ref="authenticationFailureHandler"
           authentication-success-handler-ref="authenticationSuccessHandler" />
-                                                                      <!-- (1) -->
-                  <!-- omitted -->
+      <!-- omitted -->
   </sec:http>
-                  
-   <bean id="authenticationSuccessHandler"
+
+  <!-- (2) -->
+  <bean id="authenticationSuccessHandler"
       class="org.terasoluna.gfw.web.security.RedirectAuthenticationHandler">
-                                                                      <!-- (2) -->
-      <property name="targetUrlParameter" value="redirectTo"/>        <!-- (3) -->
   </bean>
-                  
+
+  <!-- (3) -->
   <bean id="authenticationFailureHandler"
       class="org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler">
-                                                                      <!-- (4) -->
-      <property name="defaultFailureUrl" value="/login?error=true"/> <!-- (5) -->
-      <property name="useForward" value="true"/>                     <!-- (6) -->
+      <property name="defaultFailureUrl" value="/login?error=true"/> <!-- (4) -->
+      <property name="useForward" value="true"/> <!-- (5) -->
   </bean>
-                  <!-- omitted -->
 
 .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
-.. list-table:: 
+.. list-table::
    :header-rows: 1
    :widths: 10 90
 
    * - Sr. No.
      - Description
    * - | (1)
-     - | Specify BeanId of authentication-failure-handler-ref (handler setting at the time of authentication error) and
-       | authentication-success-handler-ref (handler setting in case of successful authentication).
+     - | Specify BeanId of \ ``authentication-failure-handler-ref``\  (handler setting at the time of authentication error) and \ ``authentication-success-handler-ref``\  (handler setting in case of successful authentication).
    * - | (2)
-     - | Set \ ``org.terasoluna.gfw.web.security.RedirectAuthenticationHandler``\ 
-       | as the reference class of authentication-success-handler-ref.
+     - | Define \ ``org.terasoluna.gfw.web.security.RedirectAuthenticationHandler``\ as a bean referred from \ ``authentication-success-handler-ref``\ .
    * - | (3)
-     - | It should be matched with the value described in hidden field of JSP.
-       | In this example, it is set as "redirectTo". When omitted, "redirectTo" is set.
+     - | Define \ ``org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler``\  as a bean referred from \ ``authentication-failure-handler-ref``\ .
    * - | (4)
-     - | Set \ ``org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler``\
-       | as reference class of authentication-failure-handler-ref.
+     - | Set destination path at the time of authentication failure.
+       | In above example, login screen path and the query (\ ``error=true``\ ) to indicate transition after authentication error, is set.
    * - | (5)
-     - | Set the query indicating error and path of login screen, in the transition destination path of failed authentication.
-   * - | (6)
-     - | When using this function, true should be specified in useForward.
-       | By specifying true, it becomes a forward transition from a redirect transition.
-       | Since URL of redirect destination is stored in request parameter,
-       | it is necessary to ensure that request parameter is stored as it is by setting it to "forward".
+     - | **To use this functionality, useForward should be set to true.**
+       | By setting it to \ ``true``\ , Forward is used instead of Redirect, at the time of transiting to the screen (Login screen) which would be displayed in case of authentication failure.
+
+       | This is because "URL of destination page after successful login) needs to be included in the request parameter of authentication request.
+       | By using Redirect, if authentication error screen is displayed, "URL of destination page after successful login" cannot be inherited from request parameter. Hence, it is not possible to transit to the specified screen even after login is successful.
+       | To avoid this, it is necessary to ensure that "URL of destination page after successful login" is inherited from request parameter using Forward.
 
 .. tip::
-  Measures against Open Redirector vulnerability are provided in the RedirectAuthenticationHandler.
-  Therefore, it cannot transit to external sites such as "http://google.com", without extending. 
-  In order to move to other domain, it is necessary to create the class implementing \ ``org.springframework.security.web.RedirectStrategy``\ .
-  The class implementing RedirectStrategy in targetUrlParameterRedirectStrategy of RedirectAuthenticationHandler, is set using setter injection.
-  As a precaution while extending, it is necessary to have a structure that does not pose any problems even if the redirectTo value is tampered with.
-  For example, any one of the measures such as checking redirect destination domain or specifying redirect destination URL by number (specifying the page number)
-  instead of specifying it directly, need to be taken.
+
+  Measures against Open Redirector vulnerability are provided in \ ``RedirectAuthenticationHandler``\ .
+  Therefore, user cannot transit to external sites such as "http://google.com".
+  In order to move to an external site, it is necessary to create the class implementing \ ``org.springframework.security.web.RedirectStrategy``\ ,
+  and it is to be injected to \ ``targetUrlParameterRedirectStrategy``\  property of \ ``RedirectAuthenticationHandler``\ .
+  
+  As a precaution while extending, it is necessary to have a structure that does not pose any problems even if \ ``redirectTo``\ value is tampered with.
+  For example, the measures given below can be considered.
+  
+  * Specifying the ID of page number etc. instead of directly specifying the destination URL and redirecting to the URL corresponding to that ID.
+  * Checking the destination URL, and redirecting only the URL that matches with white list.
 
 .. raw:: latex
 

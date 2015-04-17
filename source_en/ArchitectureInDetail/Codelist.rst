@@ -52,6 +52,9 @@ Following four types of codelists are implemented in common library.
    * - ``org.terasoluna.gfw.common.codelist.JdbcCodeList``
      - Use the codelist by fetching the code from DB using SQL.
      - YES
+   * - ``org.terasoluna.gfw.common.codelist.EnumCodeList``
+     - Use when creating the codelist from constant defined in \ ``Enum``\  class.
+     - NO
    * - ``org.terasoluna.gfw.common.codelist.i18n.SimpleI18nCodeList``
      - Use the codelist corresponding to java.util.Locale.
      - NO
@@ -63,7 +66,6 @@ Codelist class diagram provided in common library is as follows:
 .. figure:: ./images/codelist-class-diagram.png
    :alt: codelist class diagram
    :align: center
-   :width: 70%
 
    **Picture - Image of codelist class diagram**
 
@@ -77,6 +79,7 @@ This section describes settings for various codelists and their implementation m
 * :ref:`codelist-simple`
 * :ref:`codelist-number`
 * :ref:`codelist-jdbc`
+* :ref:`codelist-enum`
 * :ref:`codelisti18n`
 * :ref:`codelist-validate`
 
@@ -529,6 +532,178 @@ Using codelist in Java class
 For details on settings shown below, refer to :ref:`Using codelist in Java class <serverSide>` described earlier.
 
 |
+.. _codelist-enum:
+
+How to use EnumCodeList
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+\ ``org.terasoluna.gfw.common.codelist.EnumCodeList``\  is a class
+for creating codelist from constant defined in \ ``Enum``\  class.
+
+.. note::
+
+    In case of handling codelist in applications that match with the following conditions,
+    it should be analyzed if the codelist label can be stored in \ ``Enum``\  class using \ ``EnumCodeList``\  .
+    By storing codelist label in \ ``Enum``\  class,
+    the information and operations linked with code values can be aggregated in \ ``Enum``\  class.
+
+    * It is necessary to store the code values in \ ``Enum``\  class (i.e. the process needs to be performed considering code values in Java logic)
+    * Internationalization (multilingualization) of UI is not required
+
+|
+
+Image of using \ ``EnumCodeList``\  is shown below.
+
+.. figure:: ./images/codelist-enum.png
+   :alt: codelist enum
+   :width: 100%
+
+.. note::
+
+    In \ ``EnumCodeList``\ , \ ``org.terasoluna.gfw.common.codelist.EnumCodeList.CodeListItem``\  interface
+    is provided to fetch the information (code values and labels) required for creating codelist from \ ``Enum``\  class.
+
+    In case of using \ ``EnumCodeList``\ , \ ``EnumCodeList.CodeListItem``\  interface should be implemented in \ ``Enum``\  class to be created.
+
+|
+
+Example of codelist settings
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+**Creating Enum class**
+
+In case of using \ ``EnumCodeList``\ ,
+create \ ``Enum``\  class that implements \ ``EnumCodeList.CodeListItem``\  interface.
+Example is shown below.
+
+.. code-block:: java
+
+    package com.example.domain.model;
+
+    import org.terasoluna.gfw.common.codelist.EnumCodeList;
+
+    public enum OrderStatus
+        // (1)
+        implements EnumCodeList.CodeListItem {
+
+        // (2)
+        RECEIVED  ("1", "Received"),
+        SENT      ("2", "Sent"),
+        CANCELLED ("3","Cancelled");
+
+        // (3)
+        private final String value;
+        private final String label;
+
+        // (4)
+        private OrderStatus(String codeValue, String codeLabel) {
+            this.value = codeValue;
+            this.label = codeLabel;
+        }
+
+        // (5)
+        @Override
+        public String getCodeValue() {
+            return value;
+        }
+
+        // (6)
+        @Override
+        public String getCodeLabel() {
+            return label;
+        }
+
+    }
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - Sr. No.
+      - Description
+    * - | (1)
+      - In \ ``Enum``\  class to be used as codelist,
+        implement the \ ``org.terasoluna.gfw.common.codelist.EnumCodeList.EnumCodeList``\  interface provided by common library.
+
+        In \ ``EnumCodeList.EnumCodeList``\  interface, following methods are defined to fetch the information (code values and labels) required for creating a codelist.
+
+        * \ ``getCodeValue()``\  method to fetch code values
+        * \ ``getCodeLabel()``\  method to fetch labels
+
+    * - | (2)
+      - Define constants.
+
+        When creating constants, specify the information (code values and labels) required for creating a codelist.
+
+        In above example, following 3 constants are defined. 
+
+        * \ ``RECEIVED``\  (code value=\ ``"1"``\ , label=\ ``"Received"``\ )
+        * \ ``SENT``\  (code value=\ ``"2"``\ , label=\ ``"Sent"``\ )
+        * \ ``CANCELLED``\  (code value=\ ``"3"``\ , label=\ ``"Cancelled"``\ )
+
+        .. note::
+
+            Sorting order of codelist when using \ ``EnumCodeList``\  will be the order of defining constants.
+
+    * - | (3)
+      - Create a property to store the information (code values and labels) required for creating a codelist.
+    * - | (4)
+      - Create a constructor to receive the information (code values and labels) required for creating a codelist.
+    * - | (5)
+      - Return the code values storing constants.
+
+        This method is defined in \ ``EnumCodeList.EnumCodeList``\  interface, and
+        it is called when \ ``EnumCodeList``\  fetches code value from a constant.
+    * - | (6)
+      - Return the label storing constants.
+
+       This method is defined in \ ``EnumCodeList.EnumCodeList``\  interface, and
+       it is called when \ ``EnumCodeList``\  fetches label from a constant.
+
+
+|
+
+**Definition of bean definition file (xxx-codelist.xml)**
+
+\ ``EnumCodeList``\  is defined in bean definition file for codelist.
+Example of definition is shown below.
+
+.. code-block:: xml
+
+    <bean id="CL_ORDERSTATUS"
+          class="org.terasoluna.gfw.common.codelist.EnumCodeList"> <!-- (7) -->
+        <constructor-arg value="com.example.domain.model.OrderStatus" /> <!-- (8) -->
+    </bean>
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - Sr. No.
+      - Description
+    * - | (7)
+      - Specify \ ``EnumCodeList``\  class as codelist implementation class.
+    * - | (8)
+      - Specify FQCN of \ ``Enum``\  class that implements \ ``EnumCodeList.CodeListItem``\  interface in constructor of \ ``EnumCodeList``\  class.
+
+|
+
+Using codelist in JSP
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+For details on how to use codelist in JSP, refer to :ref:`clientSide` described earlier.
+
+
+|
+
+Using codelist in Java class
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+For details on how to use codelist in Java class, 
+refer to :ref:`serverSide` described earlier.
+
+|
 
 .. _codelisti18n:
 
@@ -546,7 +721,7 @@ By setting the codelist for each locale, the codelist corresponding to locale ca
 
 |
 
-Example of setting a codelist
+Example of codelist settings
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 It is easier to understand if you consider \ ``SimpleI18nCodeList``\  as two dimensional table wherein row is \ ``Locale``\ , column contains code values and cell details are labels.

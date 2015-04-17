@@ -1055,14 +1055,31 @@ spring-security.xml
      - Description
    * - | (1)
      - | Specify the path for executing logout process in \ ``logout-url``\  attribute.
+       | When not specified, "/j_spring_security_logout" will be default path.
+
+       | **In this guideline, it is recommended that you change it to unique system value instead of using the above default value "/j_spring_security_logout".** In this example, "/logout" is specified.
    * - | (2)
      - | Specify the destination path after logout in \ ``logout-success-url``\  attribute.
+       | When not specified, "/" will be default path.
+
+       | If \ ``success-handler-ref``\  attribute is specified while this attribute is specified, error will occur during startup process.
    * - | (3)
-     - | In \ ``invalidate-session``\  attribute, set whether to discard the session when logging out. By default, it is set to \ ``true``\ . When \ ``true``\ , the session gets cleared at the time of logout.
+     - | In \ ``invalidate-session``\  attribute, set whether to discard the session when logging out.
+       | By default, it is set to \ ``true``\ .
+       | In case of \ ``true``\ , the session is discarded at the time of logout.
    * - | (4)
-     - | Delete the cookie specified in \ ``delete-cookies``\  attribute. When multiple cookies are to be deleted, use "," to separate them.
+     - | In \ ``delete-cookies``\  attribute, mention the cookie names to be deleted at the time of logout.
+       | When multiple cookies are mentioned, use "," to separate them.
    * - | (5)
-     - | Specify the handler class that is called after a successful logout, in \ ``success-handler-ref``\  attribute.
+     - | Specify the handler class to be called after a successful logout, in \ ``success-handler-ref``\  attribute.
+
+       | If \ ``logout-success-url``\  attribute is specified while this attribute is specified, error will occur during startup process.
+
+.. warning:: **Why it is not recommended to use Spring Security default value, "/j_spring_security_logout"**
+
+    If default value is used, the fact that the application is using Spring Security is revealed.
+    As a result, if any Spring Security related vulnerability is detected, there is a higher risk of receiving an attack due to the vulnerability.
+    In order to prevent these risks, it is recommended to avoid using default value.
 
 .. note::
 

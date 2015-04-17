@@ -1342,58 +1342,81 @@ How to use the created \ ``ReservationUserDetailsService``\  and \ ``Reservation
   
   It is recommended not to store the information that may undergo frequent changes or the information which is changed by a user other than the login user (administrator etc.).
 
+|
 
 Extending \ ``AuthenticationProvider``\ 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. todo::
 
-  Review the details.
+In case of business requirements that cannot be supported by Spring Security's \ `authentication provider <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/apidocs/org/springframework/security/authentication/AuthenticationProvider.html>`_\ ,
+it is necessary to create a class that implements \ ``org.springframework.security.authentication.AuthenticationProvider``\  interface.
 
-| In case of business requirements that cannot be supported by Spring Security's \ `default authentication provider <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/apidocs/org/springframework/security/authentication/AuthenticationProvider.html>`_\ ,
-| it is necessary to create the class that implements \ ``org.springframework.security.authentication.AuthenticationProvider``\ .
-
-| It is necessary to return the class that implements \ ``org.springframework.security.core.Authentication``\  as return value, in \ ``AuthenticationProvider``\ .
-| It is necessary to set \ ``getPrincipal``\  method (to fetch authentication information)
-| and \ ``getCredentials``\  method (to fetch information that guarantees validity of principal) in the class that implements  \ ``Authentication``\ .
-
-| Here, the case that requires authentication information other than user name and password for authentication, is considered. To access these values in \ ``AuthenticationProvider``\ ,
- it is necessary to create a class that inherits.
-
-* \ ``org.springframework.security.authentication.UsernamePasswordAuthenticationToken``\ 
-* \ ``org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter``\ 
-
-
-| An example with user name, \ **Company identifier**\  and password as the authentication information is shown below.
+Here, the extended example of DB authentication using 3 parameters such as user name, password and \ **Company identifier (independent authentication parameter)**\  is given below.
 
 .. figure:: ./images/Authentication_HowToExtends_LoginForm.png
    :alt: Authentication_HowToExtends_LoginForm
-   :width: 40%
+   :width: 50%
+  
+To implement the above requirements, it is necessary to create a class given below.
+  
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - Sr. No.
+      - Description
+    * - | (1)
+      - Implementation class of \ ``org.springframework.security.core.Authentication``\  interface to store user name, password and company identifier (independent authentication parameter).
+
+        Here, it is created by inheriting \ ``org.springframework.security.authentication.UsernamePasswordAuthenticationToken``\  class.
+    * - | (2)
+      - Implementation class of \ ``org.springframework.security.authentication.AuthenticationProvider``\  to perform DB authentication using user name, password and company identifier (independent authentication parameter).
+
+        Here, it is created by inheriting \ ``org.springframework.security.authentication.dao.DaoAuthenticationProvider``\  class.
+    * - | (3)
+      - Servlet filter class to create \ ``Authentication``\  for fetching user name, password and company identifier (independent authentication parameter) from request parameter and passing them to \ ``AuthenticationManager``\  (\ ``AuthenticationProvider``\ ).
+
+        Here, it is created by inheriting \ ``org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter``\  class.
+
+.. tip::
+	
+    As the example below considers addition of independent parameter as an authentication parameter, 
+    it is necessary to extend servlet filter class to generate \ ``Authentication``\  and implementation class of \ ``Authentication``\  interface.
+
+    To authenticate only by user name and password, the authentication process can be extended, 
+    only by creating implementation class of \ ``AuthenticationProvider``\  interface.
+
+|
 
 Extending \ ``UsernamePasswordAuthenticationToken``\ 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-| Create an independent \ ``AuthenticationToken``\  that inherits \ ``UsernamePasswordAuthenticationToken``\ .
-| By extending \ ``UsernamePasswordAuthenticationToken``\ , company identifier can be included in authentication information.
+
+Here, by inheriting \ ``UsernamePasswordAuthenticationToken``\  class, 
+create a class that stores company identifier (independent authentication parameter) in addition to user name and password.
 
 .. code-block:: java
 
     // import omitted
     public class CompanyIdUsernamePasswordAuthenticationToken extends
-                                                                     UsernamePasswordAuthenticationToken {
+        UsernamePasswordAuthenticationToken {
 
         private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 
-        private final String companyId;  // (1)
+        // (1)
+        private final String companyId;
 
+        // (2)
         public CompanyIdUsernamePasswordAuthenticationToken(
-                Object principal, Object credentials, String companyId) {  // (2)
+                Object principal, Object credentials, String companyId) {
             super(principal, credentials);
 
             this.companyId = companyId;
         }
 
+        // (3)
         public CompanyIdUsernamePasswordAuthenticationToken(
                 Object principal, Object credentials, String companyId,
-                Collection<? extends GrantedAuthority> authorities) {  // (3)
+                Collection<? extends GrantedAuthority> authorities) {
             super(principal, credentials, authorities);
             this.companyId = companyId;
         }
@@ -1401,6 +1424,7 @@ Extending \ ``UsernamePasswordAuthenticationToken``\
         public String getCompanyId() {
             return companyId;
         }
+
     }
 
 .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
@@ -1411,52 +1435,68 @@ Extending \ ``UsernamePasswordAuthenticationToken``\
    * - Sr. No.
      - Description
    * - | (1)
-     - | Create a field for company identifier.
+     - Create a field to store company identifier.
    * - | (2)
-     - | Constructor used while creating instance of \ ``CompanyIdUsernamePasswordAuthenticationToken``\ , before authentication.
+     - Create a constructor to be used while creating instances for storing the information (information specified in request parameter) before authentication.
    * - | (3)
-     - | Constructor used while creating instance of \ ``CompanyIdUsernamePasswordAuthenticationToken``\ , after successful authentication.
-       | Authentication completion status is reached by passing authorization information collectively, to the constructor argument of parent class.
+     - | Create a constructor to be used while creating instances for storing the authenticated information.
+       | Authentication completion status is reached by passing authorization information to the constructor argument of parent class.
 
-Implementing an independent \ ``AuthenticationProvider``\ 
+|
+
+Extending \ ``DaoAuthenticationProvide``\ 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-| Using \ ``CompanyIdUsernamePasswordAuthenticationToken``\  in an independent \ ``AuthenticationProvider``\ .
+
+Here, by inheriting \ ``DaoAuthenticationProvider``\  class, 
+create a class that performs DB authentication using user name, password and company identifier.
 
 .. code-block:: java
 
     // import omitted
-    public class CompanyIdUsernamePasswordAuthenticationProvider implements
-                                                                        AuthenticationProvider {
+    public class CompanyIdUsernamePasswordAuthenticationProvider extends
+        DaoAuthenticationProvider {
+
         // omitted
 
         @Override
-        public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        protected void additionalAuthenticationChecks(UserDetails userDetails,
+                UsernamePasswordAuthenticationToken authentication)
+                throws AuthenticationException {
 
-            CompanyIdUsernamePasswordAuthenticationToken authenticationToken =
-                (CompanyIdUsernamePasswordAuthenticationToken) authentication; // (1)
+            // (1)
+            super.additionalAuthenticationChecks(userDetails, authentication);
 
-            // Obtain userName, password, companyId
-            String username = authenticationToken.getName();
-            String password = authenticationToken.getCredentials().toString();
-            String companyId = authenticationToken.getCompanyId();
-            
-            // Obtain user (and grants if needed) from database or other system
-            // UserDetails userDetails = ...
-            
-            // Business logic
-            // ...
-            
-            return new UsernamePasswordAuthenticationToken(userDetails, authentication.getCredentials(),
-                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))); // (2)
+            // (2)
+            CompanyIdUsernamePasswordAuthenticationToken companyIdUsernamePasswordAuthentication =
+                (CompanyIdUsernamePasswordAuthenticationToken) authentication;
+            String requestedCompanyId = companyIdUsernamePasswordAuthentication.getCompanyId();
+            String companyId = ((SampleUserDetails) userDetails)
+                    .getAccount().getCompanyId();
+            if (!companyId.equals(requestedCompanyId)) {
+                throw new BadCredentialsException(messages.getMessage(
+                        "AbstractUserDetailsAuthenticationProvider.badCredentials",
+                        "Bad credentials"));
+            }
+        }
+
+        @Override
+        protected Authentication createSuccessAuthentication(Object principal,
+                Authentication authentication, UserDetails user) {
+            String companyId = ((SampleUserDetails) user).getAccount()
+                    .getCompanyId();
+            // (3)
+            return new CompanyIdUsernamePasswordAuthenticationToken(user,
+                    authentication.getCredentials(), companyId,
+                    user.getAuthorities());
         }
 
         @Override
         public boolean supports(Class<?> authentication) {
+            // (4)
             return CompanyIdUsernamePasswordAuthenticationToken.class
-                    .equals(authentication); // (3)
+                    .isAssignableFrom(authentication);
         }
 
-        // omitted
     }
 
 .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
@@ -1467,32 +1507,40 @@ Implementing an independent \ ``AuthenticationProvider``\
    * - Sr. No.
      - Description
    * - | (1)
-     - | Cast the \ ``UsernamePasswordAuthenticationFilter``\  in the independent \ ``AuthenticationToken``\  which is set in extended class.
-       | For details, refer \ extension <authentication_custom_usernamepasswordauthenticationfilter> of :ref:`UsernamePasswordAuthenticationFilter`\  which will be described later.
+     - Call parent class method and execute check process provided by Spring Security.
+
+       Password authentication is performed at this time.
    * - | (2)
-     - | After executing the authentication process (fetching user information, password check, company identifier check etc.),
-       | create and return \ ``UsernamePasswordAuthenticationToken``\ . By setting authorization information collectively in parameter,
-       | authenticated instance namely, \ ``AuthenticationToken``\  is created. \ ``UserDetails``\  is passed to constructor parameter as well.
-       |
-       | In this example, only a single role is used as it is a simple implementation.
-       | For details on authority, refer \ :ref:`User information management class settings <userDetailsService>`\ .
+     - When password authentication is successful, validate company identifier (independent authentication parameter).
+
+       In the above example, it is checked whether requested company identifier matches with the company identifier stored in the table.
    * - | (3)
-     - | \ ``CompanyIdUsernamePasswordAuthenticationToken``\  class, which is an independent \ ``AuthenticationToken``\ 
-       | should be supported.
+     - When password authentication and independent authentication is successful, create and return authenticated \ ``CompanyIdUsernamePasswordAuthenticationToken``\ .
+   * - | (4)
+     - When \ ``Authentication``\ that can be casted is specified in \ ``CompanyIdUsernamePasswordAuthenticationToken``\ ,
+       perform the authentication process using this class.
+
+.. tip::
+
+    User existence check, user status check (check for invalid users, locked users, validity expired users, etc.),
+    are performed as processes of parent class before the \ ``additionalAuthenticationChecks``\  method is called.
+
+|
 
 .. _authentication_custom_usernamepasswordauthenticationfilter:
 
 Extending \ ``UsernamePasswordAuthenticationFilter``\ 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-| Create an independent \ ``AuthenticationFilter``\  that inherits \ ``UsernamePasswordAuthenticationFilter``\ .
-| By extending \ ``UsernamePasswordAuthenticationFilter``\ , \ ``CompanyIdUsernamePasswordAuthenticationToken``\  can be passed to
-| \ ``CompanyIdUsernamePasswordAuthenticationProvider``\ .
+Here, by inheriting \ ``UsernamePasswordAuthenticationFilter``\  class, 
+create a servlet filter class to pass the authentication information (user name, password, company identifier) to \ ``AuthenticationProvider``\ .
+
+Implementation of \ ``attemptAuthentication``\  method is customized by copying \ ``UsernamePasswordAuthenticationFilter``\ class method.
 
 .. code-block:: java
 
     // import omitted
     public class CompanyIdUsernamePasswordAuthenticationFilter extends
-                                                                      UsernamePasswordAuthenticationFilter {
+        UsernamePasswordAuthenticationFilter {
 
         @Override
         public Authentication attemptAuthentication(HttpServletRequest request,
@@ -1503,31 +1551,31 @@ Extending \ ``UsernamePasswordAuthenticationFilter``\
                         + request.getMethod());
             }
 
+            // (1)
             // Obtain UserName, Password, CompanyId
             String username = super.obtainUsername(request);
             String password = super.obtainPassword(request);
             String companyId = obtainCompanyId(request);
-
-            // username required
-            if (!StringUtils.hasText(username)) {
-                throw new AuthenticationServiceException("UserName is required");
+            if (username == null) {
+                username = "";
+            } else {
+                username = username.trim();
             }
-
-            // validate password, companyId
-            
-            // omitted other process
-
+            if (password == null) {
+                password = "";
+            }
             CompanyIdUsernamePasswordAuthenticationToken authRequest =
-                    new CompanyIdUsernamePasswordAuthenticationToken(username, password, companyId);  // (1)
+                new CompanyIdUsernamePasswordAuthenticationToken(username, password, companyId);
 
             // Allow subclasses to set the "details" property
             setDetails(request, authRequest);
 
-            return this.getAuthenticationManager().authenticate(authRequest);  // (2)
+            return this.getAuthenticationManager().authenticate(authRequest); // (2)
         }
 
+        // (3)
         protected String obtainCompanyId(HttpServletRequest request) {
-            return request.getParameter("j_companyid");  // (3)
+            return request.getParameter("companyid");
         }
     }
 
@@ -1539,133 +1587,221 @@ Extending \ ``UsernamePasswordAuthenticationFilter``\
    * - Sr. No.
      - Description
    * - | (1)
-     - | Create an instance of \ ``CompanyIdUsernamePasswordAuthenticationToken``\ 
-       | in which the user name, password and company identifier fetched from \ ``HttpServletRequest``\ , have been set.
+     - Create an instance of \ ``CompanyIdUsernamePasswordAuthenticationToken``\  from authentication information (user name, password, company identifier) fetched from request parameter.
    * - | (2)
-     - | Set the unauthenticated  instance of \ ``CompanyIdUsernamePasswordAuthenticationToken``\
-       | as the parameter of \ ``org.springframework.security.authentication.AuthenticationManager.authenticate``\ .
+     - Call \ ``authenticate``\  method of \ ``org.springframework.security.authentication.AuthenticationManager``\  by specifying 
+       authentication information (\ ``CompanyIdUsernamePasswordAuthenticationToken``\  instances) specified in request parameter.
+
+       If \ ``AuthenticationManager``\  method is called, authentication process of \ ``AuthenticationProvider``\  is called.
    * - | (3)
-     - | Company identifier is fetched from the request parameter.
+     - Company identifier is fetched from the request parameter called \ ``"companyid"``\ .
+
+.. note:: **Authentication information input check**
+
+    Sometimes, a check needs to be performed in advance for the obvious input errors that occur due to load reduction on DB server.
+    In such cases, input check process can be performed by extending \ ``UsernamePasswordAuthenticationFilter``\ , similar to
+    \ :ref:`authentication_custom_usernamepasswordauthenticationfilter`\ .
+
+    Input check is not performed in the above mentioned example. 
+
+.. todo::
+
+    Input check of authentication information can also be performed using Bean Validation by handling the request in Controller class.
+
+    Input check method using Bean Validation will be added later.
+
+|
+
+Application of extended authentication process
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Apply the DB authentication function using user name, password, company identifier (independent authentication parameter) in Spring Security.
+
+``spring-security.xml``
+
+ .. code-block:: xml
+
+    <!-- omitted -->
+
+    <!-- (1) -->
+    <sec:http
+        auto-config="false"
+        use-expressions="true"
+        entry-point-ref="loginUrlAuthenticationEntryPoint">
+
+        <!-- omitted -->
+
+        <!-- (2) -->
+        <sec:custom-filter
+            position="FORM_LOGIN_FILTER"
+            ref="companyIdUsernamePasswordAuthenticationFilter" />
+
+        <!-- omitted -->
+
+        <sec:csrf token-repository-ref="csrfTokenRepository" />
+
+        <sec:logout
+            logout-url="/logout"
+            logout-success-url="/login"
+            delete-cookies="JSESSIONID" />
+
+        <!-- omitted -->
+
+        <sec:intercept-url pattern="/login" access="permitAll" />
+        <sec:intercept-url pattern="/**" access="isAuthenticated()" />
+
+        <!-- omitted -->
+
+    </sec:http>
+
+    <!-- (3) -->
+    <bean id="loginUrlAuthenticationEntryPoint"
+        class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+        <constructor-arg value="/login" />
+    </bean>
+
+    <!-- (4) -->
+    <bean id="companyIdUsernamePasswordAuthenticationFilter"
+        class="com.example.app.common.security.CompanyIdUsernamePasswordAuthenticationFilter">
+        <!-- (5) -->
+        <property name="requiresAuthenticationRequestMatcher">
+            <bean class="org.springframework.security.web.authentication.logout.LogoutFilter$FilterProcessUrlRequestMatcher">
+                <constructor-arg value="/authentication" />
+            </bean>
+        </property>
+        <!-- (6) -->
+        <property name="authenticationManager" ref="authenticationManager" />
+        <!-- (7) -->
+        <property name="sessionAuthenticationStrategy" ref="sessionAuthenticationStrategy" />
+        <!-- (8) -->
+        <property name="authenticationFailureHandler">
+            <bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+                <constructor-arg value="/login?error=true" />
+            </bean>
+        </property>
+        <!-- (9) -->
+        <property name="authenticationSuccessHandler">
+            <bean class="org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler" />
+        </property>
+    </bean>
+
+    <!-- (6') -->
+    <sec:authentication-manager alias="authenticationManager">
+        <sec:authentication-provider ref="companyIdUsernamePasswordAuthenticationProvider" />
+    </sec:authentication-manager>
+    <bean id="companyIdUsernamePasswordAuthenticationProvider"
+        class="com.example.app.common.security.CompanyIdUsernamePasswordAuthenticationProvider">
+        <property name="userDetailsService" ref="sampleUserDetailsService" />
+        <property name="passwordEncoder" ref="passwordEncoder" />
+    </bean>
+
+    <!-- (7') -->
+    <bean id="sessionAuthenticationStrategy"
+        class="org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy">
+        <constructor-arg>
+            <util:list>
+                <bean class="org.springframework.security.web.csrf.CsrfAuthenticationStrategy">
+                    <constructor-arg ref="csrfTokenRepository" />
+                </bean>
+                <bean class="org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy" />
+            </util:list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="csrfTokenRepository"
+        class="org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository" />
+
+
+    <!-- omitted -->
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - Sr. No.
+      - Description
+    * - | (1)
+      - To replace "FORM_LOGIN_FILTER" using \ ``custom-filter``\ element, it is necessary to perform the following settings in attributes of \ ``http``\  element.
+
+        * Since it is not possible to use auto configuration, either set \ ``auto-config="false"``\  or delete \ ``auto-config``\  attribute.
+        * Since it is not possible to use \ ``form-login``\  element, explicitly specify \ ``AuthenticationEntryPoint``\  to be used by using \ ``entry-point-ref``\  attribute.
+    * - | (2)
+      - Replace "FORM_LOGIN_FILTER" by using \ ``custom-filter``\  element.
+
+        Specify \ ``"FORM_LOGIN_FILTER"``\  in \ ``position``\  attribute of \ ``custom-filter``\  element, and specify servlet filter bean ID extended in \ ``ref``\  attribute.
+    * - | (3)
+      - Define bean of \ ``AuthenticationEntryPoint``\  to be specified in \ ``entry-point-ref``\  attributes of \ ``http``\ element.
+
+        Here, bean of \ ``org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint``\  class used while specifying \ ``form-login``\  element, is defined.
+    * - | (4)
+      - Define bean of servlet filter to be used as "FORM_LOGIN_FILTER".
+
+        Here, bean of extended servlet filter class (\ ``CompanyIdUsernamePasswordAuthenticationFilter``\ ) is defined.
+    * - | (5)
+      - Specify \ ``RequestMatcher``\  instance for detecting request to perform authentication process, in \ ``requiresAuthenticationRequestMatcher``\  property.
+
+        Here, if there is a request in \ ``/authentication``\  path, authentication process is performed.
+        This is similar to specifying \ ``"/authentication"``\  in \ ``login-processing-url``\  attribute of \ ``form-login``\  element.
+    * - | (6)
+      - Specify the value which was set in \ ``alias``\  attribute of \ ``authentication-manager``\  element in \ ``authenticationManager``\  property.
+
+        If \ ``alias``\  attribute of \ ``authentication-manager``\ element is specified,
+        it is possible to inject dependency (DI) of \ ``AuthenticationManager``\  bean generated by Spring Security, to other bean.
+    * - | (6')
+      - Set extended \ ``AuthenticationProvider``\  (\ ``CompanyIdUsernamePasswordAuthenticationProvider``\ ) to \ ``AuthenticationManager``\  generated by Spring Security.
+    * - | (7)
+      - Specify bean of component (\ ``SessionAuthenticationStrategy``\ ) to control the session handling at the time of successful authentication, in \ ``sessionAuthenticationStrategy``\  property.
+
+    * - | (7')
+      - Define bean of component (\ ``SessionAuthenticationStrategy``\ ) to control the session handling at the time of successful authentication.
+
+        Here, the following features provided by Spring Security are enabled.
+        
+        * Component to re-create CSRF token (\ ``CsrfAuthenticationStrategy``\ )
+        * Component to generate new session to prevent session fixation attack (\ ``SessionFixationProtectionStrategy``\ )
+
+    * - | (8)
+      - | Specify handler class, called at the time of authentication failure, in \ ``authenticationFailureHandler``\ .
+    * - | (9)
+      - | Specify handler class, called at the time of successful authentication, in \ ``authenticationSuccessHandler``\ .
 
 .. note::
 
-  **Login information input check**
+    When \ ``auto-config="false"``\  is specified, \ ``<sec:http-basic>``\  element and \ ``<sec:logout>``\  element will not be enabled if not defined explicitly.
 
-  Sometimes, a check needs to be performed in advance for the obvious input errors that occur when load reduction to DB server etc.is carried out.
-  In such cases, the input check process can be performed by extending \ ``UsernamePasswordAuthenticationFilter``\ , similar to
-  \ :ref:`authentication_custom_usernamepasswordauthenticationfilter`\ .
+|
 
-
-How to use
+Creating login form
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-* Login form page (JSP)
+Here, add company identifier for the screen (JSP), introduced in \ :ref:`form-login-JSP`\  .
 
-  Adding company identifier to \ :ref:`form-login-JSP`\  example.
-
-  .. code-block:: jsp
-    :emphasize-lines: 7-8
+.. code-block:: jsp
+    :emphasize-lines: 5-6
 
     <form:form action="${pageContext.request.contextPath}/authentication" method="post">
         <!-- omitted -->
         <span>User Id</span><br>
-        <input type="text"
-            id="username" name="j_username"><br>
+        <input type="text" id="username" name="j_username"><br>
         <span>Company Id</span><br>
-        <input type="text"
-            id="companyid" name="j_companyid"><br>  <!-- (1) -->
+        <input type="text" id="companyid" name="companyid"><br>  <!-- (1) -->
         <span>Password</span><br>
-        <input type="password"
-            id="password" name="j_password"><br>
+        <input type="password" id="password" name="j_password"><br>
         <!-- omitted -->
     </form:form>
 
-  .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
-  .. list-table::
-     :header-rows: 1
-     :widths: 10 90
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 10 90
 
-     * - Sr. No.
-       - Description
-     * - | (1)
-       - | Specify j_companyid for the input field 'name' of company identifier.
+    * - Sr. No.
+      - Description
+    * - | (1)
+      - | Specify \ ``"companyid"``\  in the input field name of company identifier. 
 
-* spring-security.xml
-
-  | Set the independent \ ``AuthenticationProvider``\  and \ ``AuthenticationFilter``\ .
-
-  .. code-block:: xml
-
-    <sec:http auto-config="false" use-expressions="true" entry-point-ref="loginUrlAuthenticationEntryPoint">  <!-- (1) -->
-        <!-- omitted -->
-        <sec:custom-filter position="FORM_LOGIN_FILTER" ref="companyIdUsernamePasswordAuthenticationFilter" />  <!-- (2) -->
-
-        <!-- omitted -->
-
-        <sec:logout logout-url="/logout" logout-success-url="/"
-            delete-cookies="JSESSIONID" invalidate-session="true" />
-    </sec:http>
-
-    <bean id="companyIdUsernamePasswordAuthenticationFilter"
-        class="com.example.app.common.security.CompanyIdUsernamePasswordAuthenticationFilter">  <!-- (3) -->
-        <property name="authenticationManager" ref="authenticationManager" />  <!-- (4) -->
-        <property name="authenticationFailureHandler" ref="authenticationFailureHandler" />  <!-- (5) -->
-        <property name="authenticationSuccessHandler" ref="authenticationSuccessHandler" />  <!-- (6) -->
-        <property name="filterProcessesUrl" value="/authentication" />  <!-- (7) -->
-    </bean>
-
-    <bean id="loginUrlAuthenticationEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">  <!-- (8) -->
-        <constructor-arg value="/login" />  <!-- (9) -->
-    </bean>
-
-    <sec:authentication-manager alias="authenticationManager">
-        <sec:authentication-provider ref="companyIdUsernamePasswordAuthenticationProvider" />  <!-- (10) -->
-    </sec:authentication-manager>
-
-    <bean id="companyIdUsernamePasswordAuthenticationProvider"
-        class="com.example.app.common.security.CompanyIdUsernamePasswordAuthenticationProvider" />  <!-- (11) -->
-
-    <!-- omitted -->
-
-  .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
-  .. list-table::
-     :header-rows: 1
-     :widths: 10 90
-
-     * - Sr. No.
-       - Description
-     * - | (1)
-       - | It is not possible to specify auto-config="true" when "FORM_LOGIN_FILTER" is replaced in custom-filter element.
-         | Therefore, it is necessary either to delete the specified auto-config or specify auto-config="false".
-         | Further, entry-point-ref attribute needs to be specified clearly as the form-login element also cannot be specified.
-     * - | (2)
-       - | By specifying "FORM_LOGIN_FILTER" in the position attribute of custom-filter element,
-         | it can be replaced from UsernamePasswordAuthenticationFilter to CompanyIdUsernamePasswordAuthenticationFilter.
-     * - | (3)
-       - | Perform bean definition for CompanyIdUsernamePasswordAuthenticationFilter.
-     * - | (4)
-       - | Specify the value for alias attribute of authentication-manager, in authenticationManager property.
-     * - | (5)
-       - | Specify the handler class to be called in case of authentication failure, in authenticationFailureHandler property.
-     * - | (6)
-       - | Specify the handler class to be called in case of successful authentication, in authenticationSuccessHandler property.
-     * - | (7)
-       - | Specify the path of authentication process in filterProcessesUrl property.
-     * - | (8)
-       - | Define AuthenticationEntryPoint to be specified in the entry-point-ref attribute of http element.
-         | It is the default AuthenticationEntryPoint when form-login element was specified.
-         | Perform bean definition of \ ``org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint``\ .
-     * - | (9)
-       - | Specify the login screen path in constructor argument.
-     * - | (10)
-       - | Perform reference configuration CompanyIdUsernamePasswordAuthenticationProvider in authentication-provider element.
-     * - | (11)
-       - | Perform bean definition of CompanyIdUsernamePasswordAuthenticationProvider.
-
-  .. warning::
-
-       To use \ ``<sec:http-basic>``\  and \ ``<sec:logout>``\  elements wherein auto-config="false" has been specified, they need to be clearly defined.
-
+|
 Appendix
 --------------------------------------------------------------------------------
 | When performing authentication using Spring Security, transit to the path described in configuration file when authentication is successful.

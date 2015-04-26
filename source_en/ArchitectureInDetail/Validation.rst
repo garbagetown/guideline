@@ -2052,6 +2052,21 @@ Considering that the following settings are done in applicationContext.xml, form
 .. figure:: ./images_Validation/validations-message-properties-position-image.png
   :width: 40%
 
+.. warning::
+
+    Multiple \ ``ValidationMessages.properties``\ files should not exist directly under class path. 
+
+    If multiple \ ``ValidationMessages.properties``\ files exist directly under class path,
+    an appropriate message may not be displayed, as either one file of them is read leaving rest of the files unread.
+
+    * When adopting multi project structure, please take care so that \ ``ValidationMessages.properties``\  file is not placed in multiple projects.
+    * When distributing common parts for Bean Validation as jar file, please take care so that \ ``ValidationMessages.properties``\  file is not included in jar file.
+
+    Further, when project is created from `Blank project <https://github.com/terasolunaorg/terasoluna-gfw-web-multi-blank>`_ \  of version 1.0.2.RELEASE or higher, 
+    \ ``ValidationMessages.properties``\  is stored directly under \ ``xxx-web/src/main/resources``\ .
+
+|
+
 
 This guideline classifies the definition as follows.
 

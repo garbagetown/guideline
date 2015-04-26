@@ -1089,7 +1089,11 @@ When checking whether the input value is the code value defined in codelist,
 
 For details on BeanValidation and message output method, refer to :doc:`Validation`.
 
-See below the default message definition that provided by common library.
+For input validation using \ ``@ExistInCodeList``\  annotation,
+it is necessary to carry out ":ref:`Validation_message_def`" for \ ``@ExistInCodeList``\  .
+
+When project is created by `Blank project <https://github.com/terasolunaorg/terasoluna-gfw-web-multi-blank>`_ \ ,
+the following message is defined in \ ``ValidationMessages.properties``\  file directly under \ ``xxx-web/src/main/resources``\ .
 Please change the message to fit the application requirements.
 
 .. code-block:: properties
@@ -1099,16 +1103,34 @@ Please change the message to fit the application requirements.
 .. note::
 
     In the terasoluna-gfw-common 5.0.0.RELEASE or later,
-    the property key has been changed to standard format of Bean Validation(FQCN of annotation class + \ ``.message``\).
+    the format of message property key has been changed to standard format of Bean Validation (FQCN of annotation + \ ``.message``\ ).
 
-    See below the default message definition in the version 1.0.x.RELEASE.
+     .. tabularcolumns:: |p{0.40\linewidth}|p{0.60\linewidth}|
+     .. list-table::
+        :header-rows: 1
+        :widths: 40 60
+ 
+        * - Version
+          - Property key of message
+        * - | version 5.0.0.RELEASE or later
+          - | ``org.terasoluna.gfw.common.codelist.ExistInCodeList.message``
+        * - | version 1.0.x.RELEASE
+          - | ``org.terasoluna.gfw.common.codelist.ExistInCodeList``
+          
+    For migrating to the version 5.0.0.RELEASE or later from the version 1.0.x.RELEASE,
+    when message is changed to fit the application requirements,
+    the property key should be changed.
 
-     .. code-block:: properties
+.. note::
 
-        org.terasoluna.gfw.common.codelist.ExistInCodeList = Does not exist in {codeListId}
+    From terasoluna-gfw-common 1.0.2.RELEASE, 
+    \ ``ValidationMessages.properties``\ wherein \ ``@ExistInCodeList``\ message is defined, 
+    is not included in jar file.
+    This is to fix the "`Bug in which message is not displayed if multiple ValidationMessages.properties exist <https://github.com/terasolunaorg/terasoluna-gfw/issues/256>`_".
 
-    If have change the message to fit the application requirements,
-    need to change the property key when migrate to the version 5.0.0.RELEASE from the version 1.0.x.RELEASE.
+    For migrating to version 1.0.2.RELEASE or later from version 1.0.1.RELEASE or prior, 
+    if the message defined in \ ``ValidationMessages.properties``\ included in jar of terasoluna-gfw-common, is used,
+    it is necessary to define the message by creating \ ``ValidationMessages.properties``\ .
 
 |
 

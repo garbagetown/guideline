@@ -133,6 +133,20 @@ Page search functionality provided by Spring Data is as follows:
 
     In cases where terasoluna-gfw-common 1.0.0.RELEASE is used, the version should be upgraded to terasoluna-gfw-common 1.0.1.RELEASE or higher version.
 
+ .. note:: **Points to be noted due to the changes in API specifications of Spring Data Commons**
+
+    In case of "terasoluna-gfw-common 5.0.0.RELEASE or later version" dependent spring-data-commons (1.9.1 RELEASE or later),
+    there is a change in API specifications of interface for page search functionality (\ ``org.springframework.data.domain.Page``\ ) and class (\ ``org.springframework.data.domain.PageImpl``\  and \ ``org.springframework.data.domain.Sort.Order``\ ).
+
+    Specifically,
+
+    * In \ ``Page``\  interface and \ ``PageImpl``\  class, \ ``isFirst()``\  and \ ``isLast()``\  methods are added in spring-data-commons 1.8.0.RELEASE, and \ ``isFirstPage()``\  and \ ``isLastPage()``\  methods are deleted from spring-data-commons 1.9.0.RELEASE.
+    * In \ ``Sort.Order``\  class, \ ``nullHandling``\  property is added in spring-data-commons 1.8.0.RELEASE.
+
+    If deleted API is used, there will be a compilation error and application will have to be modified.
+    In addition, when using \ ``Page``\  interface (\ ``PageImpl``\  class) as resource object of REST API,
+    that application may also need to be modified, as JSON and XML format get changed.
+
 |
 
 .. _pagination_overview_paginationlink:

@@ -2585,7 +2585,7 @@ Implementing the REST API wherein a page search is performed for member resource
  | Highlighted portion shows the fields specific for page search.
  
  .. code-block:: json
-    :emphasize-lines: 37-49
+    :emphasize-lines: 37-50
     
     {
       "content" : [ {
@@ -2623,20 +2623,34 @@ Implementing the REST API wherein a page search is performed for member resource
         "createdAt" : "2014-03-13T10:18:08.003Z",
         "lastModifiedAt" : "2014-03-13T10:18:08.003Z"
       } ],
+      "last" : false,
+      "totalPages" : 13,
+      "totalElements" : 25,
+      "size" : 2,
+      "number" : 1,
       "sort" : [ {
         "direction" : "DESC",
         "property" : "lastModifiedAt",
         "ignoreCase" : false,
+        "nullHandling": "NATIVE",
         "ascending" : false
       } ],
-      "lastPage" : false,
-      "firstPage" : false,
-      "totalElements" : 25,
       "numberOfElements" : 2,
-      "totalPages" : 13,
-      "size" : 2,
-      "number" : 1
+      "first" : false
     }
+
+ .. note:: **Points to be noted due to changes in API specifications of Spring Data Commons**
+
+    In case of "terasoluna-gfw-common 5.0.0.RELEASE or later version" dependent spring-data-commons (1.9.1 RELEASE or later),
+    there is a change in API specifications of interface for page search functionality (\ ``org.springframework.data.domain.Page``\ ) and class (\ ``org.springframework.data.domain.PageImpl``\  and \ ``org.springframework.data.domain.Sort.Order``\ ).
+
+    Specifically,
+
+    * In \ ``Page``\  interface and \ ``PageImpl``\  class, \ ``isFirst()``\  and \ ``isLast()``\  methods are added in spring-data-commons 1.8.0.RELEASE, and \ ``isFirstPage()``\  and \ ``isLastPage()``\  methods are deleted from spring-data-commons 1.9.0.RELEASE.
+    * In \ ``Sort.Order``\  class, \ ``nullHandling``\  property is added in spring-data-commons 1.8.0.RELEASE.
+
+    When using \ ``Page``\  interface (\ ``PageImpl``\  class) as resource object of REST API,
+    that application may also need to be modified, as JSON and XML format get changed.
 
 |
 
@@ -2709,7 +2723,7 @@ Implementing the REST API wherein a page search is performed for member resource
     Transfer-Encoding: chunked
     Date: Thu, 13 Mar 2014 11:10:43 GMT
     
-    {"content":[{"memberId":"M000000001","firstName":"John","lastName":"Smith","genderCode":"1","dateOfBirth":"2013-03-13","emailAddress":"user1394709042120@test.com","telephoneNumber":"09012345678","zipCode":"1710051","address":"Tokyo","credential":{"signId":"user1394709042120@test.com","passwordLastChangedAt":"2014-03-13T11:10:43.066Z","lastModifiedAt":"2014-03-13T11:10:43.066Z"},"createdAt":"2014-03-13T11:10:43.066Z","lastModifiedAt":"2014-03-13T11:10:43.066Z"},{"memberId":"M000000002","firstName":"Sophia","lastName":"Smith","genderCode":"2","dateOfBirth":"2013-03-13","emailAddress":"user1394709043663@test.com","telephoneNumber":"09012345678","zipCode":"1710051","address":"Tokyo","credential":{"signId":"user1394709043663@test.com","passwordLastChangedAt":"2014-03-13T11:10:43.678Z","lastModifiedAt":"2014-03-13T11:10:43.678Z"},"createdAt":"2014-03-13T11:10:43.678Z","lastModifiedAt":"2014-03-13T11:10:43.678Z"}],"sort":null,"firstPage":true,"lastPage":true,"totalPages":1,"numberOfElements":2,"totalElements":2,"size":2,"number":0}
+    {"content":[{"memberId":"M000000001","firstName":"John","lastName":"Smith","genderCode":"1","dateOfBirth":"2013-03-13","emailAddress":"user1394709042120@test.com","telephoneNumber":"09012345678","zipCode":"1710051","address":"Tokyo","credential":{"signId":"user1394709042120@test.com","passwordLastChangedAt":"2014-03-13T11:10:43.066Z","lastModifiedAt":"2014-03-13T11:10:43.066Z"},"createdAt":"2014-03-13T11:10:43.066Z","lastModifiedAt":"2014-03-13T11:10:43.066Z"},{"memberId":"M000000002","firstName":"Sophia","lastName":"Smith","genderCode":"2","dateOfBirth":"2013-03-13","emailAddress":"user1394709043663@test.com","telephoneNumber":"09012345678","zipCode":"1710051","address":"Tokyo","credential":{"signId":"user1394709043663@test.com","passwordLastChangedAt":"2014-03-13T11:10:43.678Z","lastModifiedAt":"2014-03-13T11:10:43.678Z"},"createdAt":"2014-03-13T11:10:43.678Z","lastModifiedAt":"2014-03-13T11:10:43.678Z"}],"last":true,"totalPages":1,"totalElements":2,"size":2,"number":0,"sort":null,"numberOfElements":2,"first":true}
 
 |
 

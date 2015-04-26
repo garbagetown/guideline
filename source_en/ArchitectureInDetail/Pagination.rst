@@ -320,9 +320,9 @@ HTML of pagination link to be output using common library is as follows:
 
  .. note:: **About default values of "Page Link URL"**
 
-    When link status is ``"disabled"`` , the default value is ``"#"``  and if not ``"disabled"``, the default value is ``"?page={page}&size={size}"``.
+    When link status is ``"disabled"`` , the default value is ``"javascript:void(0)"``  and if not ``"disabled"``, the default value is ``"?page={page}&size={size}"``.
 
-    "Page Link URL" can be changed to another value as per the specification of parameters of JSP tag library.
+    "Page Link URL" can be changed to another value by specifying parameters of JSP tag library.
 
 
 .. _pagination_overview_paginationlink_pagelinktext:
@@ -471,7 +471,6 @@ List of parameters is shown below.
     * - 1.
       - disabledHref
       - | Specify the value to be set in "Page Link URL" having ``"disabled"`` state.
-        | Example: \javascript:void(0);\
     * - 2.
       - pathTmpl
       - | Specify the template of request path to be set in "Page Link URL".
@@ -506,8 +505,17 @@ List of parameters is shown below.
 
  .. note:: **About setting values of disabledHref**
 
-    ``"#"`` is set in ``disabledHref`` by default; hence the focus moves to top of the page on clicking page link.
-    In order to completely disable the operations on clicking page link, it is necessary to specify ``"javascript:void(0);"``.
+    \ ``"javascript:void(0)"``\ is set in \ ``disabledHref``\ attribute by default.
+    It may remain as default in order to disable only the operation of page link click.
+
+    However, if the focus is moved or on mouseover to page link in default state,
+    \ ``"javascript:void(0)"``\ may be displayed on browser status bar.
+    To change this behavior, it is necessary to disable the operation of page link click by using JavaScript.
+    Refer to ":ref:`PaginationHowToUseDisablePageLinkUsingJavaScript`" for implementation example.
+
+    From terasoluna-gfw-web 5.0.0.RELEASE, default value of \ ``disabledHref``\  attribute is changed from \ ``"#"``\  to \ ``"javascript:void(0)"``\ .
+    By doing so, the focus does not move to top of the page on clicking page link in \ ``"disabled"``\  state.
+
 
  .. note:: **Path variables (placeholders)**
 
@@ -552,10 +560,11 @@ List of parameters is shown below.
   .. code-block:: jsp
 
     <t:pagination page="${page}"
-        disabledHref="javascript:void(0);"
+        disabledHref="#"
         pathTmpl="${pageContext.request.contextPath}/article/list/{page}/{size}"
         queryTmpl="sort={sortOrderProperty},{sortOrderDirection}"
-        criteriaQuery="${f:query(articleSearchCriteriaForm)}" />
+        criteriaQuery="${f:query(articleSearchCriteriaForm)}"
+        enableLinkOfCurrentPage="true" />
 
  - HTML to be output
 
@@ -1042,9 +1051,9 @@ Pagination link is output using JSP tag library of common library.
  .. code-block:: html
 
      <ul>
-        <li class="disabled"><a href="#">&lt;&lt;</a></li>
-        <li class="disabled"><a href="#">&lt;</a></li>
-        <li class="active"><a href="?page=0&size=6">1</a></li>
+        <li class="disabled"><a href="javascript:void(0)">&lt;&lt;</a></li>
+        <li class="disabled"><a href="javascript:void(0)">&lt;</a></li>
+        <li class="active"><a href="javascript:void(0)">1</a></li>
         <li><a href="?page=1&size=6">2</a></li>
         <li><a href="?page=2&size=6">3</a></li>
         <li><a href="?page=3&size=6">4</a></li>
@@ -1601,6 +1610,58 @@ Example to specify sort condition from client is shown below.
       - | For specifying the sort condition from client, add the corresponding parameters for specifying the sort condition.
         | For parameter specifications to specify sort condition, refer to ":ref:`Request parameters for page search <pagination_overview_pagesearch_requestparameter>` " .
         | In the above example, publishedDate can be selected in ascending order or descending order from pull-down.
+
+|
+
+.. _PaginationHowToUseDisablePageLinkUsingJavaScript:
+
+To disable page link using JavaScript
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+By default, \ ``"javascript:void(0)"``\  is set in \ ``disabledHref``\  attribute of \ ``<t:pagination>``\ tag to disable the operation on clicking page link in \ ``"disabled"``\ state and \ ``"active"``\  state.
+In such a state, if focus is moved or on mouseover to page link, \ ``"javascript:void(0)"``\  is displayed on browser status bar.
+To change this behavior, it is necessary to disable the operation of page link click by using JavaScript.
+
+Implementation example is shown below.
+
+**JSP**
+
+.. code-block:: jsp
+
+    <%-- (1) --%>
+    <script type="text/javascript"
+            src="${pageContext.request.contextPath}/resources/vendor/js/jquery.js"></script>
+
+    <%-- (2) --%>
+    <script type="text/javascript">
+        $(function(){
+            $(document).on("click", ".disabled a, .active a", function(){
+                return false;
+            });
+        });
+    </script>
+
+    <%-- ... --%>
+
+    <%-- (3) --%>
+    <t:pagination page="${page}" disabledHref="#" />
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - Sr. No.
+      - Description
+    * - | (1)
+      - Read js file of jQuery.
+
+        In the above example, jQuery API is used to disable the operation of page link click using JavaScript.
+    * - | (2)
+      - Click event of page link of \ ``"disabled"``\  and \ ``"active"``\  states is disabled by using API of jQuery.
+
+        However, when \ ``"true"``\  is set in \ ``enableLinkOfCurrentPage``\  attribute of \ ``<t:pagination>``\  tag, the click event of page link in \ ``"active"``\  state should not be disabled.
+    * - | (3)
+      - Set \ ``"#"``\  in \ ``disabledHref``\  attribute.
 
 |
 

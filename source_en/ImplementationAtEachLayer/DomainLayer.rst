@@ -1764,7 +1764,7 @@ PlatformTransactionManager settings
  .. note:: **When transaction management (Global transaction management) is required for multiple DBs (Multiple resources)**
 
      * It is necessary to use \ ``org.springframework.transaction.jta.JtaTransactionManager``\ and manage transactions by using JTA functionality provided by application server.
-     * When JTA is to be used in WebSphere, Oracle WebLogic Server and Oracle OC4J, a \ ``JtaTransactionManager``\  which is extended for the application server is automatically set
+     * When JTA is to be used in WebSphere and Oracle WebLogic Server, a \ ``JtaTransactionManager``\  which is extended for the application server is automatically set
        by specifying <tx:jta-transaction-manager/>.
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.35\linewidth}|p{0.55\linewidth}|

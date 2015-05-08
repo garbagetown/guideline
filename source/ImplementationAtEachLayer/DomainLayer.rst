@@ -1278,6 +1278,7 @@ ServiceおよびSharedServiceでは、アプリケーションで使用する業
 
 を参照されたい。
 
+
 .. _service-return-message-label:
 
 メッセージを返却する
@@ -1808,7 +1809,7 @@ PlatformTransactionManagerの設定
  .. note:: **複数DB（複数リソース）に対するトランザクション管理（グローバルトランザクションの管理）が必要な場合**
 
      * \ ``org.springframework.transaction.jta.JtaTransactionManager``\ を利用し、アプリケーションサーバから提供されているJTAの機能を使って、トランザクション管理を行う必要がある。
-     * WebSphere、Oracle WebLogic Server、Oracle OC4JでJTAを使う場合、<tx:jta-transaction-manager/> を指定することで、
+     * WebSphere、Oracle WebLogic ServerでJTAを使う場合、<tx:jta-transaction-manager/> を指定することで、
        アプリケーションサーバ用に拡張された\ ``JtaTransactionManager``\ が、自動的で設定される。
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.35\linewidth}|p{0.55\linewidth}|

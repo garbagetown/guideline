@@ -189,7 +189,7 @@ Delete TODO
 
 * データベースを使用せず\ ``java.util.Map``\ を使ったインメモリ実装のRepositoryImpl
 * MyBatis3を使用してデータベースにアクセスするRepositoryImpl
-* Spring Data JPAの使用してデータベースにアクセスするRepositoryImpl
+* Spring Data JPAを使用してデータベースにアクセスするRepositoryImpl
 
 の3種類を用意している。用途に応じていずれかを選択する。
 
@@ -867,7 +867,7 @@ Package Explorer上で右クリック -> New -> Interface を選択し、「New 
 
 .. note::
 
-    ここでは、\ ``TodoRepository``\ の汎用性を上げるため、「完了済み件数の取得する」メソッド(\ ``long countFinished()``\)ではなく、
+    ここでは、\ ``TodoRepository``\ の汎用性を上げるため、「完了済み件数を取得する」メソッド(\ ``long countFinished()``\)ではなく、
     「完了状態がxxである件数を取得する」メソッド(\ ``long countByFinished(boolean)``\)として定義している。
     
     \ ``long countByFinished(boolean)``\の引数として\ ``true``\を渡すと「完了済みの件数」、
@@ -1880,7 +1880,7 @@ Formクラスに以下のプロパティを追加する。
 * ID → todoId
 
 .. code-block:: java
-    :emphasize-lines: 9-11,13-14,18-20,22-24
+    :emphasize-lines: 9-11,13-14,18-20,22-24,27-29,31-33
 
     package todo.app.todo;
 

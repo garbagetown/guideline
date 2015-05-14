@@ -271,7 +271,7 @@ AccountSharedServiceの作成
 
     本チュートリアルで作成するアプリケーションでは共通化は必須ではないが、
     通常のアプリケーションであればアカウント情報を管理する業務のServiceと処理を共通化することが想定される。
-    そのため、本チュートリアルではアカウント情報を取得処理をSharedServiceとして実装する。
+    そのため、本チュートリアルではアカウント情報の取得処理をSharedServiceとして実装する。
 
 |
 
@@ -514,6 +514,7 @@ AccountSharedServiceの作成
         <jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
             <!-- (2) -->
             <jdbc:script location="classpath:/database/${database}-schema.sql" />
+            <!-- (3) -->
             <jdbc:script location="classpath:/database/${database}-dataload.sql" />
         </jdbc:initialize-database>
 
@@ -607,7 +608,7 @@ Spring Securityの設定
    * - | URL
      - | 説明
    * - | /login.jsp
-     - | ログインフォームの表示するためのURL
+     - | ログインフォームを表示するためのURL
    * - | /login.jsp?error=true
      - | 認証エラー時に遷移するページ(ログインページ)を表示するためのURL
    * - | /authenticate

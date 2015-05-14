@@ -634,7 +634,7 @@ Spring MVCでは、 `Bean Validation <http://jcp.org/en/jsr/detail?id=349>`_\ �
 実装することができる。例として、エコーアプリケーションで名前の入力チェックを行う。
 
 
-\ ``EchoForm``\ の\ ``name``\ フォールドに、入力チェックルールを指定するアノーテションを付与する。
+\ ``EchoForm``\ の\ ``name``\ フィールドに、入力チェックルールを指定するアノーテションを付与する。
 
 .. code-block:: java
     :emphasize-lines: 5,6,11,12

@@ -249,7 +249,7 @@ spring-security.xml
        - | 認証処理において、「パスワード」として扱われる要素。
          | name属性には、Spring Securityのデフォルト値である「j_password」を指定すること。
 
-  認証エラーメッセージを表示する場合は以下の追加する
+  認証エラーメッセージを表示する場合は以下のコードをJSPに追加する。
 
   .. code-block:: jsp
 

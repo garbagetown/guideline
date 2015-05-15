@@ -63,7 +63,7 @@ Controller
 Controllerは、主に以下の役割を担う。
 
 * 画面遷移の制御（リクエストマッピングと処理結果に対応するViewを返却する)
-* ドメイン層のServiceの呼び出し (リクエストに対応する主処理の実行する)
+* ドメイン層のServiceの呼び出し (リクエストに対応する主処理を実行する)
 
 Spring MVCでは、\ ``@Controller``\ アノテーションが付与されているPOJOクラスが該当する。
 
@@ -134,7 +134,7 @@ Helperの作成はオプションである。必要に応じて、POJOクラス�
 .. note::
 
   Controllerの役割はルーティング(URLマッピングと遷移先の返却)であり、
-  それ以外の処理(JavaBeanの変換等)が必要になったらHelperに切り出して、そちらに処理を委譲すことを推奨する。
+  それ以外の処理(JavaBeanの変換等)が必要になったらHelperに切り出して、そちらに処理を委譲することを推奨する。
   
   HelperはControllerの見通しを良くするためのものであるため、HelperはControllerの一部として扱ってよい。
   (Controller内のprivateメソッドみたいなものである)
@@ -681,7 +681,7 @@ Repositoryを作成することにより、永続化技術を隠蔽できたり�
   
     [projectName]-webが[projectName]-domainを使用するのは当然であるが、[projectName]-domainが[projectName]-webを参照してはいけない。
   
-    1つのプロジェクトに[projectName]-webと[projectName]-domainの構成要素をまとめてしまうと、誤って不正な参照してしまうことがある。
+    1つのプロジェクトに[projectName]-webと[projectName]-domainの構成要素をまとめてしまうと、誤って不正な参照をしてしまうことがある。
     プロジェクトを分けて参照順序をつけることで[projectName]-domainが[projectName]-webを参照できないようにすることを強く推奨する。
 
 .. note::

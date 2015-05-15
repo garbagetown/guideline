@@ -399,7 +399,7 @@ Access authorization (Method)
 
     @Service
     @Transactional
-    public class UserServiceImpl implements UserSerice 
+    public class UserServiceImpl implements UserService {
         // omitted
 
         @PreAuthorize("hasRole('ROLE_ADMIN')") // (1)

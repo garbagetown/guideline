@@ -982,7 +982,7 @@ AOP settings and interceptor class (\ ``HandlerExceptionResolverLoggingIntercept
     * - Sr. No.
       - Description
     * - | (1)
-      - | Add \ ``ExceptionHandlerLoggingInterceptor``\  to bean definition.
+      - | Add \ ``HandlerExceptionResolverLoggingInterceptor``\  to bean definition.
     * - | (2)
       - | Inject the logger object which outputs exception log. Specify the "exceptionLogger" defined in \ ``applicationContext.xml``\ .
     * - | (3)

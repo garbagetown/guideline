@@ -1021,7 +1021,7 @@ ResultMessagesを保持する例外(BisinessException,ResourceNotFoundException)
     * - 項番
       - 説明
     * - | (1)
-      - | \ ``ExceptionHandlerLoggingInterceptor``\ を、bean定義に追加する。
+      - | \ ``HandlerExceptionResolverLoggingInterceptor``\ を、bean定義に追加する。
     * - | (2)
       - | 例外のログ出力を行うロガーオブジェクトを、DIする。\ ``applicationContext.xml``\ に定義している\ "exceptionLogger"\ を指定する。
     * - | (3)

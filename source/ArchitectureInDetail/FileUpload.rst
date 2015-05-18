@@ -1179,7 +1179,7 @@ Validatorの実装
 
     // (1)
     public class UploadFileNotEmptyForCollectionValidator implements
-        ConstraintValidator<NotEmptyUploadFile, Collection<MultipartFile>> {
+        ConstraintValidator<UploadFileNotEmpty, Collection<MultipartFile>> {
     
         // (2)
         private final UploadFileNotEmptyValidator validator = 
@@ -1187,7 +1187,7 @@ Validatorの実装
 
         // (3)
         @Override
-        public void initialize(NotEmptyUploadFile constraintAnnotation) {
+        public void initialize(UploadFileNotEmpty constraintAnnotation) {
             validator.initialize(constraintAnnotation);
         }
     
@@ -1247,7 +1247,7 @@ Validatorの実装
    * - | (5)
      - | 複数のファイルに対してチェックを行うValidatorクラスを、検証用アノテーションに追加する。
        | ``@Constraint`` アノテーションのvalidatedBy属性に、(1)で作成したクラスを指定する。
-       | こうすることで、  ``@NotEmptyUploadFile`` アノテーションを付与したプロパティに対する妥当性チェックを行う際に、(1)で作成したクラスが実行される。
+       | こうすることで、  ``@UploadFileNotEmpty`` アノテーションを付与したプロパティに対する妥当性チェックを行う際に、(1)で作成したクラスが実行される。
 
 
 JSPの実装

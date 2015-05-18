@@ -1179,7 +1179,7 @@ The section explains about creating Validator for Collection using the Validator
 
     // (1)
     public class UploadFileNotEmptyForCollectionValidator implements
-        ConstraintValidator<NotEmptyUploadFile, Collection<MultipartFile>> {
+        ConstraintValidator<UploadFileNotEmpty, Collection<MultipartFile>> {
     
         // (2)
         private final UploadFileNotEmptyValidator validator = 
@@ -1187,7 +1187,7 @@ The section explains about creating Validator for Collection using the Validator
 
         // (3)
         @Override
-        public void initialize(NotEmptyUploadFile constraintAnnotation) {
+        public void initialize(UploadFileNotEmpty constraintAnnotation) {
             validator.initialize(constraintAnnotation);
         }
     
@@ -1247,7 +1247,7 @@ The section explains about creating Validator for Collection using the Validator
    * - | (5)
      - | Add the Validator class that carries out checks with respect to multiple files, to the annotation used for verification.
        | Specify the class created in step (1) in the "validatedBy" attribute of  ``@Constraint`` annotation.
-       | With this, the class created in step (1) is executed when validating the property with ``@NotEmptyUploadFile`` annotation.
+       | With this, the class created in step (1) is executed when validating the property with ``@UploadFileNotEmpty`` annotation.
 
 
 Implementing JSP

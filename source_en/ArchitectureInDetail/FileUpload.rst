@@ -538,7 +538,7 @@ Implementing JSP
  .. code-block:: jsp
 
     <form:form
-      action="${pageContext.request.contextPath}/article/uploadFile" method="post"
+      action="${pageContext.request.contextPath}/article/upload" method="post"
       modelAttribute="fileUploadForm" enctype="multipart/form-data"> <!-- (1) (2) -->
       <table>
         <tr>
@@ -927,7 +927,7 @@ Implementing Controller
 
  .. code-block:: java
 
-    @RequestMapping(value = "uploadFile", method = RequestMethod.POST)
+    @RequestMapping(value = "upload", method = RequestMethod.POST)
     public String uploadFile(@Validated FileUploadForm form,
             BindingResult result, RedirectAttributes redirectAttributes) {
 

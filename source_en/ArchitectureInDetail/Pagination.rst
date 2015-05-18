@@ -79,7 +79,7 @@ Page search functionality provided by Spring Data is as follows:
     * - 3
       - | When Spring Data JPA is used for database access, the information of corresponding page is returned as ``Page``  object by specifying ``Pageable``  object as an argument of Repository Query method.
         | All the processes such as executing SQL to fetch total records, adding sort condition and extracting data matching the corresponding page are carried out automatically.
-        | When MyBatis is used for database access, the process that is automatically carried out in Spring Data JPA needs to be carried out in Java(Service) and SQL mapping file.
+        | When MyBatis is used for database access, the process that is automatically carried out in Spring Data JPA needs to be implemented in Java (Service) and SQL mapping file.
 
 .. _pagination_overview_pagesearch_requestparameter:
 
@@ -320,10 +320,12 @@ HTML of pagination link to be output using common library is as follows:
 
  .. note:: **About default values of "Page Link URL"**
 
-    When link status is ``"disabled"`` , the default value is ``"javascript:void(0)"``  and if not ``"disabled"``, the default value is ``"?page={page}&size={size}"``.
+    When link status is \ ``"disabled"``\  and \ ``"active"``\ , the default value is ``"javascript:void(0)"``  and in other cases, the default value is ``"?page={page}&size={size}"``.
 
     "Page Link URL" can be changed to another value by specifying parameters of JSP tag library.
 
+    From terasoluna-gfw-web 5.0.0.RELEASE, default value of link in \ ``"active"``\ status is changed from \ ``"?page={page}&size={size}"``\  to \ ``"javascript:void(0)"``\ .
+    This is to match with the implementation of pagination links of major Web sites and the implementation of major CSS libraries (Bootstrap, etc.)
 
 .. _pagination_overview_paginationlink_pagelinktext:
 
@@ -422,11 +424,6 @@ List of parameters is shown below.
         | If ``0``  is specified, "Link to navigate to the specified page" itself is not output.
         | Example: 5
 
- .. warning:: **Restrictions related to active page link**
-
-    The mechanism to disable ``"active"``  page link is not provided; hence when a page link is clicked, request is sent to fetch the corresponding page.
-    When a request is not supposed to be sent, it is necessary to either extend JSP tag library of common library or to control the processing so that the request is not sent from JavaScript.
-
 |
 
  When default values of all parameters to control the layout are changed, the following HTML is output.
@@ -502,14 +499,20 @@ List of parameters is shown below.
         | **When specifying true, it should be ensured that the characters vulnerable to XSS are not included in the query string.**
         |
         | This parameter can be used in terasoluna-gfw-web 1.0.1.RELEASE or higher version.
-
+    * - 6.
+      - enableLinkOfCurrentPage
+      - | Flag to send request for redisplaying the corresponding page on clicking page link in ``"active"``\  status.
+        | When it is set to \ ``true``\ , URL (default value is \ ``"?page={page}&size={size}"``\ ) to redisplay the corresponding page is set to "Page Link URL". (If default value is \ ``false``\ , the value of \ ``disabledHref``\  attribute is set to "Page Link URL")
+        |
+        | This parameter can be used in terasoluna-gfw-web 5.0.0.RELEASE or higher version. 
+    
  .. note:: **About setting values of disabledHref**
 
-    \ ``"javascript:void(0)"``\ is set in \ ``disabledHref``\ attribute by default.
+    \ ``"javascript:void(0)"``\ is set in \ ``disabledHref``\  attribute by default.
     It may remain as default in order to disable only the operation of page link click.
 
     However, if the focus is moved or on mouseover to page link in default state,
-    \ ``"javascript:void(0)"``\ may be displayed on browser status bar.
+    \ ``"javascript:void(0)"``\  may be displayed on browser status bar.
     To change this behavior, it is necessary to disable the operation of page link click by using JavaScript.
     Refer to ":ref:`PaginationHowToUseDisablePageLinkUsingJavaScript`" for implementation example.
 
@@ -552,7 +555,7 @@ List of parameters is shown below.
 
 |
 
- When default parameters to control the operations are changed, the following HTML is output.
+ When parameters to control the operations are changed, the following HTML is output.
  The numbers in figure correspond to serial numbers of parameter list mentioned above.
 
  - JSP
@@ -615,10 +618,10 @@ Process flow when using pagination functionality of Spring Data and JSP tag libr
 
  .. note:: **Implementation of Repository**
 
-   The implementation method of (5) & (6)  are different by the O/R Mapper to be used.
+   The implementation method of (5) & (6) are different depending on the O/R Mapper to be used.
 
-   * When using the MyBatis3, implementation are necessary at the Java(Service) and SQL mapping file.
-   * When using Spring Data JPA, implementation are unnecessary because above processes carried out automatically by the Spring Data JPA functionality.
+   * When using MyBatis3, implementation of Java (Service) and SQL mapping file is necessary.
+   * When using Spring Data JPA, implementation is not necessary because it is carried out automatically through the use of Spring Data JPA functionality.
 
    For implementation example refer to:
 
@@ -859,10 +862,10 @@ For description of ``fallbackPageable``  and example of settings, refer to ":ref
 
 Implementation of domain layer (MyBatis3)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-When accessing the database using MyBatis3, pass to Repository the information that extract from a ``Pageable`` object received from Controller.
-The SQL to select records of specified page is need the implementation into the SQL mapping file.
+| When accessing the database using MyBatis3, extract the necessary information from ``Pageable`` object received from Controller and pass it to the Repository.
+| Sort conditions and SQL for extracting the corresponding data need to be implemented in SQL mapping.
 
-For details about implementation at domain layer refer to:
+For details on page search process to be implemented at domain layer, refer to:
 
 * :ref:`DataAccessMyBatis3HowToUseFindPageUsingMyBatisFunction`
 * :ref:`DataAccessMyBatis3HowToUseFindPageUsingSqlFilter`
@@ -871,9 +874,9 @@ For details about implementation at domain layer refer to:
 
 Implementation of domain layer (JPA)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-When accessing the database using JPA (Spring Data JPA), pass ``Pageable``  object received from Controller to Repository.
+When accessing the database using JPA (Spring Data JPA), pass the ``Pageable``  object received from Controller to Repository.
 
-For details about implementation at domain layer refer to:
+For details on page search process to be implemented at domain layer, refer to:
 
 * :ref:`DataAccessJpaHowToUseFindPage`
 
@@ -1362,13 +1365,13 @@ The method of carrying forward the search conditions to the page navigation requ
     In case of JavaBean, property name is treated as request parameter name and in case of ``Map`` object, map key name is treated as request parameter.
     URL of the generated query string is encoded in UTF-8.
 
-    Refer [:ref:`TagLibAndELFunctionsHowToUseELFunctionQuery`] for detail specification of the \ ``f:query``\ (URL encoding specification etc).
+    Refer to :ref:`TagLibAndELFunctionsHowToUseELFunctionQuery` for detail specification of the \ ``f:query``\  (URL encoding specification etc).
 
  .. warning:: **Operations when Query string created using f:query is specified in queryTmpl attribute**
 
-    It has been found that specifying the query string generated using \ ``f:query``\  in queryTmpl attribute leads to duplication of URL encoding. Thus, special characters are not carried forward correctly.
+    It has been found that specifying the query string generated using \ ``f:query``\ , in queryTmpl attribute leads to duplication of URL encoding. Thus, special characters are not carried forward correctly.
     
-    This URL encoding duplication can be avoided by using \ ``criteriaCuery``\  attribute which can be used in terasoluna-gfw-web 1.0.1.RELEASE or higher version. 
+    This URL encoding duplication can be avoided by using \ ``criteriaQuery``\  attribute which can be used in terasoluna-gfw-web 1.0.1.RELEASE or higher version. 
     
 |
 
@@ -1617,7 +1620,7 @@ Example to specify sort condition from client is shown below.
 
 To disable page link using JavaScript
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-By default, \ ``"javascript:void(0)"``\  is set in \ ``disabledHref``\  attribute of \ ``<t:pagination>``\ tag to disable the operation on clicking page link in \ ``"disabled"``\ state and \ ``"active"``\  state.
+By default \ ``"javascript:void(0)"``\  is set in \ ``disabledHref``\  attribute of \ ``<t:pagination>``\  tag to disable the operation on clicking page link in \ ``"disabled"``\  state and \ ``"active"``\  state.
 In such a state, if focus is moved or on mouseover to page link, \ ``"javascript:void(0)"``\  is displayed on browser status bar.
 To change this behavior, it is necessary to disable the operation of page link click by using JavaScript.
 
@@ -1657,9 +1660,9 @@ Implementation example is shown below.
 
         In the above example, jQuery API is used to disable the operation of page link click using JavaScript.
     * - | (2)
-      - Click event of page link of \ ``"disabled"``\  and \ ``"active"``\  states is disabled by using API of jQuery.
+      - Disable click event of page link of \ ``"disabled"``\  and \ ``"active"``\  states by using API of jQuery.
 
-        However, when \ ``"true"``\  is set in \ ``enableLinkOfCurrentPage``\  attribute of \ ``<t:pagination>``\  tag, the click event of page link in \ ``"active"``\  state should not be disabled.
+        However, when \ ``enableLinkOfCurrentPage``\  attribute of \ ``<t:pagination>``\  tag is set to \ ``"true"``\ , the click event of page link in \ ``"active"``\  state should not be disabled.
     * - | (3)
       - Set \ ``"#"``\  in \ ``disabledHref``\  attribute.
 

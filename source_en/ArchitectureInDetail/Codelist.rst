@@ -657,8 +657,8 @@ Example is shown below.
     * - | (6)
       - Return the label storing constants.
 
-       This method is defined in \ ``EnumCodeList.EnumCodeList``\  interface, and
-       it is called when \ ``EnumCodeList``\  fetches label from a constant.
+        This method is defined in \ ``EnumCodeList.EnumCodeList``\  interface, and
+        it is called when \ ``EnumCodeList``\  fetches label from a constant.
 
 
 |

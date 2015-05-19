@@ -764,15 +764,15 @@ Example of escaping when default values used as characters to be escaped is give
       - ``"a％"``
       - OFF
       - Similar to No.1.
-      
-      From terasoluna-gfw-common 1.0.2.RELEASE, "``"％"``" is handled as character out of escaping scope in default specifications.
+
+        From terasoluna-gfw-common 1.0.2.RELEASE, "``"％"``" is handled as character out of escaping scope in default specifications.
     * - 7.
       - ``"a＿"``
       - ``"a＿"``
       - OFF
       - Similar to No.1.
-      
-      From terasoluna-gfw-common 1.0.2.RELEASE, "``"＿"``" is handled as character out of escaping scope in default specifications.
+
+        From terasoluna-gfw-common 1.0.2.RELEASE, "``"＿"``" is handled as character out of escaping scope in default specifications.
     * - 8.
       - ``" "``
       - ``" "``

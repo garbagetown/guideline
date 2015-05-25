@@ -69,10 +69,24 @@ WebアプリケーションをTomcat上にリリースする場合は次のよ�
 1. リリース対象のAPサーバ環境にあわせてmavenのprofileを指定し、 \*-env プロジェクトを ビルドする。
 2. 上記でビルドした\*-env-x.y.z.jarファイル をあらかじめ決定したAPサーバ上のフォルダに設置する。 ex. /etc/foo/bar/abcd-env-x.y.z.jar
 3. あらかじめパッケージリポジトリにデプロイ済みの\*.warファイルを [CATALINA_HOME]/webapps 配下で解凍(unjar)する。
-4. Tomcatの VirtualWebappLoader 機能を使って、 /etc/foo/bar/\*.jar をクラスパスに追加する。
+4. Tomcat 7の VirtualWebappLoader 機能を使って、 /etc/foo/bar/\*.jar をクラスパスに追加する。
  * [CATALINA_HOME]/conf/[contextPath].xml ファイルに上記の設定を記述すればよい。
  * 詳しくは terasoluna-shopping-envサンプルのconfigsフォルダと、 http://tomcat.apache.org/tomcat-7.0-doc/api/org/apache/catalina/loader/VirtualWebappLoader.html を参考のこと。
  * なお、VirtualWebappLoaderはTomcat6.xでも使用可能。
+5. Tomcat 8では VirtualWebappLoader 機能ではなく、リソース設定で指定する。
+ * リソース設定例：
+
+  .. code-block:: xml
+
+   <Resources className="org.apache.catalina.webresources.StandardRoot">
+     <PreResources className="org.apache.catalina.webresources.DirResourceSet"
+                   base="/etc/foo/bar/"
+                   internalPath="/"
+                   webAppMount="/WEB-INF/lib" />
+   </Resources>
+
+
+ * 詳しくは terasoluna-shopping-env サンプルのconfigsフォルダと https://tomcat.apache.org/migration-8.html#Web_application_resources を参照のこと。
 
 .. note::
 

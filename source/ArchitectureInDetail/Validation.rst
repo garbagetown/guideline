@@ -2508,7 +2508,7 @@ Bean Validationは標準で用意されているチェックルール以外に�
      * - | (3)
        - | エラーメッセージのデフォルト値を定義する。
 
-* 正の数に限定する\ ``@NotNegaitive``\ アノテーションの実装例
+* 正の数に限定する\ ``@NotNegative``\ アノテーションの実装例
 
   .. code-block:: java
     :emphasize-lines: 22-23,25
@@ -2536,8 +2536,8 @@ Bean Validationは標準で用意されているチェックルール以外に�
     @Retention(RUNTIME)
     @ReportAsSingleViolation
     @Min(value = 0)
-    public @interface NotNegaitive {
-        String message() default "{com.example.common.validation.NotNegaitive.message}";
+    public @interface NotNegative {
+        String message() default "{com.example.common.validation.NotNegative.message}";
 
         Class<?>[] groups() default {};
 
@@ -2547,7 +2547,7 @@ Bean Validationは標準で用意されているチェックルール以外に�
         @Retention(RUNTIME)
         @Documented
         public @interface List {
-            NotNegaitive[] value();
+            NotNegative[] value();
         }
     }
 

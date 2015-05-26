@@ -2522,8 +2522,8 @@ Implementation example is shown below.
     @Retention(RUNTIME)
     @ReportAsSingleViolation
     @Min(value = 0)
-    public @interface NotNegaitive {
-        String message() default "{com.example.common.validation.NotNegaitive.message}";
+    public @interface NotNegative {
+        String message() default "{com.example.common.validation.NotNegative.message}";
 
         Class<?>[] groups() default {};
 
@@ -2533,7 +2533,7 @@ Implementation example is shown below.
         @Retention(RUNTIME)
         @Documented
         public @interface List {
-            NotNegaitive[] value();
+            NotNegative[] value();
         }
     }
 

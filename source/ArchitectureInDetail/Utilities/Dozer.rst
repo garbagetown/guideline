@@ -1393,7 +1393,7 @@ map-idを指定しない場合はこの設定は適用されず、全フィー�
     destination2.setId(2);
     destination2.setName("DestinationName");
     destination2.setTitle("DestinationTitle");
-    beanMapper.map(source, destination2, "mapidSourceBeanFieldExclude"); // (2)
+    beanMapper.map(source, destination2, "mapidTitleFieldExclude"); // (2)
     System.out.println(destination2.getId());
     System.out.println(destination2.getName());
     System.out.println(destination2.getTitle());

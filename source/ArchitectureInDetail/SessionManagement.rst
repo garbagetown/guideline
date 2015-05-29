@@ -952,7 +952,7 @@ component-scanを使用する方法を、以下に示す。
  .. code-block:: java
 
     @Component
-    @Scope("session", proxyMode = ScopedProxyMode.TARGET_CLASS) // (1)
+    @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS) // (1)
     public class SessionCart implements Serializable {
 
         private static final long serialVersionUID = 1L;

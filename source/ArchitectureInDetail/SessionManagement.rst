@@ -992,6 +992,10 @@ component-scanを使用する方法を、以下に示す。
     上記例では、\ ``Cart``\ というJPAのEntityクラスを、\ ``SessionCart``\ というラッパークラスに包んで、sessionスコープのBeanとしている。
     こうすることで、JPAで扱うことができるEntityオブジェクトへの変換処理が不要となるため、Controllerで行う処理がシンプルになる。
 
+ .. note:: **scoped-proxyを有効化する理由について**
+
+     sessionスコープのBeanをsingletonスコープのControllerにInjectするために、scoped-proxyを有効化する必要がある。
+
 - spring-mvc.xml
 
  .. code-block:: xml
@@ -1007,10 +1011,6 @@ component-scanを使用する方法を、以下に示す。
       - 説明
     * - | (2)
       - | ``<context:component-scan>`` 要素でベースとなるパッケージを指定する。
-
- .. note:: **scoped-proxyを有効化する理由について**
-
-     sessionスコープのBeanをsingletonスコープのControllerにInjectするために、scoped-proxyを有効化する必要がある。
 
 |
 

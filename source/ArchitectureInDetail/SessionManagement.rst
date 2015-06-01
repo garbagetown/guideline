@@ -952,7 +952,7 @@ component-scanを使用する方法を、以下に示す。
  .. code-block:: java
 
     @Component
-    @Scope("session") // (1)
+    @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS) // (1)
     public class SessionCart implements Serializable {
 
         private static final long serialVersionUID = 1L;
@@ -980,7 +980,7 @@ component-scanを使用する方法を、以下に示す。
     * - 項番
       - 説明
     * - | (1)
-      - | Beanのスコープを\ ``"session"``\ にする。
+      - | Beanのスコープを\ ``"session"``\ にする。また、proxyMode 属性で \ ``"ScopedProxyMode.TARGET_CLASS"``\ を指定し、scoped-proxyを有効にする。
 
  .. note::
 
@@ -992,12 +992,15 @@ component-scanを使用する方法を、以下に示す。
     上記例では、\ ``Cart``\ というJPAのEntityクラスを、\ ``SessionCart``\ というラッパークラスに包んで、sessionスコープのBeanとしている。
     こうすることで、JPAで扱うことができるEntityオブジェクトへの変換処理が不要となるため、Controllerで行う処理がシンプルになる。
 
+ .. note:: **scoped-proxyを有効化する理由について**
+
+     sessionスコープのBeanをsingletonスコープのControllerにInjectするために、scoped-proxyを有効化する必要がある。
+
 - spring-mvc.xml
 
  .. code-block:: xml
 
-    <context:component-scan base-package="xxx.yyy.zzz.app"
-        scoped-proxy="targetClass" /> // (2)
+    <context:component-scan base-package="xxx.yyy.zzz.app" /> // (2)
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
@@ -1007,11 +1010,7 @@ component-scanを使用する方法を、以下に示す。
     * - 項番
       - 説明
     * - | (2)
-      - | ``<context:component-scan>`` 要素のscoped-proxy属性に、 ``"targetClass"`` を指定し、scoped-proxyを有効にする。
-
- .. note:: **scoped-proxyを有効化する理由について**
-
-     sessionスコープのBeanをsingletonスコープのControllerにInjectするために、scoped-proxyを有効化する必要がある。
+      - | ``<context:component-scan>`` 要素でベースとなるパッケージを指定する。
 
 |
 

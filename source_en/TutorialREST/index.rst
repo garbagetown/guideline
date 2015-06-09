@@ -1403,7 +1403,7 @@ Implement the processing of API(PUT Todo) into \ ``putTodo`` \ method of \ ``Tod
      - Description
    * - | (1)
      - | In order to get the \ ``todoId`` \ from path, specify the path variable in the \ ``value`` \ attribute of the \ ``@RequestMapping``\ annotation.
-       | Set the \ ``RequestMethod.GET`` \ to \ ``method`` \ attribute for handling the GET request.
+       | Set the \ ``RequestMethod.PUT`` \ to \ ``method`` \ attribute for handling the PUT request.
    * - | (2)
      - | Specify the path variable name to retrieve \ ``todoId`` \ in the \ ``value`` \ attribute of the \ ``@PathVariable`` \ annotation.
    * - | (3)

@@ -2622,7 +2622,7 @@ MyBatis3標準方式に比べて効率的に取得範囲のEntityを取得する
         @Override
         public Page<Todo> searchTodos(TodoCriteria criteria,
                 Pageable pageable) {
-            long total = todoRepository.countByCriteriaForPageable(criteria);
+            long total = todoRepository.countByCriteria(criteria);
             List<Todo> todos;
             if (0 < total) {
                 // (5)

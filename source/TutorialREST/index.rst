@@ -1400,7 +1400,7 @@ Todoリソースを一件更新(完了状態へ更新)するAPI(PUT Todo)の処�
      - 説明
    * - | (1)
      - | パスから\ ``todoId``\ を取得するために、\ ``@RequestMapping``\ アノテーションの\ ``value``\ 属性にパス変数を指定する。
-       | メソッドがGETのリクエストを処理するために、\ ``method``\ 属性に\ ``RequestMethod.GET``\ を設定する。
+       | メソッドがPUTのリクエストを処理するために、\ ``method``\ 属性に\ ``RequestMethod.PUT``\ を設定する。
    * - | (2)
      - | \ ``@PathVariable``\アノテーションの\ ``value``\ 属性に、\ ``todoId``\ を取得するためのパス変数名を指定する。
    * - | (3)

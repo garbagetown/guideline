@@ -2621,7 +2621,7 @@ Entity of fetch range can be fetched efficiently as compared to standard method 
         @Override
         public Page<Todo> searchTodos(TodoCriteria criteria,
                 Pageable pageable) {
-            long total = todoRepository.countByCriteriaForPageable(criteria);
+            long total = todoRepository.countByCriteria(criteria);
             List<Todo> todos;
             if (0 < total) {
                 // (5)

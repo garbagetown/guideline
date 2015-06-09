@@ -1703,7 +1703,7 @@ Apply the DB authentication function using user name, password, company identifi
         class="com.example.app.common.security.CompanyIdUsernamePasswordAuthenticationFilter">
         <!-- (5) -->
         <property name="requiresAuthenticationRequestMatcher">
-            <bean class="org.springframework.security.web.authentication.logout.LogoutFilter$FilterProcessUrlRequestMatcher">
+            <bean class="org.springframework.security.web.util.matcher.AntPathRequestMatcher">
                 <constructor-arg value="/authentication" />
             </bean>
         </property>

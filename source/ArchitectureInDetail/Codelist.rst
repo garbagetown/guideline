@@ -1086,6 +1086,34 @@ Javaクラスでのコードリスト使用
 
 |
 
+.. _codelist-display-label:
+
+特定のコード値からコード名を表示する
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+JSPからコードリストを参照する場合は、 ``java.util.Map`` インタフェースと同じ方法で参照することができる。
+
+コードリストを用いて特定のコード値からコード名を表示する方法について、以下に実装例を示す。
+
+**jspの実装例**
+
+ .. code-block:: jsp
+
+    Order Status : ${f:h(CL_ORDERSTATUS[orderForm.orderStatus])}
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+ .. list-table::
+   :header-rows: 1
+   :widths: 10 90
+
+   * - 項番
+     - 説明
+   * - | (1)
+     - コードリストを定義したbeanID(この例では ``"CL_ORDERSTATUS"`` ) を属性名として、コードリスト( ``java.util.Map`` インタフェース)を取得する。
+       取得した ``Map`` インタフェースのキーとしてコード値(この例では ``orderStatus`` に格納された値) を指定することで、対応するコード名を表示することができる。
+
+|
+
 .. _codelist-validate:
 
 コードリストを用いたコード値の入力チェック

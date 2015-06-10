@@ -822,7 +822,7 @@ Creating login page
     :widths: 10 90
   
     * - Sr. No.
-    * - Description
+      - Description
     * - | (1)
       - When authentication fails, display login page by calling \ ``"/login.jsp?error=true"``\ .
         Therefore, use \ ``<c:if>``\  tag, so that error message is displayed only at the time after the display of authentication error.

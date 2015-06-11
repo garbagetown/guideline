@@ -2833,6 +2833,7 @@ Example of implementation of REST API wherein a specified Member resource is cre
 
  .. code-block:: java
     :emphasize-lines: 7, 9, 12, 16
+
     @RequestMapping("members")
     @RestController
     public class MemberRestController {
@@ -2841,7 +2842,6 @@ Example of implementation of REST API wherein a specified Member resource is cre
 
         // (1)
         @RequestMapping(method = RequestMethod.POST)
-
         // (2)
         @ResponseStatus(HttpStatus.CREATED)
         public MemberResource postMember(
@@ -2852,7 +2852,6 @@ Example of implementation of REST API wherein a specified Member resource is cre
             // (4)
             Member inputMember = beanMapper.map(requestedResource, Member.class);
             Member createdMember = memberService.createMember(inputMember);
-
 
             MemberResource responseResource = beanMapper.map(createdMember,
                     MemberResource.class);

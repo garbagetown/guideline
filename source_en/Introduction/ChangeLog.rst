@@ -9,6 +9,9 @@ Change Log
     * - Modified on
       - Modified locations
       - Modification details
+    * - 2015-06-12
+      - Overall modifications
+      - Released English version of "5.0.0 RELEASE"
     * - 2015-02-23
       - \-
       - Released "5.0.0 RELEASE" version

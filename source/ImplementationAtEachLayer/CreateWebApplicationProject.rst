@@ -158,6 +158,190 @@ Maven Archetypeで作成したプロジェクトの詳細な説明について�
     ├── todo-selenium
     └── todo-web
 
+
+|
+
+
+.. _CreateWebApplicationProjectBuild:
+
+開発プロジェクトのビルド
+--------------------------------------------------------------------------------
+
+アプリケーションサーバにデプロイするためのwarファイル、envモジュール(ファイル環境依存ファイルを格納するモジュール)のjarファイルを作成する方法を紹介する。
+
+Maven Archetypeで作成したプロジェクトでは、warファイルを作成する方法として以下の２つの方法を提供している。
+
+* :ref:`CreateWebApplicationProjectBuildWarExcludeEnvJar` (**推奨**)
+* :ref:`CreateWebApplicationProjectBuildWarIncludeEnvJar`
+
+
+.. note:: **推奨するビルド方法について**
+
+    本ガイドラインでは、:ref:`CreateWebApplicationProjectBuildWarExcludeEnvJar` を推奨している。
+    推奨理由は、:doc:`../Appendix/EnvironmentIndependency` を参照されたい。
+
+.. warning:: **ビルド環境について**
+
+    ここではWindows環境でビルドする例になっているが、Windows環境でビルドすることを推奨しているわけではない。
+    本ガイドラインでは、**アプリケーションの実行環境と同じOSとJDKのバージョンを使ってビルドすることを推奨する。**
+
+    また、**試験環境や商用環境にリリースするwarファイルは、EclipseなどのIDEが提供している機能を使って作成しないようにすること。**
+    Eclipseなどの一部のIDEでは、開発用に最適化された独自のコンパイラを使ってクラスファイルを作成しており、
+    コンパイラの違いが原因でアプリケーション実行時に予期しないエラーが発生するリスクが生まれる。
+
+|
+
+Mavenを使ってビルドする場合は、環境変数「JAVA_HOME」にコンパイル時に使用するJDKのホームディレクトリが指定されていることを確認されたい。
+
+**[Windowsの場合]**
+
+.. code-block:: console
+
+    echo %JAVA_HOME%
+
+
+**[Linux系の場合]**
+
+.. code-block:: console
+
+    echo $JAVA_HOME
+
+|
+
+環境変数が設定されていない場合や異なるバージョンのJDKのホームディレクトリが指定されている場合は、環境変数に適切なホームディレクトリを指定する。
+
+**[Windowsの場合]**
+
+.. code-block:: console
+
+    set JAVA_HOME={Please set home directory of JDK}
+
+
+**[Linux系の場合]**
+
+.. code-block:: console
+
+    JAVA_HOME={Please set home directory of JDK}
+
+.. note::
+
+    環境変数「JAVA_HOME」は、ビルドを実行するOSユーザーのユーザー環境変数に設定しておくとよい。
+
+|
+
+.. _CreateWebApplicationProjectBuildWarExcludeEnvJar:
+
+envモジュールのjarファイルをwarファイルに含めないビルド方法
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. _CreateWebApplicationProjectBuildWarExcludeEnvJarStepWar:
+
+warファイルの作成
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+開発プロジェクトのルートディレクトリへ移動する。
+
+.. code-block:: console
+
+    cd C:\work\todo
+
+|
+
+| Mavenのプロファイル(\ ``-P``\ パラメータ)に\ ``warpack``\ を指定して、Maven packageを実行する。
+
+.. code-block:: console
+
+    mvn -P warpack clean package
+
+| Maven packageの実行が成功すると、webモジュールのtargetディレクトリの中に、warファイルが作成される。
+| (例：\ ``C:\work\todo\todo-web\target\todo-web.war``\ )
+
+.. note:: **指定するゴールについて**
+
+    上記例ではゴールに\ ``package``\ を指定してwarファイルの作成のみ行っているが、
+
+     * ローカルリポジトリへインストールする場合はゴールに\ ``install``\
+     * Nexusなどのリモートリポジトリへデプロイする場合はゴールに\ ``deploy``\
+
+    を指定すればよい。
+
+
+|
+
+.. _CreateWebApplicationProjectBuildWarExcludeEnvJarStepEnvJar:
+
+envモジュールのjarファイルの作成
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+envモジュールのディレクトリへ移動する。
+
+.. code-block:: console
+
+    cd C:\work\todo\todo-env
+
+|
+
+Mavenのプロファイル(\ ``-P``\ パラメータ)に環境を識別するプロファイルIDを指定して、Maven packageを実行する。
+
+.. code-block:: console
+
+    mvn -P test-server clean package
+
+| Maven packageの実行が成功すると、envモジュールのtargetディレクトリの中に、指定した環境用のjarファイルが作成される。
+| (例：\ ``C:\work\todo\todo-env\target\todo-env-1.0.0-SNAPSHOT-test-server.jar``\ )
+
+.. note:: **環境を識別するプロファイルIDについて**
+
+    Maven Archetypeで作成したプロジェクトでは、以下のプロファイルIDがデフォルトで定義されている。
+
+     * \ ``local``\  : 開発者のローカル環境向け(IDE開発環境向け)のプロファイル (デフォルトのプロファイル)
+     * \ ``test-server``\  : 試験環境向けのプロファイル
+     * \ ``production-server``\  : 商用環境向けのプロファイル
+
+    デフォルトで用意しているプロファイルは上記の3つだが、開発するシステムの環境構成にあわせて追加及び修正されたい。
+
+
+|
+
+.. _CreateWebApplicationProjectBuildWarIncludeEnvJar:
+
+envモジュールのjarファイルをwarファイルに含めるビルド方法
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. warning:: **envモジュールのjarファイルをwarファイルに含める場合の注意点**
+
+    envモジュールのjarファイルをwarファイルに含めた場合、warファイルを他の環境にデプロイすることができないため、
+    間違って他の環境(特に商用環境)にデプロイされないようにwarファイルを管理すること。
+
+    また、環境毎にwarファイルを作成して各環境へリリースする方法を採用した場合、
+    商用環境へリリースされるwarファイルは、正確にいうとテスト済みのwarファイルではないという点を意識してほしい。
+    これは、商用環境用のwarファイルを作成する際にコンパイルしなおすためである。
+    つまり、商用環境へリリースされるファイルは、テストをパスしたであろうソースファイルをコンパイルして作成された別のwarファイルということになる。
+    同じリビジョンのソースファイルを使ってビルドすればバイナリレベルでは同じクラスファイルが作成されるが、
+    外部要因(例 : 異なるリビジョンのファイルをビルドしてしまうなど)によって差分が発生するリスクがうまれる。
+
+    本ガイドラインでは、基本的には\ **環境毎にwarファイルを作成する方法を推奨していない。**\
+    :doc:`../Appendix/EnvironmentIndependency` を参照し、warファイルの作成方法とリリース方法を再度検討してほしい。
+
+|
+
+開発プロジェクトのルートディレクトリへ移動する。
+
+.. code-block:: console
+
+    cd C:\work\todo
+
+|
+
+| Mavenのプロファイル(\ ``-P``\ パラメータ)に\ ``warpack-with-env``\ とenvモジュールの中で定義している環境を識別するプロファイルIDを指定して、Maven packageを実行する。
+
+.. code-block:: console
+
+    mvn -P warpack-with-env,test-server clean package
+
+| Maven packageの実行が成功すると、webモジュールのtargetディレクトリの中に、envモジュールのjarファイルを含んだwarファイルが作成される。
+| (例：\ ``C:\work\todo\todo-web\target\todo-web.war``\ )
+
 |
 
 .. _CreateWebApplicationProjectCustomize:

@@ -649,7 +649,7 @@ Basically, application development is possible using TERASOLUNA Server Framework
 
 The project which does not contain the Java source code, only defines library dependencies.
 
-In addition, project dependencies are follow:
+In addition, project dependencies are as follows:
 
 .. figure:: images_FrameworkStack/FrameworkStackProjectDependencies.png
     :width: 75%

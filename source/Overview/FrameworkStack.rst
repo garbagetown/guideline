@@ -135,11 +135,11 @@ version 5.0.0.RELEASEで利用するOSSの一覧を以下に示す。
 
     なお、version 5.0.0.RELEASEで指定しているSpring IO platformのバージョンは、`1.1.1.RELEASE <http://docs.spring.io/platform/docs/1.1.1.RELEASE/reference/htmlsingle/>`_\ である。
 
-.. tabularcolumns:: |p{0.15\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|p{0.05\linewidth}|p{0.05\linewidth}|
+.. tabularcolumns:: |p{0.15\linewidth}|p{0.27\linewidth}|p{0.25\linewidth}|p{0.15\linewidth}|p{0.05\linewidth}|p{0.08\linewidth}|
 .. list-table::
     :header-rows: 1
     :stub-columns: 1
-    :widths: 15 25 25 25 5 5
+    :widths: 15 27 25 15 5 8
 
     * - Type
       - GroupId
@@ -597,46 +597,62 @@ version 5.0.0.RELEASEで利用するOSSの一覧を以下に示す。
 \ `共通ライブラリ <https://github.com/terasolunaorg/terasoluna-gfw>`_\ は、TERASOLUNA Server Framework for Java (5.x)が含むSpring Ecosystem や、その他依存ライブラリでは足りない+αな機能を提供するライブラリである。
 基本的には、このライブラリがなくてもTERASOLUNA Server Framework for Java (5.x)によるアプリケーション開発は可能であるが、"あると便利"な存在である。
 
-.. tabularcolumns:: |p{0.05\linewidth}|p{0.30\linewidth}|p{0.35\linewidth}|p{0.30\linewidth}|
+.. tabularcolumns:: |p{0.05\linewidth}|p{0.30\linewidth}|p{0.45\linewidth}|p{0.20\linewidth}|
 .. list-table::
     :header-rows: 1
-    :widths: 5 30 35 30
+    :widths: 5 30 45 20
 
     * - 項番
       - プロジェクト名
       - 概要
       - Javaソースコード有無
-    * - | (1)
-      - | terasoluna-gfw-common
-      - | Webに限らず、汎用的に使用できる機能
-      - | 有
-    * - | (2)
-      - | terasoluna-gfw-jodatime
-      - | Joda Timeに依存する機能
-      - | 有
-    * - | (3)
-      - | terasoluna-gfw-web
-      - | Webアプリケーションを作成する場合に使用する機能群
-      - | 有
-    * - | (4)
-      - | terasoluna-gfw-mybatis3
-      - | MyBatis3を使用する場合の、依存関係定義
-      - | 無
-    * - | (5)
-      - | terasoluna-gfw-jpa
-      - | JPAを使用する場合の、依存関係定義
-      - | 無
-    * - | (6)
-      - | terasoluna-gfw-security-core
-      - | Spring Securityを使用する場合の、依存関係定義(Web以外)
-      - | 無
-    * - | (7)
-      - | terasoluna-gfw-security-web
-      - | Spring Securityを使用する場合の依存関係定義(Web関連)、およびSpring Securityの拡張
-      - | 有
+    * - \ (1)
+      - terasoluna-gfw-common
+      - Webに依存しない汎用的に使用できる機能と依存関係定義を提供する。
+      - 有
+    * - \ (2)
+      - terasoluna-gfw-jodatime
+      - Joda Timeに依存する機能と依存関係定義を提供する。
+      - 有
+    * - \ (3)
+      - terasoluna-gfw-web
+      - Webアプリケーションを作成する場合に使用する機能と依存関係定義を提供する。
+      - 有
+    * - \ (4)
+      - terasoluna-gfw-mybatis3
+      - MyBatis3を使用する場合の依存関係定義を提供する。
+      - 無
+    * - \ (5)
+      - terasoluna-gfw-jpa
+      - JPAを使用する場合の依存関係定義を提供する。
+      - 無
+    * - \ (6)
+      - terasoluna-gfw-security-core
+      - Spring Securityを使用する場合の依存関係定義(Web以外)を提供する。
+      - 無
+    * - \ (7)
+      - terasoluna-gfw-security-web
+      - Spring Securityを使用する場合の依存関係定義(Web関連)とSpring Securityの拡張部品を提供する。
+      - 有
+    * - \ (8)
+      - terasoluna-gfw-recommended-dependencies
+      - Webに依存しない推奨ライブラリへの依存関係定義を提供する。
+      - 無
+    * - \ (9)
+      - terasoluna-gfw-recommended-web-dependencies
+      - Webに依存する推奨ライブラリへの依存関係定義を提供する。
+      - 無
+    * - \ (10)
+      - terasoluna-gfw-parent
+      - 依存ライブラリの管理とビルド用プラグインの推奨設定を提供する。
+      - 無
 
 Javaソースコードを含まないものは、ライブラリの依存関係のみ定義しているプロジェクトである。
 
+なお、プロジェクトの依存関係は以下の通りである。
+
+.. figure:: images_FrameworkStack/FrameworkStackProjectDependencies.png
+    :width: 75%
 
 
 terasoluna-gfw-common
@@ -644,7 +660,7 @@ terasoluna-gfw-common
 
 terasoluna-gfw-commonは以下の部品を提供している。
 
-.. tabularcolumns:: |p{0.30\linewidth}|p{0.35\linewidth}|p{0.30\linewidth}|
+.. tabularcolumns:: |p{0.20\linewidth}|p{0.30\linewidth}|p{0.50\linewidth}|
 .. list-table::
     :header-rows: 1
     :widths: 20 30 50
@@ -682,7 +698,7 @@ terasoluna-gfw-jodatime
 
 terasoluna-gfw-jodatimeは以下の部品を提供している。
 
-.. tabularcolumns:: |p{0.30\linewidth}|p{0.35\linewidth}|p{0.30\linewidth}|
+.. tabularcolumns:: |p{0.20\linewidth}|p{0.30\linewidth}|p{0.50\linewidth}|
 .. list-table::
     :header-rows: 1
     :widths: 20 30 50
@@ -700,7 +716,7 @@ terasoluna-gfw-web
 
 terasoluna-gfw-webは以下の部品を提供している。
 
-.. tabularcolumns:: |p{0.30\linewidth}|p{0.35\linewidth}|p{0.30\linewidth}|
+.. tabularcolumns:: |p{0.20\linewidth}|p{0.30\linewidth}|p{0.50\linewidth}|
 .. list-table::
     :header-rows: 1
     :widths: 20 30 50
@@ -758,7 +774,7 @@ terasoluna-gfw-security-web
 
 terasoluna-gfw-security-webは以下の部品を提供している。
 
-.. tabularcolumns:: |p{0.30\linewidth}|p{0.35\linewidth}|p{0.30\linewidth}|
+.. tabularcolumns:: |p{0.20\linewidth}|p{0.30\linewidth}|p{0.50\linewidth}|
 .. list-table::
     :header-rows: 1
     :widths: 20 30 50

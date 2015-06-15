@@ -135,11 +135,11 @@ List of OSS being used in version 5.0.0.RELEASE.
 
     Furthermore, Spring IO platform version is `1.1.1.RELEASE <http://docs.spring.io/platform/docs/1.1.1.RELEASE/reference/htmlsingle/>`_  specified in version 5.0.0.RELEASE.
 
-.. tabularcolumns:: |p{0.15\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|p{0.05\linewidth}|p{0.05\linewidth}|
+.. tabularcolumns:: |p{0.15\linewidth}|p{0.27\linewidth}|p{0.25\linewidth}|p{0.15\linewidth}|p{0.05\linewidth}|p{0.08\linewidth}|
 .. list-table::
     :header-rows: 1
     :stub-columns: 1
-    :widths: 15 25 25 25 5 5
+    :widths: 15 27 25 15 5 8
 
     * - Type
       - GroupId
@@ -597,45 +597,62 @@ Building blocks of Common Library
 \ `Common Library <https://github.com/terasolunaorg/terasoluna-gfw>`_\  includes ``+ alpha`` functionalities which are not available in Spring Ecosystem or other dependent libraries included in TERASOLUNA Server Framework for Java (5.x).
 Basically, application development is possible using TERASOLUNA Server Framework for Java (5.x) without this library but "convenient to have" kind of existence.
 
-.. tabularcolumns:: |p{0.05\linewidth}|p{0.30\linewidth}|p{0.35\linewidth}|p{0.30\linewidth}|
+.. tabularcolumns:: |p{0.05\linewidth}|p{0.30\linewidth}|p{0.45\linewidth}|p{0.20\linewidth}|
 .. list-table::
     :header-rows: 1
-    :widths: 5 30 35 30
+    :widths: 5 30 45 20
 
     * - No.
       - Project Name
       - Summary
       - Java source-code availability
-    * - | (1)
-      - | terasoluna-gfw-common
-      - | general-purpose functionality irrespective of Web
-      - | Yes
-    * - | (2)
-      - | terasoluna-gfw-jodatime
-      - | Functionality that depend on the Joda Time
-      - | Yes
-    * - | (3)
-      - | terasoluna-gfw-web
-      - | Group of functionalities for creating web application
-      - | Yes
-    * - | (4)
-      - | terasoluna-gfw-mybatis3
-      - | Dependency definition for using MyBatis3
-      - | No
-    * - | (5)
-      - | terasoluna-gfw-jpa
-      - | Dependency definition for using JPA
-      - | No
-    * - | (6)
-      - | terasoluna-gfw-security-core
-      - | Dependency definition for using Spring Security (other than Web)
-      - | No
-    * - | (7)
-      - | terasoluna-gfw-security-web
-      - | Dependency definition for using Spring Security (related to Web) and extended classes of Spring Security
-      - | Yes
+    * - \ (1)
+      - terasoluna-gfw-common
+      - Provide general-purpose functionalities and dependency definitions irrespective of Web.
+      - Yes
+    * - \ (2)
+      - terasoluna-gfw-jodatime
+      - Provide functionalities and dependency definitions that depend on the Joda Time.
+      - Yes
+    * - \ (3)
+      - terasoluna-gfw-web
+      - Provide group of functionalities and dependency definitions for creating web application.
+      - Yes
+    * - \ (4)
+      - terasoluna-gfw-mybatis3
+      - Provide dependency definitions for using MyBatis3.
+      - No
+    * - \ (5)
+      - terasoluna-gfw-jpa
+      - Provide dependency definitions for using JPA.
+      - No
+    * - \ (6)
+      - terasoluna-gfw-security-core
+      - Provide dependency definitions for using Spring Security (other than Web).
+      - No
+    * - \ (7)
+      - terasoluna-gfw-security-web
+      - Provide dependency definitions for using Spring Security (related to Web) and extended classes of Spring Security.
+      - Yes
+    * - \ (8)
+      - terasoluna-gfw-recommended-dependencies
+      - Provide dependency definitions of recommended libraries that doesn't depends on web.
+      - No
+    * - \ (9)
+      - terasoluna-gfw-recommended-web-dependencies
+      - Provide dependency definitions of recommended libraries that depends on web.
+      - No
+    * - \ (10)
+      - terasoluna-gfw-parent
+      - Provide dependency libraries management and recommended settings of build plugins.
+      - No
 
 The project which does not contain the Java source code, only defines library dependencies.
+
+In addition, project dependencies are as follows:
+
+.. figure:: images_FrameworkStack/FrameworkStackProjectDependencies.png
+    :width: 75%
 
 
 
@@ -644,7 +661,7 @@ terasoluna-gfw-common
 
 terasoluna-gfw-common provide following components.
 
-.. tabularcolumns:: |p{0.30\linewidth}|p{0.35\linewidth}|p{0.30\linewidth}|
+.. tabularcolumns:: |p{0.20\linewidth}|p{0.30\linewidth}|p{0.50\linewidth}|
 .. list-table::
     :header-rows: 1
     :widths: 20 30 50
@@ -682,7 +699,7 @@ terasoluna-gfw-jodatime
 
 terasoluna-gfw-jodatime provide following components.
 
-.. tabularcolumns:: |p{0.30\linewidth}|p{0.35\linewidth}|p{0.30\linewidth}|
+.. tabularcolumns:: |p{0.20\linewidth}|p{0.30\linewidth}|p{0.50\linewidth}|
 .. list-table::
     :header-rows: 1
     :widths: 20 30 50
@@ -701,7 +718,7 @@ terasoluna-gfw-web provide following components.
 
 
 
-.. tabularcolumns:: |p{0.30\linewidth}|p{0.35\linewidth}|p{0.30\linewidth}|
+.. tabularcolumns:: |p{0.20\linewidth}|p{0.30\linewidth}|p{0.50\linewidth}|
 .. list-table::
     :header-rows: 1
     :widths: 20 30 50
@@ -758,7 +775,7 @@ terasoluna-gfw-security-web
 
 terasoluna-gfw-security-web provide following components.
 
-.. tabularcolumns:: |p{0.30\linewidth}|p{0.35\linewidth}|p{0.30\linewidth}|
+.. tabularcolumns:: |p{0.20\linewidth}|p{0.30\linewidth}|p{0.50\linewidth}|
 .. list-table::
     :header-rows: 1
     :widths: 20 30 50

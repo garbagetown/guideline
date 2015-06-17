@@ -590,7 +590,7 @@ AbstractRoutingDataSourceの実装
     * - | (1)
       - \ ``AbstractRoutingDataSource``\ を継承する。
     * - | (2)
-      - 時刻を取得するため、\ ``JodaTimeDateFactory``\を使用する。詳細は、\ :doc:`./SystemDate`\を参照のこと。
+      - 時刻を取得するため、\ ``JodaTimeDateFactory``\ を使用する。詳細は、\ :doc:`./SystemDate`\ を参照のこと。
     * - | (3)
       - \ ``determineCurrentLookupKey``\ メソッドを実装する。このメソッドの返り値と後述するbean定義ファイル内の\ ``targetDataSources``\ に定義した\ ``key``\ をマッピングすることにより使用するデータソースが決定される。
     * - | (4)
@@ -601,7 +601,7 @@ AbstractRoutingDataSourceの実装
 
  .. tip::
 
-        認証ユーザー情報を使用する場合には、\ ``org.springframework.security.core.context.SecurityContext``\ を使用して取得することができる。詳細は\ :doc:`../Security/Authentication`\を参照のこと。
+        認証ユーザー情報を使用する場合には、\ ``org.springframework.security.core.context.SecurityContext``\ を使用して取得することができる。詳細は\ :doc:`../Security/Authentication`\ を参照のこと。
 
 データソースの定義
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -616,11 +616,11 @@ AbstractRoutingDataSourceの実装
         class="com.examples.infra.datasource.RoutingDataSource">  <!-- (1) -->
         <property name="targetDataSources">  <!-- (2) -->
             <map>
-                <entry key="OPEN" value-ref="dataSourceOpen" /> 
+                <entry key="OPEN" value-ref="dataSourceOpen" />
                 <entry key="CLOSE" value-ref="dataSourceClose" />
             </map>
         </property>
-        <property name="defaultTargetDataSource" ref="dataSourceDefault" />  <!-- (4) -->
+        <property name="defaultTargetDataSource" ref="dataSourceDefault" />  <!-- (3) -->
     </bean>
 
 

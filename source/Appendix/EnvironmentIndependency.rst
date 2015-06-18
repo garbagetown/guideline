@@ -71,19 +71,21 @@ WebアプリケーションをTomcat上にリリースする場合は次のよ�
 1. リリース対象のAPサーバ環境にあわせてmavenのprofileを指定し、 \*-env プロジェクトを ビルドする。
 2. 上記でビルドした\*-env-x.y.z.jarファイル をあらかじめ決定したAPサーバ上のフォルダに設置する。 ex. /etc/foo/bar/abcd-env-x.y.z.jar
 3. あらかじめパッケージリポジトリにデプロイ済みの\*.warファイルを [CATALINA_HOME]/webapps 配下で解凍(unjar)する。
-4. Tomcat 7 では、VirtualWebappLoader 機能を使って /etc/foo/bar/\*.jar をクラスパスに追加する。Tomcat 8 では、VirtualWebappLoader 機能ではなく、リソース設定で指定する。
- * [CATALINA_HOME]/conf/[contextPath].xml ファイルに上記の設定を記述すればよい。
- * [Tomcat 7] 詳しくは terasoluna-tourreservation-envサンプルのconfigsフォルダと、 http://tomcat.apache.org/tomcat-7.0-doc/api/org/apache/catalina/loader/VirtualWebappLoader.html を参考のこと。
- * [Tomcat 7] VirtualWebappLoader 設定例：
+4. Tomcat 7を使用する場合は、TomcatのVirtualWebappLoader機能を使用して /etc/foo/bar/\*.jar をクラスパスに追加する。
+ * [CATALINA_HOME]/conf/[contextPath].xml ファイルに下記の定義を追加する。
+ * 詳しくは、 http://tomcat.apache.org/tomcat-7.0-doc/api/org/apache/catalina/loader/VirtualWebappLoader.html と `terasoluna-tourreservation-envのconfigsフォルダ <https://github.com/terasolunaorg/terasoluna-tourreservation/tree/master/terasoluna-tourreservation-env/configs>`_\ を参考されたい。
+ * VirtualWebappLoaderの設定例：
    
   .. code-block:: xml
 
    <Loader className="org.apache.catalina.loader.VirtualWebappLoader"
            virtualClasspath="/etc/foo/bar/*.jar" />
 	 
- * なお、VirtualWebappLoaderはTomcat6.xでも使用可能。
- * [Tomcat 8] 詳しくは terasoluna-tourreservation-env サンプルのconfigsフォルダと https://tomcat.apache.org/migration-8.html#Web_application_resources を参照のこと。
- * [Tomcat 8] リソース設定例：
+ * なお、VirtualWebappLoader機能はTomcat 6でも使用可能。
+5. Tomcat 8を使用する場合は、Tomcatのリソース機能を使用して /etc/foo/bar/\*.jar をクラスパスに追加する。
+ * [CATALINA_HOME]/conf/[contextPath].xml ファイルに下記の定義を追加する。
+ * 詳しくは、 https://tomcat.apache.org/migration-8.html#Web_application_resources と `terasoluna-tourreservation-envのconfigsフォルダ <https://github.com/terasolunaorg/terasoluna-tourreservation/tree/master/terasoluna-tourreservation-env/configs>`_\ を参考されたい。
+ * リソースの設定例：
    
   .. code-block:: xml
 

@@ -952,7 +952,7 @@ How to use component-scan is shown below.
  .. code-block:: java
 
     @Component
-    @Scope("session") // (1)
+    @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS) // (1)
     public class SessionCart implements Serializable {
     
         private static final long serialVersionUID = 1L;
@@ -980,7 +980,7 @@ How to use component-scan is shown below.
     * - Sr. No.
       - Description
     * - | (1)
-      - | Set Bean scope to \ ``"session"``\ .
+      - | Set Bean scope to \ ``"session"``\ . Also, it be enabled the scoped-proxy by specifying a \ ``ScopedProxyMode.TARGET_CLASS``\  in \ ``proxyMode``\  attribute.
       
  .. note::
  
@@ -992,12 +992,15 @@ How to use component-scan is shown below.
     In the above example, JPA Entity class called \ ``Cart``\  is wrapped in a wrapper class called  \ ``SessionCart``\  and set as session-scoped bean.
     With this, the process to convert it to Entity object that can be handled in JPA is no longer required; hence the process to be performed in Controller becomes simple.
 
+ .. note:: **Reason for enabling scoped-proxy**
+
+     scoped-proxy needs to be enabled to inject session-scoped bean in singleton scope Controller.
+
 - spring-mvc.xml
 
  .. code-block:: xml
 
-    <context:component-scan base-package="xxx.yyy.zzz.app"
-        scoped-proxy="targetClass" /> // (2)
+    <context:component-scan base-package="xxx.yyy.zzz.app" /> // (2)
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
@@ -1007,12 +1010,9 @@ How to use component-scan is shown below.
     * - Sr. No.
       - Description 
     * - | (2)
-      - | Enable scoped-proxy by specifying ``"targetClass"`` in the scoped-proxy attribute of ``<context:component-scan>`` element.
+      - | Scan components using the \ ``<context:component-scan>``\  element. Specify a base package to scan components in the \ ``base-package``\  attribute.
 
- .. note:: **Reason for enabling scoped-proxy**
- 
-     scoped-proxy needs to be enabled to inject session-scoped bean in singleton scope Controller.
-     
+
 |
 
 How to define it in Bean definition file (XML), is shown below.
@@ -1036,7 +1036,7 @@ How to define it in Bean definition file (XML), is shown below.
     * - | (3)
       - | Set Bean scope to \ ``"session"``\ .
     * - | (4)
-      - | Specify ``<aop:scoped-proxy />``element and enable scoped-proxy.
+      - | Specify \ ``<aop:scoped-proxy />``\  element and enable scoped-proxy.
 
 Using session-scoped bean
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1991,7 +1991,7 @@ Implementation is as follows:
  .. code-block:: java
 
     @Component
-    @Scope("session")
+    @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public class SessionCart implements Serializable {
 
         private static final long serialVersionUID = 1L;

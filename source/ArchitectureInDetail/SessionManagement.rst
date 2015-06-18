@@ -1990,7 +1990,7 @@ sessionスコープのBeanを使った複数のControllerを跨いだ画面遷�
  .. code-block:: java
 
     @Component
-    @Scope("session")
+    @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
     public class SessionCart implements Serializable {
 
         private static final long serialVersionUID = 1L;

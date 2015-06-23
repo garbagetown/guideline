@@ -85,6 +85,7 @@ How to use
 * :ref:`codelist-jdbc`
 * :ref:`codelist-enum`
 * :ref:`codelisti18n`
+* :ref:`codelist-display-label`
 * :ref:`codelist-validate`
 
 |
@@ -1097,12 +1098,12 @@ JSPからコードリストを参照する場合は、 ``java.util.Map`` イン�
 
 **jspの実装例**
 
- .. code-block:: jsp
+.. code-block:: jsp
 
     Order Status : ${f:h(CL_ORDERSTATUS[orderForm.orderStatus])}
 
- .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
- .. list-table::
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
    :header-rows: 1
    :widths: 10 90
 
@@ -1111,6 +1112,7 @@ JSPからコードリストを参照する場合は、 ``java.util.Map`` イン�
    * - | (1)
      - コードリストを定義したbeanID(この例では ``"CL_ORDERSTATUS"`` ) を属性名として、コードリスト( ``java.util.Map`` インタフェース)を取得する。
        取得した ``Map`` インタフェースのキーとしてコード値(この例では ``orderStatus`` に格納された値) を指定することで、対応するコード名を表示することができる。
+
 
 |
 

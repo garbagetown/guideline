@@ -15,8 +15,7 @@
     本章では以下の内容について、現在精査中である。
 
     * | 複数データソースについて
-      | 具体的な内容は、\ :ref:`Overviewの複数データソースについて <data-access-common_todo_multiple_datasource_overview>`\ および\ :ref:`How to extendsの複数データソースについて <data-access-common_todo_multiple_datasource_howtoextends>`\ を参照されたい。
-
+      | 具体的な内容は、\ :ref:`Overviewの複数データソースについて <data-access-common_todo_multiple_datasource_overview>`\ および\ :ref:`How to extendsの複数データソースを使用するための設定 <data-access-common_todo_multiple_datasource_howtoextends>`\ を参照されたい。
     * | JPA利用時の一意制約エラー及び悲観排他エラーのハンドリング方法について
       | 具体的な内容は、\ :ref:`Overviewの例外ハンドリングについて <data-access-common_todo_exception>`\ を参照されたい。
 
@@ -235,8 +234,7 @@ Spring Framework提供のJDBCデータソース
     今後、以下の内容を追加する予定である。
 
     * 概念レベルのイメージ図
-    * 上記２ケースについての詳細。
-      特に、(1)のケースは、処理パターン（複数のデータソースに対して更新あり、更新は１つのデータソース、参照のみ、同時アクセスはなしなど）によってトランザクション管理の方法がかわると思うので、その辺りを中心にブレークダウンする予定である。
+
 
 共通ライブラリから提供しているクラスについて
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -526,19 +524,121 @@ log4jdbcのオプションの設定
 How to extend
 --------------------------------------------------------------------------------
 
+.. _data-access-common_todo_multiple_datasource_howtoextends:
+
 複数データソースを使用するための設定
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. _data-access-common_todo_multiple_datasource_howtoextends:
-
-.. todo::
+ .. todo::
 
     **TBD**
 
     今後、以下の内容を追加する予定である。
 
-    * 複数データソースを使う際の注意点などを踏まえた設定例。
-    * 実装にも影響がある場合は、実装例。
+    * 処理パターン（複数のデータソースに対して更新あり、更新は１つのデータソース、参照のみ、同時アクセスはなしなど）によってトランザクション管理の方法がかわると思うので、その辺りを中心にブレークダウンする予定である。
+
+
+動的にデータソースを切り替えるための設定
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+| 複数のデータソースを定義し、動的に切り替えを行うには、\ ``org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource``\ を継承したクラスを作成し、どのような条件でデータソースを切り替えるかを実装する必要がある。
+| 具体的には\ ``determineCurrentLookupKey``\ メソッドの戻り値となるキーとデータソースをマッピングさせることによって、これを実現する。キーの選択には通常、認証ユーザー情報、時間、ロケール等のコンテキスト情報を使用する。
+
+AbstractRoutingDataSourceの実装
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+| \ ``AbstractRoutingDataSource``\ を拡張して作成した\ ``DataSource``\ を、通常のデータソースと同じように使用することでデータソースの動的な切り替えが実現できる。
+| 以下に、時間によってデータソースを切り替える例を示す。
+
+- \ ``AbstractRoutingDataSource``\ を継承したクラスの実装例`
+
+ .. code-block:: java
+
+    package com.examples.infra.datasource;
+
+    import javax.inject.Inject;
+
+    import org.joda.time.DateTime;
+    import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
+    import org.terasoluna.gfw.common.date.jodatime.JodaTimeDateFactory;
+
+    public class RoutingDataSource extends AbstractRoutingDataSource { // (1)
+
+        @Inject
+        JodaTimeDateFactory dateFactory; // (2)
+
+        @Override
+        protected Object determineCurrentLookupKey() { // (3)
+
+            DateTime dateTime = dateFactory.newDateTime();
+            int hour = dateTime.getHourOfDay();
+
+            if (7 <= hour && hour <= 23) { // (4)
+                return "OPEN"; // (5)
+            } else {
+                return "CLOSE";
+            }
+        }
+    }
+
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - 項番
+      - 説明
+    * - | (1)
+      - \ ``AbstractRoutingDataSource``\ を継承する。
+    * - | (2)
+      - 時刻を取得するため、\ ``JodaTimeDateFactory``\ を使用する。詳細は、\ :doc:`./SystemDate`\ を参照のこと。
+    * - | (3)
+      - \ ``determineCurrentLookupKey``\ メソッドを実装する。このメソッドの返り値と後述するbean定義ファイル内の\ ``targetDataSources``\ に定義した\ ``key``\ をマッピングすることにより使用するデータソースが決定される。
+    * - | (4)
+      - メソッド内で、コンテキスト情報（ここでは時間）を参照し、キーの切り替えを行う。ここは業務用件に合わせて実装する必要がある。このサンプルは、時刻が「7:00から23:59まで」と「0:00から6:59まで」で違うキーを返すように実装されている。
+    * - | (5)
+      - 後述するbean定義ファイル内の\ ``targetDataSources``\ とマッピングさせる\ ``key``\ を返す。
+
+.. note
+
+    認証ユーザー情報(IDや権限)によってデータソースを切り替えたい場合には、\ ``determineCurrentLookupKey``\ メソッド内で、\ ``org.springframework.security.core.context.SecurityContext``\ を使用して取得すれば良い。
+    \ ``org.springframework.security.core.context.SecurityContext``\ クラスの詳細は\ :doc:`../Security/Authentication`\ を参照のこと。
+
+データソースの定義
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+作成した\ ``AbstractRoutingDataSource``\ 拡張クラスをbean定義ファイルに定義する。
+
+- :file:`xxx-env.xml`
+
+ .. code-block:: xml
+
+    <bean id="dataSource"
+        class="com.examples.infra.datasource.RoutingDataSource">  <!-- (1) -->
+        <property name="targetDataSources">  <!-- (2) -->
+            <map>
+                <entry key="OPEN" value-ref="dataSourceOpen" />
+                <entry key="CLOSE" value-ref="dataSourceClose" />
+            </map>
+        </property>
+        <property name="defaultTargetDataSource" ref="dataSourceDefault" />  <!-- (3) -->
+    </bean>
+
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - 項番
+      - 説明
+    * - | (1)
+      - 先ほど作成した\ ``AbstractRoutingDataSource``\ を継承したクラスを定義する。
+    * - | (2)
+      - 使用するデータソースを定義する。\ ``key``\ は\ ``determineCurrentLookupKey``\ メソッドで返却しうる値を定義する。\ ``value-ref``\ には\ ``key``\ ごとに使用するデータソースを指定する。\ :ref:`データソースの設定 <data-access-common_howtouse_datasource>`\ をもとに切り替えるデータソースの個数分、定義を行う必要がある。
+    * - | (3)
+      - \ ``determineCurrentLookupKey``\ メソッドで指定した\ ``key``\ が\ ``targetDataSources``\ に存在しない場合は、このデータソースが使用される。実装例の場合、デフォルトが使用されることはないが、今回は説明のため、\ ``defaultTargetDataSource``\ を定義している。
+
 
 |
 
@@ -1129,8 +1229,7 @@ Spring Frameworkから提供されているJDBCデータソースクラス
       - | org.springframework.jdbc.datasource.lookup.
         | IsolationLevelDataSourceRoute
       - 実行中のトランザクションの独立性レベルによって、使用するデータソースを切り替えるためのアダプタークラス。
-      
+
 .. raw:: latex
 
    \newpage
-

@@ -476,13 +476,13 @@ version 5.0.0.RELEASEで利用するOSSの一覧を以下に示す。
       - usertype.core
       - 3.2.0.GA
       -
-      - \*1
+      - \*2
     * - 日付操作
       - org.jadira.usertype
       - usertype.spi
       - 3.2.0.GA
       -
-      - \*1
+      - \*2
     * - コネクションプール
       - org.apache.commons
       - commons-dbcp2

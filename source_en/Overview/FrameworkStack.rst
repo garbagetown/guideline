@@ -476,13 +476,13 @@ List of OSS being used in version 5.0.0.RELEASE.
       - usertype.core
       - 3.2.0.GA
       -
-      - \*1
+      - \*2
     * - Date operation
       - org.jadira.usertype
       - usertype.spi
       - 3.2.0.GA
       -
-      - \*1
+      - \*2
     * - Connection pool
       - org.apache.commons
       - commons-dbcp2

@@ -891,7 +891,6 @@ specify \ `<sec:concurrency-control> <http://docs.spring.io/spring-security/site
             error-if-maximum-exceeded="true"
             max-sessions="2"
             expired-url="/expiredSessionError.jsp" /><!-- Steps (1) to (3) in the specified order of attribute -->
-        </sec:session-management>
     </sec:session-management>
   </sec:http>
 

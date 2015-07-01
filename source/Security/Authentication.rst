@@ -888,7 +888,6 @@ Concurrent Session Controlを利用する場合は、
             error-if-maximum-exceeded="true"
             max-sessions="2"
             expired-url="/expiredSessionError.jsp" /><!-- 属性の指定順番で(1)～(3) -->
-        </sec:session-management>
     </sec:session-management>
   </sec:http>
 

@@ -252,7 +252,7 @@ The scenario in which a session is automatically discarded due to timeout is ill
        * Tomcat: 1800  seconds (30 minutes)
        * WebLogic: 3600 seconds (60 minutes)
        * WebSphere: 1800 seconds (30 minutes)
-       * Resin: 1800 seconds (30 minutes)
+       * JBoss: 1800 seconds (30 minutes)
 
 Detecting a request after session timeout
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

@@ -1082,10 +1082,10 @@ Description of basic settings is omitted since it is same as :ref:`Using codelis
 
 .. _codelist-display-label:
 
-Displaying a code name that corresponds a code value
+Display code name corresponding to code value
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When needs to refer the codelist at the JSP, it can be referred in same way as \ ``java.util.Map``\  interface.
+When it is necessary to refer the codelist in JSP, it can be referred same as \ ``java.util.Map``\  interface.
 
 For details, see the below example.
 
@@ -1103,8 +1103,8 @@ For details, see the below example.
    * - Sr. No.
      - Description
    * - | (1)
-     - | Get a codelist that has been converted to the \ ``java.util.Map``\  from the request scope (In this example, used a \ ``"CL_ORDERSTATUS"``\  as codelist ). The codelist has been stored with same name of beanID of codelist.
-       | Then specify a code value as fetched key of the \ ``Map``\  interface and display a corresponding code name (In this example, used a \ ``orderStatus``\  value as fetched key).
+     - | Get a codelist that has been converted to the \ ``java.util.Map``\  from the request scope (In this example, \ ``"CL_ORDERSTATUS"``\  used as codelist ). The codelist has been referred with the beanID of codelist.
+       | Then specify a code value as a key of the \ ``Map``\  interface which displays a corresponding code name (In this example, \ ``orderStatus``\  value is used as a key).
 
 |
 

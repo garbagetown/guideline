@@ -69,21 +69,21 @@ Perform the following procedure to release the Web application in Tomcat.
 1. Specify the profile of Maven as per the AP server environment in which the application is to be released and build \*-env project.
 2. Place \*-env-x.y.z.jar file built above in the folder of AP server decided in advance. ex. /etc/foo/bar/abcd-env-x.y.z.jar
 3. Unjar the \*.war file deployed in package repository under [CATALINA_HOME]/webapps.
-4. If use the Tomcat 7, add /etc/foo/bar/\*.jar to class path using VirtualWebappLoader function of the Tomcat.
+4. If Tomcat 7 is used, add /etc/foo/bar/\*.jar into class path using VirtualWebappLoader function of the Tomcat.
  * The following definition should be added in [CATALINA_HOME]/conf/[contextPath].xml file.
  * For details, refer to http://tomcat.apache.org/tomcat-7.0-doc/api/org/apache/catalina/loader/VirtualWebappLoader.html and `configs folder of terasoluna-tourreservation-env <https://github.com/terasolunaorg/terasoluna-tourreservation/tree/master/terasoluna-tourreservation-env/configs>`_\ .
- * Example settings for using VirtualWebappLoader function：
+ * Example of VirtualWebappLoader function usages :
 
   .. code-block:: xml
 
    <Loader className="org.apache.catalina.loader.VirtualWebappLoader"
            virtualClasspath="/etc/foo/bar/*.jar" />
 
- * In addition、VirtualWebappLoader can also be used with the Tomcat 6.
-5. If use the Tomcat 8, add /etc/foo/bar/\*.jar to class path using Resource function of the Tomcat.
+ * In addition, VirtualWebappLoader can also be used in the Tomcat 6.
+5. If Tomcat 8 is used, add /etc/foo/bar/\*.jar into class path using Resource function of the Tomcat.
  * The following definition should be added in [CATALINA_HOME]/conf/[contextPath].xml file.
  * For details, refer to https://tomcat.apache.org/migration-8.html#Web_application_resources and `configs folder of terasoluna-tourreservation-env <https://github.com/terasolunaorg/terasoluna-tourreservation/tree/master/terasoluna-tourreservation-env/configs>`_\ .
- * Example settings for using Resource function：
+ * Example of Resource function usages :
 
   .. code-block:: xml
 

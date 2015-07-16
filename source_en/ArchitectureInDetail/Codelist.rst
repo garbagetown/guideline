@@ -81,6 +81,7 @@ This section describes settings for various codelists and their implementation m
 * :ref:`codelist-jdbc`
 * :ref:`codelist-enum`
 * :ref:`codelisti18n`
+* :ref:`codelist-display-label`
 * :ref:`codelist-validate`
 
 |
@@ -1076,6 +1077,34 @@ Description of basic settings is omitted since it is same as :ref:`Using codelis
      - Description
    * - | (1)
      - | Map of locale corresponding to I18nCodeList#asMap(Locale) can be fetched.
+
+|
+
+.. _codelist-display-label:
+
+Display code name corresponding to code value
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When it is necessary to refer the codelist in JSP, it can be referred same as \ ``java.util.Map``\  interface.
+
+For details, see the below example.
+
+**Example of jsp implementation**
+
+.. code-block:: jsp
+
+    Order Status : ${f:h(CL_ORDERSTATUS[orderForm.orderStatus])}
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+   :header-rows: 1
+   :widths: 10 90
+
+   * - Sr. No.
+     - Description
+   * - | (1)
+     - | Get a codelist that has been converted to the \ ``java.util.Map``\  from the request scope (In this example, \ ``"CL_ORDERSTATUS"``\  used as codelist ). The codelist has been referred with the beanID of codelist.
+       | Then specify a code value as a key of the \ ``Map``\  interface which displays a corresponding code name (In this example, \ ``orderStatus``\  value is used as a key).
 
 |
 

@@ -102,7 +102,7 @@ Perform the following procedure to release the Web application in Tomcat.
 Deployment to other application server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When releasing the Web application on application servers (Example: Resin, Websphere, Weblogic) where a mechanism for
+When releasing the Web application on application servers (Example: WebSphere, WebLogic, JBoss) where a mechanism for
 adding a class path for each web application (which is provided in VirtualWebappLoader of Tomcat) is not provided,
 the method to release it after adding \*-env-x.y.z.jar file under WEB-INF/lib of war file is the easiest.
 

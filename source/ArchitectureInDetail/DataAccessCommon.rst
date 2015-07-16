@@ -70,18 +70,22 @@ JDBC DataSourceについて
       - アプリケーションサーバ
       - 参照ページ
     * - 1.
+      - Apache Tomcat 8
+      - | \ `Apache Tomcat 8 User Guide(The Tomcat JDBC Connection Pool) <http://tomcat.apache.org/tomcat-8.0-doc/jdbc-pool.html>`_\ を参照されたい。
+        | \ `Apache Tomcat 8 User Guide(JNDI Datasource HOW-TO) <http://tomcat.apache.org/tomcat-8.0-doc/jndi-datasource-examples-howto.html>`_\ (Apache Commons DBCP 2)を参照されたい。
+    * - 2.
       - Apache Tomcat 7
       - | \ `Apache Tomcat 7 User Guide(The Tomcat JDBC Connection Pool) <http://tomcat.apache.org/tomcat-7.0-doc/jdbc-pool.html>`_\ を参照されたい。
         | \ `Apache Tomcat 7 User Guide(JNDI Datasource HOW-TO) <http://tomcat.apache.org/tomcat-7.0-doc/jndi-datasource-examples-howto.html>`_\ (Apache Commons DBCP)を参照されたい。
-    * - 2.
-      - Oracle WebLogic Server 12c
-      - \ `Oracle WebLogic Server Product Documentation <http://docs.oracle.com/cd/E24329_01/web.1211/e24367/toc.htm>`_\ を参照されたい。
     * - 3.
+      - Oracle WebLogic Server 12c
+      - \ `Oracle WebLogic Server Product Documentation <http://docs.oracle.com/middleware/1213/wls/INTRO/jdbc.htm>`_\ を参照されたい。
+    * - 4.
       - IBM WebSphere Application Server Version 8.5
       - \ `WebSphere Application Server Online information center <http://pic.dhe.ibm.com/infocenter/wasinfo/v8r5/index.jsp?topic=%2Fcom.ibm.websphere.nd.doc%2Fae%2Ftdat_ccrtpds.html>`_\ を参照されたい。
-    * - 4.
-      - Resin 4.0
-      - \ `Resin Documentation <http://www.caucho.com/resin-4.0/admin/database.xtp>`_\ を参照されたい。
+    * - 5.
+      - JBoss Enterprise Application Platform 6.4
+      - \ `JBoss Enterprise Application Platform Product Documentation <https://access.redhat.com/documentation/en-US/JBoss_Enterprise_Application_Platform/6.4/html/Administration_and_Configuration_Guide/chap-Datasource_Management.html>`_\ を参照されたい。
 
 
 .. _datasource_oss_thirdparty-label:

@@ -69,18 +69,22 @@ JDBC datasource provided by Application Server
       - Application Server
       - Reference page
     * - 1.
+      - Apache Tomcat 8
+      - | Refer to \ `Apache Tomcat 8 User Guide(The Tomcat JDBC Connection Pool) <http://tomcat.apache.org/tomcat-8.0-doc/jdbc-pool.html>`_\ .
+        | Refer to \ `Apache Tomcat 8 User Guide(JNDI Datasource HOW-TO) <http://tomcat.apache.org/tomcat-8.0-doc/jndi-datasource-examples-howto.html>`_\  (Apache Commons DBCP 2).
+    * - 2.
       - Apache Tomcat 7
       - | Refer to \ `Apache Tomcat 7 User Guide (The Tomcat JDBC Connection Pool) <http://tomcat.apache.org/tomcat-7.0-doc/jdbc-pool.html>`_\ .
         | Refer to \ `Apache Tomcat 7 User Guide (JNDI Datasource HOW-TO) <http://tomcat.apache.org/tomcat-7.0-doc/jndi-datasource-examples-howto.html>`_\  (Apache Commons DBCP).
-    * - 2.
-      - Oracle WebLogic Server 12c
-      - Refer to \ `Oracle WebLogic Server Product Documentation <http://docs.oracle.com/cd/E24329_01/web.1211/e24367/toc.htm>`_\ .
     * - 3.
+      - Oracle WebLogic Server 12c
+      - Refer to \ `Oracle WebLogic Server Product Documentation <http://docs.oracle.com/middleware/1213/wls/INTRO/jdbc.htm>`_\ .
+    * - 4.
       - IBM WebSphere Application Server Version 8.5
       - Refer to \ `WebSphere Application Server Online information center <http://pic.dhe.ibm.com/infocenter/wasinfo/v8r5/index.jsp?topic=%2Fcom.ibm.websphere.nd.doc%2Fae%2Ftdat_ccrtpds.html>`_\ .
-    * - 4.
-      - Resin 4.0
-      - Refer to \ `Resin Documentation <http://www.caucho.com/resin-4.0/admin/database.xtp>`_\ .
+    * - 5.
+      - JBoss Enterprise Application Platform 6.4
+      - Refer to \ `JBoss Enterprise Application Platform Product Documentation <https://access.redhat.com/documentation/en-US/JBoss_Enterprise_Application_Platform/6.4/html/Administration_and_Configuration_Guide/chap-Datasource_Management.html>`_\ .
 
 
 .. _datasource_oss_thirdparty-label:

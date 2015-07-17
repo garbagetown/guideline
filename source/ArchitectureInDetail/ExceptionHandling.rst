@@ -751,9 +751,9 @@ How to use
     :emphasize-lines: 1,13-15
 
     <appender name="MONITORING_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender"> <!-- (1) -->
-        <file>log/projectName-monitoring.log</file>
+        <file>${app.log.dir:-log}/projectName-monitoring.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>log/projectName-monitoring-%d{yyyyMMdd}.log</fileNamePattern>
+            <fileNamePattern>${app.log.dir:-log}/projectName-monitoring-%d{yyyyMMdd}.log</fileNamePattern>
             <maxHistory>7</maxHistory>
         </rollingPolicy>
         <encoder>
@@ -798,9 +798,9 @@ How to use
     :emphasize-lines: 1,13
 
     <appender name="APPLICATION_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender"> <!-- (1) -->
-        <file>log/projectName-application.log</file>
+        <file>${app.log.dir:-log}/projectName-application.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>log/projectName-application-%d{yyyyMMdd}.log</fileNamePattern>
+            <fileNamePattern>${app.log.dir:-log}/projectName-application-%d{yyyyMMdd}.log</fileNamePattern>
             <maxHistory>7</maxHistory>
         </rollingPolicy>
         <encoder>

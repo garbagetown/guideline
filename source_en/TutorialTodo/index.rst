@@ -4268,7 +4268,7 @@ The log output related definitions are done in \ :file:`logback.xml`\.
 .. code-block:: xml
     :emphasize-lines: 4, 36, 45
 
-    <!DOCTYPE logback>
+    <?xml version="1.0" encoding="UTF-8"?>
     <configuration>
 
         <!-- (1) -->
@@ -4279,9 +4279,9 @@ The log output related definitions are done in \ :file:`logback.xml`\.
         </appender>
 
         <appender name="APPLICATION_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>log/todo-application.log</file>
+            <file>${app.log.dir:-log}/todo-application.log</file>
             <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                <fileNamePattern>log/todo-application-%d{yyyyMMdd}.log</fileNamePattern>
+                <fileNamePattern>${app.log.dir:-log}/todo-application-%d{yyyyMMdd}.log</fileNamePattern>
                 <maxHistory>7</maxHistory>
             </rollingPolicy>
             <encoder>
@@ -4291,9 +4291,9 @@ The log output related definitions are done in \ :file:`logback.xml`\.
         </appender>
 
         <appender name="MONITORING_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>log/todo-monitoring.log</file>
+            <file>${app.log.dir:-log}/todo-monitoring.log</file>
             <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                <fileNamePattern>log/todo-monitoring-%d{yyyyMMdd}.log</fileNamePattern>
+                <fileNamePattern>${app.log.dir:-log}/todo-monitoring-%d{yyyyMMdd}.log</fileNamePattern>
                 <maxHistory>7</maxHistory>
             </rollingPolicy>
             <encoder>
@@ -4310,7 +4310,7 @@ The log output related definitions are done in \ :file:`logback.xml`\.
 
         <!-- TERASOLUNA -->
         <logger name="org.terasoluna.gfw">
-            <level value="debug" />
+            <level value="info" />
         </logger>
         <!-- (3) -->
         <logger name="org.terasoluna.gfw.web.logging.TraceLoggingInterceptor">
@@ -4338,11 +4338,6 @@ The log output related definitions are done in \ :file:`logback.xml`\.
             <level value="debug" />
         </logger>
               REMOVE THIS LINE IF YOU USE JPA  -->
-        <!--  REMOVE THIS LINE IF YOU USE MyBatis2
-        <logger name="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-            <level value="debug" />
-        </logger>
-              REMOVE THIS LINE IF YOU USE MyBatis2  -->
         <!--  REMOVE THIS LINE IF YOU USE MyBatis3
         <logger name="org.springframework.jdbc.datasource.DataSourceTransactionManager">
             <level value="debug" />
@@ -4350,6 +4345,11 @@ The log output related definitions are done in \ :file:`logback.xml`\.
               REMOVE THIS LINE IF YOU USE MyBatis3  -->
 
         <logger name="jdbc.sqltiming">
+            <level value="debug" />
+        </logger>
+
+        <!-- only for development -->
+        <logger name="jdbc.resultsettable">
             <level value="debug" />
         </logger>
 

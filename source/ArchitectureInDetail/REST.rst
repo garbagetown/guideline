@@ -263,13 +263,16 @@ REST APIの実装サンプル
  .. code-block:: java
 
     package todo.api.todo;
-    
+
+    import java.io.Serializable;
     import java.util.Date;
     
     import javax.validation.constraints.NotNull;
     import javax.validation.constraints.Size;
     
-    public class TodoResource {
+    public class TodoResource implements Serializable {
+
+        private static final long serialVersionUID = 1L;
 
         private String todoId;
     

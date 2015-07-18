@@ -776,13 +776,16 @@ Creation of Resource class
 .. code-block:: java
 
     package todo.api.todo;
-    
+
+    import java.io.Serializable;
     import java.util.Date;
     
     import javax.validation.constraints.NotNull;
     import javax.validation.constraints.Size;
     
-    public class TodoResource {
+    public class TodoResource implements Serializable {
+
+        private static final long serialVersionUID = 1L;
 
         private String todoId;
     
@@ -1783,14 +1786,17 @@ Creating JavaBean for holding the REST API error information
 .. code-block:: java
 
     package todo.api.common.error;
-    
+
+    import java.io.Serializable;
     import java.util.ArrayList;
     import java.util.List;
     
     import com.fasterxml.jackson.annotation.JsonInclude;
     
-    public class ApiError {
-    
+    public class ApiError implements Serializable {
+
+        private static final long serialVersionUID = 1L;
+
         private final String code;
     
         private final String message;

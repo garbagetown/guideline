@@ -16,11 +16,11 @@ DB authentication, LDAP authentication, CAS authentication, JAAS authentication,
 .. tip::
     For details of authentication types other than DB authentication, refer to the official document of each authentication method.
 
-  * \ `LDAP Authentication <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#ldap>`_\
-  * \ `CAS Authentication <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#cas>`_\
-  * \ `Java Authentication and Authorization Service (JAAS) Provider <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#jaas>`_\
-  * \ `X.509 Authentication <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#x509>`_\
-  * \ `Basic and Digest Authentication <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#basic>`_\
+  * \ `LDAP Authentication <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#ldap>`_\
+  * \ `CAS Authentication <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#cas>`_\
+  * \ `Java Authentication and Authorization Service (JAAS) Provider <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#jaas>`_\
+  * \ `X.509 Authentication <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#x509>`_\
+  * \ `Basic and Digest Authentication <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#basic>`_\
 
 Login
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -123,7 +123,7 @@ Setting \ ``<sec:http>``\  element
        * - | \ ``<http-basic>``\ 
          - | \ ``org.springframework.security.web.authentication.www.BasicAuthenticationFilter``\  is enabled.
            | BasicAuthenticationFilter is the filter that executes Basic authentication process according to RFC1945.
-           | For details on how to use, refer to \ `BasicAuthenticationFilter JavaDoc <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/apidocs/org/springframework/security/web/authentication/www/BasicAuthenticationFilter.html>`_\ .
+           | For details on how to use, refer to \ `BasicAuthenticationFilter JavaDoc <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/apidocs/org/springframework/security/web/authentication/www/BasicAuthenticationFilter.html>`_\ .
        * - | \ ``<logout>``\ 
          - | \ ``org.springframework.security.web.authentication.logout.LogoutFilter``\ ,
            | \ ``org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler``\  is enabled.
@@ -205,7 +205,7 @@ spring-security.xml
    * - | (7)
      - | Specify the handler class to be called in case of a successful authentication, in \ ``authentication-success-handler-ref``\  attribute.
 
-For attributes other than those mentioned above, refer to \ `Spring Security manual <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#nsa-form-login>`_\ .
+For attributes other than those mentioned above, refer to \ `Spring Security manual <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#nsa-form-login>`_\ .
 
 .. warning:: **Why it is not recommended to use Spring Security default values "/spring_security_login, /j_spring_security_check".**
 
@@ -403,7 +403,7 @@ They may also be combined.
      * - | (1)
        - | Define \ ``<sec:authentication-provider>``\  element in \ ``<sec:authentication-manager>``\  element. Authentication methods can be combined by specifying multiple elements. However it is not explained here.
      * - | (2)
-       - | Define \ ``AuthenticationProvider``\  in \ ``<sec:authentication-provider>``\  element. \ ``DaoAuthenticationProvider``\  is enabled by default. To specify \ ``AuthenticationProvider``\  other than this, specify the Bean ID of target AuthenticationProvider, in \`ref attribute <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#nsa-authentication-provider>`_\ .
+       - | Define \ ``AuthenticationProvider``\  in \ ``<sec:authentication-provider>``\  element. \ ``DaoAuthenticationProvider``\  is enabled by default. To specify \ ``AuthenticationProvider``\  other than this, specify the Bean ID of target AuthenticationProvider, in \`ref attribute <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#nsa-authentication-provider>`_\ .
          |
          | Specify the Bean Id of \ ``UserDetailsService``\  that fetches authenticated user information, in \ ``user-service-ref``\  attribute. This setting is mandatory when using \ ``DaoAuthenticationProvider``\ .
          | For details, refer to \ :ref:`userDetailsService`\ .
@@ -442,11 +442,11 @@ In order to use \ ``JdbcDaoImpl``\ , it is advisable to perform following Bean d
     <property name="dataSource" ref="dataSource"/>
   </bean>
 
-| It is assumed that \ ``JdbcDaoImpl``\  defines the default SQL for fetching authenticated user information and authorization information and provides tables corresponding to these. For definitions of assumed tables, refer to \ `Spring Security manual <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#appendix-schema>`_\ .
+| It is assumed that \ ``JdbcDaoImpl``\  defines the default SQL for fetching authenticated user information and authorization information and provides tables corresponding to these. For definitions of assumed tables, refer to \ `Spring Security manual <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#appendix-schema>`_\ .
 | To fetch user information and authorization information from existing tables, the SQL to be executed should be modified according to existing tables.
 | Following 3 SQLs are used.
 
-*  \ `User information acquisition query <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/apidocs/constant-values.html#org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl.DEF_USERS_BY_USERNAME_QUERY>`_\ 
+*  \ `User information acquisition query <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/apidocs/constant-values.html#org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl.DEF_USERS_BY_USERNAME_QUERY>`_\ 
 
   | By creating a table matching with the query that fetches user information, need of specifying the query to configuration file described later, is eliminated.
   | Fields namely, "username", "password" and "enabled" are mandatory
@@ -459,11 +459,11 @@ In order to use \ ``JdbcDaoImpl``\ , it is advisable to perform following Bean d
 
   | "User ID" described earlier in \ :ref:`form-login-JSP`\ , is specified in query parameter.
 
-* \ `User authorities acquisition query <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/apidocs/constant-values.html#org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl.DEF_AUTHORITIES_BY_USERNAME_QUERY>`_\ 
+* \ `User authorities acquisition query <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/apidocs/constant-values.html#org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl.DEF_AUTHORITIES_BY_USERNAME_QUERY>`_\ 
 
   | This query fetches authorization information for a user.
 
-* \ `Group authorities acquisition query <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/apidocs/constant-values.html#org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl.DEF_GROUP_AUTHORITIES_BY_USERNAME_QUERY>`_\ 
+* \ `Group authorities acquisition query <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/apidocs/constant-values.html#org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl.DEF_GROUP_AUTHORITIES_BY_USERNAME_QUERY>`_\ 
 
   | This query fetches authorization information of the group, to which the user belongs. 'Group authorities' is disabled by default and is also out of this guideline's scope.
 
@@ -781,7 +781,7 @@ Session management in Spring Security
        * | \ ``newSession``\ :
          | It discards the session before login and creates a new one. It does not inherit the session information before login.
 
-       | The objective of this functionality is to prevent \ `Session fixation attack <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#ns-session-fixation>`_\  by allocating a new session ID for each login. Therefore, it is recommended to use this default setting unless there are other clear reasons for not using it.
+       | The objective of this functionality is to prevent \ `Session fixation attack <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#ns-session-fixation>`_\  by allocating a new session ID for each login. Therefore, it is recommended to use this default setting unless there are other clear reasons for not using it.
 
 |
 
@@ -840,7 +840,7 @@ the path pattern specified in \ ``pattern``\  attribute of \ ``http``\  element.
 
 Settings of Concurrent Session Control
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-| Spring Security provides (\ `Concurrent Session Control <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#concurrent-sessions>`_\ ) a functionality that controls the number of concurrent sessions that a user can log in to.
+| Spring Security provides (\ `Concurrent Session Control <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#concurrent-sessions>`_\ ) a functionality that controls the number of concurrent sessions that a user can log in to.
 | The user mentioned here is the authentication user object fetched by \ ``Authentication.getPrincipal()``\ .
 
 .. note::
@@ -881,7 +881,7 @@ Setting \ ``<sec:concurrency-control>``\
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 When using Concurrent Session Control,
-specify \ `<sec:concurrency-control> <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#ns-concurrent-sessions>`_\  element as a child element of \ ``<sec:session-management>``\  element.
+specify \ `<sec:concurrency-control> <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#ns-concurrent-sessions>`_\  element as a child element of \ ``<sec:session-management>``\  element.
 
 .. code-block:: xml
 
@@ -945,7 +945,7 @@ specify \ `<sec:concurrency-control> <http://docs.spring.io/spring-security/site
     * ``org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy``
 
     For specific methods of definition,
-    refer to sample code of `Spring Security Reference -Web Application Security (Concurrency Control)- <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#concurrent-sessions>`_.
+    refer to sample code of `Spring Security Reference -Web Application Security (Concurrency Control)- <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#concurrent-sessions>`_.
 
 |
 
@@ -1157,7 +1157,7 @@ spring-security.xml
 Setting \ ``<sec:remember-me>``\  element
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-| "\ `Remember Me <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#remember-me>`_\  " functionality enhances convenience of the frequent users of the website and,
+| "\ `Remember Me <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#remember-me>`_\  " functionality enhances convenience of the frequent users of the website and,
 | is the functionality that stores the login status.
 | This functionality stores login information in a cookie, if user has given permission, even after the browser is closed
 | and enables the user to login without re-entering the user name and password.
@@ -1189,7 +1189,7 @@ spring-security.xml
      - | Specify the validity of the cookie for Remember Me functionality in seconds, in \ ``token-validity-seconds``\  attribute. In this example it is set as 30 days.
        | When not specified, it is valid for 14 days by default.
 
-For attributes other than the above, refer to \ `Spring Security manual <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#nsa-remember-me>`_\ .
+For attributes other than the above, refer to \ `Spring Security manual <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#nsa-remember-me>`_\ .
 
 Following flag that enables "Remember Me" functionality needs to be provided in login form.
 
@@ -1390,7 +1390,7 @@ How to use the created \ ``ReservationUserDetailsService``\  and \ ``Reservation
 Extending \ ``AuthenticationProvider``\ 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In case of business requirements that cannot be supported by Spring Security's \ `authentication provider <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/apidocs/org/springframework/security/authentication/AuthenticationProvider.html>`_\ ,
+In case of business requirements that cannot be supported by Spring Security's \ `authentication provider <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/apidocs/org/springframework/security/authentication/AuthenticationProvider.html>`_\ ,
 it is necessary to create a class that implements \ ``org.springframework.security.authentication.AuthenticationProvider``\  interface.
 
 Here, the extended example of DB authentication using 3 parameters such as user name, password and \ **Company identifier (independent authentication parameter)**\  is given below.

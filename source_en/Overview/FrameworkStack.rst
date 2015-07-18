@@ -29,13 +29,13 @@ DI Container
 Spring Framework is used as DI Container.
 
 
-* `Spring Framework 4.1 <http://docs.spring.io/spring/docs/4.1.4.RELEASE/spring-framework-reference/html/beans.html>`_
+* `Spring Framework 4.1 <http://docs.spring.io/spring/docs/4.1.7.RELEASE/spring-framework-reference/html/beans.html>`_
 
 MVC Framework
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Spring MVC is used as Web MVC Framework.
 
-* `Spring MVC 4.1 <http://docs.spring.io/spring/docs/4.1.4.RELEASE/spring-framework-reference/html/mvc.html>`_
+* `Spring MVC 4.1 <http://docs.spring.io/spring/docs/4.1.7.RELEASE/spring-framework-reference/html/mvc.html>`_
 
 O/R Mapper
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -95,7 +95,7 @@ Validation
 
   * For implementation, \ `Hibernate Validator 5.1 <http://docs.jboss.org/hibernate/validator/5.1/reference/en-US/html/>`_\  is used.
 
-* For correlated items check, \ `BeanValidation <http://download.oracle.com/otn-pub/jcp/bean_validation-1_1-fr-eval-spec/bean-validation-specification.pdf>`_\  or \ `Spring Validation <http://docs.spring.io/spring/docs/4.1.4.RELEASE/spring-framework-reference/html/validation.html>`_  is used.
+* For correlated items check, \ `BeanValidation <http://download.oracle.com/otn-pub/jcp/bean_validation-1_1-fr-eval-spec/bean-validation-specification.pdf>`_\  or \ `Spring Validation <http://docs.spring.io/spring/docs/4.1.7.RELEASE/spring-framework-reference/html/validation.html>`_  is used.
 
   * Refer to \ :doc:`../ArchitectureInDetail/Validation`\  for determining the proper use. 
 
@@ -133,7 +133,7 @@ List of OSS being used in version 5.0.0.RELEASE.
     dependencies resolved and 
     OSS version to be used in the TERASOLUNA Server Framework for Java (5.x) is following the rule of Spring IO platform definition.
 
-    Furthermore, Spring IO platform version is `1.1.1.RELEASE <http://docs.spring.io/platform/docs/1.1.1.RELEASE/reference/htmlsingle/>`_  specified in version 5.0.0.RELEASE.
+    Furthermore, Spring IO platform version is `1.1.3.RELEASE <http://docs.spring.io/platform/docs/1.1.3.RELEASE/reference/htmlsingle/>`_  specified in version 5.0.0.RELEASE.
 
 .. tabularcolumns:: |p{0.15\linewidth}|p{0.27\linewidth}|p{0.25\linewidth}|p{0.15\linewidth}|p{0.05\linewidth}|p{0.08\linewidth}|
 .. list-table::
@@ -150,109 +150,109 @@ List of OSS being used in version 5.0.0.RELEASE.
     * - Spring
       - org.springframework
       - spring-aop
-      - 4.1.4.RELEASE
+      - 4.1.7.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-aspects
-      - 4.1.4.RELEASE
+      - 4.1.7.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-beans
-      - 4.1.4.RELEASE
+      - 4.1.7.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-context
-      - 4.1.4.RELEASE
+      - 4.1.7.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-context-support
-      - 4.1.4.RELEASE
+      - 4.1.7.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-core
-      - 4.1.4.RELEASE
+      - 4.1.7.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-expression
-      - 4.1.4.RELEASE
+      - 4.1.7.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-jdbc
-      - 4.1.4.RELEASE
+      - 4.1.7.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-orm
-      - 4.1.4.RELEASE
+      - 4.1.7.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-tx
-      - 4.1.4.RELEASE
+      - 4.1.7.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-web
-      - 4.1.4.RELEASE
+      - 4.1.7.RELEASE
       - \*
       -
     * - Spring
       - org.springframework
       - spring-webmvc
-      - 4.1.4.RELEASE
+      - 4.1.7.RELEASE
       - \*
       -
     * - Spring
       - org.springframework.data
       - spring-data-commons
-      - 1.9.1.RELEASE
+      - 1.9.3.RELEASE
       - \*
       -
     * - Spring
       - org.springframework.security
       - spring-security-acl
-      - 3.2.5.RELEASE
+      - 3.2.7.RELEASE
       - \*
       -
     * - Spring
       - org.springframework.security
       - spring-security-config
-      - 3.2.5.RELEASE
+      - 3.2.7.RELEASE
       - \*
       -
     * - Spring
       - org.springframework.security
       - spring-security-core
-      - 3.2.5.RELEASE
+      - 3.2.7.RELEASE
       - \*
       -
     * - Spring
       - org.springframework.security
       - spring-security-taglibs
-      - 3.2.5.RELEASE
+      - 3.2.7.RELEASE
       - \*
       -
     * - Spring
       - org.springframework.security
       - spring-security-web
-      - 3.2.5.RELEASE
+      - 3.2.7.RELEASE
       - \*
       -
     * - MyBatis3
@@ -282,13 +282,13 @@ List of OSS being used in version 5.0.0.RELEASE.
     * - JPA(Hibernate)
       - org.hibernate
       - hibernate-core
-      - 4.3.7.Final
+      - 4.3.10.Final
       - \*
       - \*2
     * - JPA(Hibernate)
       - org.hibernate
       - hibernate-entitymanager
-      - 4.3.7.Final
+      - 4.3.10.Final
       - \*
       - \*2
     * - JPA(Hibernate)
@@ -330,7 +330,7 @@ List of OSS being used in version 5.0.0.RELEASE.
     * - JPA(Hibernate)
       - org.springframework.data
       - spring-data-jpa
-      - 1.7.1.RELEASE
+      - 1.7.3.RELEASE
       - \*
       - \*2
     * - DI
@@ -348,25 +348,25 @@ List of OSS being used in version 5.0.0.RELEASE.
     * - AOP
       - org.aspectj
       - aspectjrt
-      - 1.8.4
+      - 1.8.6
       - \*
       -
     * - AOP
       - org.aspectj
       - aspectjweaver
-      - 1.8.4
+      - 1.8.6
       - \*
       -
     * - Log output
       - ch.qos.logback
       - logback-classic
-      - 1.1.2
+      - 1.1.3
       - \*
       -
     * - Log output
       - ch.qos.logback
       - logback-core
-      - 1.1.2
+      - 1.1.3
       - \*
       - \*4
     * - Log output
@@ -378,37 +378,37 @@ List of OSS being used in version 5.0.0.RELEASE.
     * - Log output
       - org.slf4j
       - jcl-over-slf4j
-      - 1.7.8
+      - 1.7.12
       - \*
       -
     * - Log output
       - org.slf4j
       - slf4j-api
-      - 1.7.8
+      - 1.7.12
       - \*
       -
     * - JSON
       - com.fasterxml.jackson.core
       - jackson-annotations
-      - 2.4.4
+      - 2.4.6
       - \*
       -
     * - JSON
       - com.fasterxml.jackson.core
       - jackson-core
-      - 2.4.4
+      - 2.4.6
       - \*
       -
     * - JSON
       - com.fasterxml.jackson.core
       - jackson-databind
-      - 2.4.4
+      - 2.4.6
       - \*
       -
     * - JSON
       - com.fasterxml.jackson.datatype
       - jackson-datatype-joda
-      - 2.4.4
+      - 2.4.6
       - \*
       -
     * - Input check
@@ -574,11 +574,23 @@ List of OSS being used in version 5.0.0.RELEASE.
       - \*
       - \*3
     * - Servlet
-      - javax.servlet
-      - jstl
-      - 1.2
+      - org.apache.taglibs
+      - taglibs-standard-jstlel
+      - 1.2.5
       - \*
       -
+    * - Servlet
+      - org.apache.taglibs
+      - taglibs-standard-spec
+      - 1.2.5
+      - \*
+      - \*4
+    * - Servlet
+      - org.apache.taglibs
+      - taglibs-standard-impl
+      - 1.2.5
+      - \*
+      - \*4
 
 #. | Dependent libraries, when MyBatis3 is used for data access.
 #. | Dependent libraries, when JPA is used for data access.

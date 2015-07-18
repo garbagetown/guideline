@@ -1766,15 +1766,15 @@ Maven Archetypeで作成したプロジェクトのプロジェクト階層の�
 
         を行っている。
 
-        なお、Spring IO Platform経由で依存ライブラリのバージョンを管理するために、本プロジェクトの\ ``<dependencyManagement>``\ に「io.spring.platform:platform-bom:1.1.1.RELEASE」をインポートしている。
+        なお、Spring IO Platform経由で依存ライブラリのバージョンを管理するために、本プロジェクトの\ ``<dependencyManagement>``\ に「io.spring.platform:platform-bom:1.1.3.RELEASE」をインポートしている。
     * - | (3)
       - Spring IO Platformプロジェクト。
 
-        親プロジェクトとして「org.springframework.boot:spring-boot-starter-parent:1.2.1.RELEASE」が指定されているため、spring-boot-starter-parentのpomファイルに定義されている\ ``<dependencyManagement>``\ の定義も、terasoluna-gfw-parentのpomファイルにインポートされる。
+        親プロジェクトとして「org.springframework.boot:spring-boot-starter-parent:1.2.5.RELEASE」が指定されているため、spring-boot-starter-parentのpomファイルに定義されている\ ``<dependencyManagement>``\ の定義も、terasoluna-gfw-parentのpomファイルにインポートされる。
     * - | (4)
       - Spring Boot Starter Parentプロジェクト。
 
-        親プロジェクトとして「org.springframework.boot:spring-boot-dependencies:1.2.1.RELEASE」が指定されているため、spring-boot-dependenciesのpomファイルに定義されている\ ``<dependencyManagement>``\の定義も、terasoluna-gfw-parentのpomファイルにインポートされる。
+        親プロジェクトとして「org.springframework.boot:spring-boot-dependencies:1.2.5.RELEASE」が指定されているため、spring-boot-dependenciesのpomファイルに定義されている\ ``<dependencyManagement>``\の定義も、terasoluna-gfw-parentのpomファイルにインポートされる。
     * - | (5)
       - Spring Boot Dependenciesプロジェクト。
 

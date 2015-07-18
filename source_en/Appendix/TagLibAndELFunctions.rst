@@ -382,7 +382,7 @@ f:query() function specification
  .. note::
 
     Field value of the specified object is converted into string using the convert method of \ ``org.springframework.format.support.DefaultFormattingConversionService``\.
-    Refer \ `Spring Framework Reference Documentation(Spring Type Conversion) <http://docs.spring.io/spring/docs/4.1.4.RELEASE/spring-framework-reference/html/validation.html#core-convert>`_\
+    Refer \ `Spring Framework Reference Documentation(Spring Type Conversion) <http://docs.spring.io/spring/docs/4.1.7.RELEASE/spring-framework-reference/html/validation.html#core-convert>`_\
     for the \ ``ConversionService``\.
 
 

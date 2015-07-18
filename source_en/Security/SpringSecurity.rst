@@ -168,7 +168,7 @@ spring-security.xml settings
       .. note::
           For the Spring EL expressions enabled by use-expressions="true", please refer to the following.
 
-          \ `Expression-Based Access Control <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#el-access>`_\
+          \ `Expression-Based Access Control <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#el-access>`_\
 
 Appendix
 --------------------------------------------------------------------------------
@@ -318,7 +318,7 @@ Attributes can be set when individual settings are performed. Some of the attrib
     * https://www.owasp.org/index.php/List_of_useful_HTTP_headers (X-Content-Type-Options, X-XSS-Protection)
 
 
-For details, refer to \ `Official reference <http://docs.spring.io/spring-security/site/docs/3.2.5.RELEASE/reference/htmlsingle/#default-security-headers>`_\ .
+For details, refer to \ `Official reference <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#default-security-headers>`_\ .
 
     
 .. raw:: latex

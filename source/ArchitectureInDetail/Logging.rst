@@ -218,7 +218,7 @@ logback.xml
 
 .. code-block:: xml
 
-  <!DOCTYPE logback>
+  <?xml version="1.0" encoding="UTF-8"?>
   <configuration>
 
       <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender"> <!-- (1) -->
@@ -228,9 +228,9 @@ logback.xml
       </appender>
 
       <appender name="APPLICATION_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender"> <!-- (3) -->
-          <file>log/projectName-application.log</file> <!-- (4) -->
+          <file>${app.log.dir:-log}/projectName-application.log</file> <!-- (4) -->
           <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-              <fileNamePattern>log/projectName-application-%d{yyyyMMddHH}.log</fileNamePattern> <!-- (5) -->
+              <fileNamePattern>${app.log.dir:-log}/projectName-application-%d{yyyyMMddHH}.log</fileNamePattern> <!-- (5) -->
               <maxHistory>7</maxHistory> <!-- (6) -->
           </rollingPolicy>
           <encoder>
@@ -240,9 +240,9 @@ logback.xml
       </appender>
 
       <appender name="MONITORING_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender"> <!-- (8) -->
-          <file>log/projectName-monitoring.log</file>
+          <file>${app.log.dir:-log}/projectName-monitoring.log</file>
           <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-              <fileNamePattern>log/projectName-monitoring-%d{yyyyMMdd}.log</fileNamePattern>
+              <fileNamePattern>${app.log.dir:-log}/projectName-monitoring-%d{yyyyMMdd}.log</fileNamePattern>
               <maxHistory>7</maxHistory>
           </rollingPolicy>
           <encoder>
@@ -278,6 +278,26 @@ logback.xml
 
       <logger name="org.springframework.web.servlet">
           <level value="info" />
+      </logger>
+
+      <!--  REMOVE THIS LINE IF YOU USE JPA
+      <logger name="org.hibernate.engine.transaction">
+          <level value="debug" />
+      </logger>
+            REMOVE THIS LINE IF YOU USE JPA  -->
+      <!--  REMOVE THIS LINE IF YOU USE MyBatis3
+      <logger name="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+          <level value="debug" />
+      </logger>
+            REMOVE THIS LINE IF YOU USE MyBatis3  -->
+
+      <logger name="jdbc.sqltiming">
+          <level value="debug" />
+      </logger>
+
+      <!-- only for development -->
+      <logger name="jdbc.resultsettable">
+          <level value="debug" />
       </logger>
 
       <root level="warn"> <!-- (11) -->
@@ -753,9 +773,9 @@ logback.xmlの\ ``<pattern>``\ に\ ``%X{X-Track}``\ および、\ ``%X{USER}``\
 
     <!-- omitted -->
     <appender name="APPLICATION_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>log/projectName-application.log</file>
+        <file>${app.log.dir:-log}/projectName-application.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>log/projectName-application-%d{yyyyMMdd}.log</fileNamePattern>
+            <fileNamePattern>${app.log.dir:-log}/projectName-application-%d{yyyyMMdd}.log</fileNamePattern>
             <maxHistory>7</maxHistory>
         </rollingPolicy>
         <encoder>

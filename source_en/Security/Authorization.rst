@@ -339,7 +339,7 @@ Access authorization (JSP)
   .. code-block:: jsp
   
     <div>
-      <sec:authorize access="ROLE_USER">  <!-- (1) -->
+      <sec:authorize access="hasRole('ROLE_USER')">  <!-- (1) -->
           <p>This screen is for ROLE_USER</p>
       </sec:authorize>
       <sec:authorize url="/admin/menu">  <!-- (2) -->

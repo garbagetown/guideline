@@ -559,7 +559,7 @@ Spring Data JPAを有効化するための設定
     * - 4.
       - query-lookup-strategy
       - | Queryメソッドが呼び出された特に実行するQueryをLookupする方法を指定する。
-        | デフォルトは ``"CREATE_IF_NOT_FOUND"`` となっている。詳細は、`Spring Data JPA - Reference Documentationの "Query lookup strategies" <http://docs.spring.io/spring-data/jpa/docs/1.7.1.RELEASE/reference/html/#repositories.query-methods.query-lookup-strategies>`_\ を参照されたい。 特に理由がない場合は、デフォルトのままでよい。
+        | デフォルトは ``"CREATE_IF_NOT_FOUND"`` となっている。詳細は、`Spring Data Commons - Reference Documentationの "Query lookup strategies" <http://docs.spring.io/spring-data/commons/docs/1.9.3.RELEASE/reference/html/#repositories.query-methods.query-lookup-strategies>`_\ を参照されたい。 特に理由がない場合は、デフォルトのままでよい。
     * - 5.
       - factory-class
       - | Repositoryインタフェースのメソッドが呼び出された際の処理を実装するクラスを生成するためのFactoryを指定する。
@@ -1100,8 +1100,8 @@ Queryメソッドは、Entity毎のRepositoryインタフェースのメソッ�
     #. メソッド名からQuery(JPQL)を作成して使用する。
     #. メソッド名からQuery(JPQL)が作成できない場合は、エラーとなる。
 
-    QueryのLookup方法の詳細については、 `Spring Data JPA - Reference Documentation「Defining query methods」の
-    「Query lookup strategies」 <http://docs.spring.io/spring-data/jpa/docs/1.7.1.RELEASE/reference/html/#repositories.query-methods.query-lookup-strategies>`_\ を参照されたい。
+    QueryのLookup方法の詳細については、 `Spring Data Commons - Reference Documentation「Defining query methods」の
+    「Query lookup strategies」 <http://docs.spring.io/spring-data/commons/docs/1.9.3.RELEASE/reference/html/#repositories.query-methods.query-lookup-strategies>`_\ を参照されたい。
 
 Entityのロックを取得する
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1497,19 +1497,19 @@ Queryメソッド呼び出し時に実行するQueryの指定方法について�
       - 参照ページ
       - 説明
     * - 1.
-      - `Spring Data JPA - Reference Documentation「Defining query methods」の「Query creation」 <http://docs.spring.io/spring-data/jpa/docs/1.7.1.RELEASE/reference/html/#repositories.query-methods.query-creation>`_\
+      - `Spring Data Commons - Reference Documentation「Defining query methods」の「Query creation」 <http://docs.spring.io/spring-data/commons/docs/1.9.3.RELEASE/reference/html/#repositories.query-methods.query-creation>`_\
       - Distinct、ORDER BY、Case insensitiveの指定方法などが記載されている。
     * - 2.
-      - `Spring Data JPA - Reference Documentation「Defining query methods」の「Property expressions」 <http://docs.spring.io/spring-data/jpa/docs/1.7.1.RELEASE/reference/html/#repositories.query-methods.query-property-expressions>`_\
+      - `Spring Data Commons - Reference Documentation「Defining query methods」の「Property expressions」 <http://docs.spring.io/spring-data/commons/docs/1.9.3.RELEASE/reference/html/#repositories.query-methods.query-property-expressions>`_\
       - ネストされたEntityのプロパティを条件に指定する方法などが記載されている。
     * - 3.
-      - `Spring Data JPA - Reference Documentation「Defining query methods」の「Special parameter handling」 <http://docs.spring.io/spring-data/jpa/docs/1.7.1.RELEASE/reference/html/#repositories.special-parameters>`_\
+      - `Spring Data Commons - Reference Documentation「Defining query methods」の「Special parameter handling」 <http://docs.spring.io/spring-data/commons/docs/1.9.3.RELEASE/reference/html/#repositories.special-parameters>`_\
       - 特別なメソッド引数(``Pageable`` 、 ``Sort``)についての説明が記載されている。
     * - 4.
-      - `Spring Data JPA - Reference Documentation「Query methods」の「Query creation」 <http://docs.spring.io/spring-data/jpa/docs/1.7.1.RELEASE/reference/html/#jpa.query-methods.query-creation>`_\
+      - `Spring Data JPA - Reference Documentation「Query methods」の「Query creation」 <http://docs.spring.io/spring-data/jpa/docs/1.7.3.RELEASE/reference/html/#jpa.query-methods.query-creation>`_\
       - JPQLを組み立てるための命名規約(キーワード)に関する説明が記載されている。
     * - 5.
-      - `Spring Data JPA - Reference Documentation「Appendix C. Repository query keywords」 <http://docs.spring.io/spring-data/jpa/docs/1.7.1.RELEASE/reference/html/#repository-query-keywords>`_\
+      - `Spring Data Commons - Reference Documentation「Appendix C. Repository query keywords」 <http://docs.spring.io/spring-data/commons/docs/1.9.3.RELEASE/reference/html/#repository-query-keywords>`_\
       - JPQLを組み立てるための命名規約(キーワード)に関する説明が記載されている。
 
 以下に、実装例を示す。

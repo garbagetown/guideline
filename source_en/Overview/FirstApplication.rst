@@ -254,7 +254,7 @@ To understand the configuration of Spring MVC, the generated Spring MVC configur
    * - Sr. No.
      - Description
    * - | (1)
-     - Default settings of Spring MVC are configured by defining \ ``<mvc:annotation-driven>``\. Refer to the official website `Enabling the MVC Java Config or the MVC XML Namespace <http://docs.spring.io/spring/docs/4.1.4.RELEASE/spring-framework-reference/html/mvc.html#mvc-config-enable>`_ for default configuration of Spring framework.
+     - Default settings of Spring MVC are configured by defining \ ``<mvc:annotation-driven>``\. Refer to the official website `Enabling the MVC Java Config or the MVC XML Namespace <http://docs.spring.io/spring/docs/4.1.7.RELEASE/spring-framework-reference/html/mvc.html#mvc-config-enable>`_ for default configuration of Spring framework.
    * - | (2)
      - Define the package which will be target of searching components used in Spring MVC.
    * - | (3)
@@ -556,7 +556,7 @@ Create input screen (src/main/webapp/WEB-INF/views/echo/index.jsp).
      - Description
    * - | (1)
      - | HTML form is constructed using tag library. Specify the name of form object created by Controller in ``modelAttribute`` attribute.
-       | Refer `here <http://docs.spring.io/spring/docs/4.1.4.RELEASE/spring-framework-reference/html/view.html#view-jsp-formtaglib-formtag>`_  for tag library.
+       | Refer `here <http://docs.spring.io/spring/docs/4.1.7.RELEASE/spring-framework-reference/html/view.html#view-jsp-formtaglib-formtag>`_  for tag library.
 
 .. note::
 

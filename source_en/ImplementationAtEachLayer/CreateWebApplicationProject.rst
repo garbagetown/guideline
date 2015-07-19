@@ -1479,15 +1479,15 @@ The hierarchical structure of the project indicated below which is created in Ma
 
         are performed.
 
-        Furthermore, in order to version management of the dependent libraries via Spring IO Platform, imported the [io.spring.platform:platform-bom:1.1.1.RELEASE] into \ ``<dependencyManagement>`` \ of the current project.
+        Furthermore, in order to version management of the dependent libraries via Spring IO Platform, imported the [io.spring.platform:platform-bom:1.1.3.RELEASE] into \ ``<dependencyManagement>`` \ of the current project.
     * - | (3)
       - Spring IO Platform project.
 
-        Since [org.springframework.boot:spring-boot-starter-parent:1.2.1.RELEASE] is specified as a parent project, the definition of \ ``<dependencyManagement>`` \ defined into pom file of the spring-boot-starter-parent also imported into pom file of the terasoluna-gfw-parent.
+        Since [org.springframework.boot:spring-boot-starter-parent:1.2.5.RELEASE] is specified as a parent project, the definition of \ ``<dependencyManagement>`` \ defined into pom file of the spring-boot-starter-parent also imported into pom file of the terasoluna-gfw-parent.
     * - | (4)
       - Spring Boot Starter Parent project.
 
-        Since [org.springframework.boot:spring-boot-dependencies:1.2.1.RELEASE] is specified as a parent project,  the definition of \ ``<dependencyManagement>`` \ defined into pom file of the spring-boot-dependencies also imported into pom file of the terasoluna-gfw-parent.
+        Since [org.springframework.boot:spring-boot-dependencies:1.2.5.RELEASE] is specified as a parent project,  the definition of \ ``<dependencyManagement>`` \ defined into pom file of the spring-boot-dependencies also imported into pom file of the terasoluna-gfw-parent.
     * - | (5)
       - Spring Boot Dependencies project.
 

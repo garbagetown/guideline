@@ -118,7 +118,7 @@ Classes provided by Spring Web for uploading a file are as follows:
 
  .. tip::
 
-    In this guideline, it is a prerequisite to use File Upload functionality implemented from Servlet 3.0. However, Spring Web also provides an \ `implementation class for "Apache Commons FileUpload" <http://docs.spring.io/spring/docs/4.1.4.RELEASE/spring-framework-reference/html/mvc.html#mvc-multipart-resolver-commons>`_\ .
+    In this guideline, it is a prerequisite to use File Upload functionality implemented from Servlet 3.0. However, Spring Web also provides an \ `implementation class for "Apache Commons FileUpload" <http://docs.spring.io/spring/docs/4.1.7.RELEASE/spring-framework-reference/html/mvc.html#mvc-multipart-resolver-commons>`_\ .
     The difference in implementation of upload processes is absorbed by \ ``MultipartResolver``\  and \ ``MultipartFile``\  objects; hence it does not affect Controller implementation.
 
 |
@@ -699,7 +699,7 @@ Implementing Controller
  .. note:: **About MultipartFile**
 
     Methods to operate the uploaded file are provided in MultipartFile.
-    For details on using each method, refer to \ `JavaDoc <http://docs.spring.io/spring/docs/4.1.4.RELEASE/javadoc-api/org/springframework/web/multipart/MultipartFile.html> of MultipartFile class `_\ .
+    For details on using each method, refer to \ `JavaDoc <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/web/multipart/MultipartFile.html> of MultipartFile class `_\ .
 
 .. _fileupload_validator:
 
@@ -1480,7 +1480,7 @@ Housekeeping of unnecessary files at the time of temporary upload
     A mechanism should be provided to delete unnecessary files as the disk may run out of space if such files are left to pile up.
 
 This guideline explains about deleting unnecessary files using the "Task Scheduler" functionality provided by Spring Framework.
-For details on "Task Scheduler", refer to the \ `official website "Task Execution and Scheduling" <http://docs.spring.io/spring/docs/4.1.4.RELEASE/spring-framework-reference/html/scheduling.html>`_\ .
+For details on "Task Scheduler", refer to the \ `official website "Task Execution and Scheduling" <http://docs.spring.io/spring/docs/4.1.7.RELEASE/spring-framework-reference/html/scheduling.html>`_\ .
 
  .. note::
 
@@ -1630,7 +1630,7 @@ Carry out bean registration and task schedule settings for the POJO class that d
      * ``0 0 * * * *`` : Executed in 0 minute every hour.
      * ``0 0 9-17 * * MON-FRI`` : Executed in 0 minute every hour from 9:00~17:00 on weekdays.
 
-    For details on specified value of cron, refer to \ `CronSequenceGenerator - JavaDoc <http://docs.spring.io/spring/docs/4.1.4.RELEASE/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html>`_\ .
+    For details on specified value of cron, refer to \ `CronSequenceGenerator - JavaDoc <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/scheduling/support/CronSequenceGenerator.html>`_\ .
 
     Execution time should be fetched from external properties as it may differ depending on the environment in which the application is to be deployed.
     For details on external properties, refer to \ :doc:`PropertyManagement`\ .
@@ -1761,7 +1761,7 @@ Perform the following settings when using Commons FileUpload.
    * - | (2)
      - | Set maximum size allowed in file upload.
        | In case of Commons FileUpload, it should be noted that the maximum value is the entire size of request including header.
-       | Moreover, **as the default value is -1 (unlimited), make sure to set a value.** For other properties, refer to \ `JavaDoc <http://docs.spring.io/spring-framework/docs/4.1.4.RELEASE/javadoc-api/org/springframework/web/multipart/commons/CommonsMultipartResolver.html>`_\ .
+       | Moreover, **as the default value is -1 (unlimited), make sure to set a value.** For other properties, refer to \ `JavaDoc <http://docs.spring.io/spring-framework/docs/4.1.7.RELEASE/javadoc-api/org/springframework/web/multipart/commons/CommonsMultipartResolver.html>`_\ .
 
 .. warning::
 

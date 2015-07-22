@@ -1861,7 +1861,7 @@ Spring Securityを使用した認証では、認証に成功した場合は、
 に遷移する。
 
 共通ライブラリでは、Spring Securityが提供している機能に加えて、
-遷移先のパスをリクエストパラメータで指定できるクラス(\ ``org.terasoluna.gfw.web.security.RedirectAuthenticationHandler``\ )を提供している。
+遷移先のパスをリクエストパラメータで指定できるクラス(\ ``org.terasoluna.gfw.security.web.RedirectAuthenticationHandler``\ )を提供している。
 
 \ ``RedirectAuthenticationHandler``\ は、以下のような仕組みを実現するために作成されたクラスである。
 
@@ -1944,7 +1944,7 @@ Spring Securityを使用した認証では、認証に成功した場合は、
 
   <!-- (2) -->
   <bean id="authenticationSuccessHandler"
-      class="org.terasoluna.gfw.web.security.RedirectAuthenticationHandler">
+      class="org.terasoluna.gfw.security.web.RedirectAuthenticationHandler">
   </bean>
 
   <!-- (3) -->
@@ -1964,7 +1964,7 @@ Spring Securityを使用した認証では、認証に成功した場合は、
    * - | (1)
      - | \ ``authentication-failure-handler-ref``\ (認証エラー時のハンドラ設定)と\ ``authentication-success-handler-ref``\ (認証成功時のハンドラ設定)のBeanIdを指定する。
    * - | (2)
-     - | \ ``authentication-success-handler-ref``\ から参照されるbeanとして\ ``org.terasoluna.gfw.web.security.RedirectAuthenticationHandler``\ を定義する。
+     - | \ ``authentication-success-handler-ref``\ から参照されるbeanとして\ ``org.terasoluna.gfw.security.web.RedirectAuthenticationHandler``\ を定義する。
    * - | (3)
      - | \ ``authentication-failure-handler-ref``\ から参照されるbeanとして\ ``org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler``\ を定義する。
    * - | (4)

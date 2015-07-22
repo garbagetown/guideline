@@ -1859,7 +1859,7 @@ In case of authentication using Spring Security, user is transited to the follow
 * Path for displaying "Secure page for which authentication is necessary" which is accessed before the login.
 
 In common library, in addition to the functionality provided by Spring Security, 
-a class (\ ``org.terasoluna.gfw.web.security.RedirectAuthenticationHandler``\ ) is provided which can specify the destination path in request parameter.
+a class (\ ``org.terasoluna.gfw.security.web.RedirectAuthenticationHandler``\ ) is provided which can specify the destination path in request parameter.
 
 \ ``RedirectAuthenticationHandler``\  is a class, created for implementing the mechanism given below.
 
@@ -1942,7 +1942,7 @@ a class (\ ``org.terasoluna.gfw.web.security.RedirectAuthenticationHandler``\ ) 
 
   <!-- (2) -->
   <bean id="authenticationSuccessHandler"
-      class="org.terasoluna.gfw.web.security.RedirectAuthenticationHandler">
+      class="org.terasoluna.gfw.security.web.RedirectAuthenticationHandler">
   </bean>
 
   <!-- (3) -->
@@ -1962,7 +1962,7 @@ a class (\ ``org.terasoluna.gfw.web.security.RedirectAuthenticationHandler``\ ) 
    * - | (1)
      - | Specify BeanId of \ ``authentication-failure-handler-ref``\  (handler setting at the time of authentication error) and \ ``authentication-success-handler-ref``\  (handler setting in case of successful authentication).
    * - | (2)
-     - | Define \ ``org.terasoluna.gfw.web.security.RedirectAuthenticationHandler``\ as a bean referred from \ ``authentication-success-handler-ref``\ .
+     - | Define \ ``org.terasoluna.gfw.security.web.RedirectAuthenticationHandler``\ as a bean referred from \ ``authentication-success-handler-ref``\ .
    * - | (3)
      - | Define \ ``org.springframework.security.web.authentication.ExceptionMappingAuthenticationFailureHandler``\  as a bean referred from \ ``authentication-failure-handler-ref``\ .
    * - | (4)

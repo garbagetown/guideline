@@ -345,7 +345,7 @@ logback.xml
        .. warning:: **About additivity setting value**
 
            Specify \ ``false``\ . If \ ``true``\ (default value) is specified, the same log will be output by upper level logger (for example, root).
-           In the specifically, the monitoring log will be outputted using three appenders(\ ``MONITORING_LOG_FILE``\, \ ``STDOUT``\  and \ ``APPLICATION_LOG_FILE``\).
+           Concretely speaking, the monitoring log will be output using three appenders(\ ``MONITORING_LOG_FILE``\, \ ``STDOUT``\  and \ ``APPLICATION_LOG_FILE``\).
 
    * - | (11)
      - | It is set such that logger without <logger> specification outputs the log of warn level or above.

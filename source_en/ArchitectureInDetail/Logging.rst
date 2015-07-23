@@ -341,6 +341,12 @@ logback.xml
      - | The logger name is set so that logger under com.example.sample outputs the log above debug level.
    * - | (10)
      - | A monitoring log is set. Refer to \ :ref:`exception-handling-how-to-use-application-configuration-common-label`\  of \ :doc:`ExceptionHandling`\ .
+
+       .. warning:: **About additivity setting value**
+
+           Specify \ ``false``\ . If \ ``true``\ (default value) is specified, the same log will be output by upper level logger (for example, root).
+           Concretely speaking, the monitoring log will be output using three appenders(\ ``MONITORING_LOG_FILE``\, \ ``STDOUT``\  and \ ``APPLICATION_LOG_FILE``\).
+
    * - | (11)
      - | It is set such that logger without <logger> specification outputs the log of warn level or above.
    * - | (12)

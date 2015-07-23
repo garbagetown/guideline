@@ -341,6 +341,12 @@ logback.xml
      - | ロガー名は、com.example.sample以下のロガーが、debugレベル以上のログを出力するように設定する。
    * - | (10)
      - | 監視ログの設定を行う。\ :doc:`ExceptionHandling`\ の\ :ref:`exception-handling-how-to-use-application-configuration-common-label`\ を参照されたい。
+
+       .. warning:: **additivityの設定値について**
+
+           \ ``false``\ を指定すること。\ ``true``\ (デフォルト値)を指定すると、上位のロガー(例えば、root)によって、同じログが出力されてしまう。
+           具体的には、監視ログは3つのアペンダー(\ ``MONITORING_LOG_FILE``\、\ ``STDOUT``\、\ ``APPLICATION_LOG_FILE``\)によって出力される。
+
    * - | (11)
      - | <logger>の指定が無いロガーが、warnレベル以上のログを出力するように設定する。
    * - | (12)

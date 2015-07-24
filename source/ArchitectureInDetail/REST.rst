@@ -1632,6 +1632,12 @@ RESTful Web Serviceとクライアントアプリケーションを一つのWeb�
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 RESTful Web Service向けのアプリケーションの設定について説明する。
 
+.. warning:: **StAX(Streaming API for XML)使用時のDOS攻撃対策について**
+
+    XML形式のデータをStAXを使用して解析する場合は、DTDを使ったDOS攻撃を受けないように対応する必要がある。
+    詳細は、\ `CVE-2015-3192 - DoS Attack with XML Input <http://pivotal.io/security/cve-2015-3192>`_\ を参照されたい。
+
+
 .. _RESTHowToUseApplicationSettingsOfSpringMVC:
 
 RESTful Web Serviceで必要となるSpring MVCのコンポーネントを有効化するための設定
@@ -1780,6 +1786,7 @@ RESTful Web Serviceで必要となるSpring MVCのコンポーネントを有効
      * http://fasterxml.github.io/jackson-core/javadoc/2.4/deprecated-list.html
      * http://fasterxml.github.io/jackson-databind/javadoc/2.4/deprecated-list.html
      * http://fasterxml.github.io/jackson-annotations/javadoc/2.4/deprecated-list.html
+
 
 |
 

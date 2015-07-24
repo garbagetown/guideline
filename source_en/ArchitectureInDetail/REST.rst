@@ -1637,6 +1637,12 @@ Application settings
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Application settings for RESTful Web Service are explained below.
 
+.. warning:: **DoS attack measures at the time of StAX(Streaming API for XML) use**
+
+    If the StAX is used to parse the XML format data, DoS attack measures is required.
+    For details, refer to \ `CVE-2015-3192 - DoS Attack with XML Input <http://pivotal.io/security/cve-2015-3192>`_\ .
+
+
 .. _RESTHowToUseApplicationSettingsOfSpringMVC:
 
 Settings for activating the Spring MVC components necessary for RESTful Web Service

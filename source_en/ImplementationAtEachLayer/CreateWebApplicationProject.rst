@@ -67,7 +67,7 @@ Create project using `archetype:generate <http://maven.apache.org/archetype/mave
      -DarchetypeCatalog=http://repo.terasoluna.org/nexus/content/repositories/terasoluna-gfw-releases^
      -DarchetypeGroupId=org.terasoluna.gfw.blank^
      -DarchetypeArtifactId=terasoluna-gfw-multi-web-blank-mybatis3-archetype^
-     -DarchetypeVersion=5.0.0.RELEASE^
+     -DarchetypeVersion=5.0.1.RELEASE^
      -DgroupId=com.example.todo^
      -DartifactId=todo^
      -Dversion=1.0.0-SNAPSHOT
@@ -118,7 +118,7 @@ If the project creation successes, following type of log will be printed.
 
     (... omit)
     [INFO] ----------------------------------------------------------------------------
-    [INFO] Using following parameters for creating project from Archetype: terasoluna-gfw-multi-web-blank-mybatis3-archetype:5.0.0.RELEASE
+    [INFO] Using following parameters for creating project from Archetype: terasoluna-gfw-multi-web-blank-mybatis3-archetype:5.0.1.RELEASE
     [INFO] ----------------------------------------------------------------------------
     [INFO] Parameter: groupId, Value: com.example.todo
     [INFO] Parameter: artifactId, Value: todo
@@ -139,7 +139,7 @@ If the project creation successes, following type of log will be printed.
     [INFO] BUILD SUCCESS
     [INFO] ------------------------------------------------------------------------
     [INFO] Total time: 9.929 s
-    [INFO] Finished at: 2015-01-20T12:03:21+00:00
+    [INFO] Finished at: 2015-07-31T12:03:21+00:00
     [INFO] Final Memory: 10M/26M
     [INFO] ------------------------------------------------------------------------
 
@@ -1466,8 +1466,8 @@ The hierarchical structure of the project indicated below which is created in Ma
         The project created in Maven Archetype has become a multi-module configuration,
         parent project and each sub-module have a cross-reference relationship.
 
-        In the project created in version 5.0.0.RELEASE Maven Archetype,
-        [org.terasoluna.gfw:terasoluna-gfw-parent:5.0.0.RELEASE] is specified as a parent project.
+        In the project created in version 5.0.1.RELEASE Maven Archetype,
+        [org.terasoluna.gfw:terasoluna-gfw-parent:5.0.1.RELEASE] is specified as a parent project.
     * - | (2)
       - TERASOLUNA Server Framework for Java (5.x) Parent project.
 

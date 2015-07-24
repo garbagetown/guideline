@@ -117,7 +117,7 @@ Common Library
 OSS Versions
 --------------------------------------------------------------------------------
 
-List of OSS being used in version 5.0.0.RELEASE.
+List of OSS being used in version 5.0.1.RELEASE.
 
 .. tip::
 
@@ -133,7 +133,7 @@ List of OSS being used in version 5.0.0.RELEASE.
     dependencies resolved and 
     OSS version to be used in the TERASOLUNA Server Framework for Java (5.x) is following the rule of Spring IO platform definition.
 
-    Furthermore, Spring IO platform version is `1.1.3.RELEASE <http://docs.spring.io/platform/docs/1.1.3.RELEASE/reference/htmlsingle/>`_  specified in version 5.0.0.RELEASE.
+    Furthermore, Spring IO platform version is `1.1.3.RELEASE <http://docs.spring.io/platform/docs/1.1.3.RELEASE/reference/htmlsingle/>`_  specified in version 5.0.1.RELEASE.
 
 .. tabularcolumns:: |p{0.15\linewidth}|p{0.27\linewidth}|p{0.25\linewidth}|p{0.15\linewidth}|p{0.05\linewidth}|p{0.08\linewidth}|
 .. list-table::

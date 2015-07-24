@@ -195,10 +195,10 @@ If project is created from `blank project <https://github.com/terasolunaorg/tera
             <dependency>
                 <groupId>org.terasoluna.gfw</groupId>
                 <artifactId>terasoluna-gfw-jodatime</artifactId>
-                <version>5.0.0.RELEASE</version>
+                <version>5.0.1.RELEASE</version>
             </dependency>
 
-    In the above example 5.0.0.RELEASE is specified  but it should be actual version which is specified at project side.
+    In the above example 5.0.1.RELEASE is specified  but it should be actual version which is specified at project side.
 
 |
 

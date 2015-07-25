@@ -15,8 +15,7 @@ Database Access (Common)
     The following topics in this chapter are currently under study.
 
     * | About multiple datasources
-      | For details, refer to \ :ref:`Overview - About multiple datasources <data-access-common_todo_multiple_datasource_overview>`\  and \ :ref:`How to extends - About multiple datasources <data-access-common_todo_multiple_datasource_howtoextends>`\ .
-
+      | For details, \ :ref:`About multiple datasources of Overview <data-access-common_todo_multiple_datasource_overview>`\  and \ :ref:`Settings for using multiple datasources of How to extends <data-access-common_todo_multiple_datasource_howtoextends>`\ .
     * | About handling of unique constraint errors and pessimistic exclusion errors when using JPA
       | For details, refer to \ :ref:`Overview - About exception handling <data-access-common_todo_exception>`\ .
 
@@ -237,8 +236,7 @@ About multiple datasources
     The following details will be added in future.
 
     * Conceptual diagram
-    * Details of above two cases
-      Especially, in case (1), transaction management method is likely to change depending on processing pattern (such as DB update using multiple datasources; DB update using only a single datasource, DB read only, no concurrent access etc.); hence plan to break down considering all these aspects.
+
 
 About common library classes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -527,23 +525,125 @@ Default operations of log4jdbc can be customized by placing properties file \ :f
 How to extend
 --------------------------------------------------------------------------------
 
+.. _data-access-common_todo_multiple_datasource_howtoextends:
+
 Settings for using multiple datasources
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. _data-access-common_todo_multiple_datasource_howtoextends:
-
-.. todo::
+ .. todo::
 
     **TBD**
 
     Following details will be added in future.
 
-    * Example of settings based on notes to be considered while using multiple datasources
-    * Example of implementation if it is getting impacted
+    * Transaction management method may change depending on the processing pattern (like Update for multiple datasources, Update for a single datasource, Only for reference, No concurrent access etc.), hence breakdown is planned focusing on that area.
+
+
+Settings to switch the datasource dynamically
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+| In order to define multiple datasources and then to switch them dynamically, it is necessary to create a class that inherits \ ``org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource``\  and implement the conditions by which datasource is switched.
+| This is to be implemented by mapping the key which is a return value of \ ``determineCurrentLookupKey``\  method with the datasource. For selecting the key, usually context information like authenticated user information, time and locale etc. is to be used.
+
+Implementation of AbstractRoutingDataSource
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+|The datasource can be switched dynamically by using the \ ``DataSource``\  which is created by extending \ ``AbstractRoutingDataSource``\ in a same way as the normal datasource.
+|The example of switching the datasource based on time is given below.
+
+- Example of implementing a class that inherits \ ``AbstractRoutingDataSource``\ 
+
+ .. code-block:: java
+
+    package com.examples.infra.datasource;
+
+    import javax.inject.Inject;
+
+    import org.joda.time.DateTime;
+    import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
+    import org.terasoluna.gfw.common.date.jodatime.JodaTimeDateFactory;
+
+    public class RoutingDataSource extends AbstractRoutingDataSource { // (1)
+
+        @Inject
+        JodaTimeDateFactory dateFactory; // (2)
+
+        @Override
+        protected Object determineCurrentLookupKey() { // (3)
+
+            DateTime dateTime = dateFactory.newDateTime();
+            int hour = dateTime.getHourOfDay();
+
+            if (7 <= hour && hour <= 23) { // (4)
+                return "OPEN"; // (5)
+            } else {
+                return "CLOSE";
+            }
+        }
+    }
+
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - Sr. No.
+      - Description
+    * - | (1)
+      - Inherit \ ``AbstractRoutingDataSource``\ .
+    * - | (2)
+      - Use \ ``JodaTimeDateFactory``\ to fetch time. For details, refer to \ :doc:`./SystemDate`\ .
+    * - | (3)
+      - Implement \ ``determineCurrentLookupKey``\  method. The datasource to be used is defined by mapping the return value of this method and the \ ``key``\  defined in \ ``targetDataSources``\  of the bean definition file described later.
+    * - | (4)
+      - In the method, refer to the context information (here Time) and switch the key. Here the implementation should be in accordance with the business requirements. This sample is being implemented so that the time returns different keys as "From 7:00 to 23:59" and  "From 0:00 to 6:59".
+    * - | (5)
+      - Return the  \ ``key``\  to be mapped with \ ``targetDataSources``\  of the bean definition file described later.
+
+.. note
+
+    When switching the datasource based on authenticated user information (ID or privileges), it is advisable to fetch it using \ ``org.springframework.security.core.context.SecurityContext``\  in \ ``determineCurrentLookupKey``\  method.
+    For details on \ ``org.springframework.security.core.context.SecurityContext``\  class, refer to \ :doc:`../Security/Authentication`\ .
+
+Datasource definition
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Define the  \ ``AbstractRoutingDataSource``\ extended class which was created, in bean definition file.
+
+- :file:`xxx-env.xml`
+
+ .. code-block:: xml
+
+    <bean id="dataSource"
+        class="com.examples.infra.datasource.RoutingDataSource">  <!-- (1) -->
+        <property name="targetDataSources">  <!-- (2) -->
+            <map>
+                <entry key="OPEN" value-ref="dataSourceOpen" />
+                <entry key="CLOSE" value-ref="dataSourceClose" />
+            </map>
+        </property>
+        <property name="defaultTargetDataSource" ref="dataSourceDefault" />  <!-- (3) -->
+    </bean>
+
+
+ .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+ .. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - Sr. No.
+      - Description
+    * - | (1)
+      - Define a class that inherits \ ``AbstractRoutingDataSource``\  created earlier.
+    * - | (2)
+      - Define the datasource to be used. As for \ ``key``\ , define the value that can be returned using \ ``determineCurrentLookupKey``\  method. In \ ``value-ref``\  , specify the datasource to be used for each \ ``key``\ . Define in accordance with the number of datasources to be switched based on \ :ref:`Datasource settings <data-access-common_howtouse_datasource>`\ .
+    * - | (3)
+      - This datasource is used, when \ ``key``\  specified in \ ``determineCurrentLookupKey``\  method does not exist in \ ``targetDataSources``\ . In case of implementation example, default setting is not used; however, this time \ ``defaultTargetDataSource``\  is being used for description purpose.
+
 
 |
 
-How to resolve the problem
+how to solve the problem
 --------------------------------------------------------------------------------
 |
 
@@ -711,7 +811,7 @@ Specifications of escaping provided by common library are as follows:
 
 .. note::
 
-    Till terasoluna-gfw-common 1.0.1.RELEASE, the characters to be escaped were 4, namely " ``"%"`` , ``"_"`` , ``"％"`` , ``"＿"`` " ; however,
+    Till terasoluna-gfw-common 1.0.1.RELEASE, the characters to be escaped were 4, namely " ``"%"`` , ``"_"`` , ``"％"`` , ``"＿"`` ; however,
     it is changed to 2 characters namely " ``"%"`` , ``"_"`` " from terasoluna-gfw-common 1.0.2.RELEASE 
     in order to fix the "`Bugs related to handling of wildcard characters for LIKE search <https://github.com/terasolunaorg/terasoluna-gfw/issues/78>`_ ".
 
@@ -764,7 +864,7 @@ Example of escaping when default values used as characters to be escaped is give
       - ON
       - Escaping done as the string contains characters to be escaped. When there are multiple characters to be escaped, escaping is done for all characters.
     * - 6.
-      - ``"a％"``
+      - ``"a％"```
       - ``"a％"``
       - OFF
       - Similar to No.1.
@@ -815,7 +915,7 @@ For other than Sr. No. 6 and 7, refer to escaping example of default specificati
         | Flag
       - | Description
     * - 6.
-      - ``"a％"``
+      - `"a％"``
       - ``"a~％"``
       - ON
       - Escaping done as string contains characters to be escaped.
@@ -1131,7 +1231,7 @@ JDBC datasource classes provided by Spring Framework
       - | org.springframework.jdbc.datasource.lookup.
         | IsolationLevelDataSourceRoute
       - Adapter class for switching the datasource to be used based on independence level of an active transaction.
-      
+
 .. raw:: latex
 
    \newpage

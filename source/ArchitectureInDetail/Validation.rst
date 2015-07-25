@@ -2343,18 +2343,20 @@ ValidationMessages.propertiesでシステムで利用するデフォルトのメ
   アノテーション名.フォーム属性名.プロパティ名=対象のメッセージ
 
 
-\ :ref:`Validation_message_in_validationmessages`\ の設定がある前提で、以下の設定で\ ``age``\ フィールドのメッセージを上書きする。
+\ :ref:`Validation_message_in_validationmessages`\ の設定がある前提で、以下の設定で\ ``email``\ と\ ``age``\ フィールドのメッセージを上書きする。
 
 * application-messages.properties
 
   .. code-block:: properties
 
     # override messages
+    # for email field
+    Size.userForm.email=The size of "{0}" must be between {2} and {1}.
+    # for age field
     NotNull.userForm.age="{0}" is compulsory.
+    Min.userForm.age="{0}" must be greater than or equal to {1}.
     Max.userForm.age="{0}" must be less than or equal to {1}.
-    Max.userForm.age="{0}" must be less than or equal to {1}.
-    NotNull.userForm.email="{0}" is compulsory.
-    Size.userForm.age=The size of "{0}" must be between {2} and {1}.
+
     # filed names
     name=Name
     email=Email

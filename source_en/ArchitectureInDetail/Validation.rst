@@ -2330,18 +2330,20 @@ In this case, define messages in the following format in application-messages.pr
   [annotation name].[form attribute name].[property name] = [target message]
 
 
-Considering that the message for \ ``age``\  field already exists \ :ref:`Validation_message_in_validationmessages`\. Override the message for  \ ``age``\  field using the below settings.
+Apply "\ :ref:`Validation_message_in_validationmessages`\ " and override the message for  \ ``email``\  and \ ``age``\  field using the below settings.
 
 * application-messages.properties
 
   .. code-block:: properties
 
     # override messages
+    # for email field
+    Size.userForm.email=The size of "{0}" must be between {2} and {1}.
+    # for age field
     NotNull.userForm.age="{0}" is compulsory.
+    Min.userForm.age="{0}" must be greater than or equal to {1}.
     Max.userForm.age="{0}" must be less than or equal to {1}.
-    Max.userForm.age="{0}" must be less than or equal to {1}.
-    NotNull.userForm.email="{0}" is compulsory.
-    Size.userForm.age=The size of "{0}" must be between {2} and {1}.
+
     # filed names
     name=Name
     email=Email
@@ -2358,7 +2360,7 @@ Error messages are changed as follows.
 
 .. note::
 
-  \ `There are other formats  <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/validation/DefaultMessageCodesResolver.html>`_\ as well for the message key format of application-messages.properties;
+  \ `There are other formats <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/validation/DefaultMessageCodesResolver.html>`_\  as well for the message key format of application-messages.properties;
   however, if it is used with the purpose of overwriting some default messages, it should be in \ ``[annotation name].[form attribute name].[property name]``\  format.
 
 |

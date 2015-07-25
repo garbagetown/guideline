@@ -9,6 +9,94 @@ Change Log
     * - Modified on
       - Modified locations
       - Modification details
+    * - 2015-07-31
+      - \-
+      - Released "5.0.1 RELEASE" version
+
+        * For update details, refer to \ `Issue list of 5.0.1 <https://github.com/terasolunaorg/guideline/issues?q=is%3Aissue+milestone%3A5.0.1+is%3Aclosed>`_\
+    * -
+      - Overall modifications
+      - Fixed guideline errors (corrected typos, mistakes in description, etc.)
+
+        * For modification details, refer to \ `Issue list of 5.0.1 (clerical error) <https://github.com/terasolunaorg/guideline/issues?q=is%3Aclosed+milestone%3A5.0.1+label%3A%22clerical+error%22>`_\
+
+        Improved the description
+
+        * For improvement details, \ `Issue list of 5.0.1 (improvement) <https://github.com/terasolunaorg/guideline/issues?q=milestone%3A5.0.1+label%3Aimprovement+is%3Aclosed>`_\
+
+        Fixed the description about application server
+
+        * Removed the description for the Resin
+        * Updated the link of reference page
+    * -
+      - :doc:`../Overview/FrameworkStack`
+      - Updated the OSS version(Spring IO Platform version) to protect security vulnerability
+
+        * Spring IO Platform version updated to 1.1.3.RELEASE
+        * Spring Framework version updated to 4.1.7.RELEASE (\ `CVE-2015-3192 <http://pivotal.io/security/cve-2015-3192>`_\ )
+        * JSTL version updated to 1.2.5 (\ `CVE-2015-0254 <http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-0254>`_\ )
+
+        Updated the OSS version by the Spring IO Platform version update
+
+        * Updated the OSS version to be used. For update details, refer to \ `Migration guide of version 5.0.1 <https://github.com/terasolunaorg/terasoluna-gfw/wiki/Migration-Guide-5.0.1#step-1-update-dependency-libraries>`_\
+
+        Improved the description (\ `guideline#1148 <https://github.com/terasolunaorg/guideline/issues/1148>`_\ )
+
+        * Added the description of \ ``terasoluna-gfw-recommended-dependencies``\ ,\ ``terasoluna-gfw-recommended-web-dependencies``\  and \ ``terasoluna-gfw-parent``\
+        * Modified the description for some project
+        * Added the illustration to indicate project dependencies
+    * -
+      - :doc:`../ImplementationAtEachLayer/CreateWebApplicationProject`
+      - Added the description
+
+        * Added how to build a war file (\ `guideline#1146 <https://github.com/terasolunaorg/guideline/issues/1146>`_\ )
+    * -
+      - :doc:`../ArchitectureInDetail/DataAccessCommon`
+      - Added the description
+
+        * Added the description of \ ``DataSource``\  switching functionality (\ `guideline#1071 <https://github.com/terasolunaorg/guideline/issues/1071>`_\ )
+    * -
+      - :doc:`../ArchitectureInDetail/DataAccessMyBatis3`
+      - Fixed the guideline bug
+
+        * Modified the description about timing of batch execution (\ `guideline#903 <https://github.com/terasolunaorg/guideline/issues/903>`_\ )
+    * -
+      - :doc:`../ArchitectureInDetail/Logging`
+      - Improved the description
+
+        * Added the description about \ ``additivity``\  attribute of \ ``<logger>``\  tag (\ `guideline#977 <https://github.com/terasolunaorg/guideline/issues/977>`_\ )
+    * -
+      - :doc:`../ArchitectureInDetail/SessionManagement`
+      - Improved the description
+
+        * Modified the description about how to define a session scope bean (\ `guideline#1082 <https://github.com/terasolunaorg/guideline/issues/1082>`_\ )
+    * -
+      - :doc:`../ArchitectureInDetail/Codelist`
+      - Added the description
+
+        * Added how to display a code name (\ `guideline#1109 <https://github.com/terasolunaorg/guideline/issues/1109>`_\ )
+    * -
+      - | :doc:`../ArchitectureInDetail/Ajax`
+        | :doc:`../ArchitectureInDetail/REST`
+      - Added the warning about \ `CVE-2015-3192 <http://pivotal.io/security/cve-2015-3192>`_\ (XML security vulnerability)
+
+        * Added the warning at the time of the StAX(Streaming API for XML) use (\ `guideline#1211 <https://github.com/terasolunaorg/guideline/issues/1211>`_\ )
+    * -
+      - :doc:`../Security/Authentication`
+      - Improved the description
+
+        * Added the notes about handling with some properties of parent class of \ ``ExceptionMappingAuthenticationFailureHandler``\  (\ `guideline#812 <https://github.com/terasolunaorg/guideline/issues/812>`_\ )
+        * Modified the setting example for the \ ``requiresAuthenticationRequestMatcher``\  property of \ ``AbstractAuthenticationProcessingFilter``\  (\ `guideline#1110 <https://github.com/terasolunaorg/guideline/issues/1110>`_\ )
+    * -
+      - :doc:`../Security/Authorization`
+      - Fixed the guideline bug
+
+        * Modified the setting example for the \ ``access``\  attribute of \ ``<sec:authorize>``\  tag (JSP tag library) (\ `guideline#1003 <https://github.com/terasolunaorg/guideline/issues/1003>`_\ )
+    * -
+      - :doc:`../Appendix/EnvironmentIndependency`
+      - Added the description
+
+        * Added how to apply the external classpath(alternative functionality of \ ``VirtualWebappLoader``\  of Tomcat7) at the time of Tomcat8 use (\ `guideline#1081 <https://github.com/terasolunaorg/guideline/issues/1081>`_\ )
     * - 2015-06-12
       - Overall modifications
       - Released English version of "5.0.0 RELEASE"

@@ -117,7 +117,7 @@ Viewのレイアウトを共通化する場合は、
 利用するOSSのバージョン
 --------------------------------------------------------------------------------
 
-version 5.0.0.RELEASEで利用するOSSの一覧を以下に示す。
+version 5.0.1.RELEASEで利用するOSSの一覧を以下に示す。
 
 .. tip::
 
@@ -133,7 +133,7 @@ version 5.0.0.RELEASEで利用するOSSの一覧を以下に示す。
     への依存関係を解決しており、
     TERASOLUNA Server Framework for Java (5.x)で使用するOSSのバージョンは、原則として、Spring IO platformの定義に準じている。
 
-    なお、version 5.0.0.RELEASEで指定しているSpring IO platformのバージョンは、`1.1.3.RELEASE <http://docs.spring.io/platform/docs/1.1.3.RELEASE/reference/htmlsingle/>`_\ である。
+    なお、version 5.0.1.RELEASEで指定しているSpring IO platformのバージョンは、`1.1.3.RELEASE <http://docs.spring.io/platform/docs/1.1.3.RELEASE/reference/htmlsingle/>`_\ である。
 
 .. tabularcolumns:: |p{0.15\linewidth}|p{0.27\linewidth}|p{0.25\linewidth}|p{0.15\linewidth}|p{0.05\linewidth}|p{0.08\linewidth}|
 .. list-table::

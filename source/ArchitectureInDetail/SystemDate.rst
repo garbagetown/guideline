@@ -200,10 +200,10 @@ pom.xmlの設定
             <dependency>
                 <groupId>org.terasoluna.gfw</groupId>
                 <artifactId>terasoluna-gfw-jodatime</artifactId>
-                <version>5.0.0.RELEASE</version>
+                <version>5.0.1.RELEASE</version>
             </dependency>
 
-    上記例では5.0.0.RELEASEを指定しているが、実際に指定するバージョンは、プロジェクトで利用するバージョンを指定すること。
+    上記例では5.0.1.RELEASEを指定しているが、実際に指定するバージョンは、プロジェクトで利用するバージョンを指定すること。
 
 |
 

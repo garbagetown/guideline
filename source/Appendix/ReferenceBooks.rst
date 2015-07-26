@@ -10,6 +10,9 @@
    * - 書籍名
      - 出版社
      - 備考
+   * - `Pro Spring 4th Edition <http://www.apress.com/9781430261513>`_
+     - APress
+     -
    * - `Pro Spring 3 <http://www.apress.com/9781430241072>`_
      - APress
      - 

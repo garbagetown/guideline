@@ -847,7 +847,7 @@ Log output related functionalities provided by common library
 HttpSessionEventLoggingListener
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-\  ``org.terasoluna.fw.web.logging.HttpSessionEventLoggingListener``\  is a listener class
+\  ``org.terasoluna.gfw.web.logging.HttpSessionEventLoggingListener``\  is a listener class
 that outputs debug log at the time of generating, discarding, activating or deactivating session, and adding or deleting session attributes.
 
 The following should be added to web.xml.

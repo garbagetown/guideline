@@ -849,7 +849,7 @@ logback.xmlの\ ``<pattern>``\ に\ ``%X{X-Track}``\ および、\ ``%X{USER}``\
 HttpSessionEventLoggingListener
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-\  ``org.terasoluna.fw.web.logging.HttpSessionEventLoggingListener``\ は、
+\  ``org.terasoluna.gfw.web.logging.HttpSessionEventLoggingListener``\ は、
 セッションの生成・破棄・活性・非活性、セッションへの属性の追加・削除のタイミングでdebugログを出力するためのリスナークラスである。
 
 web.xmlに、以下を追加すればよい。

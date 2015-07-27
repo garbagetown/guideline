@@ -1311,7 +1311,7 @@ ServiceおよびSharedServiceでは、アプリケーションで使用する業
 | 警告メッセージの返却は、戻り値としてメッセージオブジェクトを返却する。
 | Entityなどのドメイン層のオブジェクトと一緒に返却する必要がある場合は、出力オブジェクト(DTO)にメッセージオブジェクトとドメインオブジェクトを詰めて返却する。
 
-| 共通ライブラリとしてメッセージオブジェクト(\ ``org.terasoluna.fw.common.message.ResultMessages``\ )を用意している。
+| 共通ライブラリとしてメッセージオブジェクト(\ ``org.terasoluna.gfw.common.message.ResultMessages``\ )を用意している。
 | 共通ライブラリで用意しているクラスだと要件を満たせない場合は、プロジェクト毎にメッセージオブジェクトを作成すること。
 
 - DTOの作成
@@ -1383,7 +1383,7 @@ ServiceおよびSharedServiceでは、アプリケーションで使用する業
 -  商品を注文する際に在庫切れの場合
 -  etc ...
 
-| 共通ライブラリとしてビジネス例外(\ ``org.terasoluna.fw.common.exception.BusinessException``\ )を用意している。
+| 共通ライブラリとしてビジネス例外(\ ``org.terasoluna.gfw.common.exception.BusinessException``\ )を用意している。
 | 共通ライブラリで用意しているビジネス例外クラスだと要件を満たせない場合は、プロジェクト毎にビジネス例外クラスを作成すること。
 | **ビジネス例外クラスは、java.lang.RuntimeException のサブクラスとして作成することを推奨する** 。
 \
@@ -1431,7 +1431,7 @@ ServiceおよびSharedServiceでは、アプリケーションで使用する業
 -  利用しているライブラリのメソッドから発生する検査例外のうち、システム異常に分類される例外を補足した場合
 -  etc ...
 
-| 共通ライブラリとしてシステム例外(\ ``org.terasoluna.fw.common.exception.SystemException``\ )を用意している。
+| 共通ライブラリとしてシステム例外(\ ``org.terasoluna.gfw.common.exception.SystemException``\ )を用意している。
 | 共通ライブラリで用意しているシステム例外クラスだと要件を満たせない場合は、プロジェクト毎にシステム例外クラスを作成すること。
 | **システム例外クラスは、java.lang.RuntimeException のサブクラスとして作成することを推奨する** 。
 | 理由は、システム例外は、アプリケーションのコード上でハンドリングする必要がないという点と、\ ``@Transactinal``\ アノテーションのデフォルトのロールバック対象が、\ ``java.lang.RuntimeException``\ のためである。

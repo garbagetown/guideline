@@ -268,7 +268,7 @@ Javaクラスでコードリストを利用する場合、 ``javax.inject.Inject
 
   import javax.inject.Named;
 
-  import org.terasoluna.fw.common.codelist.CodeList;
+  import org.terasoluna.gfw.common.codelist.CodeList;
 
   public class OrderServiceImpl implements OrderService {
 
@@ -632,9 +632,9 @@ EnumCodeListの使用方法
       - 説明
     * - | (1)
       - コードリストとして使用する\ ``Enum``\ クラスでは、
-        共通ライブラリから提供している\ ``org.terasoluna.gfw.common.codelist.EnumCodeList.EnumCodeList``\ インタフェースを実装する。
+        共通ライブラリから提供している\ ``org.terasoluna.gfw.common.codelist.EnumCodeList.CodeListItem``\ インタフェースを実装する。
 
-        \ ``EnumCodeList.EnumCodeList``\ インタフェースには、コードリストを作成するために必要な情報(コード値とラベル)を取得するためのメソッドとして、
+        \ ``EnumCodeList.CodeListItem``\ インタフェースには、コードリストを作成するために必要な情報(コード値とラベル)を取得するためのメソッドとして、
 
         * コード値を取得する\ ``getCodeValue()``\ メソッド
         * ラベルを取得する\ ``getCodeLabel()``\ メソッド
@@ -662,12 +662,12 @@ EnumCodeListの使用方法
     * - | (5)
       - 定数が保持するコード値を返却する。
 
-        このメソッドは、\ ``EnumCodeList.EnumCodeList``\ インタフェースで定義されているメソッドであり、
+        このメソッドは、\ ``EnumCodeList.CodeListItem``\ インタフェースで定義されているメソッドであり、
         \ ``EnumCodeList``\ が定数からコード値を取得する際に呼び出す。
     * - | (6)
       - 定数が保持するラベルを返却する。
 
-        このメソッドは、\ ``EnumCodeList.EnumCodeList``\ インタフェースで定義されているメソッドであり、
+        このメソッドは、\ ``EnumCodeList.CodeListItem``\ インタフェースで定義されているメソッドであり、
         \ ``EnumCodeList``\ が定数からラベルを取得する際に呼び出す。
 
 |

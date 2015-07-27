@@ -263,7 +263,7 @@ Specify the codelist name in ``@Named`` annotation.
 
   import javax.inject.Named;
 
-  import org.terasoluna.fw.common.codelist.CodeList;
+  import org.terasoluna.gfw.common.codelist.CodeList;
 
   public class OrderServiceImpl implements OrderService {
 
@@ -624,9 +624,9 @@ Example is shown below.
       - Description
     * - | (1)
       - In \ ``Enum``\  class to be used as codelist,
-        implement the \ ``org.terasoluna.gfw.common.codelist.EnumCodeList.EnumCodeList``\  interface provided by common library.
+        implement the \ ``org.terasoluna.gfw.common.codelist.EnumCodeList.CodeListItem``\  interface provided by common library.
 
-        In \ ``EnumCodeList.EnumCodeList``\  interface, following methods are defined to fetch the information (code values and labels) required for creating a codelist.
+        In \ ``EnumCodeList.CodeListItem``\  interface, following methods are defined to fetch the information (code values and labels) required for creating a codelist.
 
         * \ ``getCodeValue()``\  method to fetch code values
         * \ ``getCodeLabel()``\  method to fetch labels
@@ -653,12 +653,12 @@ Example is shown below.
     * - | (5)
       - Return the code values storing constants.
 
-        This method is defined in \ ``EnumCodeList.EnumCodeList``\  interface, and
+        This method is defined in \ ``EnumCodeList.CodeListItem``\  interface, and
         it is called when \ ``EnumCodeList``\  fetches code value from a constant.
     * - | (6)
       - Return the label storing constants.
 
-        This method is defined in \ ``EnumCodeList.EnumCodeList``\  interface, and
+        This method is defined in \ ``EnumCodeList.CodeListItem``\  interface, and
         it is called when \ ``EnumCodeList``\  fetches label from a constant.
 
 

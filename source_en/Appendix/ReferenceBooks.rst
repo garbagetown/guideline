@@ -10,6 +10,9 @@ This guideline was prepared after referring to the following books. Refer to the
    * - Book name
      - Publisher
      - Remarks
+   * - `Pro Spring 4th Edition <http://www.apress.com/9781430261513>`_
+     - APress
+     -
    * - `Pro Spring 3 <http://www.apress.com/9781430241072>`_
      - APress
      - 

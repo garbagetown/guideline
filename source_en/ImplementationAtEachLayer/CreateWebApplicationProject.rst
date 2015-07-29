@@ -26,7 +26,7 @@ The multi-project structured development project will be created using the
     * Internet connection is used
     * If internet is connected via proxy, `Maven proxy setting <http://maven.apache.org/guides/mini/guide-proxies.html>`_  needs to be done
 
-    are prerequisite.
+    are prerequisites.
 
     If prerequisite conditions are not satisfied, it is necessary to perform these setups first.
 
@@ -158,7 +158,288 @@ For detail description of the project that you have created in the Maven Archety
     ├── todo-selenium
     └── todo-web
 
+
 |
+
+
+.. _CreateWebApplicationProjectBuild:
+
+Creating a development project
+--------------------------------------------------------------------------------
+
+The method to create a war file to be deployed on application server and a jar file of env module (module to store the file environment dependent file) is described below.
+
+In case of a project created using Maven Archetype, the following 2 methods are provided as methods to create a war file.
+
+* :ref:`CreateWebApplicationProjectBuildWarExcludeEnvJar` (**recommended**)
+* :ref:`CreateWebApplicationProjectBuildWarIncludeEnvJar`
+
+
+.. note:: **About the recommended build method**
+
+    This guideline recommends :ref:`CreateWebApplicationProjectBuildWarExcludeEnvJar`. 
+    For reasons why this method is recommended, refer to :doc:`../Appendix/EnvironmentIndependency`.
+    Other build method apart from those mentioned here can also be used.
+
+    However, **the war file and jar file to be released in test environment and production environment should not be created using the functionality provided by IDE such as Eclipse.**
+    In some of the IDE functionalities like Eclipse, class files are created using an independent compiler which has been optimized for development,
+    hence there could be a risk of unexpected error during the application execution due to difference in the compiler.
+
+
+.. warning:: **About build environment**
+
+    In the example below, Windows environment is used for the build. However, you can use your own environment for doing the build.
+    This guideline **recommends that you should do the build using the same OS and JDK version as that of the application execution environment.**
+
+|
+
+| When build is done using Maven, confirm whether home directory of JDK which is used during compilation in the environment variable JAVA_HOME, has been specified.
+| If the environment variable is not set or the home directory of JDK having different version has been specified, an appropriate home directory should be specified in environment variable.
+
+**[In case of Windows]**
+
+.. code-block:: console
+
+    echo %JAVA_HOME%
+    set JAVA_HOME={Please set home directory of JDK}
+
+
+**[In case of Linux]**
+
+.. code-block:: console
+
+    echo $JAVA_HOME
+    JAVA_HOME={Please set home directory of JDK}
+
+.. note::
+
+    It is advisable to set the environment variable JAVA_HOME in the user environment variable of OS user wherein build is to be done.
+
+|
+
+.. _CreateWebApplicationProjectBuildWarExcludeEnvJar:
+
+Build method wherein jar file of env module is not included in war file
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. _CreateWebApplicationProjectBuildWarExcludeEnvJarStepWar:
+
+Creating war file
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Open the root directory of development project.
+
+.. code-block:: console
+
+    cd C:\work\todo
+
+|
+
+| Specify \ ``warpack``\  in Maven profile ((\ ``-P``\ parameter) and run Maven install.
+
+.. code-block:: console
+
+    mvn -P warpack clean install
+
+| If the Maven package is run successfully, a war file that does not include jar file of env module is created in the target directory of web module.
+| (Example: \ ``C:\work\todo\todo-web\target\todo-web.war``\ )
+
+.. note:: **About the goal to be specified**
+
+    In the above example, \ ``install``\  is specified in goal and war file is installed in local repository, however it is advisable to specify
+
+     * \ ``package``\  in goal when only creating a war file
+     * \ ``deploy``\  in goal when deploying in remote repository like Nexus
+
+
+|
+
+.. _CreateWebApplicationProjectBuildWarExcludeEnvJarStepEnvJar:
+
+Creating jar file of env module
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Open env module directory.
+
+.. code-block:: console
+
+    cd C:\work\todo\todo-env
+
+|
+
+Specify \ **Profile ID to identify environment**\  in Maven profile ((\ ``-P``\  parameter) and run Maven package.
+
+.. code-block:: console
+
+    mvn -P test-server clean package
+
+| If Maven package is run successfully, jar file for the specified environment is created in target directory of env module.
+| (Example: \ ``C:\work\todo\todo-env\target\todo-env-1.0.0-SNAPSHOT-test-server.jar``\ )
+
+.. note:: **About profile ID to identify environment**
+
+    In case of a project created using Maven Archetype, following profile IDs are defined by default.
+
+     * \ ``local``\ : Profile for local environment of the developer (for IDE development environment) (default profile)
+     * \ ``test-server``\ : Profile for test environment
+     * \ ``production-server``\ : Profile for production environment
+
+    The above 3 profiles are provided by default; however you can add or modify them as per the environment configuration of the system to be developed.
+
+|
+
+.. _CreateWebApplicationProjectBuildWarExcludeEnvJarStepDeployToTomcat:
+
+Deploying on Tomcat
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Deployment method (procedure) when Tomcat is used as an application server is given below.
+
+* Copy the jar file of env module to a predefined external directory.
+* Deploy the war file on Tomcat.
+
+.. note::
+
+  * For method to manage a jar file of env module in external directory, refer to :ref:`EnvironmentIndependencyDeployTomcat` of Appendix.
+  * For method to deploy a war file on Tomcat, refer to Tomcat manual.
+
+|
+
+.. _CreateWebApplicationProjectBuildWarExcludeEnvJarStepDeployToOtherServer:
+
+Deploying on application server other than Tomcat
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Deployment method (procedure) when server other than Tomcat is used as an application server is given below.
+
+* Embed the jar file of env module in war file.
+* Deploy the war file in which jar file of env module is embedded on application server.
+
+.. note::
+
+    For a method to deploy a war file on application server, refer to the manual of application server to be used
+
+|
+
+Here, a method to embed the jar file of env module in war file using jar command is given.
+
+| Open the working directory.
+| Here the in the example below, work is performed in env project.
+
+.. code-block:: console
+
+    cd C:\work\todo\todo-env
+
+|
+
+| Copy the created war file to the working directory.
+| Here in the example below, war file is fetched from Maven repository. (war file is required to be \ ``installed``\  or \ ``deployed``\ .)
+
+.. code-block:: console
+
+    mvn org.apache.maven.plugins:maven-dependency-plugin:2.5:get^
+     -DgroupId=com.example.todo^
+     -DartifactId=todo-web^
+     -Dversion=1.0.0-SNAPSHOT^
+     -Dpackaging=war^
+     -Ddest=target/todo-web.war
+
+| If the command is run successfully, the specified war file is copied to the target directory of env module.
+| (Example: \ ``C:\work\todo\todo-env\target\todo-web.war``\ )
+
+.. note::
+
+    * An appropriate value should be specified in \ ``-DgroupId``\ , \ ``-DartifactId``\ , \ ``-Dversion``\ , \ ``-Ddest``\ . 
+    * When run on Linux, \ ``^``\  at the end of the line should be read as \ ``\``\  . 
+
+|
+
+Copy the created jar file to working directory (\ ``target\WEB-INF\lib``\ ) once and add it to the war file.
+
+**[In case of Windows]**
+
+.. code-block:: console
+
+    mkdir target\WEB-INF\lib
+    copy target\todo-env-1.0.0-SNAPSHOT-test-server.jar target\WEB-INF\lib\.
+    cd target
+    jar -uvf todo-web.war WEB-INF\lib
+
+**[In case of Linux]**
+
+.. code-block:: console
+
+    mkdir -p target/WEB-INF/lib
+    cp target/todo-env-1.0.0-SNAPSHOT-test-server.jar target/WEB-INF/lib/.
+    cd target
+    jar -uvf todo-web.war WEB-INF/lib
+
+.. note:: **Measures to be taken when jar command is not found**
+
+    The problem when jar command is not found can be resolved using either of the following measures.
+
+    * Add \ ``JAVA_HOME/bin``\  to environment variable "PATH". 
+    * Specify the jar command with full path. In case of Windows, \ ``%JAVA_HOME%\bin\jar``\  and in case of Linux, \ ``${JAVA_HOME}/bin/jar``\  can be specified.
+
+
+|
+
+.. _CreateWebApplicationProjectBuildWarIncludeEnvJar:
+
+Build method wherein jar file of env module is included in war file
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. _CreateWebApplicationProjectBuildWarIncludeEnvJarWar:
+
+Creating war file
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+.. warning:: **Points to be noted when including a jar file of env module in war file**
+
+    When jar file of env module is included in war file, the war file cannot be deployed in other environment; 
+    hence war file should be managed so that it is not deployed to other environment (especially in production environment) by mistake.
+
+    Moreover, when using a method in which war file is created for each environment and released in each environment, 
+    it should be noted that war file released in production environment can never be the war file for which testing is complete.
+    This is for the re-compilation at the time of creating war file for the production environment.
+    When creating the war file and releasing the same for each environment, it is especially important to use the 
+    VCS (Version Control System) functionality (Tag functionality etc.) like Git or Subversion and to establish a mechanism to create a war file
+    which is to be released in production environment and various test environments, through the use of tested source files.
+
+|
+
+Open the root directory of development project.
+
+.. code-block:: console
+
+    cd C:\work\todo
+
+|
+
+| In Maven profile (\ ``-P``\  parameter), specify \ **Profile ID to identify environment**\ defined in env module and \ ``warpack-with-env``\ , and then run the Maven package.
+
+.. code-block:: console
+
+    mvn -P warpack-with-env,test-server clean package
+
+| If Maven package is run successfully, war file which includes jar file of env module is created in target directory of web module.
+| (Example: \ ``C:\work\todo\todo-web\target\todo-web.war``\ )
+
+|
+
+.. _CreateWebApplicationProjectBuildWarIncludeEnvJarDeploy:
+
+Deployment
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Deploy the created war file on application server.
+
+.. note::
+
+    For a method to deploy a war file on application server, refer to the manual of Application Server to be used.
+
+|
+
 
 .. _CreateWebApplicationProjectCustomize:
 
@@ -308,7 +589,7 @@ the value of the project division is in the state of provisional value [\ ``xx``
 .. note::
 
     * **If the message ID system introduced in this guideline is used, specify the appropriate values to the project classification.** For the message ID system introduced in this guideline, Refer [:ref:`message-management_result-rule`].
-    * If the message ID system introduced in this guideline is not used, it is necessary to replace all of the message IDs those are used in the customization targeted file indicated below.
+    * If the message ID system introduced in this guideline is not used, it is necessary to replace all the message IDs those are used in the customization targeted file indicated below.
 
 |
 
@@ -678,7 +959,7 @@ Customization method and customization targeted files are indicated below.
 
 
     The \ ``database`` \ property is unnecessary property if MyBatis is used as O/R Mapper.
-    You may remove this but you may left to set in order to clarify the used database.
+    You may remove this but you may leave the settings in order to specify the database being used.
 
 .. tip:: **How to add the JDBC driver**
 
@@ -750,7 +1031,7 @@ In addition, various settings have been included that is recommended in this gui
 * Tiles configuration file
 * Property file (such as message definition file)
 
-and, As a simple component implementation of low (=necessary to develop every kind of application) dependency on the application requirements,
+and, as a simple component implementation of low (=necessary to develop every kind of application) dependency on the application requirements,
 
 * Controller and JSP for displaying Welcome page
 * JSP to display an error screen (HTML)
@@ -1301,7 +1582,7 @@ Module that manages the environment dependent configuration files are explained.
         Following definitions are done in this file.
 
         * Definition of dependent libraries and build plug-ins
-        * Definition of Profile to create a environment wise jar file
+        * Definition of Profile to create a jar file for each environment
 
 |
 
@@ -1568,7 +1849,7 @@ Relationship of bean definition file and structure of the Spring Framework appli
     If domain layer components are registered to the application context for the \ ``DispatcherServlet``\, 
     trouble like the database operations are not committed occurs due to component that performs the transaction control (AOP) is not enabled.
 
-    Furthermore, the settings for not occurring the above issues are done in the Maven Archetype created project.
+    Furthermore, the settings are done in the project created using Maven Archetype so that the above events don't occur.
     It is necessary to be careful while performing modification or addition of the settings.
 
 |

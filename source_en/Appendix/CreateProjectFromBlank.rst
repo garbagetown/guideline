@@ -105,6 +105,7 @@ For method of creating a project of multi-project structure, refer to:
 The above document includes
 
 * Method to create a project of multi-project structure
+* Method to create a war file
 * Description of customized locations from blank project
 * Description of project structure
 

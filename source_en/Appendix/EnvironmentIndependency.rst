@@ -61,6 +61,8 @@ For details, refer to \ `Sample application <https://github.com/terasolunaorg/te
 Deployment
 --------------------------------------------------------------------------------
 
+.. _EnvironmentIndependencyDeployTomcat:
+
 Deployment in Tomcat
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -99,6 +101,8 @@ Perform the following procedure to release the Web application in Tomcat.
  * autoDeploy attribute of Host tag of [CATALINA_HOME]/conf/server.xml should be set to false. Otherwise [CATALINA_HOME]/conf/[contextPath].xml gets deleted each time web application is restarted.
  * When autoDeploy is disabled, Web application does not start by just placing the war file in [CATALINA_HOME]/webapps. war file should always be unjarred (unzipped).
 
+.. _EnvironmentIndependencyDeployOther:
+
 Deployment to other application server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -110,6 +114,8 @@ the method to release it after adding \*-env-x.y.z.jar file under WEB-INF/lib of
 2. Copy \*.war file deployed in the package repository to the working directory.
 3. Add it under WEB-INF/lib of war file using add option of jar command as follows.
 4. Release foo-x.y.z.war on AP server.
+
+.. _EnvironmentIndependencyContinuousDeploy:
 
 Continuous deployment
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

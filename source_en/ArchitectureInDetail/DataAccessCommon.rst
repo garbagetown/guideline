@@ -807,15 +807,15 @@ Specifications of escaping of common library
 Specifications of escaping provided by common library are as follows:
 
 * Escape character is ``"~"`` .
-* Characters to be escaped by default are 2, namely " ``"%"`` , ``"_"`` ".
+* Characters to be escaped by default are 2, namely ``"%"`` , ``"_"`` .
 
 .. note::
 
-    Till terasoluna-gfw-common 1.0.1.RELEASE, the characters to be escaped were 4, namely " ``"%"`` , ``"_"`` , ``"％"`` , ``"＿"`` ; however,
-    it is changed to 2 characters namely " ``"%"`` , ``"_"`` " from terasoluna-gfw-common 1.0.2.RELEASE 
+    Till terasoluna-gfw-common 1.0.1.RELEASE, the characters to be escaped were 4, namely ``"%"`` , ``"_"`` , ``"％"`` , ``"＿"`` ; however,
+    it is changed to 2 characters namely ``"%"`` , ``"_"`` from terasoluna-gfw-common 1.0.2.RELEASE
     in order to fix the "`Bugs related to handling of wildcard characters for LIKE search <https://github.com/terasolunaorg/terasoluna-gfw/issues/78>`_ ".
 
-    In addition, a method for escaping that includes double byte characters " ``"％"`` , ``"＿"``" as characters to be escaped, is also provided.
+    In addition, a method for escaping that includes double byte characters ``"％"`` , ``"＿"`` as characters to be escaped, is also provided.
 
 |
 
@@ -864,19 +864,19 @@ Example of escaping when default values used as characters to be escaped is give
       - ON
       - Escaping done as the string contains characters to be escaped. When there are multiple characters to be escaped, escaping is done for all characters.
     * - 6.
-      - ``"a％"```
+      - ``"a％"``
       - ``"a％"``
       - OFF
       - Similar to No.1.
 
-        From terasoluna-gfw-common 1.0.2.RELEASE, "``"％"``" is handled as character out of escaping scope in default specifications.
+        From terasoluna-gfw-common 1.0.2.RELEASE, ``"％"`` is handled as character out of escaping scope in default specifications.
     * - 7.
       - ``"a＿"``
       - ``"a＿"``
       - OFF
       - Similar to No.1.
 
-        From terasoluna-gfw-common 1.0.2.RELEASE, "``"＿"``" is handled as character out of escaping scope in default specifications.
+        From terasoluna-gfw-common 1.0.2.RELEASE, ``"＿"`` is handled as character out of escaping scope in default specifications.
     * - 8.
       - ``" "``
       - ``" "``
@@ -915,7 +915,7 @@ For other than Sr. No. 6 and 7, refer to escaping example of default specificati
         | Flag
       - | Description
     * - 6.
-      - `"a％"``
+      - ``"a％"``
       - ``"a~％"``
       - ON
       - Escaping done as string contains characters to be escaped.

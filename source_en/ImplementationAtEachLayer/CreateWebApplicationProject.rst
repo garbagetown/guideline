@@ -235,7 +235,7 @@ Open the root directory of development project.
 
 |
 
-| Specify \ ``warpack``\  in Maven profile ((\ ``-P``\ parameter) and run Maven install.
+| Specify \ ``warpack``\  in Maven profile (\ ``-P``\  parameter) and run Maven install.
 
 .. code-block:: console
 
@@ -267,7 +267,7 @@ Open env module directory.
 
 |
 
-Specify \ **Profile ID to identify environment**\  in Maven profile ((\ ``-P``\  parameter) and run Maven package.
+Specify \ **Profile ID to identify environment**\  in Maven profile (\ ``-P``\  parameter) and run Maven package.
 
 .. code-block:: console
 

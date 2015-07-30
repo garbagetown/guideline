@@ -379,9 +379,20 @@ f:query() 関数仕様
 
         JavaBeanを指定した場合はプロパティ名がリクエストパラメータ名となり、\ ``Map``\ を指定した場合はキー名がリクエストパラメータとなる。
 
+        JavaBeanのプロパティ及び\ ``Map``\ の値としてサポートしている型は以下の通りである。
+
+        * シンプル型 (\ ``DefaultFormattingConversionService``\ を使って\ ``String``\ 型へ変換可能なクラス)
+        * JavaBean
+        * \ ``Iterable``\ インタフェースの実装クラス
+        * 配列
+        * \ ``Map``\ インタフェースの実装クラス
+
+        terasoluna-gfw-web 5.0.1.RELEASEより、ネスト構造をもつJavaBean及び\ ``Map``\ を指定できるように改善されている。
+
+
  .. note::
 
-    指定されたオブジェクトのフィールド値は、
+    指定されたオブジェクトのシンプル型のプロパティ値は、
     \ ``org.springframework.format.support.DefaultFormattingConversionService``\ の \ ``convert``\ メソッドを使用して文字列に変換される。
     \ ``ConversionService``\ については、
     \ `Spring Framework Reference Documentation(Spring Type Conversion) <http://docs.spring.io/spring/docs/4.1.7.RELEASE/spring-framework-reference/html/validation.html#core-convert>`_\ を参照されたい。
@@ -402,6 +413,64 @@ f:query() 関数仕様
       - 引数で指定されたオブジェクトを元に生成したクエリ文字列(UTF-8でURLエンコーディング済みの文字列)
 
         引数で指定されたオブジェクトが、JavaBean又は\ ``Map``\ 以外の場合は、空文字(\ ``""``\ )を返却する。
+
+ .. note:: **クエリ文字列への変換ルール**
+
+    \ ``f:query()``\ は、Spring Web MVCのバインディング処理で扱うことができる形式に変換している。
+    具体的には以下のルールでクエリ文字列に変換している。
+
+    **[リクエストパラメータ名]**
+
+     .. tabularcolumns:: |p{0.45\linewidth}|p{0.30\linewidth}|p{0.25\linewidth}|
+     .. list-table::
+        :header-rows: 1
+        :widths: 45 30 25
+
+        * - 条件
+          - パラメータ名の変換仕様
+          - 変換例
+        * - プロパティの型がシンプル型の場合
+          - プロパティ名
+          - \ ``userId=xxx``\
+        * - プロパティの型(\ ``Iterable``\、配列、\ ``Map``\ の要素型)がJavaBeanの場合
+          - プロパティ名を\ ``"."``\ (ドット)でつなげた値
+          - | \ ``mainContract.name=xxx``\
+            | \ ``subContracts[0].name=xxx``\
+        * - プロパティの型が\ ``Iterable``\ の実装クラス又は配列の場合
+          - プロパティ名 + \ ``[要素位置]``\
+          - \ ``status[0]=accepting``\
+        * - プロパティの型が\ ``Map``\ の実装クラスの場合
+          - プロパティ名 + \ ``[Mapのキー名]``\
+          - \ ``status[accepting]=Accepting Order``\
+        * - プロパティの型が\ ``Iterable``\ の実装クラス又は配列で値の要素が空の場合
+          - | プロパティ名
+            | (\ ``[要素位置]``\ は付与しない)
+          -  \ ``status=``\
+        * - プロパティの値が\ ``null``\ の場合
+          - \ ``_``\ (アンダースコア) + プロパティ名
+          - | \ ``_mainContract.name=``\
+            | \ ``_status[0]=``\
+            | \ ``_status[accepting]=``\
+
+    **[リクエストパラメータ値]**
+
+     .. tabularcolumns:: |p{0.45\linewidth}|p{0.30\linewidth}|p{0.25\linewidth}|
+     .. list-table::
+        :header-rows: 1
+        :widths: 45 30 25
+
+        * - 条件
+          - パラメータ値の変換仕様
+          - 変換例
+        * - プロパティの値が\ ``null``\ の場合
+          - ブランク文字列
+          - \ ``_userId=``\
+        * - プロパティの型が\ ``Iterable``\ の実装クラス又は配列で値の要素が空の場合
+          - ブランク文字列
+          - \ ``status=``\
+        * - プロパティの値が\ ``null``\ でない場合
+          - \ ``DefaultFormattingConversionService``\ を使って\ ``String``\ 型へ変換した値
+          - \ ``targetDate=20150801``\
 
 f:query() 使用方法
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

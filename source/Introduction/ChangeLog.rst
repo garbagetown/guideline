@@ -9,6 +9,94 @@
     * - 更新日付
       - 更新箇所
       - 更新内容
+    * - 2015-07-31
+      - \-
+      - 5.0.1 RELEASE版公開
+
+        * 更新内容の詳細は、\ `5.0.1のIssue一覧 <https://github.com/terasolunaorg/guideline/issues?q=is%3Aissue+milestone%3A5.0.1+is%3Aclosed>`_\ を参照されたい。
+    * -
+      - 全般
+      - ガイドラインの誤記(タイプミスや単純な記述ミスなど)の修正
+
+        * 修正内容の詳細は、\ `5.0.1のIssue一覧(clerical error) <https://github.com/terasolunaorg/guideline/issues?q=is%3Aclosed+milestone%3A5.0.1+label%3A%22clerical+error%22>`_\ を参照されたい。
+
+        記載内容の改善
+
+        * 改善内容の詳細は、\ `5.0.1のIssue一覧(improvement) <https://github.com/terasolunaorg/guideline/issues?q=milestone%3A5.0.1+label%3Aimprovement+is%3Aclosed>`_\ を参照されたい。
+
+        アプリケーションサーバに関する記載内容の修正
+
+        * Resinに関する記載を削除
+        * リファレンスページへのリンクを最新化
+    * -
+      - :doc:`../Overview/FrameworkStack`
+      - セキュリティ脆弱性対応に伴い利用するOSSのバージョン(Spring IO Platformのバージョン)を更新
+
+        * Spring IO Platformのバージョンを1.1.3.RELEASEに更新
+        * Spring Frameworkのバージョンを4.1.7.RELEASEに更新 (\ `CVE-2015-3192 <http://pivotal.io/security/cve-2015-3192>`_\ )
+        * JSTLのバージョンを1.2.5に更新 (\ `CVE-2015-0254 <http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-0254>`_\ )
+
+        Spring IO Platformのバージョン更新に伴い利用するOSSのバージョンを更新
+
+        * 使用するOSSのバージョンを更新。更新内容は、\ `version 5.0.1の移行ガイド <https://github.com/terasolunaorg/terasoluna-gfw/wiki/Migration-Guide-5.0.1#step-1-update-dependency-libraries>`_\ を参照されたい。
+
+        記載内容の改善 (\ `guideline#1148 <https://github.com/terasolunaorg/guideline/issues/1148>`_\ )
+
+        * \ ``terasoluna-gfw-recommended-dependencies``\ 、\ ``terasoluna-gfw-recommended-web-dependencies``\ 、\ ``terasoluna-gfw-parent``\ プロジェクトの説明を追加。
+        * プロジェクトの説明を修正。
+        * プロジェクト間の依存関係を示す図を追加。
+    * -
+      - :doc:`../ImplementationAtEachLayer/CreateWebApplicationProject`
+      - 記載内容の追加
+
+        * warファイルのビルド方法を追加 (\ `guideline#1146 <https://github.com/terasolunaorg/guideline/issues/1146>`_\ )
+    * -
+      - :doc:`../ArchitectureInDetail/DataAccessCommon`
+      - 記載内容の追加
+
+        * データソース切り替え機能の説明を追加 (\ `guideline#1071 <https://github.com/terasolunaorg/guideline/issues/1071>`_\ )
+    * -
+      - :doc:`../ArchitectureInDetail/DataAccessMyBatis3`
+      - ガイドラインのバグ修正
+
+        * バッチ実行のタイミングに関する説明を修正 (\ `guideline#903 <https://github.com/terasolunaorg/guideline/issues/903>`_\ )
+    * -
+      - :doc:`../ArchitectureInDetail/Logging`
+      - 記載内容の改善
+
+        * \ ``<logger>``\ タグの\ ``additivity``\ 属性に関する説明を追加 (\ `guideline#977 <https://github.com/terasolunaorg/guideline/issues/977>`_\ )
+    * -
+      - :doc:`../ArchitectureInDetail/SessionManagement`
+      - 記載内容の改善
+
+        * セッションスコープのBeanの定義方法に関する説明を修正 (\ `guideline#1082 <https://github.com/terasolunaorg/guideline/issues/1082>`_\ )
+    * -
+      - :doc:`../ArchitectureInDetail/Codelist`
+      - 記載内容の追加
+
+        * コード名の表示方法を追加 (\ `guideline#1109 <https://github.com/terasolunaorg/guideline/issues/1109>`_\ )
+    * -
+      - | :doc:`../ArchitectureInDetail/Ajax`
+        | :doc:`../ArchitectureInDetail/REST`
+      - \ `CVE-2015-3192 <http://pivotal.io/security/cve-2015-3192>`_\ (XMLの脆弱性)に関する注意喚起を追加
+
+        * StAX(Streaming API for XML)を使用する際の注意事項を追加 (\ `guideline#1211 <https://github.com/terasolunaorg/guideline/issues/1211>`_\ )
+    * -
+      - :doc:`../Security/Authentication`
+      - 記載内容の改善
+
+        * \ ``ExceptionMappingAuthenticationFailureHandler``\ の親クラスのプロパティの扱いに関する注意点を追加 (\ `guideline#812 <https://github.com/terasolunaorg/guideline/issues/812>`_\ )
+        * \ ``AbstractAuthenticationProcessingFilter``\ の\ ``requiresAuthenticationRequestMatcher``\ プロパティの設定例を修正 (\ `guideline#1110 <https://github.com/terasolunaorg/guideline/issues/1110>`_\ )
+    * -
+      - :doc:`../Security/Authorization`
+      - ガイドラインのバグ修正
+
+        * \ ``<sec:authorize>``\ タグ(JSPタグライブラリ)の\ ``access``\ 属性の設定例を修正 (\ `guideline#1003 <https://github.com/terasolunaorg/guideline/issues/1003>`_\ )
+    * -
+      - :doc:`../Appendix/EnvironmentIndependency`
+      - 記載内容の追加
+
+        * Tomcat8使用時の外部クラスパス(Tomcat7の\ ``VirtualWebappLoader``\ の代替機能)の適用方法を追加 (\ `guideline#1081 <https://github.com/terasolunaorg/guideline/issues/1081>`_\ )
     * - 2015-06-12
       - 全般
       - 5.0.0 RELEASE英語版公開

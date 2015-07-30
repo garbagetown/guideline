@@ -82,6 +82,12 @@
 
         * StAX(Streaming API for XML)を使用する際の注意事項を追加 (\ `guideline#1211 <https://github.com/terasolunaorg/guideline/issues/1211>`_\ )
     * -
+      - | :doc:`../ArchitectureInDetail/Pagination`
+        | :doc:`../Appendix/TagLibAndELFunctions`
+      - 共通ライブラリのバグ改修に伴う修正
+
+        * 共通ライブラリのバグ改修(\ `terasoluna-gfw#297 <https://github.com/terasolunaorg/terasoluna-gfw/issues/297>`_\)に伴い、\ ``f:query``\ の仕様に関する説明を修正 (\ `guideline#1244 <https://github.com/terasolunaorg/guideline/issues/1244>`_\ )
+    * -
       - :doc:`../Security/Authentication`
       - 記載内容の改善
 

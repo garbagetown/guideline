@@ -82,6 +82,12 @@ Change Log
 
         * Added the warning at the time of the StAX(Streaming API for XML) use (\ `guideline#1211 <https://github.com/terasolunaorg/guideline/issues/1211>`_\ )
     * -
+      - | :doc:`../ArchitectureInDetail/Pagination`
+        | :doc:`../Appendix/TagLibAndELFunctions`
+      - Modified in accordance with bug fixes of common library
+
+        * Modified the description about \ ``f:query``\  specification , in accordance with bug fixes of common library (\ `terasoluna-gfw#297 <https://github.com/terasolunaorg/terasoluna-gfw/issues/297>`_\ ) (\ `guideline#1244 <https://github.com/terasolunaorg/guideline/issues/1244>`_\ )
+    * -
       - :doc:`../Security/Authentication`
       - Improved the description
 

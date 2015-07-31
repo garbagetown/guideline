@@ -164,7 +164,7 @@ For detail description of the project that you have created in the Maven Archety
 
 .. _CreateWebApplicationProjectBuild:
 
-Creating a development project
+Build development project
 --------------------------------------------------------------------------------
 
 The method to create a war file to be deployed on application server and a jar file of env module (module to store the file environment dependent file) is described below.
@@ -224,7 +224,7 @@ Build method wherein jar file of env module is not included in war file
 
 .. _CreateWebApplicationProjectBuildWarExcludeEnvJarStepWar:
 
-Creating war file
+Create war file
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 Open the root directory of development project.
@@ -256,7 +256,7 @@ Open the root directory of development project.
 
 .. _CreateWebApplicationProjectBuildWarExcludeEnvJarStepEnvJar:
 
-Creating jar file of env module
+Create jar file of env module
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 Open env module directory.
@@ -290,7 +290,7 @@ Specify \ **Profile ID to identify environment**\  in Maven profile (\ ``-P``\  
 
 .. _CreateWebApplicationProjectBuildWarExcludeEnvJarStepDeployToTomcat:
 
-Deploying on Tomcat
+Deploy on Tomcat
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 Deployment method (procedure) when Tomcat is used as an application server is given below.
@@ -307,7 +307,7 @@ Deployment method (procedure) when Tomcat is used as an application server is gi
 
 .. _CreateWebApplicationProjectBuildWarExcludeEnvJarStepDeployToOtherServer:
 
-Deploying on application server other than Tomcat
+Deploy on application server other than Tomcat
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 Deployment method (procedure) when server other than Tomcat is used as an application server is given below.
@@ -391,7 +391,7 @@ Build method wherein jar file of env module is included in war file
 
 .. _CreateWebApplicationProjectBuildWarIncludeEnvJarWar:
 
-Creating war file
+Create war file
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 .. warning:: **Points to be noted when including a jar file of env module in war file**
@@ -429,7 +429,7 @@ Open the root directory of development project.
 
 .. _CreateWebApplicationProjectBuildWarIncludeEnvJarDeploy:
 
-Deployment
+Deploy
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 Deploy the created war file on application server.

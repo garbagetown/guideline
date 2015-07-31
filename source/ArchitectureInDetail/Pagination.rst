@@ -1373,6 +1373,8 @@ JSPの実装(基本編)
     JavaBeanの場合はプロパティ名がリクエストパラメータ名となり、 ``Map`` オブジェクトの場合はマップのキー名がリクエストパラメータとなる。
     生成されるクエリ文字列は、UTF-8のURLエンコーディングが行われる。
 
+    terasoluna-gfw-web 5.0.1.RELEASEより、ネスト構造をもつJavaBeanと\ ``Map``\ オブジェクトを指定できるように改善されている。
+
     \ ``f:query``\ の詳細な仕様(URLエンコーディングの仕様など)については、「:ref:`TagLibAndELFunctionsHowToUseELFunctionQuery`」を参照されたい。
 
  .. warning:: **f:queryを使用して生成したクエリ文字列をqueryTmpl属性に指定した際の動作について**

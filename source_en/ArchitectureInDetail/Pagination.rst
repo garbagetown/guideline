@@ -1365,7 +1365,7 @@ The method of carrying forward the search conditions to the page navigation requ
     In case of JavaBean, property name is treated as request parameter name and in case of ``Map`` object, map key name is treated as request parameter.
     URL of the generated query string is encoded in UTF-8.
 
-    From the terasoluna-gfw-web 5.0.1.RELEASE, it has been improved to be able specify a nested structured JavaBean or \ ``Map``\.
+    From the terasoluna-gfw-web 5.0.1.RELEASE,  ``f:query`` has been supporting a nested structured JavaBean or \ ``Map``\.
 
     Refer to :ref:`TagLibAndELFunctionsHowToUseELFunctionQuery` for detail specification of the \ ``f:query``\  (URL encoding specification etc).
 

@@ -379,11 +379,11 @@ f:query() function specification
 
         Property name will be a request parameter name if you have specified a JavaBean and key name will be a request parameter name if you specified the \ ``Map``\.
 
-        Supported value types as JavaBean property and \ ``Map``\  value are follows:
+        Supported value types of JavaBean's property and value of \ ``Map``\  are as follows:
 
-        * Implementation classes of \ ``Iterable``\  interface
+        * Classes which implements \ ``Iterable``\  interface
         * Array
-        * Implementation classes of \ ``Map``\  interface
+        * Classes which implements  \ ``Map``\  interface
         * JavaBean
         * Simple Types (classes that can converted to \ ``String``\  type the using \ ``DefaultFormattingConversionService``\)
 
@@ -414,9 +414,9 @@ f:query() function specification
 
         If the object specified in argument is other than the JavaBean or \ ``Map``\, it returns the empty string(\ ``""``\ ).
 
- .. note:: **Rules for converting to the query string**
+ .. note:: **Rules for conversion to the query string**
 
-    \ ``f:query()``\  is converting to the format that can be supported at bind processing provided by the Spring Web MVC.
+    \ ``f:query()``\  converts an object so that the Spring Web MVC can handle it at binding process provided.
 
     **[Request parameter name]**
 
@@ -426,23 +426,23 @@ f:query() function specification
         :widths: 45 30 25
 
         * - Conditions
-          - Converting specification of parameter name
-          - Converting examples
-        * - Case that property type is implementation class of \ ``Iterable``\
+          - Conversion specification of parameter name
+          - Conversion examples
+        * - Case that property type is an instance of \ ``Iterable``\
           - Property name + \ ``[element position]``\
           - \ ``status[0]=accepting``\
-        * - Case that property type is implementation class of \ ``Iterable``\  or Array, and value's element is empty
+        * - Case that property type is an instance of \ ``Iterable``\  or Array and the value of the element is empty
           - | Property name
             | (Does not append \ ``[element position]``\)
           -  \ ``status=``\
-        * - Case that property type is implementation class of \ ``Map``\
+        * - Case that property type is an instance of \ ``Map``\
           - Property name + \ ``[Map's key name]``\
           - \ ``status[accepting]=Accepting Order``\
-        * - Case that property type(element type for \ ``Iterable``\ ,Array and \ ``Map``\) is JavaBean
+        * - Case that property type(including element type in \ ``Iterable``\ ,Array and \ ``Map``\) is JavaBean
           - Value that combined a property name with \ ``"."``\ (dot)
           - | \ ``mainContract.name=xxx``\
             | \ ``subContracts[0].name=xxx``\
-        * - Case that property type is simple type
+        * - Case that property type is a simple type
           - Property name
           - \ ``userId=xxx``\
         * - Case that property value is \ ``null``\
@@ -459,16 +459,16 @@ f:query() function specification
         :widths: 45 30 25
 
         * - Conditions
-          - Converting specification of parameter value
-          - Converting examples
+          - Conversion specification of parameter value
+          - Conversion examples
         * - Case that property value is \ ``null``\
           - Empty string
           - \ ``_userId=``\
-        * - Case that property type is implementation class of \ ``Iterable``\  or Array, and value's element is empty
+        * - Case that property type is an instance of \ ``Iterable``\  or Array and the value of the element is empty
           - Empty string
           - \ ``status=``\
         * - Case that property value is not \ ``null``\
-          - Value that convert to \ ``String``\  type using the \ ``DefaultFormattingConversionService``\
+          - Value that can be converted to \ ``String``\  type using the \ ``DefaultFormattingConversionService``\
           - \ ``targetDate=20150801``\
 
 f:query() how to use

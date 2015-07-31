@@ -379,9 +379,21 @@ f:query() function specification
 
         Property name will be a request parameter name if you have specified a JavaBean and key name will be a request parameter name if you specified the \ ``Map``\.
 
+        Supported value types of JavaBean's property and value of \ ``Map``\  are as follows:
+
+        * Classes which implements \ ``Iterable``\  interface
+        * Array
+        * Classes which implements  \ ``Map``\  interface
+        * JavaBean
+        * Simple Types (classes that can converted to \ ``String``\  type the using \ ``DefaultFormattingConversionService``\)
+
+        From the terasoluna-gfw-web 5.0.1.RELEASE, it has been improved to be able specify a nested structured JavaBean or \ ``Map``\ .
+
+
+
  .. note::
 
-    Field value of the specified object is converted into string using the convert method of \ ``org.springframework.format.support.DefaultFormattingConversionService``\.
+    A simple type property value of the specified object is converted into string using the convert method of \ ``org.springframework.format.support.DefaultFormattingConversionService``\.
     Refer \ `Spring Framework Reference Documentation(Spring Type Conversion) <http://docs.spring.io/spring/docs/4.1.7.RELEASE/spring-framework-reference/html/validation.html#core-convert>`_\
     for the \ ``ConversionService``\.
 
@@ -401,6 +413,63 @@ f:query() function specification
       - Query string that is generated based on the specified object in the argument (URL encoded string in UTF-8)
 
         If the object specified in argument is other than the JavaBean or \ ``Map``\, it returns the empty string(\ ``""``\ ).
+
+ .. note:: **Rules for conversion to the query string**
+
+    \ ``f:query()``\  converts an object so that the Spring Web MVC can handle it at binding process provided.
+
+    **[Request parameter name]**
+
+     .. tabularcolumns:: |p{0.45\linewidth}|p{0.30\linewidth}|p{0.25\linewidth}|
+     .. list-table::
+        :header-rows: 1
+        :widths: 45 30 25
+
+        * - Conditions
+          - Conversion specification of parameter name
+          - Conversion examples
+        * - Case that property type is an instance of \ ``Iterable``\
+          - Property name + \ ``[element position]``\
+          - \ ``status[0]=accepting``\
+        * - Case that property type is an instance of \ ``Iterable``\  or Array and the value of the element is empty
+          - | Property name
+            | (Does not append \ ``[element position]``\)
+          -  \ ``status=``\
+        * - Case that property type is an instance of \ ``Map``\
+          - Property name + \ ``[Map's key name]``\
+          - \ ``status[accepting]=Accepting Order``\
+        * - Case that property type(including element type in \ ``Iterable``\ ,Array and \ ``Map``\) is JavaBean
+          - Value that combined a property name with \ ``"."``\ (dot)
+          - | \ ``mainContract.name=xxx``\
+            | \ ``subContracts[0].name=xxx``\
+        * - Case that property type is a simple type
+          - Property name
+          - \ ``userId=xxx``\
+        * - Case that property value is \ ``null``\
+          - \ ``_``\ (underscore) + Property name
+          - | \ ``_mainContract.name=``\
+            | \ ``_status[0]=``\
+            | \ ``_status[accepting]=``\
+
+    **[Request parameter value]**
+
+     .. tabularcolumns:: |p{0.45\linewidth}|p{0.30\linewidth}|p{0.25\linewidth}|
+     .. list-table::
+        :header-rows: 1
+        :widths: 45 30 25
+
+        * - Conditions
+          - Conversion specification of parameter value
+          - Conversion examples
+        * - Case that property value is \ ``null``\
+          - Empty string
+          - \ ``_userId=``\
+        * - Case that property type is an instance of \ ``Iterable``\  or Array and the value of the element is empty
+          - Empty string
+          - \ ``status=``\
+        * - Case that property value is not \ ``null``\
+          - Value that can be converted to \ ``String``\  type using the \ ``DefaultFormattingConversionService``\
+          - \ ``targetDate=20150801``\
 
 f:query() how to use
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

@@ -381,11 +381,11 @@ f:query() 関数仕様
 
         JavaBeanのプロパティ及び\ ``Map``\ の値としてサポートしている型は以下の通りである。
 
-        * シンプル型 (\ ``DefaultFormattingConversionService``\ を使って\ ``String``\ 型へ変換可能なクラス)
-        * JavaBean
         * \ ``Iterable``\ インタフェースの実装クラス
         * 配列
         * \ ``Map``\ インタフェースの実装クラス
+        * JavaBean
+        * シンプル型 (\ ``DefaultFormattingConversionService``\ を使って\ ``String``\ 型へ変換可能なクラス)
 
         terasoluna-gfw-web 5.0.1.RELEASEより、ネスト構造をもつJavaBean及び\ ``Map``\ を指定できるように改善されている。
 
@@ -429,23 +429,23 @@ f:query() 関数仕様
         * - 条件
           - パラメータ名の変換仕様
           - 変換例
-        * - プロパティの型がシンプル型の場合
-          - プロパティ名
-          - \ ``userId=xxx``\
-        * - プロパティの型(\ ``Iterable``\、配列、\ ``Map``\ の要素型)がJavaBeanの場合
-          - プロパティ名を\ ``"."``\ (ドット)でつなげた値
-          - | \ ``mainContract.name=xxx``\
-            | \ ``subContracts[0].name=xxx``\
         * - プロパティの型が\ ``Iterable``\ の実装クラス又は配列の場合
           - プロパティ名 + \ ``[要素位置]``\
           - \ ``status[0]=accepting``\
-        * - プロパティの型が\ ``Map``\ の実装クラスの場合
-          - プロパティ名 + \ ``[Mapのキー名]``\
-          - \ ``status[accepting]=Accepting Order``\
         * - プロパティの型が\ ``Iterable``\ の実装クラス又は配列で値の要素が空の場合
           - | プロパティ名
             | (\ ``[要素位置]``\ は付与しない)
           -  \ ``status=``\
+        * - プロパティの型が\ ``Map``\ の実装クラスの場合
+          - プロパティ名 + \ ``[Mapのキー名]``\
+          - \ ``status[accepting]=Accepting Order``\
+        * - プロパティの型(\ ``Iterable``\、配列、\ ``Map``\ の要素型)がJavaBeanの場合
+          - プロパティ名を\ ``"."``\ (ドット)でつなげた値
+          - | \ ``mainContract.name=xxx``\
+            | \ ``subContracts[0].name=xxx``\
+        * - プロパティの型がシンプル型の場合
+          - プロパティ名
+          - \ ``userId=xxx``\
         * - プロパティの値が\ ``null``\ の場合
           - \ ``_``\ (アンダースコア) + プロパティ名
           - | \ ``_mainContract.name=``\

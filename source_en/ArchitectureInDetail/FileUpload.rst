@@ -20,13 +20,12 @@ Overview
 
  .. note::
 
-    If File Upload functionality of Servlet 3.0 is only used partially on application server,
-    it may likely result into garbling of multi byte characters of file names or request parameters.
+    File Upload functionality of Servlet 3.0 may likely result into garbling of multi byte characters of file names or request parameters on some application servesr.
 
     In case of using an application server, wherein problems are likely to occur, using Commons FileUpload can help in avoiding such problems.
     For settings to use Commons FileUpload, refer to ":ref:`file-upload_usage_commons_fileupload`". 
 
-    At the time of version 5.0.1.RELEASE, application servers which confirmed occurrence of those problem are as follows:
+    At the time of version 5.0.1.RELEASE, application servers where this problem is confirmed are as follows:
 
     * WebLogic 12c
     * JBoss EAP 6

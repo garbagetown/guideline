@@ -18,13 +18,17 @@ Overview
 
     In this chapter, File Upload functionality supported by Servlet3.0 is used; hence, Servlet version 3.0 or above is a prerequisite here.
 
-.. note::
+ .. note::
 
-    If File Upload functionality of Servlet 3.0 is only used partially on application server such as Weblogic etc.,
-    it may likely result into garbling of multi byte characters of file names or request parameters.
+    File Upload functionality of Servlet 3.0 may likely result into garbling of multi byte characters of file names or request parameters on some application servesr.
 
     In case of using an application server, wherein problems are likely to occur, using Commons FileUpload can help in avoiding such problems.
     For settings to use Commons FileUpload, refer to ":ref:`file-upload_usage_commons_fileupload`". 
+
+    At the time of version 5.0.1.RELEASE, application servers where this problem is confirmed are as follows:
+
+    * WebLogic 12c
+    * JBoss EAP 6
 
  .. warning::
  
@@ -126,7 +130,7 @@ Classes provided by Spring Web for uploading a file are as follows:
 How to use
 --------------------------------------------------------------------------------
 
-.._file-upload_how_to_usr_application_settings:
+.. _file-upload_how_to_usr_application_settings:
 
 Application settings
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

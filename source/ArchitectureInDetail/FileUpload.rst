@@ -20,11 +20,16 @@ Overview
 
  .. note::
 
-    WebLogicなど一部のアプリケーションサーバー上でServlet 3.0のファイルアップロード機能を使用すると、
+    一部のアプリケーションサーバー上でServlet 3.0のファイルアップロード機能を使用すると、
     リクエストパラメータやファイル名のマルチバイト文字が文字化けすることがある。
 
     問題が発生するアプリケーションサーバーを使用する場合は、Commons FileUploadを使用することで問題を回避することができる。
     Commons FileUploadを使用するための設定方法については、「:ref:`file-upload_usage_commons_fileupload`」を参照されたい。
+
+    version 5.0.1.RELEASE時点で問題の発生が確認されているアプリケーションサーバーは以下の通りである。
+
+    * WebLogic 12c
+    * JBoss EAP 6
 
  .. warning::
  

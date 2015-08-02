@@ -3169,6 +3169,7 @@ Service及びアプリケーション層を作成後にAPサーバーを起動�
 * ページング処理を追加する → :doc:`../ArchitectureInDetail/Pagination`
 * 例外ハンドリングを加える → :doc:`../ArchitectureInDetail/ExceptionHandling`
 * 二重送信を防止する(トランザクショントークンチェックを追加する) → :doc:`../ArchitectureInDetail/DoubleSubmitProtection`
+* システム日時の取得先を変更する → :doc:`../ArchitectureInDetail/SystemDate`
 
 |
 

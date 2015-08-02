@@ -3165,13 +3165,14 @@ In this tutorial, following contents have been learnt.
  * Development of Infrastructure layer without use of O/R Mapper
 
 The following improvement can be done in the TODO management application.
- As a learning challenge of the application improvement refere the appropriate description of the guidelines.
+ As a learning challenge of the application improvement refer the appropriate description of the guidelines.
 
 * To externalize the property (Maximum number of uncompleted TODO) -> :doc:`../ArchitectureInDetail/PropertyManagement`
 * To externalize the messages -> :doc:`../ArchitectureInDetail/MessageManagement`
 * To add pagination -> :doc:`../ArchitectureInDetail/Pagination`
 * To add exception handling -> :doc:`../ArchitectureInDetail/ExceptionHandling`
-* To add double submit protection -> :doc:`../ArchitectureInDetail/DoubleSubmitProtection`
+* To add double submit protection (Support the transaction token check) -> :doc:`../ArchitectureInDetail/DoubleSubmitProtection`
+* To change getting destination of the system datetime → :doc:`../ArchitectureInDetail/SystemDate`
 
 |
 

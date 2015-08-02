@@ -1487,7 +1487,7 @@ Package Explorer上で右クリック -> New -> File を選択し、「New File�
                 method="post" modelAttribute="todoForm">
                 <!-- (2) -->
                 <form:input path="todoTitle" />
-                <input type="submit" value="Create Todo" />
+                <form:button>Create Todo</form:button>
             </form:form>
         </div>
         <hr />
@@ -1739,7 +1739,7 @@ JSPの修正
                 method="post" modelAttribute="todoForm">
                 <form:input path="todoTitle" />
                 <form:errors path="todoTitle" /><!-- (2) -->
-                <input type="submit" value="Create Todo" />
+                <form:button>Create Todo</form:button>
             </form:form>
         </div>
         <hr />
@@ -2099,7 +2099,7 @@ JSPの修正
 完了処理用のformを追加する。
 
 .. code-block:: jsp
-    :emphasize-lines: 56-67
+    :emphasize-lines: 56-66
 
     <!DOCTYPE html>
     <html>
@@ -2143,7 +2143,7 @@ JSPの修正
                 method="post" modelAttribute="todoForm">
                 <form:input path="todoTitle" />
                 <form:errors path="todoTitle" cssClass="text-error" />
-                <input type="submit" value="Create Todo" />
+                <form:button>Create Todo</form:button>
             </form:form>
         </div>
         <hr />
@@ -2165,8 +2165,7 @@ JSPの修正
                                     <!-- (2) -->
                                     <form:hidden path="todoId"
                                         value="${f:h(todo.todoId)}" />
-                                    <input type="submit" name="finish"
-                                        value="Finish" />
+                                    <form:button>Finish</form:button>
                                 </form:form>
                             </c:otherwise>
                         </c:choose></li>
@@ -2419,7 +2418,7 @@ JSPの修正
 削除処理用のformを追加する。
 
 .. code-block:: jsp
-    :emphasize-lines: 68-77
+    :emphasize-lines: 67-76
 
     <!DOCTYPE html>
     <html>
@@ -2463,7 +2462,7 @@ JSPの修正
                 method="post" modelAttribute="todoForm">
                 <form:input path="todoTitle" />
                 <form:errors path="todoTitle" cssClass="text-error" />
-                <input type="submit" value="Create Todo" />
+                <form:button>Create Todo</form:button>
             </form:form>
         </div>
         <hr />
@@ -2483,8 +2482,7 @@ JSPの修正
                                     cssStyle="display: inline-block;">
                                     <form:hidden path="todoId"
                                         value="${f:h(todo.todoId)}" />
-                                    <input type="submit" name="finish"
-                                        value="Finish" />
+                                    <form:button>Finish</form:button>
                                 </form:form>
                             </c:otherwise>
                         </c:choose>
@@ -2496,7 +2494,7 @@ JSPの修正
                             <!-- (2) -->
                             <form:hidden path="todoId"
                                 value="${f:h(todo.todoId)}" />
-                            <input type="submit" value="Delete" />
+                            <form:button>Delete</form:button>
                         </form:form>
                     </li>
                 </c:forEach>
@@ -2603,7 +2601,7 @@ JSPからCSSファイルを読み込む。
                 method="post" modelAttribute="todoForm">
                 <form:input path="todoTitle" />
                 <form:errors path="todoTitle" cssClass="text-error" />
-                <input type="submit" value="Create Todo" />
+                <form:button>Create Todo</form:button>
             </form:form>
         </div>
         <hr />
@@ -2623,8 +2621,7 @@ JSPからCSSファイルを読み込む。
                                     cssStyle="display: inline-block;">
                                     <form:hidden path="todoId"
                                         value="${f:h(todo.todoId)}" />
-                                    <input type="submit" name="finish"
-                                        value="Finish" />
+                                    <form:button>Finish</form:button>
                                 </form:form>
                             </c:otherwise>
                         </c:choose>
@@ -2634,7 +2631,7 @@ JSPからCSSファイルを読み込む。
                             cssStyle="display: inline-block;">
                             <form:hidden path="todoId"
                                 value="${f:h(todo.todoId)}" />
-                            <input type="submit" value="Delete" />
+                            <form:button>Delete</form:button>
                         </form:form>
                     </li>
                 </c:forEach>

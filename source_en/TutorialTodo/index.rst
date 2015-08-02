@@ -1488,7 +1488,7 @@ First, implement necessary JSP for following display.
                 method="post" modelAttribute="todoForm">
                 <!-- (2) -->
                 <form:input path="todoTitle" />
-                <input type="submit" value="Create Todo" />
+                <form:button>Create Todo</form:button>
             </form:form>
         </div>
         <hr />
@@ -1741,7 +1741,7 @@ Add the tag for displaying the result message and input check error.
                 method="post" modelAttribute="todoForm">
                 <form:input path="todoTitle" />
                 <form:errors path="todoTitle" /><!-- (2) -->
-                <input type="submit" value="Create Todo" />
+                <form:button>Create Todo</form:button>
             </form:form>
         </div>
         <hr />
@@ -2101,7 +2101,7 @@ Modifications in JSP
 Add completion process form.
 
 .. code-block:: jsp
-    :emphasize-lines: 56-67
+    :emphasize-lines: 56-66
 
     <!DOCTYPE html>
     <html>
@@ -2145,7 +2145,7 @@ Add completion process form.
                 method="post" modelAttribute="todoForm">
                 <form:input path="todoTitle" />
                 <form:errors path="todoTitle" cssClass="text-error" />
-                <input type="submit" value="Create Todo" />
+                <form:button>Create Todo</form:button>
             </form:form>
         </div>
         <hr />
@@ -2167,8 +2167,7 @@ Add completion process form.
                                     <!-- (2) -->
                                     <form:hidden path="todoId"
                                         value="${f:h(todo.todoId)}" />
-                                    <input type="submit" name="finish"
-                                        value="Finish" />
+                                    <form:button>Finish</form:button>
                                 </form:form>
                             </c:otherwise>
                         </c:choose></li>
@@ -2421,7 +2420,7 @@ Modifications in JSP
 Add deletion process form.
 
 .. code-block:: jsp
-    :emphasize-lines: 68-77
+    :emphasize-lines: 67-76
 
     <!DOCTYPE html>
     <html>
@@ -2465,7 +2464,7 @@ Add deletion process form.
                 method="post" modelAttribute="todoForm">
                 <form:input path="todoTitle" />
                 <form:errors path="todoTitle" cssClass="text-error" />
-                <input type="submit" value="Create Todo" />
+                <form:button>Create Todo</form:button>
             </form:form>
         </div>
         <hr />
@@ -2485,8 +2484,7 @@ Add deletion process form.
                                     cssStyle="display: inline-block;">
                                     <form:hidden path="todoId"
                                         value="${f:h(todo.todoId)}" />
-                                    <input type="submit" name="finish"
-                                        value="Finish" />
+                                    <form:button>Finish</form:button>
                                 </form:form>
                             </c:otherwise>
                         </c:choose>
@@ -2498,7 +2496,7 @@ Add deletion process form.
                             <!-- (2) -->
                             <form:hidden path="todoId"
                                 value="${f:h(todo.todoId)}" />
-                            <input type="submit" value="Delete" />
+                            <form:button>Delete</form:button>
                         </form:form>
                     </li>
                 </c:forEach>
@@ -2605,7 +2603,7 @@ Loading CSS file within JSP.
                 method="post" modelAttribute="todoForm">
                 <form:input path="todoTitle" />
                 <form:errors path="todoTitle" cssClass="text-error" />
-                <input type="submit" value="Create Todo" />
+                <form:button>Create Todo</form:button>
             </form:form>
         </div>
         <hr />
@@ -2625,8 +2623,7 @@ Loading CSS file within JSP.
                                     cssStyle="display: inline-block;">
                                     <form:hidden path="todoId"
                                         value="${f:h(todo.todoId)}" />
-                                    <input type="submit" name="finish"
-                                        value="Finish" />
+                                    <form:button>Finish</form:button>
                                 </form:form>
                             </c:otherwise>
                         </c:choose>
@@ -2636,7 +2633,7 @@ Loading CSS file within JSP.
                             cssStyle="display: inline-block;">
                             <form:hidden path="todoId"
                                 value="${f:h(todo.todoId)}" />
-                            <input type="submit" value="Delete" />
+                            <form:button>Delete</form:button>
                         </form:form>
                     </li>
                 </c:forEach>

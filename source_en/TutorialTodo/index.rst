@@ -3172,7 +3172,7 @@ The following improvement can be done in the TODO management application.
 * To add pagination -> :doc:`../ArchitectureInDetail/Pagination`
 * To add exception handling -> :doc:`../ArchitectureInDetail/ExceptionHandling`
 * To add double submit protection (Support the transaction token check) -> :doc:`../ArchitectureInDetail/DoubleSubmitProtection`
-* To change getting destination of the system datetime -> :doc:`../ArchitectureInDetail/SystemDate`
+* To change getting source of the system datetime -> :doc:`../ArchitectureInDetail/SystemDate`
 
 |
 

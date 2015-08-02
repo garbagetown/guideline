@@ -1666,8 +1666,8 @@ Add new creation process into \ ``TodoController``\.
      - | In case of \ ``BusinessException`` \  while executing business logic, add the result message to \ ``Model`` \ and return to list screen.
    * - | (8)
      - | Since it is created successfully, add the result message to flash scope and redirect to list screen.
-       | Since redirect is used, there is no case of browser being read again and a new registration process being \ ``POST``\. 
-       Since this time Created successfully message is displayed, \ ``ResultMessages.success()`` \ is used.
+       | Since redirect is used, there is no case of browser being read again and a new registration process being \ ``POST``\. (For details, refer to ":ref:`DoubleSubmitProtectionAboutPRG`")
+       | Since this time Created successfully message is displayed, \ ``ResultMessages.success()`` \ is used.
 
 
 Modifications in Form
@@ -3172,7 +3172,7 @@ The following improvement can be done in the TODO management application.
 * To add pagination -> :doc:`../ArchitectureInDetail/Pagination`
 * To add exception handling -> :doc:`../ArchitectureInDetail/ExceptionHandling`
 * To add double submit protection (Support the transaction token check) -> :doc:`../ArchitectureInDetail/DoubleSubmitProtection`
-* To change getting destination of the system datetime → :doc:`../ArchitectureInDetail/SystemDate`
+* To change getting destination of the system datetime -> :doc:`../ArchitectureInDetail/SystemDate`
 
 |
 

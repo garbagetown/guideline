@@ -132,7 +132,7 @@ Show all TODO
 * Display all records of TODO
 * Provide ``Finish`` and  ``Delete`` buttons for incomplete TODO
 * Strike-through the completed records of TODO
-* Only record name of TODO
+* Display only record name of TODO
 
 
 Create TODO
@@ -141,19 +141,22 @@ Create TODO
 * Save TODO sent from the form
 * Record name of TODO should be between 1 - 30 characters
 * When :ref:`app-requirement` B01 is not fulfilled, business exception with error code E001 is thrown
+* Display the "Created successfully!" at the transition destination screen, if creation processing is successful.
 
 Finish TODO
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * For the TODOs corresponding to \ ``todoId`` \ which is received from the form object, change the status to ``completed``.
+* When the corresponding TODO does not exist, resources undetected exception with error code E404 is thrown
 * When :ref:`app-requirement` B02 is not fulfilled, business exception with error code E002 is thrown
-* When the corresponding TODO does not exist, business exception with error code E404 is thrown
+* Display the "Finished successfully!" at the transition destination screen, if finishing processing is successful.
 
 Delete TODO
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * Delete TODO corresponding to \ ``todoId`` \ sent from the form
-* When the corresponding TODO does not exist, business exception with error code E404 is thrown
+* When the corresponding TODO does not exist, resources undetected exception with error code E404 is thrown
+* Display the "Deleted successfully!" at the transition destination screen, if deletion processing is successful.
 
 |
 

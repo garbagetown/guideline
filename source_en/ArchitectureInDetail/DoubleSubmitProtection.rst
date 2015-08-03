@@ -233,6 +233,8 @@ The image when a button is disabled will be as follows:
     If all the buttons and links on the screen are disabled, the screen operations can no longer be performed if there is no response from the Server.
     Therefore, it is recommended not to disable buttons or links that execute events such as "Return to previous screen" or "Go to top screen" etc.
 
+.. _DoubleSubmitProtectionAboutPRG:
+
 About PRG (Post-Redirect-Get) pattern
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 

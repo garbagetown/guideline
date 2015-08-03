@@ -132,7 +132,7 @@ Show all TODO
 * TODOを全件表示する
 * 未完了のTODOに対しては「Finish」と「Delete」用のボタンが付く
 * 完了のTODOは打ち消し線で装飾する
-* TODOの件名のみ
+* TODOの件名のみ表示する
 
 
 Create TODO
@@ -141,19 +141,22 @@ Create TODO
 * フォームから送信されたTODOを保存する
 * TODOの件名は1文字以上30文字以下であること
 * :ref:`app-requirement` のB01を満たさない場合はエラーコードE001でビジネス例外をスローする
+* 処理が成功した場合は、遷移先の画面で「Created successfully!」を表示する
 
 Finish TODO
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * フォームから送信された\ ``todoId``\ に対応するTODOを完了済みにする
+* 該当するTODOが存在しない場合はエラーコードE404でリソース未検出例外をスローする
 * :ref:`app-requirement` のB02を満たさない場合はエラーコードE002でビジネス例外をスローする
-* 該当するTODOが存在しない場合はエラーコードE404でビジネス例外をスローする
+* 処理が成功した場合は、遷移先の画面で「Finished successfully!」を表示する
 
 Delete TODO
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * フォームから送信された\ ``todoId``\ に対応するTODOを削除する
-* 該当するTODOが存在しない場合はエラーコードE404でビジネス例外をスローする
+* 該当するTODOが存在しない場合はエラーコードE404でリソース未検出例外をスローする
+* 処理が成功した場合は、遷移先の画面で「Deleted successfully!」を表示する
 
 |
 
@@ -1487,7 +1490,7 @@ Package Explorer上で右クリック -> New -> File を選択し、「New File�
                 method="post" modelAttribute="todoForm">
                 <!-- (2) -->
                 <form:input path="todoTitle" />
-                <input type="submit" value="Create Todo" />
+                <form:button>Create Todo</form:button>
             </form:form>
         </div>
         <hr />
@@ -1662,7 +1665,8 @@ Controllerの修正
      - | 業務処理を実行して、\ ``BusinessException``\ が発生した場合、結果メッセージを\ ``Model``\ に追加して、一覧画面に戻る。
    * - | (8)
      - | 正常に作成が完了したので、結果メッセージをflashスコープに追加して、一覧画面でリダイレクトする。
-       | リダイレクトすることにより、ブラウザを再読み込みして、再び新規登録処理が\ ``POST``\ されることがなくなる。なお、今回は成功メッセージであるため、\ ``ResultMessages.success()``\ を使用している。
+       | リダイレクトすることにより、ブラウザを再読み込みして、再び新規登録処理が\ ``POST``\ されることがなくなる。（詳しくは、「:ref:`DoubleSubmitProtectionAboutPRG`」を参照されたい）
+       | なお、今回は成功メッセージであるため、\ ``ResultMessages.success()``\ を使用している。
 
 
 Formの修正
@@ -1739,7 +1743,7 @@ JSPの修正
                 method="post" modelAttribute="todoForm">
                 <form:input path="todoTitle" />
                 <form:errors path="todoTitle" /><!-- (2) -->
-                <input type="submit" value="Create Todo" />
+                <form:button>Create Todo</form:button>
             </form:form>
         </div>
         <hr />
@@ -2099,7 +2103,7 @@ JSPの修正
 完了処理用のformを追加する。
 
 .. code-block:: jsp
-    :emphasize-lines: 56-67
+    :emphasize-lines: 56-66
 
     <!DOCTYPE html>
     <html>
@@ -2143,7 +2147,7 @@ JSPの修正
                 method="post" modelAttribute="todoForm">
                 <form:input path="todoTitle" />
                 <form:errors path="todoTitle" cssClass="text-error" />
-                <input type="submit" value="Create Todo" />
+                <form:button>Create Todo</form:button>
             </form:form>
         </div>
         <hr />
@@ -2165,8 +2169,7 @@ JSPの修正
                                     <!-- (2) -->
                                     <form:hidden path="todoId"
                                         value="${f:h(todo.todoId)}" />
-                                    <input type="submit" name="finish"
-                                        value="Finish" />
+                                    <form:button>Finish</form:button>
                                 </form:form>
                             </c:otherwise>
                         </c:choose></li>
@@ -2419,7 +2422,7 @@ JSPの修正
 削除処理用のformを追加する。
 
 .. code-block:: jsp
-    :emphasize-lines: 68-77
+    :emphasize-lines: 67-76
 
     <!DOCTYPE html>
     <html>
@@ -2463,7 +2466,7 @@ JSPの修正
                 method="post" modelAttribute="todoForm">
                 <form:input path="todoTitle" />
                 <form:errors path="todoTitle" cssClass="text-error" />
-                <input type="submit" value="Create Todo" />
+                <form:button>Create Todo</form:button>
             </form:form>
         </div>
         <hr />
@@ -2483,8 +2486,7 @@ JSPの修正
                                     cssStyle="display: inline-block;">
                                     <form:hidden path="todoId"
                                         value="${f:h(todo.todoId)}" />
-                                    <input type="submit" name="finish"
-                                        value="Finish" />
+                                    <form:button>Finish</form:button>
                                 </form:form>
                             </c:otherwise>
                         </c:choose>
@@ -2496,7 +2498,7 @@ JSPの修正
                             <!-- (2) -->
                             <form:hidden path="todoId"
                                 value="${f:h(todo.todoId)}" />
-                            <input type="submit" value="Delete" />
+                            <form:button>Delete</form:button>
                         </form:form>
                     </li>
                 </c:forEach>
@@ -2603,7 +2605,7 @@ JSPからCSSファイルを読み込む。
                 method="post" modelAttribute="todoForm">
                 <form:input path="todoTitle" />
                 <form:errors path="todoTitle" cssClass="text-error" />
-                <input type="submit" value="Create Todo" />
+                <form:button>Create Todo</form:button>
             </form:form>
         </div>
         <hr />
@@ -2623,8 +2625,7 @@ JSPからCSSファイルを読み込む。
                                     cssStyle="display: inline-block;">
                                     <form:hidden path="todoId"
                                         value="${f:h(todo.todoId)}" />
-                                    <input type="submit" name="finish"
-                                        value="Finish" />
+                                    <form:button>Finish</form:button>
                                 </form:form>
                             </c:otherwise>
                         </c:choose>
@@ -2634,7 +2635,7 @@ JSPからCSSファイルを読み込む。
                             cssStyle="display: inline-block;">
                             <form:hidden path="todoId"
                                 value="${f:h(todo.todoId)}" />
-                            <input type="submit" value="Delete" />
+                            <form:button>Delete</form:button>
                         </form:form>
                     </li>
                 </c:forEach>
@@ -3169,6 +3170,7 @@ Service及びアプリケーション層を作成後にAPサーバーを起動�
 * ページング処理を追加する → :doc:`../ArchitectureInDetail/Pagination`
 * 例外ハンドリングを加える → :doc:`../ArchitectureInDetail/ExceptionHandling`
 * 二重送信を防止する(トランザクショントークンチェックを追加する) → :doc:`../ArchitectureInDetail/DoubleSubmitProtection`
+* システム日時の取得元を変更する → :doc:`../ArchitectureInDetail/SystemDate`
 
 |
 

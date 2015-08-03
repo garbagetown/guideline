@@ -132,7 +132,7 @@ Show all TODO
 * Display all records of TODO
 * Provide ``Finish`` and  ``Delete`` buttons for incomplete TODO
 * Strike-through the completed records of TODO
-* Only record name of TODO
+* Display only record name of TODO
 
 
 Create TODO
@@ -141,19 +141,22 @@ Create TODO
 * Save TODO sent from the form
 * Record name of TODO should be between 1 - 30 characters
 * When :ref:`app-requirement` B01 is not fulfilled, business exception with error code E001 is thrown
+* Display "Created successfully!" at the transited screen when the creation process is successful.
 
 Finish TODO
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * For the TODOs corresponding to \ ``todoId`` \ which is received from the form object, change the status to ``completed``.
+* When the corresponding TODO does not exist, resource not found exception with error code E404 is thrown
 * When :ref:`app-requirement` B02 is not fulfilled, business exception with error code E002 is thrown
-* When the corresponding TODO does not exist, business exception with error code E404 is thrown
+* Display "Finished successfully!" at the transited screen when the finishing process is successful.
 
 Delete TODO
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * Delete TODO corresponding to \ ``todoId`` \ sent from the form
-* When the corresponding TODO does not exist, business exception with error code E404 is thrown
+* When the corresponding TODO does not exist, resources undetected exception with error code E404 is thrown
+* Display "Deleted successfully!" at the transited screen when the deletion process is successful.
 
 |
 
@@ -1488,7 +1491,7 @@ First, implement necessary JSP for following display.
                 method="post" modelAttribute="todoForm">
                 <!-- (2) -->
                 <form:input path="todoTitle" />
-                <input type="submit" value="Create Todo" />
+                <form:button>Create Todo</form:button>
             </form:form>
         </div>
         <hr />
@@ -1663,8 +1666,8 @@ Add new creation process into \ ``TodoController``\.
      - | In case of \ ``BusinessException`` \  while executing business logic, add the result message to \ ``Model`` \ and return to list screen.
    * - | (8)
      - | Since it is created successfully, add the result message to flash scope and redirect to list screen.
-       | Since redirect is used, there is no case of browser being read again and a new registration process being \ ``POST``\. 
-       Since this time Created successfully message is displayed, \ ``ResultMessages.success()`` \ is used.
+       | Since redirect is used, there is no case of browser being read again and a new registration process being \ ``POST``\. (For details, refer to ":ref:`DoubleSubmitProtectionAboutPRG`")
+       | Since this time Created successfully message is displayed, \ ``ResultMessages.success()`` \ is used.
 
 
 Modifications in Form
@@ -1741,7 +1744,7 @@ Add the tag for displaying the result message and input check error.
                 method="post" modelAttribute="todoForm">
                 <form:input path="todoTitle" />
                 <form:errors path="todoTitle" /><!-- (2) -->
-                <input type="submit" value="Create Todo" />
+                <form:button>Create Todo</form:button>
             </form:form>
         </div>
         <hr />
@@ -2101,7 +2104,7 @@ Modifications in JSP
 Add completion process form.
 
 .. code-block:: jsp
-    :emphasize-lines: 56-67
+    :emphasize-lines: 56-66
 
     <!DOCTYPE html>
     <html>
@@ -2145,7 +2148,7 @@ Add completion process form.
                 method="post" modelAttribute="todoForm">
                 <form:input path="todoTitle" />
                 <form:errors path="todoTitle" cssClass="text-error" />
-                <input type="submit" value="Create Todo" />
+                <form:button>Create Todo</form:button>
             </form:form>
         </div>
         <hr />
@@ -2167,8 +2170,7 @@ Add completion process form.
                                     <!-- (2) -->
                                     <form:hidden path="todoId"
                                         value="${f:h(todo.todoId)}" />
-                                    <input type="submit" name="finish"
-                                        value="Finish" />
+                                    <form:button>Finish</form:button>
                                 </form:form>
                             </c:otherwise>
                         </c:choose></li>
@@ -2421,7 +2423,7 @@ Modifications in JSP
 Add deletion process form.
 
 .. code-block:: jsp
-    :emphasize-lines: 68-77
+    :emphasize-lines: 67-76
 
     <!DOCTYPE html>
     <html>
@@ -2465,7 +2467,7 @@ Add deletion process form.
                 method="post" modelAttribute="todoForm">
                 <form:input path="todoTitle" />
                 <form:errors path="todoTitle" cssClass="text-error" />
-                <input type="submit" value="Create Todo" />
+                <form:button>Create Todo</form:button>
             </form:form>
         </div>
         <hr />
@@ -2485,8 +2487,7 @@ Add deletion process form.
                                     cssStyle="display: inline-block;">
                                     <form:hidden path="todoId"
                                         value="${f:h(todo.todoId)}" />
-                                    <input type="submit" name="finish"
-                                        value="Finish" />
+                                    <form:button>Finish</form:button>
                                 </form:form>
                             </c:otherwise>
                         </c:choose>
@@ -2498,7 +2499,7 @@ Add deletion process form.
                             <!-- (2) -->
                             <form:hidden path="todoId"
                                 value="${f:h(todo.todoId)}" />
-                            <input type="submit" value="Delete" />
+                            <form:button>Delete</form:button>
                         </form:form>
                     </li>
                 </c:forEach>
@@ -2605,7 +2606,7 @@ Loading CSS file within JSP.
                 method="post" modelAttribute="todoForm">
                 <form:input path="todoTitle" />
                 <form:errors path="todoTitle" cssClass="text-error" />
-                <input type="submit" value="Create Todo" />
+                <form:button>Create Todo</form:button>
             </form:form>
         </div>
         <hr />
@@ -2625,8 +2626,7 @@ Loading CSS file within JSP.
                                     cssStyle="display: inline-block;">
                                     <form:hidden path="todoId"
                                         value="${f:h(todo.todoId)}" />
-                                    <input type="submit" name="finish"
-                                        value="Finish" />
+                                    <form:button>Finish</form:button>
                                 </form:form>
                             </c:otherwise>
                         </c:choose>
@@ -2636,7 +2636,7 @@ Loading CSS file within JSP.
                             cssStyle="display: inline-block;">
                             <form:hidden path="todoId"
                                 value="${f:h(todo.todoId)}" />
-                            <input type="submit" value="Delete" />
+                            <form:button>Delete</form:button>
                         </form:form>
                     </li>
                 </c:forEach>
@@ -3165,13 +3165,14 @@ In this tutorial, following contents have been learnt.
  * Development of Infrastructure layer without use of O/R Mapper
 
 The following improvement can be done in the TODO management application.
- As a learning challenge of the application improvement refere the appropriate description of the guidelines.
+ As a learning challenge of the application improvement refer the appropriate description of the guidelines.
 
 * To externalize the property (Maximum number of uncompleted TODO) -> :doc:`../ArchitectureInDetail/PropertyManagement`
 * To externalize the messages -> :doc:`../ArchitectureInDetail/MessageManagement`
 * To add pagination -> :doc:`../ArchitectureInDetail/Pagination`
 * To add exception handling -> :doc:`../ArchitectureInDetail/ExceptionHandling`
-* To add double submit protection -> :doc:`../ArchitectureInDetail/DoubleSubmitProtection`
+* To add double submit protection (Support the transaction token check) -> :doc:`../ArchitectureInDetail/DoubleSubmitProtection`
+* To change how to get the system date time -> :doc:`../ArchitectureInDetail/SystemDate`
 
 |
 

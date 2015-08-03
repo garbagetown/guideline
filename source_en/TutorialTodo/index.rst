@@ -141,22 +141,22 @@ Create TODO
 * Save TODO sent from the form
 * Record name of TODO should be between 1 - 30 characters
 * When :ref:`app-requirement` B01 is not fulfilled, business exception with error code E001 is thrown
-* Display the "Created successfully!" at the transition destination screen, if creation processing is successful.
+* Display "Created successfully!" at the transited screen when the creation process is successful.
 
 Finish TODO
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * For the TODOs corresponding to \ ``todoId`` \ which is received from the form object, change the status to ``completed``.
-* When the corresponding TODO does not exist, resources undetected exception with error code E404 is thrown
+* When the corresponding TODO does not exist, resource not found exception with error code E404 is thrown
 * When :ref:`app-requirement` B02 is not fulfilled, business exception with error code E002 is thrown
-* Display the "Finished successfully!" at the transition destination screen, if finishing processing is successful.
+* Display "Finished successfully!" at the transited screen when the finishing process is successful.
 
 Delete TODO
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * Delete TODO corresponding to \ ``todoId`` \ sent from the form
 * When the corresponding TODO does not exist, resources undetected exception with error code E404 is thrown
-* Display the "Deleted successfully!" at the transition destination screen, if deletion processing is successful.
+* Display "Deleted successfully!" at the transited screen when the deletion process is successful.
 
 |
 
@@ -3172,7 +3172,7 @@ The following improvement can be done in the TODO management application.
 * To add pagination -> :doc:`../ArchitectureInDetail/Pagination`
 * To add exception handling -> :doc:`../ArchitectureInDetail/ExceptionHandling`
 * To add double submit protection (Support the transaction token check) -> :doc:`../ArchitectureInDetail/DoubleSubmitProtection`
-* To change getting source of the system datetime -> :doc:`../ArchitectureInDetail/SystemDate`
+* To change how to get the system date time -> :doc:`../ArchitectureInDetail/SystemDate`
 
 |
 

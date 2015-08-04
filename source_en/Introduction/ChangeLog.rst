@@ -76,6 +76,11 @@ Change Log
 
         * Modified the description about how to define a session scope bean (\ `guideline#1082 <https://github.com/terasolunaorg/guideline/issues/1082>`_\ )
     * -
+      - :doc:`../ArchitectureInDetail/DoubleSubmitProtection`
+      - Added the description
+
+        * Added the description about the transaction token check in case that response cache is disabled (\ `guideline#1260 <https://github.com/terasolunaorg/guideline/issues/1260>`_\ )
+    * -
       - :doc:`../ArchitectureInDetail/Codelist`
       - Added the description
 

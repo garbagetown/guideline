@@ -76,6 +76,11 @@
 
         * セッションスコープのBeanの定義方法に関する説明を修正 (\ `guideline#1082 <https://github.com/terasolunaorg/guideline/issues/1082>`_\ )
     * -
+      - :doc:`../ArchitectureInDetail/DoubleSubmitProtection`
+      - 記載内容の追加
+
+        * レスポンスをキャッシュしないように設定している時のトランザクショントークンチェックの動作を補足 (\ `guideline#1260 <https://github.com/terasolunaorg/guideline/issues/1260>`_\ )
+    * -
       - :doc:`../ArchitectureInDetail/Codelist`
       - 記載内容の追加
 

@@ -1496,6 +1496,28 @@ How to extend
 Appendix
 --------------------------------------------------------------------------------
 
+.. _double-submit_disable-cache:
+
+ブラウザキャッシュ無効時のトランザクショントークンチェック
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+HTTPレスポンスヘッダの\ ``Cache-Control``\ の設定により、ブラウザキャッシュが無効になっている場合は、
+「\ :ref:`double-submit_transactiontokencheck`\ 」の想定外の操作を行った際に、
+トランザクショントークンエラーが発生する前にWebブラウザの有効期限切れメッセージが表示される。
+
+具体的には(8)のブラウザの戻るボタンをクリックすると以下の画面が表示される。図はInternet Explorer 11を使用した場合である。
+
+ .. figure:: ./images_DoubleSubmitProtection/page-expired.png
+   :width: 60%
+
+この場合でも二重送信自体は防止されているため、問題はない。
+バージョン5.0.0.RELEASE以降の\ :doc:`雛形プロジェクト <../ImplementationAtEachLayer/CreateWebApplicationProject>`\ では、
+\ :ref:`Spring Securityの機能 <SpringSecurityAppendixSecHeaders>`\ でキャッシュが無効になる設定が行われている。
+
+もしこの画面の表示が出る代わりにトランザクショントークンエラー画面を表示したい場合は、
+\ ``<sec:cache-control />``\ の設定を除外する必要があるが、セキュリティ観点では\ ``<sec:cache-control />``\ を設定しておくことを推奨する。
+
+
+
 .. _doubleSubmit_appendix_global_token:
 
 グローバルトークン

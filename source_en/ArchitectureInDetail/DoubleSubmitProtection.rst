@@ -1496,6 +1496,29 @@ The maximum limit of transaction tokens that can be stored on 1 NameSpace can be
 Appendix
 --------------------------------------------------------------------------------
 
+.. _double-submit_disable-cache:
+
+Transaction Token Check in case that the cache of browser is disabled
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+If the cache of web browser is disabled due to \ ``Cache-Control``\ in HTTP response header,
+the message will display which tells the cache has been expired before transaction token error
+in case of the illegal operation flow in "\ :ref:`double-submit_transactiontokencheck`\ "
+
+Concretely, the following screen will display when the browser back button is clicked (8).
+This is an example of Internet Explorer 11.
+
+ .. figure:: ./images_DoubleSubmitProtection/page-expired.png
+    :width: 60%
+
+There is no problem because the double submit itself is prevented.
+
+In \ :doc:`blank projects <../ImplementationAtEachLayer/CreateWebApplicationProject>`\  after 5.0.0.RELEASE,
+it is configured so that the cache is disabled byg \ :ref:`Spring Security <SpringSecurityAppendixSecHeaders>`\ .
+
+If showing the transaction error screen is preferred instead of the screen above,
+excluding \ ``<sec:cache-control />``\ is required.
+However, \ ``<sec:cache-control />``\ should be configured from the point of view of security.
+
 .. _doubleSubmit_appendix_global_token:
 
 Global Tokens

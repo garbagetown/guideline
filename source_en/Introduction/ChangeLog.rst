@@ -9,7 +9,7 @@ Change Log
     * - Modified on
       - Modified locations
       - Modification details
-    * - 2015-07-31
+    * - 2015-08-05
       - \-
       - Released "5.0.1 RELEASE" version
 
@@ -28,6 +28,11 @@ Change Log
 
         * Removed the description for the Resin
         * Updated the link of reference page
+    * -
+      - :doc:`index`
+      - Added the description
+
+        * Added description about tested environments for contents described in this guideline
     * -
       - :doc:`../Overview/FrameworkStack`
       - Updated the OSS version(Spring IO Platform version) to protect security vulnerability

@@ -77,6 +77,11 @@ Reading this document
     #. \ :doc:`../TutorialTodo/index`\ 
     #. \ :doc:`../ArchitectureInDetail/Validation`\ 
 
+Tested environments of this document
+================================================================================
+
+For tested environments of contents  described in this guideline,
+refer to "\ `Tested Environment <https://github.com/terasolunaorg/terasoluna-gfw-functionaltest/wiki/Tested-Environment>`_\".
 
 .. raw:: latex
 

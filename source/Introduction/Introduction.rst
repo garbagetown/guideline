@@ -80,6 +80,13 @@ Spring Frameworkに関して、本ドキュメントを読むための基礎知�
     
     を読むとよい。
 
+このドキュメントの動作検証環境
+================================================================================
+
+本ガイドラインで説明している内容の動作検証環境については、
+「\ `テスト済み環境 <https://github.com/terasolunaorg/terasoluna-gfw-functionaltest/wiki/Tested-Environment>`_\」を参照されたい。
+
+
 .. raw:: latex
 
    \newpage

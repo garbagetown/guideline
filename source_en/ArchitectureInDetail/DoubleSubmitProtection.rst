@@ -1500,7 +1500,7 @@ Appendix
 
 Transaction Token Check in case that the cache of browser is disabled
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-If the cache of web browser is disabled due to \ ``Cache-Control``\ in HTTP response header,
+If the cache of web browser is disabled due to \ ``Cache-Control``\  in HTTP response header,
 the message will display which tells the cache has been expired before transaction token error
 in case of the illegal operation flow in "\ :ref:`double-submit_transactiontokencheck`\ "
 
@@ -1513,11 +1513,11 @@ This is an example of Internet Explorer 11.
 There is no problem because the double submit itself is prevented.
 
 In \ :doc:`blank projects <../ImplementationAtEachLayer/CreateWebApplicationProject>`\  after 5.0.0.RELEASE,
-it is configured so that the cache is disabled byg \ :ref:`Spring Security <SpringSecurityAppendixSecHeaders>`\ .
+it is configured so that the cache is disabled by \ :ref:`Spring Security <SpringSecurityAppendixSecHeaders>`\ .
 
 If showing the transaction error screen is preferred instead of the screen above,
-excluding \ ``<sec:cache-control />``\ is required.
-However, \ ``<sec:cache-control />``\ should be configured from the point of view of security.
+excluding \ ``<sec:cache-control />``\  is required.
+However, \ ``<sec:cache-control />``\  should be configured from the point of view of security.
 
 .. _doubleSubmit_appendix_global_token:
 

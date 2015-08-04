@@ -32,7 +32,7 @@ Change Log
       - :doc:`index`
       - Added the description
 
-        * Added description about behavior verification environments for contents that is described in this guideline
+        * Added description about tested environments for contents described in this guideline
     * -
       - :doc:`../Overview/FrameworkStack`
       - Updated the OSS version(Spring IO Platform version) to protect security vulnerability

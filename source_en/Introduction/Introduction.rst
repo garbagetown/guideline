@@ -77,6 +77,11 @@ Reading this document
     #. \ :doc:`../TutorialTodo/index`\ 
     #. \ :doc:`../ArchitectureInDetail/Validation`\ 
 
+Behavior verification environment of this document
+================================================================================
+
+For behavior verification environment of contents that is described in this guideline,
+refer to "\ `Tested Environment <https://github.com/terasolunaorg/terasoluna-gfw-functionaltest/wiki/Tested-Environment>`_\" of common library functional test project.
 
 .. raw:: latex
 

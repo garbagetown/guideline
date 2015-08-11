@@ -205,7 +205,7 @@ Settings of Logback
      Settings of Logback are read automatically as per the rules given below.
 
      #. logback.groovy on class path
-     #. If file "1" is not found, logback-text.xml on class path
+     #. If file "1" is not found, logback-test.xml on class path
      #. If file "2" is not found, logback.xml on class path
      #. If file "3" is not found, settings of BasicConfigurator class (console output)
 

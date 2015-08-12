@@ -205,7 +205,7 @@ Logbackの設定
      Logbackの設定は、以下のルールによる自動で読み込まれる。
 
      #. クラスパス上のlogback.grovy
-     #. 「1」のファイルが見つからない場合、クラスパス上のlogback-text.xml
+     #. 「1」のファイルが見つからない場合、クラスパス上のlogback-test.xml
      #. 「2」のファイルが見つからない場合、クラスパス上のlogback.xml
      #. 「3」のファイルが見つからない場合、BasicConfiguratorクラスの設定内容(コンソール出力)
 

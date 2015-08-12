@@ -810,7 +810,7 @@ In such a case, the HTML shown below is output using \ ``<t:messagesPanel />``\ 
 
             e.ex.an.8001=Cannot upload, Because the file size must be less than {0,number,#}MB.
 
-    For details, refer to \ `Javadoc <http://docs.oracle.com/javase/7/docs/api/java/text/MessageFormat.html>`_\ .
+    For details, refer to \ `Javadoc <http://docs.oracle.com/javase/8/docs/api/java/text/MessageFormat.html>`_\ .
 
 |
 

@@ -2309,7 +2309,7 @@ Spring Frameworkでは、HTML formから送信されたリクエストパラメ�
      - 数値のスタイル（NUMBER,CURRENCY,PERCENT）を指定する。詳細は、`Spring FrameworkのJavadoc <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/format/annotation/NumberFormat.Style.html>`_\ を参照されたい。
    * - 2.
      - pattern
-     - Javaの数値形式を指定する。詳細は、`JAVASEのJavadoc <http://docs.oracle.com/javase/7/docs/api/java/text/DecimalFormat.html>`_\ を参照されたい。
+     - Javaの数値形式を指定する。詳細は、`JAVASEのJavadoc <http://docs.oracle.com/javase/8/docs/api/java/text/DecimalFormat.html>`_\ を参照されたい。
 
 |
 
@@ -2354,7 +2354,7 @@ Spring Frameworkでは、HTML formから送信されたリクエストパラメ�
      - ISOの日時形式を指定する。詳細は、`Spring FrameworkのJavadoc <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/format/annotation/DateTimeFormat.ISO.html>`_\ を参照。
    * - 2.
      - pattern
-     - Javaの日時形式を指定する。詳細は、`JAVASEのJavadoc <http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html>`_\ を参照されたい。
+     - Javaの日時形式を指定する。詳細は、`JAVASEのJavadoc <http://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html>`_\ を参照されたい。
    * - 3.
      - style
      - | 日付と時刻のスタイルを2桁の文字列として指定する。

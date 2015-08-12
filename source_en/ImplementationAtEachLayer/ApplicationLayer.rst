@@ -2306,7 +2306,7 @@ Attributes of ``@NumberFormat`` annotation are given below.
      - Specify number format style (NUMBER, CURRENCY, PERCENT). For details refer to `Javadoc of Spring Framework <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/format/annotation/NumberFormat.Style.html>`_\ .
    * - 2.
      - pattern
-     - Specify number format of Java. Refer to 'Javadoc <http://docs.oracle.com/javase/7/docs/api/java/text/DecimalFormat.html> of JAVASE'_\ for details.
+     - Specify number format of Java. Refer to 'Javadoc <http://docs.oracle.com/javase/8/docs/api/java/text/DecimalFormat.html> of JAVASE'_\ for details.
 
 |
 
@@ -2351,7 +2351,7 @@ Attributes of \ ``@DateTimeFormat``\  annotation are given below.
      - Specify ISO date and time format. For details refer to `Javadoc of Spring Framework <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/format/annotation/DateTimeFormat.ISO.html>`_\ .
    * - 2.
      - pattern
-     - Specify Java date and time format. Refer to 'Javadoc <http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html> of JAVASE'_\ for details.
+     - Specify Java date and time format. Refer to 'Javadoc <http://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html> of JAVASE'_\ for details.
    * - 3.
      - style
      - | Specify style of date and time as two-digit string.

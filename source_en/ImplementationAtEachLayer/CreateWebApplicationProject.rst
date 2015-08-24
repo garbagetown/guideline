@@ -1669,7 +1669,7 @@ Module that manages the SQL file to initialize the database is explained.
       - The initdb module configuration is defined in POM (Project Object Model) file.
         Following definitions are done in this file.
 
-        * Definition of build plug-ins (`SQL Maven Plugin <http://mojo.codehaus.org/sql-maven-plugin/index.html>`_)
+        * Definition of build plug-ins (`SQL Maven Plugin <http://www.mojohaus.org/sql-maven-plugin/>`_)
 
         Simple configuration for PostgreSQL is defined at the time of creation.
     * - | (2)

@@ -1700,7 +1700,17 @@ Seleniumを使用したE2E(End To End)テスト用のコンポーネントを管
         └── src
             └── test  ... (2)
                 ├── java
+                │   └── com
+                │       └── example
+                │           └── project
+                │               └── selenium
+                │                   └── welcome
+                │                       └── HelloTest.java  ... (3)
                 └── resources
+                    └── META-INF
+                        └── spring
+                            ├── selenium.properties  ... (4)
+                            └── seleniumContext.xml  ... (5)
 
 .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
 .. list-table::
@@ -1722,6 +1732,20 @@ Seleniumを使用したE2E(End To End)テスト用のコンポーネントを管
 
         作成例については、`サンプルアプリケーションのseleniumプロジェクト <https://github.com/terasolunaorg/terasoluna-tourreservation-mybatis3/tree/master/terasoluna-tourreservation-selenium>`_ を参照されたい。
 
+    * - | (3)
+      - Selenium WebDriverを使用したサンプルテストクラス。
+
+        作成時点では、Welcomeページのタイトルを検証するテストケースが実装されている。
+
+    * - | (4)
+      - テストで使用する設定値を定義するプロパティファイル。
+
+        作成時点では、アプリケーションサーバのURLは\ ``http://localhost:8080/``\ である。
+
+    * - | (5)
+      - テスト用のコンポーネントを定義するためのBean定義ファイル。
+
+        作成時点では、サンプルのテストを実行するために必要な設定がされている。
 
 |
 

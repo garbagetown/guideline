@@ -1675,7 +1675,7 @@ initdbモジュールの構成
       - initdbモジュールの構成を定義するPOM(Project Object Model)ファイル。
         このファイルでは、以下の定義を行う。
 
-        * ビルド用プラグイン(`SQL Maven Plugin <http://mojo.codehaus.org/sql-maven-plugin/index.html>`_)の定義
+        * ビルド用プラグイン(`SQL Maven Plugin <http://www.mojohaus.org/sql-maven-plugin/>`_)の定義
 
         作成時点では、PostgreSQL用の雛形設定が定義されている。
     * - | (2)

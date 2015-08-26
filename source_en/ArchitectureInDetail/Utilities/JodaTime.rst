@@ -15,8 +15,8 @@ Overview
 | The API of ``java.util.Date`` , ``java.util.Calender`` class is poorly built to perform complex date calculations.
 | This guideline recommends the usage of Joda Time which provides quality replacement for the Java Date and Time classes.
 
-| In Joda Time, date is expressed using ``org.joda.time.DateTime`` object instead of ``java.util.Date``.
-| ``org.joda.time.DateTime`` object is immutable (the result of date related calculations, etc. is returned in a new object).
+| In Joda Time, date is expressed using ``org.joda.time.DateTime`` , ``org.joda.time.LocalDate`` , or ``org.joda.time.LocalTime`` object instead of ``java.util.Date``.
+| ``org.joda.time.DateTime`` , ``org.joda.time.LocalDate`` , or ``org.joda.time.LocalTime`` object is immutable (the result of date related calculations, etc. is returned in a new object).
 
 |
 
@@ -244,7 +244,7 @@ Parsing from string
 
 .. code-block:: java
 
-    DateTime dateTime = DateTimeFormat.forPattern("yyyy-MM-dd").parseDateTime("2012-08-09");  // (1)
+    LocalDate localDate = DateTimeFormat.forPattern("yyyy-MM-dd").parseLocalDate("2012-08-09");  // (1)
 
 .. tabularcolumns:: |p{0.1\linewidth}|p{0.9\linewidth}|
 .. list-table::
@@ -254,7 +254,7 @@ Parsing from string
    * - Sr. No.
      - Description
    * - | (1)
-     - | Convert "yyyy-MM-dd" string format to DateTime type.
+     - | Convert "yyyy-MM-dd" string format to LocalDate type.
        | For values that can be specified as arguments of DateTimeFormat#forPattern, refer to `Formatters <http://www.joda.org/joda-time/userguide.html#Input_and_Output>`_.
 
 |
@@ -264,15 +264,15 @@ Date operations
 
 Date calculations
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-| DateTime provides methods to perform date calculations. Examples are shown below.
+| LocalDate provides methods to perform date calculations. Examples are shown below.
 
 .. code-block:: java
 
-    DateTime dateTime = new DateTime(); // dateTime is 2013-01-10T13:30:22.123Z
-    DateTime yesterday = dateTime.minusDays(1);  // (1)
-    DateTime tomorrow = dateTime.plusDays(1);  // (2)
-    DateTime afterThreeMonth = dateTime.plusMonths(3);  // (3)
-    DateTime nextYear = dateTime.plusYears(1);  // (4)
+    LocalDate localDate = new LocalDate(); // localDate is 2013-01-10
+    LocalDate yesterday = localDate.minusDays(1);  // (1)
+    LocalDate tomorrow = localDate.plusDays(1);  // (2)
+    LocalDate afterThreeMonth = localDate.plusMonths(3);  // (3)
+    LocalDate nextYear = localDate.plusYears(1);  // (4)
 
 .. tabularcolumns:: |p{0.1\linewidth}|p{0.9\linewidth}|
 .. list-table::
@@ -282,15 +282,15 @@ Date calculations
    * - Sr. No.
      - Description
    * - | (1)
-     - | The value specified in argument of DateTime#minusDays is subtracted from the date. In this example, it becomes \ ``2013-01-09T13:30:22.123Z``\.
+     - | The value specified in argument of LocalDate#minusDays is subtracted from the date. In this example, it becomes \ ``2013-01-09``\.
    * - | (2)
-     - | The value specified in argument of DateTime#plusDays is added to the date. In this example, it becomes \ ``2013-01-11T13:30:22.123Z``\.
+     - | The value specified in argument of LocalDate#plusDays is added to the date. In this example, it becomes \ ``2013-01-11``\.
    * - | (3)
-     - | The value specified in argument of DateTime#plusMonths is added to the number of months. In this example, it becomes \ ``2013-04-10T13:30:22.123Z``\.
+     - | The value specified in argument of LocalDate#plusMonths is added to the number of months. In this example, it becomes \ ``2013-04-10``\.
    * - | (4)
-     - | The value specified in argument of DateTime#plusYears is added to the number of years. In this example, it becomes \ ``2014-01-10T13:30:22.123Z``\.
+     - | The value specified in argument of LocalDate#plusYears is added to the number of years. In this example, it becomes \ ``2014-01-10``\.
 
-For methods other than those mentioned above, refer to `DateTime JavaDoc <http://joda-time.sourceforge.net/apidocs/org/joda/time/DateTime.html>`_ .
+For methods other than those mentioned above, refer to `LocalDate JavaDoc <http://joda-time.sourceforge.net/apidocs/org/joda/time/LocalDate.html>`_ .
 
 |
 
@@ -298,14 +298,13 @@ Fetching first and last day of the month
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 | The method of fetching the first and the last day of the month by considering the current date and time as base, is shown below.
-| Value of Hour/Minute/Second/Millisecond fetched in new DateTime() is kept as it is.
 
 .. code-block:: java
 
-    DateTime dateTime = new DateTime(); // dateTime is 2013-01-10T13:30:22.123Z
-    Property dayOfMonth = dateTime.dayOfMonth();  // (1)
-    DateTime firstDayOfMonth = dayOfMonth.withMinimumValue();  // (2)
-    DateTime lastDayOfMonth = dayOfMonth.withMaximumValue();  // (3)
+    LocalDate localDate = new LocalDate(); // dateTime is 2013-01-10
+    Property dayOfMonth = localDate.dayOfMonth(); // (1)
+    LocalDate firstDayOfMonth = dayOfMonth.withMinimumValue(); // (2)
+    LocalDate lastDayOfMonth = dayOfMonth.withMaximumValue(); // (3)
 
 .. tabularcolumns:: |p{0.1\linewidth}|p{0.9\linewidth}|
 .. list-table::
@@ -317,9 +316,9 @@ Fetching first and last day of the month
    * - | (1)
      - | Get Property object that holds the attribute values related to day of current month.
    * - | (2)
-     - | Get first day of the month by fetching the minimum value from Property object. In this example, it becomes \ ``2013-01-01T13:30:22.123Z``\.
+     - | Get first day of the month by fetching the minimum value from Property object. In this example, it becomes \ ``2013-01-01``\.
    * - | (3)
-     - | Get last day of the month by fetching the maximum value from Property object. In this example, it becomes \ ``2013-01-31T13:30:22.123Z``\.
+     - | Get last day of the month by fetching the maximum value from Property object. In this example, it becomes \ ``2013-01-31``\.
 
 |
 
@@ -327,14 +326,13 @@ Fetching the first and the last day of the week
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 | The method of fetching the first and the last day of the week by considering the current date and time as base, is shown below.
-| Value of Hour/Minute/Second/Millisecond fetched in new DateTime() is kept as it is.
 
 .. code-block:: java
 
-    DateTime dateTime = new DateTime(); // dateTime is 2013-01-10T13:30:22.123Z
-    Property dayOfWeek = dateTime.dayOfWeek();  // (1)
-    DateTime firstDayOfWeek = dayOfWeek.withMinimumValue();  // (2)
-    DateTime lastDayOfWeek = dayOfWeek.withMaximumValue();  // (3)
+    LocalDate localDate = new LocalDate(); // dateTime is 2013-01-10
+    Property dayOfWeek = localDate.dayOfWeek(); // (1)
+    LocalDate firstDayOfWeek = dayOfWeek.withMinimumValue(); // (2)
+    LocalDate lastDayOfWeek = dayOfWeek.withMaximumValue(); // (3)
 
 .. tabularcolumns:: |p{0.1\linewidth}|p{0.9\linewidth}|
 .. list-table::
@@ -346,9 +344,9 @@ Fetching the first and the last day of the week
    * - | (1)
      - | Get Property object that holds attribute values related to the day of current week.
    * - | (2)
-     - | Get first day of the week (Monday) by fetching the minimum value from Property object. In this example, it becomes \ ``2013-01-07T13:30:22.123Z``\.
+     - | Get first day of the week (Monday) by fetching the minimum value from Property object. In this example, it becomes \ ``2013-01-07``\.
    * - | (3)
-     - | Get last day of the week (Sunday) by fetching the maximum value from Property object. In this example, it becomes \ ``2013-01-13T13:30:22.123Z``\.
+     - | Get last day of the week (Sunday) by fetching the maximum value from Property object. In this example, it becomes \ ``2013-01-13``\.
 
 
 Comparison of date time
@@ -605,7 +603,7 @@ The controller is implemented as follows:
 
         @RequestMapping
         public String today(Model model) {
-            DateTime today = new DateTime();
+            LocalDate today = new LocalDate();
             int year = today.getYear();
             int month = today.getMonthOfYear();
             return month(year, month, model);
@@ -614,25 +612,25 @@ The controller is implemented as follows:
         @RequestMapping(value = "month")
         public String month(@RequestParam("year") int year,
                 @RequestParam("month") int month, Model model) {
-            DateTime firstDayOfMonth = new DateTime(year, month, 1, 0, 0);
-            DateTime lastDayOfMonth = firstDayOfMonth.dayOfMonth()
+            LocalDate firstDayOfMonth = new LocalDate(year, month, 1);
+            LocalDate lastDayOfMonth = firstDayOfMonth.dayOfMonth()
                     .withMaximumValue();
 
-            DateTime firstDayOfCalender = firstDayOfMonth.dayOfWeek()
+            LocalDate firstDayOfCalender = firstDayOfMonth.dayOfWeek()
                     .withMinimumValue();
-            DateTime lastDayOfCalender = lastDayOfMonth.dayOfWeek()
+            LocalDate lastDayOfCalender = lastDayOfMonth.dayOfWeek()
                     .withMaximumValue();
 
-            List<List<DateTime>> calendar = new ArrayList<List<DateTime>>();
-            List<DateTime> weekList = null;
+            List<List<LocalDate>> calendar = new ArrayList<List<LocalDate>>();
+            List<LocalDate> weekList = null;
             for (int i = 0; i < 100; i++) {
-                DateTime d = firstDayOfCalender.plusDays(i);
+                LocalDate d = firstDayOfCalender.plusDays(i);
                 if (d.isAfter(lastDayOfCalender)) {
                     break;
                 }
 
                 if (weekList == null) {
-                    weekList = new ArrayList<DateTime>();
+                    weekList = new ArrayList<LocalDate>();
                     calendar.add(weekList);
                 }
 
@@ -649,8 +647,8 @@ The controller is implemented as follows:
                 }
             }
 
-            DateTime nextMonth = firstDayOfMonth.plusMonths(1);
-            DateTime prevMonth = firstDayOfMonth.minusMonths(1);
+            LocalDate nextMonth = firstDayOfMonth.plusMonths(1);
+            LocalDate prevMonth = firstDayOfMonth.minusMonths(1);
             CalendarOutput output = new CalendarOutput();
             output.setCalendar(calendar);
             output.setFirstDayOfMonth(firstDayOfMonth);
@@ -671,9 +669,9 @@ The ``CalendarOutput`` class mentioned below is JavaBean having the consolidated
 .. code-block:: java
 
     public class CalendarOutput {
-        private List<List<DateTime>> calendar;
+        private List<List<LocalDate>> calendar;
 
-        private DateTime firstDayOfMonth;
+        private LocalDate firstDayOfMonth;
 
         private int yearOfNextMonth;
 

@@ -1423,7 +1423,6 @@ Appendix
         public String initializeUpdateWizardForm(@PathVariable("id") Integer id,
                 RedirectAttributes redirectAttributes, SessionStatus sessionStatus) {
             sessionStatus.setComplete();
-            redirectAttributes.addAttribute("id", id);
             return "redirect:/wizard/{id}/update?form1";
         }
 
@@ -1635,7 +1634,6 @@ Appendix
         public String initializeUpdateWizardForm(@PathVariable("id") Integer id,
                 RedirectAttributes redirectAttributes, SessionStatus sessionStatus) {
             sessionStatus.setComplete();
-            redirectAttributes.addAttribute("id", id);
             return "redirect:/wizard/{id}/update?form1";
         }
     

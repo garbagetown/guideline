@@ -1694,7 +1694,17 @@ Module that manages the E2E (End To End) testing components used in Selenium exp
         └── src
             └── test  ... (2)
                 ├── java
+                │   └── com
+                │       └── example
+                │           └── project
+                │               └── selenium
+                │                   └── welcome
+                │                       └── HelloTest.java  ... (3)
                 └── resources
+                    └── META-INF
+                        └── spring
+                            ├── selenium.properties  ... (4)
+                            └── seleniumContext.xml  ... (5)
 
 .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
 .. list-table::
@@ -1716,6 +1726,20 @@ Module that manages the E2E (End To End) testing components used in Selenium exp
 
         For how to create, Refer `Sample application of selenium project <https://github.com/terasolunaorg/terasoluna-tourreservation-mybatis3/tree/master/terasoluna-tourreservation-selenium>`_.
 
+    * - | (3)
+      - Sample test class using Selenium WebDriver.
+
+        At the time of creation, it has the test method for asserting a title of the Welcome page.
+
+    * - | (4)
+      - Properties file that defines the settings to be used in the test.
+
+        The URL of the application server is \ ``http://localhost:8080/``\ at the time of creation.
+
+    * - | (5)
+      - Bean definition file for defining the test components.
+
+        At the time of creation, it defines required settings for executing the sample test.
 
 |
 

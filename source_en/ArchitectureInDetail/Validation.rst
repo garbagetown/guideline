@@ -2350,7 +2350,15 @@ Apply "\ :ref:`Validation_message_in_validationmessages`\ " and override the mes
     age=Age
 
 Value of attributes of the annotation gets inserted after \ ``{1}``\  onwards.
+Incidentally, index position of attribute values are alphabetical ordering(ascending order) of attribute names.
 
+For example, index positions of \ ``@Size``\  are as follow:
+
+* \ ``{0}``\  : property name (physical name or logical name)
+* \ ``{1}``\  : value of \ ``max``\  attribute
+* \ ``{2}``\  : value of \ ``min``\  attribute
+
+For specification details, refer to \ `JavaDoc of SpringValidatorAdapter <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/validation/beanvalidation/SpringValidatorAdapter.html#getArgumentsForConstraint-java.lang.String-java.lang.String-javax.validation.metadata.ConstraintDescriptor->`_\.
 
 Error messages are changed as follows.
 

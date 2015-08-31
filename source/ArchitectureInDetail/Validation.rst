@@ -2362,8 +2362,17 @@ ValidationMessages.propertiesでシステムで利用するデフォルトのメ
     email=Email
     age=Age
 
-アノテーションの属性値は、\ ``{1}``\ 以降に埋め込まれる。
+アノテーションの属性値は、\ ``{1}``\ 以降に埋め込まれる。なお、属性値のインデックス位置は、アノテーションの属性名のアルファベット順(昇順)となる。
 
+例えば、\ ``@Size``\ のインデックス位置は、
+
+* \ ``{0}``\  : プロパティ名 (物理名又は論理名)
+* \ ``{1}``\  : \ ``max``\ 属性の値
+* \ ``{2}``\  : \ ``min``\ 属性の値
+
+となる。
+仕様の詳細については \ `SpringValidatorAdapterのJavaDoc <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/validation/beanvalidation/SpringValidatorAdapter.html#getArgumentsForConstraint-java.lang.String-java.lang.String-javax.validation.metadata.ConstraintDescriptor->`_\
+を参照されたい。
 
 エラーメッセージは以下のように変更される。
 

@@ -2371,6 +2371,8 @@ ValidationMessages.propertiesでシステムで利用するデフォルトのメ
 * \ ``{2}``\  : \ ``min``\ 属性の値
 
 となる。
+仕様の詳細については \ `SpringValidatorAdapterのJavaDoc <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/validation/beanvalidation/SpringValidatorAdapter.html#getArgumentsForConstraint-java.lang.String-java.lang.String-javax.validation.metadata.ConstraintDescriptor->`_\
+を参照されたい。
 
 エラーメッセージは以下のように変更される。
 

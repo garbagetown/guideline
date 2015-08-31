@@ -2358,6 +2358,7 @@ For example, index positions of \ ``@Size``\  are as follow:
 * \ ``{1}``\  : value of \ ``max``\  attribute
 * \ ``{2}``\  : value of \ ``min``\  attribute
 
+For specification details, refer to \ `JavaDoc of SpringValidatorAdapter <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/validation/beanvalidation/SpringValidatorAdapter.html#getArgumentsForConstraint-java.lang.String-java.lang.String-javax.validation.metadata.ConstraintDescriptor->`_\.
 
 Error messages are changed as follows.
 

@@ -55,9 +55,49 @@ JavaMailのAPI仕様については、\ `JavaMail API Design Specification <http
 Spring FrameworkのMail連携用コンポーネントについて
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-| Spring Frameworkはメール送信を行うためのコンポーネント（\ ``org.springframework.mail``\ パッケージ）を提供している。
-| このパッケージに含まれるコンポーネントはメール送信に係る詳細なロジックを隠蔽し、低レベルのAPIハンドリング(JavaMailのAPI呼び出し)を代行する。
-| ここでは、本ガイドラインで使用する主なインタフェースやクラスを紹介する。
+Spring Frameworkはメール送信を行うためのコンポーネント（\ ``org.springframework.mail``\ パッケージ）を提供している。
+このパッケージに含まれるコンポーネントはメール送信に係る詳細なロジックを隠蔽し、低レベルのAPIハンドリング(JavaMailのAPI呼び出し)を代行する。
+
+具体的な実装方法の説明を行う前に、Spring Frameworkが提供するメール送信用のコンポーネントがどのようにメールを送信しているかを説明する。
+
+.. figure:: ./images_Email/EmailOverview.png
+    :alt: Constitution of Spring Mail
+    :width: 100%
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.20\linewidth}|p{0.60\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 10 20 60
+
+    * - 項番
+      - コンポーネント
+      - 説明
+    * - | (1)
+      - | アプリケーション
+      - | \ ``JavaMailSender``\ のメソッドを呼び出し、メールの送信依頼を行う。
+        |
+        | \* 単純なメッセージを送信する場合は、\ ``SimpleMailMessage``\ を生成し宛先や本文を設定することでメールを送信することもできる。
+    * - | (2)
+      - | \ ``JavaMailSender``\
+      - | アプリケーションから指定された\ ``MimeMessagePreparator``\ (JavaMailの\ ``MimeMessage``\ を作成するためのコールバックインターフェース)を呼び出し、メール送信用のメッセージ(\ ``MimeMessage``\ )の作成依頼を行う。
+        |
+        | \* \ ``SimpleMailMessage``\ を使用してメッセージを送信する場合はこの処理は呼びだされない。
+    * - | (3)
+      - | アプリケーション
+        | (\ ``MimeMessagePreparator``\)
+      - | \ ``MimeMessageHelper``\ のメソッドを利用して、メール送信用のメッセージを(\ ``MimeMessage``\ )の作成する。
+        |
+        | \* \ ``SimpleMailMessage``\ を使用してメッセージを送信する場合はこの処理は呼びだされない。
+    * - | (4)
+      - | \ ``JavaMailSender``\
+      - | JavaMailのAPIを使用して、メールの送信依頼を行う。
+    * - | (5)
+      - | JavaMail
+      - | メールサーバへメッセージを送信する。
+
+\
+
+本ガイドラインでは、以下のインタフェースやクラスを使用してメール送信処理を実装する方法について説明する。
 
 * \ ``JavaMailSender``\
     | JavaMail用のメール送信インターフェース。

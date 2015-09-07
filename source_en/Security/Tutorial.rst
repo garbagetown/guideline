@@ -969,7 +969,7 @@ Adding logout button
             <p>
                 <!-- (1) -->
                 <form:form action="${pageContext.request.contextPath}/logout">
-                    <button>Logout</button>
+                    <button type="submit">Logout</button>
                 </form:form>
             </p>
             <ul>

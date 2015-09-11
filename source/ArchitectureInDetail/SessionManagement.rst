@@ -1089,22 +1089,18 @@ sessionスコープのBeanの利用
 
 セッションに格納したオブジェクトの削除
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-| sessionスコープのBeanを利用して、セッションに格納したオブジェクトを削除する場合、
-| \ ``@SessionAttributes``\ アノテーションを使用したときと同様に、
-| \ ``org.springframework.web.bind.support.SessionStatus``\ のsetCompleteメソッドを、Controllerの処理メソッドから呼びだす。
-
-| \ ``SessionStatus``\ オブジェクトのsetCompleteメソッドを呼び出して、セッションから削除するために、
-| \ ``@SessionAttributes``\ アノテーションのvalue属性に、sessionスコープのBeanの属性名を指定する必要がある。
+| セッションにあるBeanのフィールドをリセットすることで、セッションからオブジェクトを取り除くことができる。
+| DIコンテナがセッション中のBeanのライフサイクルを管理しているので、Bean自体の破棄はDIコンテナにまかせる。
+| セッション中のBeanは、セッションが切れる時にDIコンテナによって破棄される。
 
  .. code-block:: java
 
     @Controller
     @RequestMapping("order")
-    @SessionAttributes("scopedTarget.sessionCart") // (1)
     public class OrderController {
 
         @Inject
-        SessionCart sessionCart;
+        SessionCart sessionCart; // (1)
 
         // ...
 
@@ -1116,8 +1112,7 @@ sessionスコープのBeanの利用
 
         @RequestMapping(params = "complete", method = RequestMethod.GET)
         public String complete(Model model, SessionStatus sessionStatus) {
-            sessionStatus.setComplete(); // (2)
-            model.addAttribute(sessionCart.getCart()); // (3)
+            sessionCart.clearItems(); // (2)
             return "order/complete";
         }
 
@@ -1131,13 +1126,9 @@ sessionスコープのBeanの利用
     * - 項番
       - 説明
     * - | (1)
-      - | \ ``@SessionAttributes``\ アノテーションのvalue属性に、sessionスコープのBeanの属性名を指定する。
-        | 属性名は、\ ``"scopedTarget."``\ + Bean名 となる。
+      - | セッションに格納されたBeanを示す。Beanのフィールドには，削除したいオブジェクトを要素とするリストがある。
     * - | (2)
-      - | \ ``SessionStatus``\ オブジェクトの、setCompleteメソッドを呼び出す。
-        | 上記例では、\ ``"scopedTarget.sessionCart"``\ という属性名で格納されているオブジェクトが、セッションから削除される。
-    * - | (3)
-      - | View(JSP)にて、sessionスコープのBeanで保持しているオブジェクトを参照する必要がある場合は、View(JSP)で参照するオブジェクトを、\ ``Model``\ オブジェクトに格納する必要がある。
+      - | フィールドにあるリストの要素を削除する。
 
 sessionスコープのBeanを使った処理の実装例
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

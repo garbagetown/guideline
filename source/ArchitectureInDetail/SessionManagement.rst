@@ -970,6 +970,9 @@ component-scanを使用する方法を、以下に示す。
             this.cart = cart;
         }
 
+        public void clearCart() { // (2)
+            cart.clearCart();
+        }
     }
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
@@ -981,7 +984,8 @@ component-scanを使用する方法を、以下に示す。
       - 説明
     * - | (1)
       - | Beanのスコープを\ ``"session"``\ にする。また、proxyMode 属性で \ ``"ScopedProxyMode.TARGET_CLASS"``\ を指定し、scoped-proxyを有効にする。
-
+    * - | (2)
+      - | カートにある商品のオブジェクトを\ ``cart``\から削除し、カートが空の状態にする。
  .. note::
 
     JPAで扱うEntityクラスをsessionスコープのBeanとして定義したい場合は、直接sessionスコープのBeanとして定義するのではなく、ラッパークラスを用意することを推奨する。
@@ -1089,9 +1093,12 @@ sessionスコープのBeanの利用
 
 セッションに格納したオブジェクトの削除
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-| セッションにあるBeanのフィールドをリセットすることで、セッションからオブジェクトを取り除くことができる。
-| DIコンテナがセッション中のBeanのライフサイクルを管理しているので、Bean自体の破棄はDIコンテナにまかせる。
-| セッション中のBeanは、セッションが切れる時にDIコンテナによって破棄される。
+| 不要になったオブジェクトをセッション上から削除する場合は、sessionスコープのBeanのフィールドをリセットする。
+| DIコンテナがsessionスコープのBeanのライフサイクルを管理しているので、Bean自体の破棄はDIコンテナにまかせる。
+
+ .. note:: 
+
+    sessionスコープのBeanは、セッションが切れる時にDIコンテナによって破棄される。
 
  .. code-block:: java
 
@@ -1112,7 +1119,7 @@ sessionスコープのBeanの利用
 
         @RequestMapping(params = "complete", method = RequestMethod.GET)
         public String complete(Model model, SessionStatus sessionStatus) {
-            sessionCart.clearItems(); // (2)
+            sessionCart.clearCart(); // (2)
             return "order/complete";
         }
 
@@ -1126,9 +1133,9 @@ sessionスコープのBeanの利用
     * - 項番
       - 説明
     * - | (1)
-      - | セッションに格納されたBeanを示す。Beanのフィールドには，削除したいオブジェクトを要素とするリストがある。
+      - | Beanはセッションに格納されている。Beanは、カートにある商品をまとめたオブジェクトを参照している。
     * - | (2)
-      - | フィールドにあるリストの要素を削除する。
+      - | カートにある商品のオブジェクトを\ ``sessionCart``\から参照できなくすることでカートを空の状態にする。
 
 sessionスコープのBeanを使った処理の実装例
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1997,6 +2004,9 @@ sessionスコープのBeanを使った複数のControllerを跨いだ画面遷�
             this.cart = cart;
         }
 
+        public void clearCart() { // (2)
+            cart.clearCart();
+        }
     }
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
@@ -2008,6 +2018,8 @@ sessionスコープのBeanを使った複数のControllerを跨いだ画面遷�
       - 説明
     * - | (1)
       - | \ ``Cart``\ というEntity(Domainオブジェクト)をラップしている。
+    * - | (2)
+      - | カートに追加された商品のオブジェクトを\ ``cart``\から削除し，カートが空の状態にする。
 
 - ItemController
 
@@ -2155,7 +2167,6 @@ sessionスコープのBeanを使った複数のControllerを跨いだ画面遷�
 
     @Controller
     @RequestMapping("order")
-    @SessionAttributes("scopedTarget.sessionCart")
     public class OrderController {
 
         @Inject
@@ -2188,7 +2199,7 @@ sessionスコープのBeanを使った複数のControllerを跨いだ画面遷�
         // (15)
         @RequestMapping(params = "complete", method = RequestMethod.GET)
         public String complete(Model model, SessionStatus sessionStatus) {
-            sessionStatus.setComplete();
+            sessionCart.clearCart();
             return "order/complete";
         }
 

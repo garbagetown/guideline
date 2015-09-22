@@ -3734,14 +3734,13 @@ HandlerMethodArgumentResolverを実装してControllerの引数として受け�
 | サンプルコードでは、 リクエストパラメータで指定できる日付型で形式を ``"yyyy/MM/dd"`` に設定している。
 
  .. code-block:: java
-    :emphasize-lines: 1,2,3,6-7
+    :emphasize-lines: 1,2,5-6
 
     @ControllerAdvice // (1)
-    @Component // (2)
-    @Order(0) // (3)
+    @Order(0) // (2)
     public class SampleControllerAdvice {
 
-        // (4)
+        // (3)
         @InitBinder
         public void initBinder(WebDataBinder binder) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
@@ -3762,10 +3761,8 @@ HandlerMethodArgumentResolverを実装してControllerの引数として受け�
    * - | (1)
      - \ ``@ControllerAdvice``\ アノテーションを付与することで、ControllerAdviceのBeanであることを示している。
    * - | (2)
-     - \ ``@Component``\ アノテーションを付与することで、component-scan対象にしている。
-   * - | (3)
      - \ ``@Order``\ アノテーションを付与することで、共通処理が適用される優先度を指定する。ControllerAdviceを複数作成する場合は、必ず指定すること。
-   * - | (4)
+   * - | (3)
      - \ ``@InitBinder``\ メソッドを実装する。全てのControllerに対して\ ``@InitBinder``\ メソッドが適用される。
 
 |

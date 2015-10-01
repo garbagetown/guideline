@@ -1199,6 +1199,8 @@ ECサイトにおける「注文」処理の例を考える。「注文」フォ
   :width: 60%
 
 
+.. _ValidationGroupValidation:
+
 バリデーションのグループ化
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 バリデーショングループを作成し、一つのフィールドに対して、グループごとに入力チェックルールを指定することができる。
@@ -3133,6 +3135,434 @@ Bean Validationは標準で用意されているチェックルール以外に�
        - | 業務ロジックの結果を返却する。\ ``isValid``\ メソッド名で業務ロジックを記述せず、かならずServiceに処理を委譲すること。
 
 |
+
+Method Validation 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Bean Validationによってメソッドの実引数と返り値の妥当性を確認する方法を説明する。
+説明のために、本節ではこの方法をMethod Validationと呼ぶ。
+防衛的プログラミングを行う場合などでは、Controller以外のクラスでメソッドの入出力を確認する必要がある。
+このとき、Bean Validationライブラリを利用すれば、Controllerで使用したBean Validationの制約アノテーションを再利用できる。
+
+.. _MethodValidationOnSpringFrameworkHowToUseSettings:
+
+アプリケーションの設定
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Spring Frameworkが提供するMethod Validationを使用する場合は、
+Spring Frameworkから提供されている\ ``org.springframework.validation.beanvalidation.MethodValidationPostProcessor``\ クラスをBean定義する必要がある。
+
+\ ``MethodValidationPostProcessor``\ を定義するBean定義ファイルは、Method Validationを使用する箇所によって異なる。
+
+ここでは、本ガイドラインが推奨するマルチプロジェクト環境でMethod Validationを使用するための設定例を示す。
+
+* アプリケーション層用のプロジェクト(\ ``projectName-web``\ )
+* ドメイン層用のプロジェクト(\ ``projectName-domain``\ )
+
+の両プロジェクトの設定を変更する必要がある。
+
+* :file:`projectName-domain/src/main/resources/META-INF/spring/projectName-domain.xml`
+
+ .. code-block:: xml
+
+    <!-- (1) -->
+    <bean id="validator"
+          class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+
+    <!-- (2) -->
+    <bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor">
+        <property name="validator" ref="validator" />
+    </bean>
+
+* :file:`projectName-web/src/main/resources/META-INF/spring/spring-mvc.xml`
+
+ .. code-block:: xml
+
+    <!-- (3) -->
+    <mvc:annotation-driven validator="validator">
+        <!-- ... -->
+    </mvc:annotation-driven>
+
+    <!-- (4) -->
+    <bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor">
+        <property name="validator" ref="validator" />
+    </bean>
+
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - 項番
+      - 説明
+    * - | (1)
+      - \ ``LocalValidatorFactoryBean``\ をBean定義する。
+    * - | (2)
+      - \ ``MethodValidationPostProcessor``\ をBean定義し、
+        ドメイン層のクラスのメソッドに対してMethod Validationが実行されるようにする。
+
+        \ ``validator``\ プロパティには、(1)で定義したBeanを指定する。
+    * - | (3)
+      - \ ``<mvc:annotation-driven>``\ 要素の\ ``validator``\ 属性に、(1)で定義したBeanを指定する。
+
+        この設定がない場合は(1)で作成したものとは異なる\ ``Validator``\ インスタンスが生成されてしまう。
+    * - | (4)
+      - \ ``MethodValidationPostProcessor``\ をBean定義し、
+        アプリケーション層のクラスのメソッドに対してMethod Validationが実行されるようにする。
+
+        \ ``validator``\ プロパティには、(1)で定義したBeanを指定する。
+
+.. tip::
+
+    \ ``LocalValidatorFactoryBean``\ は、
+    Bean Validation(Hibernate Validator)が提供する\ ``Validator``\ クラスとSpring Frameworkを連携するためのラッパー\ ``Validator``\ オブジェクトを生成するためのクラスである。
+
+    このクラスによって生成されたラッパー\ ``Validator``\を使用することで、
+    Spring Frameworkが提供するメッセージ管理機能(\ ``MessageSource``\ )やDIコンテナなどとの連携が行えるようになる。
+
+.. tip::
+
+    Spring Frameworkでは、DIコンテナで管理されているBeanのメソッド呼び出しに対するMethod Validationの実行を、
+    AOPの仕組みを利用して行っている。
+
+    \ ``MethodValidationPostProcessor``\ は、Method Validationを実行するためのAOPを適用するためのクラスである。
+
+.. note::
+
+    上記例では、各Beanの\ ``validator``\ プロパティに対して、同じ\ ``Validator``\ オブジェクト(インスタンス)を設定しているが、
+    これは必ずしも必須ではない。
+    ただし、特に理由がない場合は、同じオブジェクト(インスタンス)を設定しておくことを推奨する。
+
+|
+
+.. _MethodValidationOnSpringFrameworkHowToUseApplyTarget:
+
+Method Validation対象のメソッドにするための定義方法
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+メソッドにMethod Validationを適用するには、
+対象のメソッドを含むことを示したアノテーションをクラスレベルに、
+Bean Validationの制約アノテーションをメソッドと仮引数にそれぞれ指定する必要がある。
+
+「:ref:`MethodValidationOnSpringFrameworkHowToUseSettings`」を行っただけでは、Method Validationを実行するAOPは適用されない。
+Method Validationを実行するAOPを適用するためには、
+インタフェース又はクラスに\ ``@ org.springframework.validation.annotation.Validated``\ アノテーションを付与する必要がある。
+
+ここでは、インタフェースに対してアノテーションを指定する方法を紹介する。
+
+.. code-block:: java
+
+    package com.example.domain.service;
+
+    import org.springframework.validation.annotation.Validated;
+
+    @Validated // (1)
+    public interface HelloService {
+        // ...
+    }
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - 項番
+      - 説明
+    * - | (1)
+      - Method Validationの対象となるインタフェースに、\ ``Validated``\ アノテーションを指定する。
+
+        上記例では、\ ``HelloService``\ インタフェースの実装メソッドに対して、
+        Method Validationを実行するAOPが適用される。
+
+.. tip::
+
+    \ ``@Validated``\ アノテーションの\ ``value``\ 属性にグループインタフェースを指定することで、
+    指定したグループに属するValidationのみ実行する事も可能である。
+
+    また、メソッドレベルに\ ``Validated``\ アノテーションを付与することで、
+    メソッド毎にバリデーショングループを切り替える事も可能な仕組みとなっている。
+
+    バリデーショングループについては、「:ref:`ValidationGroupValidation`」を参照されたい。
+
+|
+
+次に、Bean Validationの制約アノテーションをメソッドや仮引数へ指定する方法を説明する。
+具体的には、
+
+* メソッドの引数
+* メソッドの引数に指定されたJavaBeanのフィールド
+
+に対してBean Validationの制約アノテーションを、
+
+* メソッドの返り値
+* メソッドの返り値として返却するJavaBeanのフィールド
+
+に対してBean Validationの制約アノテーションを指定する。
+
+以下に、具体的な指定方法について説明する。
+以降の説明では、インタフェースにアノテーションを指定する方法を紹介する。
+
+まず、メソッドのシグネチャとして基本型(プリミティブやプリミティブラッパ型など)を使用するメソッドに対して、
+制約アノテーションを指定する方法について説明する。
+
+.. code-block:: java
+
+    package com.example.domain.service;
+
+    import org.springframework.validation.annotation.Validated;
+
+    import javax.validation.constraints.NotNull;
+
+    @Validated
+    public interface HelloService {
+
+        // (2)
+        @NotNull
+        String hello(@NotNull /* (1) */ String message);
+
+    }
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - 項番
+      - 説明
+    * - | (1)
+      - Bean Validationの制約アノテーションをメソッドの引数アノテーションとして指定する。
+
+        \ ``@NotNull``\は\ ``message``\ という引数がNull値を許可しないことを意味する制約である。
+        引数にNull値が指定された場合、\ ``javax.validation.ConstraintViolationException``\ が発生する。
+    * - | (2)
+      - Bean Validationの制約アノテーションをメソッドアノテーションとして指定する。
+
+        上記例では、返り値がNull値にならないことを示しており、
+        返り値としてNull値が返却された場合、\ ``javax.validation.ConstraintViolationException``\ が発生する。
+
+|
+
+次に、メソッドのシグネチャとしてJavaBeanを使用するメソッドに対して、
+Bean Validationの制約アノテーションを指定する方法について説明する。
+
+ここでは、インタフェースに対してアノテーションを指定する方法を紹介する。
+
+.. note::
+
+    ポイントは、\ ``@javax.validation.Valid``\ アノテーションを指定するという点である。
+    以下に、サンプルコード使って指定方法を詳しく説明する。
+
+**Serviceインタフェース**
+
+.. code-block:: java
+
+    package com.example.domain.service;
+
+    import org.springframework.validation.annotation.Validated;
+
+    import javax.validation.constraints.NotNull;
+
+    @Validated
+    public interface HelloService {
+
+        @NotNull // (3)
+        @Valid   // (4)
+        HelloOutput hello(@NotNull /* (1) */ @Valid /* (2) */ HelloInput input);
+
+    }
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - 項番
+      - 説明
+    * - | (1)
+      - Bean Validationの制約アノテーションをメソッドの引数アノテーションとして指定する。
+
+        \ ``input``\ という引数(JavaBean)がNull値を許可しない事を示しており、
+        引数にNull値が指定された場合は、\ ``javax.validation.ConstraintViolationException``\ が発生する。
+    * - | (2)
+      - \ ``@javax.validation.Valid``\ アノテーションをメソッドの引数アノテーションとして指定する。
+
+        \ ``@Valid``\ アノテーションを付与する事で、引数のJavaBeanのフィールドに指定したBean Validationの制約アノテーションが有効となる。
+        JavaBeanに指定された制約を満たさない場合は\ ``javax.validation.ConstraintViolationException``\ が発生する。
+    * - | (3)
+      - Bean Validationの制約アノテーションをメソッドアノテーションとして指定する。
+
+        返り値のJavaBeanがNull値にならないことを示しており、
+        返り値としてNull値が返却された場合は例外が発生する。
+    * - | (4)
+      - \ ``@Valid``\ アノテーションをメソッドアノテーションとして指定する。
+
+        \ ``@Valid``\ アノテーションを付与する事で、返り値のJavaBeanのフィールドに指定したBean Validationの制約アノテーションが有効となる。
+        JavaBeanに指定された制約を満たさない場合は\ ``javax.validation.ConstraintViolationException``\ が発生する。
+
+|
+
+| 以下にJavaBeanの実装サンプルを紹介する。
+| 基本的には、Bean Validationの制約アノテーションを指定するだけだが、JavaBeanが更にJavaBeanをネストしている場合は注意が必要になる。
+
+**Input用のJavaBean**
+
+.. code-block:: java
+
+    package com.example.domain.service;
+
+    import javax.validation.constraints.NotNull;
+    import javax.validation.constraints.Past;
+    import java.util.Date;
+
+    public class HelloInput {
+
+        @NotNull
+        @Past
+        private Date visitDate;
+
+        @NotNull
+        private String visitMessage;
+
+        private String userId;
+
+        // ...
+
+    }
+
+**Output用のJavaBean**
+
+.. code-block:: java
+
+    package com.example.domain.service;
+
+    import com.example.domain.model.User;
+
+    import java.util.Date;
+
+    import javax.validation.Valid;
+    import javax.validation.constraints.NotNull;
+    import javax.validation.constraints.Past;
+
+    public class HelloOutput {
+
+        @NotNull
+        @Past
+        private Date acceptDate;
+
+        @NotNull
+        private String acceptMessage;
+
+        @Valid // (5)
+        private User user;
+
+        // ...
+
+    }
+
+**Output用のJavaBean内でネストしているJavaBean**
+
+.. code-block:: java
+
+    package com.example.domain.model;
+
+    import javax.validation.constraints.NotNull;
+    import javax.validation.constraints.Past;
+    import java.util.Date;
+
+    public class User {
+
+        @NotNull
+        private String userId;
+
+        @NotNull
+        private String userName;
+
+        @Past
+        private Date dateOfBirth;
+
+        // ...
+
+    }
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - 項番
+      - 説明
+    * - | (5)
+      - ネストしたJavaBeanに指定しているBean Validationの制約アノテーションを有効にする場合は、
+        \ ``@Valid``\ アノテーションをフィールドアノテーションとして指定する。
+
+        \ ``@Valid``\ アノテーションを付与する事で、ネストしたJavaBeanのフィールドに指定したBean Validationの制約アノテーションが有効となる。
+        ネストしたJavaBeanに指定された制約を満たさない場合は\ ``javax.validation.ConstraintViolationException``\ が発生する。
+
+|
+
+.. _MethodValidationOnSpringFrameworkHowToUseExceptionHandling:
+
+制約違反時の例外ハンドリング
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+制約に違反した場合、\ ``javax.validation.ConstraintViolationException``\ が発生する。
+
+\ ``ConstraintViolationException``\ が発生した場合、スタックトレースから発生したメソッドは特定できるが、
+具体的な違反内容が特定できない。
+
+違反内容を特定するためには、\ ``ConstraintViolationException``\ をハンドリングしてログ出力を行う例外ハンドリングクラスを作成するとよい。
+
+以下の例外ハンドリングクラスの作成例を示す。
+
+.. code-block:: java
+
+    package com.example.app;
+
+    import javax.validation.ConstraintViolationException;
+
+    import org.slf4j.Logger;
+    import org.slf4j.LoggerFactory;
+    import org.springframework.web.bind.annotation.ControllerAdvice;
+    import org.springframework.web.bind.annotation.ExceptionHandler;
+
+    @ControllerAdvice
+    public class ConstraintViolationExceptionHandler {
+
+        private static final Logger log = LoggerFactory.getLogger(ConstraintViolationExceptionHandler.class);
+
+        // (1)
+        @ExceptionHandler
+        public String handleConstraintViolationException(ConstraintViolationException e){
+            // (2)
+            if (log.isErrorEnabled()) {
+                log.error("ConstraintViolations[\n{}\n]", e.getConstraintViolations());
+            }
+            return "common/error/systemError";
+        }
+
+    }
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - 項番
+      - 説明
+    * - | (1)
+      - \ ``ConstraintViolationException``\ をハンドリングするための\ ``@ExceptionHandler``\ メソッドを作成する。
+
+        メソッドの引数として、\ ``ConstraintViolationException``\ を受け取るようにする。
+    * - | (2)
+      - メソッドの引数で受け取った\ ``ConstraintViolationException``\ が保持している違反内容(\ ``ConstraintViolation``\ の\ ``Set``\ )をログに出力する。
+
+.. note::
+
+    \ ``@ControllerAdvice``\ アノテーションの詳細については「:ref:`application_layer_controller_advice`」を参照されたい。
+
+.. raw:: latex
+
 
 Appendix
 --------------------------------------------------------------------------------

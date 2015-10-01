@@ -1635,7 +1635,7 @@ When there is no need to change the operation at request level, it is handled by
  .. code-block:: java
 
     @ExceptionHandler(OptimisticLockingFailureException.class) // (1)
-    public String handleOptimisticLockingFailureException(
+    public ModelAndView handleOptimisticLockingFailureException(
             OptimisticLockingFailureException e) {
         // (2)
         ExtendedModelMap modelMap = new ExtendedModelMap();
@@ -1708,7 +1708,7 @@ If there is no need to change the operation at request level, it is handled usin
  .. code-block:: java
 
     @ExceptionHandler(PessimisticLockingFailureException.class) // (1)
-    public String handlePessimisticLockingFailureException(
+    public ModelAndView handlePessimisticLockingFailureException(
             PessimisticLockingFailureException e) {
         // (2)
         ExtendedModelMap modelMap = new ExtendedModelMap();

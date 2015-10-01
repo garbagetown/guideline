@@ -1646,7 +1646,7 @@ Controllerで適切にハンドリングする必要がある。
  .. code-block:: java
 
     @ExceptionHandler(OptimisticLockingFailureException.class) // (1)
-    public String handleOptimisticLockingFailureException(
+    public ModelAndView handleOptimisticLockingFailureException(
             OptimisticLockingFailureException e) {
         // (2)
         ExtendedModelMap modelMap = new ExtendedModelMap();

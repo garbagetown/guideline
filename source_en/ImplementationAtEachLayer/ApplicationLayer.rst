@@ -3740,14 +3740,13 @@ Methods to specify Controller (methods to specify attributes) for applying commo
 | In sample code, date that can be specified in request parameter is set to ``"yyyy/MM/dd"`` .
 
  .. code-block:: java
-    :emphasize-lines: 1,2,3,6-7
+    :emphasize-lines: 1,2,5-6
 
     @ControllerAdvice // (1)
-    @Component // (2)
-    @Order(0) // (3)
+    @Order(0) // (2)
     public class SampleControllerAdvice {
     
-        // (4)
+        // (3)
         @InitBinder
         public void initBinder(WebDataBinder binder) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
@@ -3768,10 +3767,8 @@ Methods to specify Controller (methods to specify attributes) for applying commo
    * - | (1)
      - It indicates that it is Bean of ControllerAdvice by assigning the \ ``@ControllerAdvice``\  annotation.
    * - | (2)
-     - It should be component-scan target by assigning the \ ``@Component``\  annotation.
-   * - | (3)
      - Specify priority for common processes by assigning the \ ``@Order``\  annotation. It should be specified when multiple ControllerAdvice are to be created.
-   * - | (4)
+   * - | (3)
      - Implement \ ``@InitBinder``\  method. \ ``@InitBinder``\  method is applied to all Controllers.
 
 |

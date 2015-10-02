@@ -24,6 +24,7 @@ TERASOLUNA Server Framework for Java (5.x)の機能詳細
    REST
    FileUpload
    FileDownload
+   Email
    TilesLayout
    SystemDate
    Utilities/index

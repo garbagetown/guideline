@@ -985,7 +985,7 @@ How to use component-scan is shown below.
     * - | (1)
       - | Set Bean scope to \ ``"session"``\ . Also, it be enabled the scoped-proxy by specifying a \ ``ScopedProxyMode.TARGET_CLASS``\  in \ ``proxyMode``\  attribute.
     * - | (2)
-      - | A Method to delete all items in a cart. It is called when an order has been finished.
+      - | Create a method to clear the cart content (delete products from the cart) while order has been finished.
       
  .. note::
  
@@ -1095,7 +1095,7 @@ Using session-scoped bean
 
 Deleting objects stored in session
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-| When you want to delete the object to which a session-scoped bean refers, invalidate the reference. 
+| If you want to remove object from session which is not required any more, reset the Bean field from session scope.
 
  .. note::
 
@@ -2007,9 +2007,12 @@ Implementation is as follows:
         public void setCart(Cart cart) {
             this.cart = cart;
         }
-    
+
+        public void clearCart() { // (2)
+            cart.clearCart();
+        }
     }
-    
+
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :widths: 10 90
@@ -2019,6 +2022,8 @@ Implementation is as follows:
       - Description
     * - | (1)
       - | Wrap the Entity (Domain object) called, \ ``Cart``\ .
+    * - | (2)
+      - | Make cart empty by removing all product objects from \ ``cart``\ which are added in the cart.
     
 - ItemController
 
@@ -2199,7 +2204,7 @@ Implementation is as follows:
         // (15)
         @RequestMapping(params = "complete", method = RequestMethod.GET)
         public String complete(Model model, SessionStatus sessionStatus) {
-            sessionStatus.setComplete();
+            sessionCart.clearCart();
             return "order/complete";
         }
     

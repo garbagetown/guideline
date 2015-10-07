@@ -2226,6 +2226,9 @@ The mapping between framework exceptions handled using DefaultHandlerExceptionRe
    * - | (13)
      - | org.springframework.validation.BindException
      - | 400
+   * - | (14)
+     - | org.springframework.web.servlet.NoHandlerFoundException
+     - | 404
 
 .. raw:: latex
 

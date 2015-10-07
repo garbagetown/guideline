@@ -2229,6 +2229,9 @@ DefaultHandlerExceptionResolverでハンドリングされるフレームワー�
    * - | (13)
      - | org.springframework.validation.BindException
      - | 400
+   * - | (14)
+     - | org.springframework.web.servlet.NoHandlerFoundException
+     - | 404
 
 .. raw:: latex
 

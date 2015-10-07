@@ -969,7 +969,10 @@ How to use component-scan is shown below.
         public void setCart(Cart cart) {
             this.cart = cart;
         }
-    
+
+        public void clearCart() { // (2)
+            cart.clearCart();
+        } 
     }
 
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
@@ -981,6 +984,8 @@ How to use component-scan is shown below.
       - Description
     * - | (1)
       - | Set Bean scope to \ ``"session"``\ . Also, it be enabled the scoped-proxy by specifying a \ ``ScopedProxyMode.TARGET_CLASS``\  in \ ``proxyMode``\  attribute.
+    * - | (2)
+      - | Create a method to clear the cart content (delete products from the cart) while order has been finished.
       
  .. note::
  
@@ -1090,23 +1095,23 @@ Using session-scoped bean
 
 Deleting objects stored in session
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-| To delete objects from session using session-scoped bean,
-| call setComplete method of \ ``org.springframework.web.bind.support.SessionStatus``\  from Controller processing method,
-| same as when using  \ ``@SessionAttributes``\  annotation.
+| If you want to remove object from session which is not required any more, reset the Bean field from session scope.
 
-| To delete objects from session by calling the setComplete method of \ ``SessionStatus``\  object,
-| attribute name of session-scoped bean needs to be specified in the "value" attribute of \ ``@SessionAttributes``\  annotation.
+ .. note::
 
+    The IoC Container destroys session-scoped beans when a session expires.
+
+    Since the IoC Container manages the lifecycle of session-scoped beans, 
+    avoid deleting them explicitly.
 
  .. code-block:: java
 
     @Controller
     @RequestMapping("order")
-    @SessionAttributes("scopedTarget.sessionCart") // (1)
     public class OrderController {
     
         @Inject
-        SessionCart sessionCart;
+        SessionCart sessionCart;  // (1)
     
         // ...
     
@@ -1118,12 +1123,12 @@ Deleting objects stored in session
     
         @RequestMapping(params = "complete", method = RequestMethod.GET)
         public String complete(Model model, SessionStatus sessionStatus) {
-            sessionStatus.setComplete(); // (2)
-            model.addAttribute(sessionCart.getCart()); // (3)
+            sessionCart.clearCart(); // (2)
             return "order/complete";
         }
 
     }
+
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :widths: 10 90
@@ -1132,13 +1137,9 @@ Deleting objects stored in session
     * - Sr. No.
       - Description
     * - | (1)
-      - | Specify attribute name of session-scoped bean in "value" attribute of \ ``@SessionAttributes``\  annotation.
-        | Attribute name is \ ``"scopedTarget."``\  + Bean name.
+      - | An injectable session-scoped bean.
     * - | (2)
-      - | Call setComplete method of \ ``SessionStatus``\  object.
-        | In the above example, the object stored with attribute name \ ``"scopedTarget.sessionCart"``\ , is deleted from session.
-    * - | (3)
-      - | When the object held by session-scoped bean in View (JSP) needs to be referred in View (JSP), the same should be stored in \ ``Model``\  object.
+      - | delete all items which have already been ordered by initializing the state of the session-scoped bean.
 
 Process implementation using session-scoped bean
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -2006,9 +2007,12 @@ Implementation is as follows:
         public void setCart(Cart cart) {
             this.cart = cart;
         }
-    
+
+        public void clearCart() { // (2)
+            cart.clearCart();
+        }
     }
-    
+
  .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
  .. list-table::
     :widths: 10 90
@@ -2018,6 +2022,8 @@ Implementation is as follows:
       - Description
     * - | (1)
       - | Wrap the Entity (Domain object) called, \ ``Cart``\ .
+    * - | (2)
+      - | Make cart empty by removing all product objects from \ ``cart``\ which are added in the cart.
     
 - ItemController
 
@@ -2198,7 +2204,7 @@ Implementation is as follows:
         // (15)
         @RequestMapping(params = "complete", method = RequestMethod.GET)
         public String complete(Model model, SessionStatus sessionStatus) {
-            sessionStatus.setComplete();
+            sessionCart.clearCart();
             return "order/complete";
         }
     

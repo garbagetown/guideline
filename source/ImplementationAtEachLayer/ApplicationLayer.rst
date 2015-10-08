@@ -3062,9 +3062,6 @@ HTMLの\ ``<form>``\ 要素(JSPタグライブラリの\ ``<form:form>``\ 要素
 
         date:2014-12-09 18:34:29	thread:RMI TCP Connection(2)-127.0.0.1	X-Track:	level:TRACE	logger:o.s.w.s.m.m.a.RequestMappingHandlerMapping      	message:Mapping name=HC#hello
 
-| リクエストマッピング名の重複件数が多く、個別に対応するのが現実的でない場合は、リクエストマッピング名を生成する実装を差し替えることもできる。
-| デフォルト実装を差し替える場合は、\ ``org.springframework.beans.factory.config.BeanPostProcessor``\ の仕組みを利用するとよい。
-
 |
 
 .. _view_jsp_form-label:

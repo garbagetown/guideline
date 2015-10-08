@@ -1,4 +1,4 @@
-ファイルダウンロード
+﻿ファイルダウンロード
 ================================================================================
 
 .. only:: html
@@ -126,19 +126,28 @@ PDFファイルのダウンロード
                   <groupId>org.swinglabs</groupId>
                   <artifactId>pdf-renderer</artifactId>
               </exclusion>
-          </exclusions>
-     </dependency>
+              <exclusion>
+                    <groupId>org.bouncycastle</groupId>
+                    <artifactId>bcprov-jdk14</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk14</artifactId>
+            <version>1.38</version>
+        </dependency>
   </dependencies>
   
   <properties>
       <!-- omitted -->
-      <com.lowagie.itext.version>4.2.1</com.lowagie.itext.version>
+      <com.lowagie.itext.version>2.1.7</com.lowagie.itext.version>
   </properties>
 
 
 \
     .. note::
-        Spring 3.2では、itextの5系のバージョンに対応していない。
+        Spring IO Platform 1.1.4に準拠し、itextのバージョンは2.1.7とする
 
 .. _viewresolver-label:
 

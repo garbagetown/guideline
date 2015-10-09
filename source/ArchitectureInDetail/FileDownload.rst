@@ -104,7 +104,6 @@ PDFファイルのダウンロード
       <dependency>
           <groupId>com.lowagie</groupId>
           <artifactId>itext</artifactId>
-          <version>${com.lowagie.itext.version}</version>
           <exclusions>
               <exclusion>
                   <artifactId>xml-apis</artifactId>
@@ -139,15 +138,11 @@ PDFファイルのダウンロード
         </dependency>
   </dependencies>
   
-  <properties>
-      <!-- omitted -->
-      <com.lowagie.itext.version>2.1.7</com.lowagie.itext.version>
-  </properties>
 
 
 \
     .. note::
-        Spring IO Platform 1.1.4に準拠し、itextのバージョンは2.1.7とする
+        itextのバージョンはSpring IO Platformにて定義されている。
 
 .. _viewresolver-label:
 

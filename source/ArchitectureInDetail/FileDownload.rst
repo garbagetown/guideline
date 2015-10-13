@@ -1,4 +1,4 @@
-ファイルダウンロード
+﻿ファイルダウンロード
 ================================================================================
 
 .. only:: html
@@ -104,7 +104,6 @@ PDFファイルのダウンロード
       <dependency>
           <groupId>com.lowagie</groupId>
           <artifactId>itext</artifactId>
-          <version>${com.lowagie.itext.version}</version>
           <exclusions>
               <exclusion>
                   <artifactId>xml-apis</artifactId>
@@ -126,19 +125,24 @@ PDFファイルのダウンロード
                   <groupId>org.swinglabs</groupId>
                   <artifactId>pdf-renderer</artifactId>
               </exclusion>
-          </exclusions>
-     </dependency>
+              <exclusion>
+                    <groupId>org.bouncycastle</groupId>
+                    <artifactId>bcprov-jdk14</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk14</artifactId>
+            <version>1.38</version>
+        </dependency>
   </dependencies>
   
-  <properties>
-      <!-- omitted -->
-      <com.lowagie.itext.version>4.2.1</com.lowagie.itext.version>
-  </properties>
 
 
 \
     .. note::
-        Spring 3.2では、itextの5系のバージョンに対応していない。
+        itextのバージョンはSpring IO Platformにて定義されている。
 
 .. _viewresolver-label:
 

@@ -12,6 +12,8 @@ Webアプリケーション向け開発プロジェクトの作成
 本ガイドラインでは、マルチプロジェクト構成を採用することを推奨している。
 推奨するマルチプロジェクト構成の説明については、「:ref:`application-layering_project-structure`」を参照されたい。
 
+.. _CreateWebApplicationProject:
+
 開発プロジェクトの作成
 --------------------------------------------------------------------------------
 
@@ -1895,6 +1897,101 @@ Spring Frameworkのアプリケーションコンテキスト(DIコンテナ)の
     * 機能詳細に記載がないものについては、ここに説明を記載する。
 
     具体的な対応時期は未定。
+
+|
+
+オフライン環境におけるアプリケーション開発
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+「:ref:`CreateWebApplicationProject`」では、
+マルチプロジェクト構成の開発プロジェクトを、
+`Maven Archetype Plugin <http://maven.apache.org/archetype/maven-archetype-plugin/>`_ の 
+`archetype:generate <http://maven.apache.org/archetype/maven-archetype-plugin/generate-mojo.html>`_ を使用して作成する方法について述べた。
+Mavenはオンライン環境での動作が前提であるが、
+以下にオフライン環境でも使用できるようにする方法について述べる。
+
+オフライン環境でプロジェクト開発を続けるためには、
+開発に必要となるライブラリやプラグイン等のファイルを事前にコピーする必要がある。
+以下の作業は **オンライン環境** で行うこと。
+
+|
+
+開発プロジェクトのルートディレクトリへ移動する。
+ここでは「:ref:`CreateWebApplicationProject`」で作成したプロジェクトを例に説明をする。
+
+.. code-block:: console
+
+    cd C:\work\todo
+
+|
+
+プロジェクト開発に必要であるライブラリやプラグイン等のファイルをコピーする。
+`Maven Archetype Plugin <http://maven.apache.org/archetype/maven-archetype-plugin/>`_ の 
+`dependency:go-offline <https://maven.apache.org/plugins/maven-dependency-plugin/go-offline-mojo.html>`_ を実行することでコピーする。
+
+.. code-block:: console
+
+    mvn dependency:go-offline -Dmaven.repo.local=repository
+
+.. tabularcolumns:: |p{0.25\linewidth}|p{0.75\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 25 75
+
+    * - パラメータ
+      - 説明
+    * - | \--Dmaven.repo.local
+      - コピー先を指定する。
+        コピー先が存在しない場合は新たに作成される。
+        今回はコピー先をrepositoryと指定している。
+
+|
+
+成果物を配布しやすくするために、warファイルまたはjarファイルを作成する。
+この時、ビルドに必要となるライブラリやプラグイン等のファイルがコピーされる。
+
+.. code-block:: console
+
+    mvn package -Dmaven.repo.local=repository
+
+|
+
+ビルドが成功した場合、以下のようなログが出力される。
+
+.. code-block:: console
+
+	(... omit)    
+	[INFO] ------------------------------------------------------------------------
+	[INFO] Reactor Summary:
+	[INFO]
+	[INFO] TERASOLUNA Server Framework for Java (5.x) Web Blank Multi Project (MyBa
+	tis3) SUCCESS [  0.006 s]
+	[INFO] todo-env ........................................... SUCCESS [ 46.565 s]
+	[INFO] todo-domain ........................................ SUCCESS [  0.684 s]
+	[INFO] todo-web ........................................... SUCCESS [ 12.832 s]
+	[INFO] todo-initdb ........................................ SUCCESS [  0.067 s]
+	[INFO] todo-selenium ...................................... SUCCESS [01:13 min]
+	[INFO] ------------------------------------------------------------------------
+	[INFO] BUILD SUCCESS
+	[INFO] ------------------------------------------------------------------------
+	[INFO] Total time: 02:14 min
+	[INFO] Finished at: 2015-10-01T10:32:34+09:00
+	[INFO] Final Memory: 36M/206M
+	[INFO] ------------------------------------------------------------------------
+
+|
+
+以上で、プロジェクト開発に必要なライブラリやプラグイン等のファイルをコピーした。
+このrepositoryをオフライン環境マシンの${HOME}/.m2へコピーすることで、作業は完了となる。
+オンライン環境で一度も実行していない処理をオフライン環境で実行すると、
+必要なライブラリやプラグイン等のファイルを取得できず処理に失敗するが、
+コピーを行ったことにより、オフライン環境へ移行した場合においても継続して開発を進めることが可能となる。
+
+.. warning:: **オフライン環境での開発における注意点**
+
+    オフライン環境では新規に依存関係をインターネットから取得することが不可能となるため、
+    POM（Project Object Model）ファイルを編集しないこと。
+    POMファイルに編集を加える場合は、再度オンライン環境へ戻る必要がある。
 
 .. raw:: latex
 

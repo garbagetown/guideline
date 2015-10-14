@@ -52,7 +52,7 @@ Therefore, after configuring the screen layout using Tiles, only the JSP file co
 
 |
 
-.. _How-To-Use:
+.. _TilesLayoutHowToUse:
 
 How to use
 --------------------------------------------------------------------------------
@@ -545,7 +545,7 @@ Setting multiple layouts
 
 | When creating actual business application, display layout may be divided depending on business process contents.
 | This time, it is assumed that the staff search functionality menu is required to be displayed on left side of the screen.
-| Configuration is shown below based on :ref:`How-To-Use.
+| Configuration is shown below based on :ref:`TilesLayoutHowToUse`.
 
 **Tiles Definition**
 
@@ -694,7 +694,7 @@ Create the jsp (template) that forms the frame of the layout and jsp to be embed
      - Description
    * - | (1)
      - | Read the "menu" defined in tiles-definitions.xml.
-       | Rest is same as :ref:`How-To-Use`.
+       | Rest is same as :ref:`TilesLayoutHowToUse`.
 
 - styles.css
 
@@ -736,7 +736,7 @@ Create the jsp (template) that forms the frame of the layout and jsp to be embed
 
 - header.jsp
 
-  Same as :ref:`How-To-Use`.
+  Same as :ref:`TilesLayoutHowToUse`.
 
 - menu.jsp
 
@@ -792,7 +792,7 @@ Create the jsp (template) that forms the frame of the layout and jsp to be embed
 
 - footer.jsp
 
-  Same as :ref:`How-To-Use`.
+  Same as :ref:`TilesLayoutHowToUse`.
 
 **Creating Controller**
 

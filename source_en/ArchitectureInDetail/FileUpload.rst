@@ -703,7 +703,7 @@ Implementing Controller
  .. note:: **About MultipartFile**
 
     Methods to operate the uploaded file are provided in MultipartFile.
-    For details on using each method, refer to \ `JavaDoc <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/web/multipart/MultipartFile.html> of MultipartFile class `_\ .
+    For details on using each method, refer to \ `JavaDoc of MultipartFile class <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/web/multipart/MultipartFile.html>`_\ .
 
 .. _fileupload_validator:
 

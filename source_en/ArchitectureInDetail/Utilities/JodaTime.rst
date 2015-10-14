@@ -482,12 +482,13 @@ Period is a class indicates duration in terms of Year, Month and Week.
 | For example, when Period of "1 month" is added to Instant（DateTime）indicating "March 1", DateTime will be "April 1".
 | The result of adding the Period of "1 month" to "March 1" and "April 1" is as shown below.
 
- * Number of days is "31" when a Period of "1 month" is added to "March 1".
- * Number of days is "30" when a Period of "1 month" is added to "April 1".
+* Number of days is "31" when a Period of "1 month" is added to "March 1".
+* Number of days is "30" when a Period of "1 month" is added to "April 1".
 
 The result of adding a Period of "1 month" differs depending on the target DateTime.
 
 | Two different types of implementations have been provided for Period.
+
 * Single field Period (Example：Type having values of single unit such as "1 Day" or "1 month")
 * Any field Period (Example：Type indicating the period and having values of multiple units such as "1 month 2 days 4 hours")
 

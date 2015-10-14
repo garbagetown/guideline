@@ -41,12 +41,19 @@ Webアプリケーションの開発プロジェクトでは、必ず環境依�
 
 1. 必ずマルチプロジェクト構成にする。
 2. 一つのプロジェクトに環境依存性のある設定ファイル（ex. logback.xml, jdbc.properties）をできるだけ集約する。 **以降、このプロジェクトを \*-env と表現する。**
+
  * ex. terasoluna-tourreservation-env
+
 3. \*-env以外のプロジェクトには環境依存性のある設定値を一切持たせない。
+
  * もちろん、src/test/resources 配下などにテスト用の環境依存性設定ファイルを格納しておくことは許可される。
+
 4. 全てのソフトウェアのパッケージ済みバイナリをパッケージリポジトリ上に保管して管理する。
+
  * \*.jarファイルだけではなく\*.warファイルも成果物としてパッケージリポジトリにデプロイする。したがって、それらのjar/warファイルには環境依存性が含まれていてはならない。
+
 5. \*-env プロジェクトは下記のような構造にする。
+
  * 開発者のPC上での作業に必要な設定値をデフォルトとして src/main/resources 配下のファイルに格納する。
  * 試験サーバ、本番サーバ等、環境毎に異なる設定ファイルを src/main/resources 以外(ex. configs/test-server)のフォルダに格納し、mavenのprofile機能を使って環境毎に自動的に設定値を差し替えながら \*-env-x.y.z.jarファイルをビルドする。
 
@@ -72,6 +79,7 @@ WebアプリケーションをTomcat上にリリースする場合は次のよ�
 2. 上記でビルドした\*-env-x.y.z.jarファイル をあらかじめ決定したAPサーバ上のフォルダに設置する。 ex. /etc/foo/bar/abcd-env-x.y.z.jar
 3. あらかじめパッケージリポジトリにデプロイ済みの\*.warファイルを [CATALINA_HOME]/webapps 配下で解凍(unjar)する。
 4. Tomcat 7を使用する場合は、TomcatのVirtualWebappLoader機能を使用して /etc/foo/bar/\*.jar をクラスパスに追加する。
+
  * [CATALINA_HOME]/conf/[contextPath].xml ファイルに下記の定義を追加する。
  * 詳しくは、 http://tomcat.apache.org/tomcat-7.0-doc/api/org/apache/catalina/loader/VirtualWebappLoader.html と `terasoluna-tourreservation-envのconfigsフォルダ <https://github.com/terasolunaorg/terasoluna-tourreservation/tree/master/terasoluna-tourreservation-env/configs>`_\ を参考されたい。
  * VirtualWebappLoaderの設定例：
@@ -82,7 +90,9 @@ WebアプリケーションをTomcat上にリリースする場合は次のよ�
            virtualClasspath="/etc/foo/bar/*.jar" />
 	 
  * なお、VirtualWebappLoader機能はTomcat 6でも使用可能。
+
 5. Tomcat 8を使用する場合は、Tomcatのリソース機能を使用して /etc/foo/bar/\*.jar をクラスパスに追加する。
+
  * [CATALINA_HOME]/conf/[contextPath].xml ファイルに下記の定義を追加する。
  * 詳しくは、 https://tomcat.apache.org/migration-8.html#Web_application_resources と `terasoluna-tourreservation-envのconfigsフォルダ <https://github.com/terasolunaorg/terasoluna-tourreservation/tree/master/terasoluna-tourreservation-env/configs>`_\ を参考されたい。
  * リソースの設定例：
@@ -156,7 +166,9 @@ SNAPSHOTバージョンのソフトウェアのデリバリーフローは下図
 
 1. 開発用trunkからソースコードをチェックアウトする。
 2. コンパイル、コードメトリクスの測定、テストを実行する。
+
  * コンパイルエラー、コードメトリクスでの一定以上のviolationの発生、テストの失敗の場合、以降の作業を中止する。
+
 3. mavenパッケージリポジトリサーバにartifact(jar,warファイル)をアップロード(mvn deploy)する。
 
 .. todo:: 後でキャプチャをはる
@@ -176,8 +188,10 @@ RELEASEバージョンの運用
 3. pom.xml上の<version>タグを変更する。（例：<version>1.0.1</version>）
 4. VCS上にtagを付与する。（例： tags/1.0.1）
 5. コンパイル、コードメトリクスの測定、テストを実行する。
+
  * コンパイルエラー、コードメトリクスでの一定以上のviolationの発生、テストの失敗の場合、以降の作業を中止する。
  * 失敗した場合はVCS上のtagを削除する。
+
 6. mavenパッケージリポジトリサーバにartifact(jar,warファイル)をアップロード(mvn deploy)する。
 
 .. todo:: 
@@ -214,7 +228,9 @@ Webサービスを提供するAPサーバにアプリケーションをリリー
 2. \*-resourcesプロジェクト（環境依存性設定ファイルを集約しているプロジェクト）をVCSからチェックアウトする
 3. mavenのprofileを機能によって、リリース先の環境に合わせた設定ファイル群で内容を差し替えてresourcesプロジェクトをパッケージし、\*-resources-x.y.z.jarを生成する。
 4. 生成した\*-resources-x.y.z.jarファイルを、warファイル内のWEB-INF/libフォルダ配下に追加する。
+
  * Tomcatの場合は、\*-resources-x.y.z.jarをwarファイル内部に追加するのではなく、Tomcatサーバ上の任意のパスにコピーし、そのパスをVirtualWebappLoaderの拡張クラスパスに指定する。詳細は :doc:`EnvironmentIndependency` を参照。
+
 5. warファイルをアプリケーションサーバにデプロイする。
 
 .. note::

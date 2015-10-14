@@ -365,7 +365,7 @@ In order to output SQL log, \ ``Log4jdbcProxyDataSource`` \ described in :doc:`.
 |
 
 Returning time obtained by adding the difference registered in DB to the server system time
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Use \ ``org.terasoluna.gfw.common.date.jodatime.JdbcAdjustedJodaTimeDateFactory``\.
 

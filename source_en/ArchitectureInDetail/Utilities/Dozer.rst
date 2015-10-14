@@ -1077,7 +1077,9 @@ Creating custom convertor
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 | Mapping of the data type not supported by Dozer can be performed through a custom converter.
+
 * Example : ``java.lang.String`` <=> ``org.joda.time.DateTime``
+
 | Custom converter is a class that implements ``org.dozer.CustomConverter`` provided by Dozer.
 | Custom converter can be specified in the following 3 patterns.
 

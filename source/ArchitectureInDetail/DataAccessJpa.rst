@@ -162,6 +162,7 @@ Entityのライフサイクル管理イメージは、以下の通りである�
         |  :ref:`永続操作の反映タイミングについて(その１) <how_to_create_repository_extends_springdata_flush_timing_note1>`
         |  :ref:`永続操作の反映タイミングについて(その2) <how_to_create_repository_extends_springdata_flush_timing_note2>`
         | を参照されたい。
+
 \
 
  .. note:: **他のライフサイクル管理用のメソッドについて**
@@ -175,6 +176,7 @@ Entityのライフサイクル管理イメージは、以下の通りである�
 
     clearメソッドについては、Spring Data JPAより提供されている\ ``@Modifying``\ アノテーションのclearAutomatically属性を、\ ``true``\ に設定することで、呼び出すことができる。
     詳細については、\ :ref:`data-access-jpa_howtouse_querymethod_modifying`\ を参照されたい。
+
 \
 
  .. note:: **作成状態と分離状態のEntityへの操作について**
@@ -346,6 +348,7 @@ EntityManagerの設定
     * - | (8)
       - | Hibernateから提供されている ``EntityManager`` の動作設定を指定する。
         | 詳細については「`Hibernate Reference Documentation <http://docs.jboss.org/hibernate/orm/4.3/manual/en-US/html/ch03.html#configuration-optional>`_\」を参照されたい。
+
 \
 
  .. tip::
@@ -424,6 +427,7 @@ EntityManagerの設定
         | 上記は、WeblogicのJTAを使用する場合の設定例となる。
         | 設定可能な値(プラットフォーム)は、 ``org.hibernate.service.jta.platform.spi.JtaPlatform`` の実装クラスのFQCNとなる。
         | 主なアプリケーションサーバ向けの実装クラスについては、Hibernateから提供されている。
+
 \
 
  .. note::
@@ -992,6 +996,7 @@ Spring Dataより提供されているインタフェースや共通インタフ
 
 | クラスアノテーションとして\ ``@org.springframework.data.repository.RepositoryDefinition``\ アノテーションを指定し、 domainClass属性にEntityの型を、idClass属性にEntityのIDの型を指定する。
 | Spring Dataから提供されているRepositoryインタフェースに定義されているメソッドと同じシグネチャのメソッドについては、Spring Data提供のRepositoryインタフェースを継承して作成した際と同様、メソッドの実装は不要である。
+
 \
 
  .. note:: **想定される適用ケース**
@@ -3326,7 +3331,7 @@ Entityと関連Entityを一緒に削除したい場合は、Repositryインタ�
       親のEntityが管理対象になった際に、deleteメソッドで削除しようとしていた関連Entityが親のEntityオブジェクト内にロードされる可能性がある。
       親のEntityオブジェクト内にロードされてしまうと、永続層(DB)から削除されない。
     * deleteメソッド呼び出し後に、親のEntityオブジェクトを取得した場合、deleteメソッドで削除した関連Entityが親のEntityオブジェクト内にロードされる可能性がある。
-    親のEntityオブジェクト内にロードされてしまうと、永続層(DB)から削除されない。
+      親のEntityオブジェクト内にロードされてしまうと、永続層(DB)から削除されない。
 
     回避方法は、
 

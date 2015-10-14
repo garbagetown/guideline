@@ -12,6 +12,7 @@ Overview
 
 | This chapter explains the functionality to download a file from server to client, using Spring.
 | It is recommended to use Spring MVC View for rendering the files.
+
 \
     .. note::
         It is not recommended to include file rendering logic in controller class.
@@ -455,7 +456,9 @@ Specifying View in controller
    * - | (1)
      - | With "textFileDownloadView"as the return value of method, 
        | TextFileDownloadView class stored in Spring context is executed.
+
 \
+
     .. tip::
 
             As described above, Model information can be rendered in various types of Views using Spring.

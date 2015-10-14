@@ -163,6 +163,7 @@ The life cycle of entity is managed as follows:
         | refer to 
         |  :ref:`Reflection timing of persistence processing (1) <how_to_create_repository_extends_springdata_flush_timing_note1>`
         |  :ref:`Reflection timing of persistence processing (2) <how_to_create_repository_extends_springdata_flush_timing_note2>`
+
 \
 
  .. note:: **About other life cycle management methods**
@@ -176,6 +177,7 @@ The life cycle of entity is managed as follows:
 
     clear method can be called by setting the clearAutomatically attribute of  \ ``@Modifying``\  annotation of Spring Data JPA to \ ``true``\ .
     For details, refer to \ :ref:`data-access-jpa_howtouse_querymethod_modifying`\ .
+
 \
 
  .. note:: **About operations of "new" and "detached" entities**
@@ -346,6 +348,7 @@ Perform settings to use \ ``EntityManager``\ .
     * - | (8)
       - | Specify the settings to configure ``EntityManager`` of Hibernate.
         | For details, refer to "`Hibernate Reference Documentation <http://docs.jboss.org/hibernate/orm/4.3/manual/en-US/html/ch03.html#configuration-optional>`_\" .
+
 \
 
  .. tip::
@@ -424,6 +427,7 @@ Perform settings to use \ ``EntityManager``\ .
         | The above example illustrates usage of Weblogic JTA.
         | The configurable value (platform) is FQCN of ``org.hibernate.service.jta.platform.spi.JtaPlatform`` implementation class.
         | The implementation class for main application servers is provided by Hibernate.
+
 \
 
  .. note::
@@ -990,6 +994,7 @@ This section explains how to create entity specific Repository interface without
 
 | Specify \ ``@org.springframework.data.repository.RepositoryDefinition``\  annotation as class annotation and specify entity type in domainClass attribute and entity ID type in idClass attribute.
 | The methods which have the same signature as methods defined in Repository interface of Spring Data need not be implemented.
+
 \
 
  .. note:: **Assumed cases**
@@ -3323,7 +3328,7 @@ In order to delete the related-entity without using the parent-entity, call the 
       If the parent-entity ends up getting managed under ``EntityManager``, the related-entity that was to be deleted using delete method may be loaded in the parent-entity object.
       Once it is loaded under the parent-entity object, it will not be deleted from persistence layer (DB).
     * If the parent-entity object is fetched after calling the delete method, the related-entity which is deleted using delete method may be loaded in the parent-entity object.
-    Once it is loaded under parent-entity object, it cannot be deleted from persistence layer (DB).
+      Once it is loaded under parent-entity object, it cannot be deleted from persistence layer (DB).
 
     How to avoid this problem,
 

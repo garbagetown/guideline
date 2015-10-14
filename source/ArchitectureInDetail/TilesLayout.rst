@@ -52,7 +52,7 @@ Overview
 
 |
 
-.. _How-To-Use:
+.. _TilesLayoutHowToUse:
 
 How to use
 --------------------------------------------------------------------------------
@@ -545,7 +545,7 @@ How to extend
 
 | 実際に業務アプリケーションを作成する場合、業務内容によって表示レイアウトを分けたい場合がある。
 | 今回は、スタッフ検索機能の場合、メニューを画面の左側に出す要望があると想定する。
-| その設定方法について、 :ref:`How-To-Use` をベースに以下に示す。
+| その設定方法について、 :ref:`TilesLayoutHowToUse` をベースに以下に示す。
 
 **Tilesの定義**
 
@@ -694,7 +694,7 @@ How to extend
      - 説明
    * - | (1)
      - | tiles-definitions.xmlで定義した"menu"を読み込む。
-       | それ以外は :ref:`How-To-Use` と同じ
+       | それ以外は :ref:`TilesLayoutHowToUse` と同じ
 
 - styles.css
 
@@ -736,7 +736,7 @@ How to extend
 
 - header.jsp
 
-  :ref:`How-To-Use` と同じ
+  :ref:`TilesLayoutHowToUse` と同じ
 
 - menu.jsp
 
@@ -792,7 +792,7 @@ How to extend
 
 - footer.jsp
 
-  :ref:`How-To-Use` と同じ
+  :ref:`TilesLayoutHowToUse` と同じ
 
 **Controller作成**
 

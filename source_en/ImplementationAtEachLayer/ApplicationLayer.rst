@@ -23,7 +23,7 @@ Implementation of application layer is given in the following 3 steps.
    | Controller receives the request, calls business logic, updates model, decides View. Thereby, controls one complete round of operations after receiving the request. 
    | It is the most important part in the implementation of application layer.
 #. | :ref:`formobject`
-   |Form object transfers the values between HTML form and application.
+   | Form object transfers the values between HTML form and application.
 #. | :ref:`view`
    | View (JSP) acquires the data from model (form object, domain object etc.) and generates screen (HTML).
 
@@ -75,7 +75,7 @@ The implementation of Controller is explained by focusing on the following point
 
 Creating Controller class
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-| **Controller class is created with @Controller annotation added to POJO class (Annotation-based Controller). **
+| **Controller class is created with @Controller annotation added to POJO class (Annotation-based Controller).**
 | Controller in Spring MVC can also be created by implementing \ ``org.springframework.web.servlet.mvc.Controller``\  interface (Interface-based Controller). However, it is preferred to avoid using it as it is Deprecated from Spring 3 onwards.
 
  .. code-block:: java
@@ -757,13 +757,13 @@ Create  the view (JSP) for user input confirmation screen.
    * - | (1)
      - The values entered on form screen is set as the hidden fields of HTML form since they must be sent back to the server when Create or Back buttons are clicked.
    * - | (2)
-     - Specify \``name="redo"``\  parameter for submit button to return to form screen.
+     - Specify \ ``name="redo"``\  parameter for submit button to return to form screen.
    * - | (3)
      - Parameter name need not be specified for submit button. Submit button will do the actual create operation.
 
  .. note::
     In the above example, HTML escaping is performed as an XSS countermeasure using ``f:h()`` function while displaying the user input values.
-    For details, refer to :doc:`Cross Site Scripting <../security/XSS>`.
+    For details, refer to :doc:`Cross Site Scripting <../Security/XSS>`.
 
 |
 
@@ -1360,7 +1360,7 @@ Processing method that receives request parameter separately using ``@RequestPar
 
  .. note::
     When form object is used as argument, unlike \ ``@RequestParam``\ ,
-    mandatory check is not performed. \ ** When using form object, ** :ref:`controller_method_argument-validation-label` ** should be performed as described below **\.
+    mandatory check is not performed. \ **When using form object,** :ref:`controller_method_argument-validation-label` **should be performed as described below**\.
 
 .. warning::
     Domain objects such as Entity, etc. can also be used as form object without any changes required. 
@@ -2251,7 +2251,7 @@ Hence, the fields to be defined in form object need not only be in \ ``java.lang
         // omitted getter/setter
     }
 
- .. tip:: **Regarding the mechanism provided by Spring Framework that performs format conversion **
+ .. tip:: **Regarding the mechanism provided by Spring Framework that performs format conversion**
 
     Spring Framework executes format conversion using the following 3 mechanisms and supports conversion to basic format as standard. Refer to linked page for the details of each conversion function.
 
@@ -2527,7 +2527,7 @@ Binding to HTML form
      - Define taglib to use \ ``<form:form>``\  tag.
    * - | (2)
      - Specify form object stored in \ ``Model``\  in the ``modelAttribute`` attribute of \ ``<form:form>``\  tag.
-   * - |(3)
+   * - | (3)
      - Specify property name of form object in path attribute of \ ``<form:input>``\  tag.
 
 |
@@ -2810,7 +2810,7 @@ Display using EL expressions.
 
    * - Sr. No.
      - Description
-   * - |(1)
+   * - | (1)
      - | Add \ ``HelloBean``\  object to \ ``Model``\  object.
    * - | (2)
      - | In View(JSP), data added to the \ ``Model``\  object can be retrieved by describing ``${Attribute name.Property name of JavaBean}``.
@@ -2877,7 +2877,7 @@ Displaying date and time stored in model
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 Use JSP tag library provided by JSTL to output format date and time value.
 
-|Display using ``<fmt:formatDate>`` tag provided by JSP tag library of JSTL. 
+Display using ``<fmt:formatDate>`` tag provided by JSP tag library of JSTL.
 
  .. code-block:: jsp
     :emphasize-lines: 1

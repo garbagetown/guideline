@@ -12,7 +12,9 @@ Overview
 
 | A message consists of fixed text displayed on screens or reports, or dynamic text displayed depending on screen operations performed by user.
 | It is also recommended to define a error message in as much details as possible.
+
 \
+
     .. warning::
        In following cases, there is a risk of inability to identify error cause during the production phase or during the testing just before entering into production phase (however, such risks may not surface during the development phase).
 
@@ -1215,7 +1217,9 @@ In such a case, HTML shown below is output in \ ``<t:messagesPanel />`` \ .
         <li>The recommended change interval has passed password. Please change your password.</li>
       </ul>
     </div>
+
 \
+
     .. tip::
 
         For extension method, refer to \ ``org.terasoluna.gfw.common.message.StandardResultMessageType``\ .
@@ -1488,7 +1492,9 @@ and it will be displayed in the browser as follows:
 
 .. figure:: ./images_MessageManagement/message-management-login-error.jpg
     :width: 60%
+
 \
+
     .. tip::
 
         For details on JSP for login, refer to \ :doc:`../Security/Authentication`\ .
@@ -1614,6 +1620,7 @@ and the corresponding usage method. You can customize and use them based on the 
             /** e.ex.an.9001=There are inconsistencies in the data. */
             public static final String E_EX_AN_9001 = "e.ex.an.9001";
         }
+
 \
 
 .. raw:: latex

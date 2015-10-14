@@ -938,7 +938,7 @@ Add to bean definition, the class (\ ``SystemExceptionResolver``\ )  used for ha
     * - | (2)
       - | Inject the object that resolves exception code (Message ID). Specify \ "exceptionCodeResolver"\  defined in \ ``applicationContext.xml``\ .
     * - | (3)
-      - | Specify the order of priority for handling. The value can be "3". When \ ``<mvc:annotation-driven>``\  is specified, automatically \ :ref:`registered class <exception-handling-annotation-driven>`\  is given higher priority.
+      - | Specify the order of priority for handling. The value can be "3". When \ ``<mvc:annotation-driven>``\  is specified, automatically \ :ref:`registered class <ExceptionHandling-annotation-driven>`\  is given higher priority.
 
         .. hint:: **Method to disable exception handling carried out by DefaultHandlerExceptionResolver**
 
@@ -1492,7 +1492,6 @@ As shown in following example, if there is no problem in continuing the executio
 
 
 .. _exception-handling-how-to-use-codingpoint-controller-label:
-
 
 Coding Points (Controller)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

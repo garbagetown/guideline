@@ -175,7 +175,9 @@ Output Escaping
         <td>&lt;script&gt;alert(&quot;XSS Attack&quot;)&lt;/script&gt;</td>
     </tr>
     <!-- omitted -->
+
 \
+
     .. tip::
 
         **java.util.Date継承クラスのフォーマット**
@@ -189,7 +191,9 @@ Output Escaping
 
         valueの値に前述した \ ``f:h()``\ を使用して値を設定すると、Stringになってしまい、\ ``javax.el.ELException``\ がスローされるため、そのまま\ ``${form.date}``\ を使用している。
         しかし、yyyyMMddにフォーマットするため、XSSの心配はない。
+
 \
+
     .. tip::
 
         **java.lang.Number継承クラス、またはjava.lang.Numberにパースできる文字列**
@@ -277,7 +281,9 @@ JavaScript Escaping
         var aaa = '<script><\/script><script>alert('XSS Attack!');<\/script><\/script>';
         document.write(aaa);
     </script>
+
 \
+
     .. tip::
 
         業務要件上必要でない限り、JavaScriptの要素をユーザからの入力値に依存して動的に生成する仕様は、

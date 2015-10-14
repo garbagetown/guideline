@@ -77,7 +77,7 @@ When Web application is created by the method recommended in this guideline, ses
     * - 1.
       - | Authentication/authorization process provided by Spring Security.
         | Timing and status of session generation can be specified by Spring Security settings.
-        | For details on session management in Spring Security, refer to \ :ref:`authentication (spring_security)_how_to_use_sessionmanagement`\ .
+        | For details on session management in Spring Security, refer to \ :ref:`authentication(spring_security)_how_to_use_sessionmanagement`\ .
     * - 2.
       - | CSRF token check process provided by Spring Security
         | When a session is already established, new session is not generated.

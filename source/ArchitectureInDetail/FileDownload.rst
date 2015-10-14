@@ -12,6 +12,7 @@ Overview
 
 | 本節では、Springでクライアントにサーバからファイルをダウンロードする機能について説明する。
 | Spring MVCのViewで、ファイルのレンダリングを行うことを推奨する。
+
 \
     .. note::
         コントローラクラスで、ファイルレンダリングのロジックを持たせることは推奨しない。
@@ -456,7 +457,9 @@ ViewResolverの定義
    * - | (1)
      - | "textFileDownloadView" をメソッドの戻り値として返却することで、
        | Springのコンテキストで管理された、TextFileDownloadViewクラスが実行される。
+
 \
+
     .. tip::
 
         前述してきたように、SpringはModelの情報をいろいろなViewにレンダリングすることができる。

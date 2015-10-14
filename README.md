@@ -8,6 +8,8 @@ This guideline helps to proceed with the software development (mainly coding) sm
 >
 > **GitHub contents is under construction**. Stable guidelines refer to [here](http://terasolunaorg.github.io/guideline/).
 
+[![Build Status](https://travis-ci.org/terasolunaorg/guideline.png?branch=master)](https://travis-ci.org/terasolunaorg/guideline)
+
 
 ## How to contribute
 

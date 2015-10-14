@@ -104,7 +104,6 @@ Implementation of Custom View
       <dependency>
           <groupId>com.lowagie</groupId>
           <artifactId>itext</artifactId>
-          <version>${com.lowagie.itext.version}</version>
           <exclusions>
               <exclusion>
                   <artifactId>xml-apis</artifactId>
@@ -126,19 +125,23 @@ Implementation of Custom View
                   <groupId>org.swinglabs</groupId>
                   <artifactId>pdf-renderer</artifactId>
               </exclusion>
+              <exclusion>  
+                  <groupId>org.bouncycastle</groupId>  
+                  <artifactId>bcprov-jdk14</artifactId>  
+              </exclusion>  
           </exclusions>
      </dependency>
+     <dependency>  
+          <groupId>org.bouncycastle</groupId>  
+          <artifactId>bcprov-jdk14</artifactId>  
+          <version>1.38</version>  
+     </dependency>  
   </dependencies>
   
-  <properties>
-      <!-- omitted -->
-      <com.lowagie.itext.version>4.2.1</com.lowagie.itext.version>
-  </properties>
-
 
 \
     .. note::
-        Spring 3.2 does not support itext version 5.
+        Spring IO Platform defines itext version.
 
 .. _viewresolver-label:
 

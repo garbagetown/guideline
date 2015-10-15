@@ -32,6 +32,7 @@ NEXUSをインストールするマシンは次の条件を満たしている必
 
 * JRE6以上がインストール済みであること
 * インターネット上の下記のURLにhttpアクセス可能であること
+
  * 先頭がhttp://repo1.maven.org/ で始まるURL（セントラルリポジトリ）
  * 先頭がhttp://repo.terasoluna.org/ で始まるURL（Terasolunaリポジトリ）
 
@@ -194,18 +195,23 @@ RDBMSとしてoracleを使用する場合に必須だが、
 そのため、組織内のパッケージリポジトリに格納しておく必要がある。
 
 1. adminユーザーでログインします。（デフォルトのパスワードはadmin123）
+
  .. figure:: ./images/appendix-nexus-login.png
 
 2. 3rdPartyリポジトリを選択し、 **Artifact Upload** タブを選択する。
+
  .. figure:: ./images/appendix-nexus-select-3rdparty.png
 
 3. GAV情報を入力します。(GAV = groupId, artifactId, version)
+
  .. figure:: ./images/appendix-nexus-ojdbc6-input-gav.png
 
 4. ローカルPC上のojdbc6.jarファイルを選択し、 **Add Artifact** ボタンを押す。
+
  .. figure:: ./images/appendix-nexus-ojdbc6-selectfile.png
 
 5. 最後に **Upload Artifact(s)** ボタンを押すと、リポジトリにjarファイルが格納される。
+
  .. figure:: ./images/appendix-nexus-ojdbc6-upload.png
 
 以上でアップロード作業は完了。

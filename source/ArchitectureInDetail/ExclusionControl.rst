@@ -1293,7 +1293,7 @@ RDBMSの行ロック機能
       - | 在庫がない、または不足している旨のメッセージを格納し、業務エラーを発生させる。
         | 発生させたエラーは、Controllerで要件に応じて適切にハンドリングすること。
         | 上記例では、ビジネスルールのチェックを排他制御しながら行っているだけなので、更新条件を満たさない場合は、排他エラーではなく業務エラーとしている。
-        | エラーのハンドリング方法については、\ :ref:`exception-handling-how-to-use-codingpoint-contoller-label`\ を参照されたい。
+        | エラーのハンドリング方法については、\ :ref:`exception-handling-how-to-use-codingpoint-controller-label`\ を参照されたい。
     * - | (5)
       - Queryメソッド呼び出し時に実行されるSQL。
 
@@ -1669,7 +1669,7 @@ Controllerで適切にハンドリングする必要がある。
       - \ ``@ExceptionHandler``\ アノテーションのvalue属性に、\ ``OptimisticLockingFailureException.class``\ を指定する。
     * - | (2)
       - | エラーハンドリングの処理を実装する。エラーを通知するためのメッセージ、画面表示に必要な情報（フォームやその他のモデル）を生成し、遷移先を指定した\ ``ModelAndView``\ を返却する。
-        | エラーハンドリングの詳細については、\ :ref:`exception-handling-how-to-use-codingpoint-contoller-usecase-label`\ を参照されたい。
+        | エラーハンドリングの詳細については、\ :ref:`exception-handling-how-to-use-codingpoint-controller-usecase-label`\ を参照されたい。
 
 リクエスト単位に動作を変える必要がある場合は、Controllerの処理メソッドの中で、\ ``try - catch``\ を使用してハンドリングする。
 
@@ -1705,7 +1705,7 @@ Controllerで適切にハンドリングする必要がある。
       - ``OptimisticLockingFailureException`` をcatchする。
     * - | (2)
       - | エラーハンドリングの処理を実装する。エラーを通知するためのメッセージ、画面表示に必要な情報（フォームやその他のモデル）を生成し、遷移先のview名を返却する。
-        | エラーハンドリングの詳細については、\ :ref:`exception-handling-how-to-use-codingpoint-contoller-request-label`\ を参照されたい。
+        | エラーハンドリングの詳細については、\ :ref:`exception-handling-how-to-use-codingpoint-controller-request-label`\ を参照されたい。
 
 悲観ロックの失敗時のエラーハンドリング
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1741,7 +1741,7 @@ Controllerで適切にハンドリングする必要がある。
       - \ ``@ExceptionHandler``\ アノテーションのvalue属性に、\ ``PessimisticLockingFailureException.class``\ を指定する。
     * - | (2)
       - | エラーハンドリングの処理を実装する。エラーを通知するためのメッセージ、画面表示に必要な情報（フォームやその他のモデル）を生成し、遷移先を指定した\ ``ModelAndView``\ を返却する。
-        | エラーハンドリングの詳細については、\ :ref:`exception-handling-how-to-use-codingpoint-contoller-usecase-label`\ を参照されたい。
+        | エラーハンドリングの詳細については、\ :ref:`exception-handling-how-to-use-codingpoint-controller-usecase-label`\ を参照されたい。
 
 リクエスト単位に動作を変える必要がある場合は、Controllerの処理メソッドの中で、\ ``try - catch``\ を使用してハンドリングする。
 
@@ -1777,7 +1777,7 @@ Controllerで適切にハンドリングする必要がある。
       - \ ``PessimisticLockingFailureException``\ をcatchする。
     * - | (2)
       - | エラーハンドリングの処理を実装する。エラーを通知するためのメッセージ、画面表示に必要な情報（フォームやその他のモデル）を生成し、遷移先のview名を返却する。
-        | エラーハンドリングの詳細については、\ :ref:`exception-handling-how-to-use-codingpoint-contoller-request-label`\ を参照されたい。
+        | エラーハンドリングの詳細については、\ :ref:`exception-handling-how-to-use-codingpoint-controller-request-label`\ を参照されたい。
 
 
 .. raw:: latex

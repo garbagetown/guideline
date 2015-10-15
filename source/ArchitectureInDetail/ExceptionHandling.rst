@@ -656,7 +656,7 @@ How to use
 
 #. :ref:`exception-handling-how-to-use-application-configuration-label`
 #. :ref:`exception-handling-how-to-use-codingpoint-service-label`
-#. :ref:`exception-handling-how-to-use-codingpoint-contoller-label`
+#. :ref:`exception-handling-how-to-use-codingpoint-controller-label`
 #. :ref:`exception-handling-how-to-use-codingpoint-jsp-label`
 
 
@@ -940,7 +940,7 @@ ResultMessagesを保持する例外(BisinessException,ResourceNotFoundException)
     * - | (2)
       - | 例外コード(メッセージID)を解決するオブジェクトをDIする。\ ``applicationContext.xml``\ に定義している、\ "exceptionCodeResolver"\ を指定する。
     * - | (3)
-      - | ハンドリングの優先順位を指定する。値は、基本的に「3」で良い。\ ``<mvc:annotation-driven>``\ を指定した際に、自動的に、\ :ref:`登録されるクラス<exception-handling-annotation-driven>`\ の方が、優先順位が上となる。
+      - | ハンドリングの優先順位を指定する。値は、基本的に「3」で良い。\ ``<mvc:annotation-driven>``\ を指定した際に、自動的に、\ :ref:`登録されるクラス<ExceptionHandling-annotation-driven>`\ の方が、優先順位が上となる。
 
         .. hint:: **DefaultHandlerExceptionResolverで行われる例外ハンドリングを無効化する方法**
 
@@ -1494,18 +1494,18 @@ Spring MVCの、デフォルトの例外ハンドリング機能によって行�
     org.springframework.web.client.RestClientException: Test example exception
 
 
-.. _exception-handling-how-to-use-codingpoint-contoller-label:
+.. _exception-handling-how-to-use-codingpoint-controller-label:
 
 
 コーディングポイント（Controller編）
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 例外ハンドリングを行う際の、Controllerでのコーディングポイントを、以下に示す。
 
-#. :ref:`exception-handling-how-to-use-codingpoint-contoller-request-label`
-#. :ref:`exception-handling-how-to-use-codingpoint-contoller-usecase-label`
+#. :ref:`exception-handling-how-to-use-codingpoint-controller-request-label`
+#. :ref:`exception-handling-how-to-use-codingpoint-controller-usecase-label`
 
 
-.. _exception-handling-how-to-use-codingpoint-contoller-request-label:
+.. _exception-handling-how-to-use-codingpoint-controller-request-label:
 
 リクエスト単位で例外をハンドリングする方法
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -1551,7 +1551,7 @@ Spring MVCの、デフォルトの例外ハンドリング機能によって行�
       - | エラー時の遷移先を表示するためのメソッドを呼び出し、View表示に必要なモデルと、View名を取得した後に、表示するView名を返却する。
 
 
-.. _exception-handling-how-to-use-codingpoint-contoller-usecase-label:
+.. _exception-handling-how-to-use-codingpoint-controller-usecase-label:
 
 ユースケース単位で例外をハンドリングする方法
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''

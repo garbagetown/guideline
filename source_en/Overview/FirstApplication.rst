@@ -765,6 +765,7 @@ Add the implementation of displaying input error message on input screen (src/ma
 
 | Implementation of input validation is completed.
 | Error message is displayed in the following conditions:
+
 * When an empty name is sent
 * Size is more than 5 characters.
 

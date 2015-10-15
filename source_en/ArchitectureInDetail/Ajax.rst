@@ -27,6 +27,7 @@ Ajax is the generic term used for group of techniques that perform the following
 | Typical examples of Ajax are (a) Providing suggestions while searching words and (b) Real time search of a search site.
 
 |
+
 .. _ajax_how_to_use:
 
 How to use

@@ -387,10 +387,13 @@ PlatformTransactionManagerについては、使用するO/R Mapperによって�
 
 JDBCのDebug用ログの設定
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 | O/R Mapper(MyBatis, Hibernate)で出力されるログより、さらに細かい情報が必要な場合、log4jdbc(log4jdbc-remix)を使って出力される情報が有効である。
 | log4jdbcの詳細については、\ `log4jdbc project page <https://code.google.com/p/log4jdbc/>`_\ を参照されたい。
 | log4jdbc-remixの詳細については、\ `log4jdbc-remix project page <https://code.google.com/p/log4jdbc-remix/>`_\ を参照されたい。
+
 \
+
  .. warning::
 
     **本設定はDebug用の設定なので、性能試験および商用環境にリリースする資材には、設定しないようにすること。**

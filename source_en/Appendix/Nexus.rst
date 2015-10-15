@@ -31,6 +31,7 @@ The machine on which NEXUS is to be installed should satisfy the following condi
 
 * JRE6 or later should be installed
 * Http access to the following URLs
+
  * URL starting with http://repo1.maven.org/ (Central repository)
  * URL starting with http://repo.terasoluna.org/ (Terasoluna repository)
 
@@ -193,18 +194,23 @@ central repository is not stored in the public repository on internet.
 Therefore, it should be stored in the package repository in the organization.
 
 1. Login as admin user. (Default password is admin123)
+
  .. figure:: ./images/appendix-nexus-login.png
 
 2. Select 3rdParty repository and select **Artifact Upload** tab.
+
  .. figure:: ./images/appendix-nexus-select-3rdparty.png
 
 3. Enter GAV information. (GAV = groupId, artifactId, version)
+
  .. figure:: ./images/appendix-nexus-ojdbc6-input-gav.png
 
 4. Select ojdbc6.jar on local PC and click **Add Artifact** button.
+
  .. figure:: ./images/appendix-nexus-ojdbc6-selectfile.png
 
-5. At the end, click **Upload Artifact(s) button to save the jar file in repository.
+5. At the end, click **Upload Artifact(s)** button to save the jar file in repository.
+
  .. figure:: ./images/appendix-nexus-ojdbc6-upload.png
 
 With this uploading is completed.

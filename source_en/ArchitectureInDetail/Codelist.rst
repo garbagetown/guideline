@@ -533,6 +533,7 @@ Using codelist in Java class
 For details on settings shown below, refer to :ref:`Using codelist in Java class <serverSide>` described earlier.
 
 |
+
 .. _codelist-enum:
 
 How to use EnumCodeList

@@ -503,7 +503,7 @@ Change Log
         * :doc:`../ArchitectureInDetail/Validation`
         * :doc:`../ArchitectureInDetail/ExceptionHandling`
         * :doc:`../ArchitectureInDetail/MessageManagement`
-        * :doc:`../ArchitectureInDetail/utilities/JodaTime`
+        * :doc:`../ArchitectureInDetail/Utilities/JodaTime`
         * :doc:`../Security/XSS`
         * :doc:`../Appendix/ReferenceBooks`
     * - 

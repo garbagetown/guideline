@@ -12,7 +12,9 @@ Overview
 
 | メッセージとは、画面や帳票等に表示する固定文言、またはユーザの画面操作の結果に応じて表示する動的文言を指す。
 | また、エラーメッセージは、できるだけ細かく定義することを推奨する。
+
 \
+
     .. warning::
        以下の場合において、運用中、あるいは運用前の試験の際、エラーの原因を究明できなくなるリスクが生じる。(開発中は、特に困らないかもしれない。)
 
@@ -1220,7 +1222,9 @@ How to extend
         <li>The recommended change interval has passed password. Please change your password.</li>
       </ul>
     </div>
+
 \
+
     .. tip::
 
         拡張方法は、\ ``org.terasoluna.gfw.common.message.StandardResultMessageType``\ が参考になる。
@@ -1493,7 +1497,9 @@ ResultMessagesを使用しない結果メッセージの表示
 
 .. figure:: ./images_MessageManagement/message-management-login-error.jpg
     :width: 60%
+
 \
+
     .. tip::
 
         ログイン用のJSPの内容については、\ :doc:`../Security/Authentication`\ を参照されたい。
@@ -1619,6 +1625,7 @@ ResultMessagesを使用しない結果メッセージの表示
             /** e.ex.an.9001=There are inconsistencies in the data. */
             public static final String E_EX_AN_9001 = "e.ex.an.9001";
         }
+
 \
 
 .. raw:: latex

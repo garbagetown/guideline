@@ -176,7 +176,9 @@ Example of escaping output value using f:h() function
         <td>&lt;script&gt;alert(&quot;XSS Attack&quot;)&lt;/script&gt;</td>
     </tr>
     <!-- omitted -->
+
 \
+
     .. tip::
 
 
@@ -191,7 +193,9 @@ Example of escaping output value using f:h() function
 
         If \ ``f:h()``\  is used for setting the value of "value" attribute, it gets converted into String and \ ``javax.el.ELException``\  is thrown; hence \ ``${form.date}``\  is used as is.
         However, it is safe from XSS attack since the value is in yyyyMMdd format.
+
 \
+
     .. tip::
 
 
@@ -280,7 +284,9 @@ Example of vulnerability when output values are not escaped
         var aaa = '<script><\/script><script>alert('XSS Attack!');<\/script><\/script>';
         document.write(aaa);
     </script>
+
 \
+
     .. tip::
 
         Dynamically generated javascript code depending on user input carries a risk of any script being inserted; hence an alternate 

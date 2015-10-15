@@ -1284,7 +1284,7 @@ Row lock function of RDBMS
       - | Store the message notifying "No stock" or "Not enough stock" to generate a business error.
         | The generated error should be handled appropriately in Controller as per the requirements.
         | In the above example, only business rules are checked while performing exclusive control; hence when update conditions are not satisfied, it is treated as business error and not exclusive error.
-        | For error handling methods, refer to \ :ref:`exception-handling-how-to-use-codingpoint-contoller-label`\ .
+        | For error handling methods, refer to \ :ref:`exception-handling-how-to-use-codingpoint-controller-label`\ .
     * - | (5)
       - SQL that is executed while calling the Query method.
 
@@ -1658,7 +1658,7 @@ When there is no need to change the operation at request level, it is handled by
       - Specify \ ``OptimisticLockingFailureException.class``\  in the value attribute of \ ``@ExceptionHandler``\  annotation.
     * - | (2)
       - | Carry out error handling. Generate the message to notify error and information required for screen display (form or other model) and return \ ``ModelAndView``\  specifying the destination.
-        | For details on error handling, refer to \ :ref:`exception-handling-how-to-use-codingpoint-contoller-usecase-label`\ .
+        | For details on error handling, refer to \ :ref:`exception-handling-how-to-use-codingpoint-controller-usecase-label`\ .
 
 If there is a need to change the operation at request level, it is to be handled using \ ``try - catch``\  in the processing method of Controller.
 
@@ -1694,7 +1694,7 @@ If there is a need to change the operation at request level, it is to be handled
       - Catch ``OptimisticLockingFailureException``.
     * - | (2)
       - | Carry out error handling. Generate the message to notify error and information required for screen display (form or other model) and return the destination view name.
-        | For details on error handling, refer to \ :ref:`exception-handling-how-to-use-codingpoint-contoller-usecase-label`\ .
+        | For details on error handling, refer to \ :ref:`exception-handling-how-to-use-codingpoint-controller-usecase-label`\ .
 
 Error handling in case of pessimistic locking failure
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -1730,7 +1730,7 @@ If there is no need to change the operation at request level, it is handled usin
       - Specify \ ``PessimisticLockingFailureException .class``\  in value attribute of \ ``@ExceptionHandler``\  annotation.
     * - | (2)
       - | Carry out error handling. Generate the message to notify error and information required for screen display (form or other model) and return \ ``ModelAndView``\  specifying the destination.
-        | For details on error handling, refer to \ :ref:`exception-handling-how-to-use-codingpoint-contoller-usecase-label`\ .
+        | For details on error handling, refer to \ :ref:`exception-handling-how-to-use-codingpoint-controller-usecase-label`\ .
 
 If there is need to change the operation at request level, it is to be handled using \ ``try - catch``\  in the processing method of Controller.
 
@@ -1766,7 +1766,7 @@ If there is need to change the operation at request level, it is to be handled u
       - Catch \ ``PessimisticLockingFailureException``\ .
     * - | (2)
       - | Carry out error handling. Generate the message to notify error and information required for screen display (form or other model) and return destination view name.
-        | For details on error handling, refer to \ :ref:`exception-handling-how-to-use-codingpoint-contoller-usecase-label`\ .
+        | For details on error handling, refer to \ :ref:`exception-handling-how-to-use-codingpoint-controller-usecase-label`\ .
 
 
 .. raw:: latex

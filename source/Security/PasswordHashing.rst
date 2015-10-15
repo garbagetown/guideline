@@ -194,6 +194,7 @@ StandardPasswordEncoder
 
 | 引数で渡された、encodedPasswordの先頭のsaltをsplitし、salt + secret + rawPassword でハッシュ化した値と
 | encodedPasswordの先頭saltを除いた値とで比較処理を行う。
+
 \
 
 StandardPasswordEncoderの設定例
@@ -275,7 +276,9 @@ How to extend
 
 | その場合、\ ``org.springframework.security.crypto.password.PasswordEncoder``\ を実装したクラスではなく、
 | 異なるパッケージの\ ``org.springframework.security.authentication.encoding.PasswordEncoder``\ を実装したクラスの使用を推奨する。
+
 \
+
  .. warning::
 
      Spring Security 3.1.4以前では、\ ``org.springframework.security.authentication.encoding.PasswordEncoder``\

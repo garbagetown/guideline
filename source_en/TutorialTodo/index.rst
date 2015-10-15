@@ -3643,7 +3643,7 @@ You may skip the explanation other than the created blank project.
 
 
 todo-infra.xml if creating blank project that does not dependent on the O/R Mapper
-''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 Empty definition file is created as follows while creating blank project that does not dependent on the O/R Mapper.
 

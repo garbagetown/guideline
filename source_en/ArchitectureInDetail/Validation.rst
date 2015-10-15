@@ -3175,7 +3175,7 @@ Refer to Chapter 7 \ `Bean Validation specification <http://download.oracle.com/
    * - \ ``@DecimalMin``\
      - BigDecimal, BigInteger, String, byte, short, int, long and wrapper
        (In case of Hibernate Validator implementation, it is also possible to use it with arbitrary CharSequence, Number inherited class.)
-     - |Validate whether the Decimal value is greater than or equal to the minimum value.
+     - | Validate whether the Decimal value is greater than or equal to the minimum value.
        | By specifying \ ``inclusive = false``\ , it is possible to change to an operation so as to validate whether the value is greater than the minimum value.
      - Refer @DecimalMax
    * - \ ``@DecimalMax``\

@@ -779,6 +779,7 @@ Serviceクラスから、別のServiceクラスの呼び出しを禁止する理
 
     本ガイドラインでは、シグネチャを限定するようなインタフェースを作成することは、特に推奨していないが、
     プロジェクトの特性を加味して、どのようなアーキテクチャにするか決めて頂きたい。
+
 \
 
 | Appendixに、シグネチャを限定するようなインタフェースと規定クラスを作成するの、サンプルを示す。
@@ -1027,6 +1028,7 @@ Serviceクラスを作成する際の注意点を、以下に示す。
    * - | (1)
      - | **Serviceインタフェースを作成することを推奨する。**
        | インタフェースを設けることで、Serviceとして公開するメソッドを明確にすることが出来る。
+
 \
 
  .. note:: **アーキテクチャ観点でのメリット例**
@@ -1078,6 +1080,7 @@ Serviceクラスを作成する際の注意点を、以下に示す。
      - | **Serviceクラスでは状態は保持せず、singletonスコープのbeanとしてコンテナに登録する 。**
        | フィールド変数には、スレッド毎に状態が変わるオブジェクト(Entity/DTO/VOなどのPOJO)や、値(プリミティブ型、プリミティブラッパークラスなど)を保持してはいけない。
        | また、\ ``@Scope``\ アノテーションを使ってsingleton以外のスコープ(prototype, request, session)にしてはいけない。
+
 \
 
  .. note:: **クラスに @Transactional アノテーションを付加する理由**
@@ -1150,6 +1153,7 @@ Serviceクラスのメソッドを作成する際の注意点を、以下に示�
        | 詳細は、\ :ref:`transaction-management-declare-transaction-info-label` を参照されたい。
 
        | また、\ ``@Transactional``\ アノテーションを使用する際の注意点を理解するために、「:ref:`DomainLayerAppendixTransactionManagement`」を合わせて確認するとよい。
+
 \
 
  .. tip:: **参照系の業務ロジックのトランザクション定義について**
@@ -1190,6 +1194,7 @@ Serviceクラスのメソッド引数と返り値は、以下の点を考慮す�
  * 上記型のコレクション(\ ``java.util.Collection``\ の実装クラス)
  * void
  * etc ...
+
 \
 
  .. note:: **入出力オブジェクトとは**
@@ -1210,6 +1215,7 @@ Serviceクラスのメソッド引数と返り値は、以下の点を考慮す�
     #. アプリケーション層の実装アーキテクチャに依存するオブジェクトを許可してしまうと、アプリケーション層とドメイン層が密結合になってしまう。
     #. \ ``java.util.Map``\ は、インタフェースとして汎用性が高すぎるため、メソッドの引数や返り値に使うと、
        どのようなオブジェクが格納されているかわかりづらい。 また、値の管理がキー名で行われるため、以下の問題が発生しやすくなる。
+
      * 値を設定する処理と値を取得する処理で異なるキー名を指定してしまい、値が取得できない。
      * キー名の変更した場合の影響範囲の把握が困難になる。
 
@@ -1217,6 +1223,7 @@ Serviceクラスのメソッド引数と返り値は、以下の点を考慮す�
 **アプリケーション層とドメイン層で同じDTOを共有する場合の方針を、以下に示す。**
 
 * ドメイン層のパッケージに属するDTOとして作成し、アプリケーション層で利用する。
+
 \
 
  .. warning::
@@ -1291,6 +1298,7 @@ ServiceおよびSharedServiceでは、アプリケーションで使用する業
    :alt: target of resolving message
    :width: 100%
    :align: center
+
 \
 
  .. note:: **メッセージの解決について**
@@ -1386,6 +1394,7 @@ ServiceおよびSharedServiceでは、アプリケーションで使用する業
 | 共通ライブラリとしてビジネス例外(\ ``org.terasoluna.gfw.common.exception.BusinessException``\ )を用意している。
 | 共通ライブラリで用意しているビジネス例外クラスだと要件を満たせない場合は、プロジェクト毎にビジネス例外クラスを作成すること。
 | **ビジネス例外クラスは、java.lang.RuntimeException のサブクラスとして作成することを推奨する** 。
+
 \
 
  .. note:: **ビジネス例外を非検査例外にする理由**
@@ -1482,6 +1491,7 @@ ServiceおよびSharedServiceでは、アプリケーションで使用する業
      - | 利用しているライブラリのメソッドから、システム異常に分類される例外が発生したシステム例外をスローしている。
        | **利用しているライブラリから発生した例外は、原因例外としてシステム例外クラスに必ず渡すこと。**
        | 原因例外が失われると、スタックトレースよりエラー発生箇所および本質的なエラー原因が追えなくなってしまう。
+
 \
 
  .. note:: **データアクセスエラーの扱いについて**
@@ -1612,6 +1622,7 @@ Spring Frameworkから提供されている「宣言型トランザクション�
       - noRollbackForClassName
       - | トランザクションのコミット対象とする例外クラス名のリストを指定する。
         | デフォルトは空（指定なし）
+
 \
 
  .. note:: **@Transactionalアノテーションを指定する場所**
@@ -1685,7 +1696,7 @@ Spring Frameworkから提供されている「宣言型トランザクション�
 
     \ :ref:`log4jdbc <DataAccessCommonDataSourceDebug>`\ を使用して以下のようなログが出力された場合は、本事象に該当するケースとなる。
 
-     .. code-block:: log
+     .. code-block:: text
 
         date:2015-02-20 16:11:56	thread:main	user:	X-Track:	level:ERROR	logger:jdbc.audit                                      	message:3. Connection.setReadOnly(true)
         org.postgresql.util.PSQLException: Cannot change transaction read-only property in the middle of a transaction.
@@ -1804,6 +1815,7 @@ PlatformTransactionManagerの設定
     * - | (1)
       - | 用途にあった\ ``PlatformTransactionManager``\ の実装クラスを指定する。
         | idは「transactionManager」としておくことを推奨する。
+
 \
 
  .. note:: **複数DB（複数リソース）に対するトランザクション管理（グローバルトランザクションの管理）が必要な場合**
@@ -1916,7 +1928,7 @@ Appendix
 
 | IBM DeveloperWorksに「トランザクションの落とし穴を理解する」という記事がある。
 | この記事ではトランザクション管理で注意しなくてはいけないことや、Spring Frameworkの@Transactionalを使う場合の注意点がまとめられているので、ぜひ一読してほしい。
-詳細は、\ `IBM DeveloperWorksの記事 <http://www.ibm.com/developerworks/java/library/j-ts1/index.html>`_\ を参照されたい。
+| 詳細は、\ `IBM DeveloperWorksの記事 <http://www.ibm.com/developerworks/java/library/j-ts1/index.html>`_\ を参照されたい。
 
 .. note::
 

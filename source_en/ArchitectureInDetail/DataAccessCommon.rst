@@ -387,7 +387,9 @@ JDBC debug log settings
 | When more detailed information than the log output using O/R Mapper(MyBatis, Hibernate) is required, the information output using log4jdbc(log4jdbc-remix) can be used.
 | For details on log4jdbc, refer to \ `log4jdbc project page <https://code.google.com/p/log4jdbc/>`_\ .
 | For details on log4jdbc-remix, refer to \ `log4jdbc-remix project page <https://code.google.com/p/log4jdbc-remix/>`_\ .
+
 \
+
  .. warning::
 
     **This is a debug setting; hence it should not be performed in case of applications that are to be released in performance test environment or production environment.**
@@ -547,8 +549,8 @@ Settings to switch the datasource dynamically
 Implementation of AbstractRoutingDataSource
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-|The datasource can be switched dynamically by using the \ ``DataSource``\  which is created by extending \ ``AbstractRoutingDataSource``\ in a same way as the normal datasource.
-|The example of switching the datasource based on time is given below.
+| The datasource can be switched dynamically by using the \ ``DataSource``\  which is created by extending \ ``AbstractRoutingDataSource``\ in a same way as the normal datasource.
+| The example of switching the datasource based on time is given below.
 
 - Example of implementing a class that inherits \ ``AbstractRoutingDataSource``\ 
 

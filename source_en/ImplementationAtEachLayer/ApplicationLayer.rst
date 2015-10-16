@@ -212,7 +212,7 @@ Pattern can be specified instead of a specific value for request path. For detai
 Mapping by HTTP method
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 In case of the following definition, if the URL ``"sample/hello"`` is accessed with POST method, then  ``hello()`` method is executed.
-For the list of supported HTTP methods, refer to `Javadoc of Spring Framework <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/web/bind/annotation/RequestMethod.html>`_.
+For the list of supported HTTP methods, refer to `Javadoc of RequestMethod <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/web/bind/annotation/RequestMethod.html>`_.
 When not specified, all supported HTTP methods are mapped.
 
  .. code-block:: java
@@ -1060,7 +1060,7 @@ Source code of controller of sample application
 Regarding arguments of processing method
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The arguments of processing method can be used to fetch various values `<http://docs.spring.io/spring/docs/4.1.7.RELEASE/spring-framework-reference/html/mvc.html#mvc-ann-arguments>`_;
+`The arguments of processing method can be used to fetch various values <http://docs.spring.io/spring/docs/4.1.7.RELEASE/spring-framework-reference/html/mvc.html#mvc-ann-arguments>`_;
 however, as a principle rule, the following should not be fetched using arguments of processing method of controller.
 
 * ServletRequest
@@ -1711,7 +1711,7 @@ Refer to :doc:`../ArchitectureInDetail/MessageManagement`  for details.
 
 Regarding return value of processing method
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-For return values of processing methods, `various values can be fetched <http://docs.spring.io/spring/docs/4.1.7.RELEASE/spring-framework-reference/html/mvc.html#mvc-ann-return-types>`_ ; however,
+`For return values of processing methods, various values can be fetched <http://docs.spring.io/spring/docs/4.1.7.RELEASE/spring-framework-reference/html/mvc.html#mvc-ann-return-types>`_ ; however,
 only the following values should be used.
 
 
@@ -2303,10 +2303,10 @@ Attributes of ``@NumberFormat`` annotation are given below.
      - Description
    * - 1.
      - style
-     - Specify number format style (NUMBER, CURRENCY, PERCENT). For details refer to `Javadoc of Spring Framework <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/format/annotation/NumberFormat.Style.html>`_\ .
+     - Specify number format style (NUMBER, CURRENCY, PERCENT). For details refer to `Javadoc of NumberFormat.Style <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/format/annotation/NumberFormat.Style.html>`_\ .
    * - 2.
      - pattern
-     - Specify number format of Java. Refer to 'Javadoc <http://docs.oracle.com/javase/8/docs/api/java/text/DecimalFormat.html> of JAVASE'_\ for details.
+     - Specify number format of Java. Refer to 'Javadoc of DecimalFormat <http://docs.oracle.com/javase/8/docs/api/java/text/DecimalFormat.html>'_\ for details.
 
 |
 
@@ -2348,10 +2348,10 @@ Attributes of \ ``@DateTimeFormat``\  annotation are given below.
      - Description
    * - 1.
      - iso
-     - Specify ISO date and time format. For details refer to `Javadoc of Spring Framework <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/format/annotation/DateTimeFormat.ISO.html>`_\ .
+     - Specify ISO date and time format. For details refer to `Javadoc of DateTimeFormat.ISO <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/format/annotation/DateTimeFormat.ISO.html>`_\ .
    * - 2.
      - pattern
-     - Specify Java date and time format. Refer to 'Javadoc <http://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html> of JAVASE'_\ for details.
+     - Specify Java date and time format. Refer to 'Javadoc of SimpleDateFormat <http://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html>'_\ for details.
    * - 3.
      - style
      - | Specify style of date and time as two-digit string.

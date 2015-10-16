@@ -205,7 +205,7 @@ spring-security.xml
    * - | (7)
      - | \ ``authentication-success-handler-ref``\ 属性に認証成功時に呼ばれる、ハンドラクラスを指定する。
 
-上記以外の属性については、\ `Spring Securityのマニュアル <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#nsa-form-login>`_\ を参照されたい。
+上記以外の属性については、\ `Spring Security Reference -The Security Namespace(<form-login>)- <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#nsa-form-login>`_\ を参照されたい。
 
 .. warning:: **Spring Security のデフォルト値「/spring_security_login, /j_spring_security_check」の使用を推奨しない理由**
 
@@ -442,7 +442,7 @@ Spring Securityで認証処理を設定するために、\ ``AuthenticationProvi
     <property name="dataSource" ref="dataSource"/>
   </bean>
 
-| \ ``JdbcDaoImpl``\ は、認証ユーザー情報と認可情報を取得するためのデフォルトSQLを定義しており、これらに対応したテーブルが用意されていることが前提となっている。前提としているテーブル定義は\ `Spring Securityのマニュアル <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#appendix-schema>`_\ を参照されたい。
+| \ ``JdbcDaoImpl``\ は、認証ユーザー情報と認可情報を取得するためのデフォルトSQLを定義しており、これらに対応したテーブルが用意されていることが前提となっている。前提としているテーブル定義は\ `Spring Security Reference -Security Database Schema- <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#appendix-schema>`_\ を参照されたい。
 | 既存のテーブルからユーザー情報、認可情報を取得したい場合は、発行されるSQLを既存のテーブルに合わせて修正すればよい。
 | 使用するSQLは以下の3つである。
 
@@ -1199,7 +1199,7 @@ spring-security.xml
      - | 「\ ``token-validity-seconds``\ 属性に、Remeber Me用のcookieの有効時間を秒単位で指定する。この例では30日間を設定している。
        | 指定が無い場合、デフォルトで14日間が有効期限になる。
 
-上記以外の属性については、\ `Spring Securityのマニュアル <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#nsa-remember-me>`_\ を参照されたい。
+上記以外の属性については、\ `Spring Security Reference -The Security Namespace(<remember-me>)- <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#nsa-remember-me>`_\ を参照されたい。
 
 ログインフォームには以下のように「Remeber Me」機能を有効にするためのフラグを用意する必要がある。
 

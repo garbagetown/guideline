@@ -484,7 +484,7 @@ Change Log
       - Overall modifications
       - Fixed guideline bugs (corrected typos, mistakes in description etc.)
 
-        Refer to \ `Issue list of 1.0.1 <https://github.com/terasolunaorg/guideline/issues?labels=bug&milestone=1&state=closed>`_\  for details.
+        Refer to \ `Issue list of 1.0.1 (bug & clerical error) <https://github.com/terasolunaorg/guideline/issues?labels=bug&milestone=1&state=closed>`_\  for details.
     * - 
       - Japanese version
       - Added Japanese version of the following.

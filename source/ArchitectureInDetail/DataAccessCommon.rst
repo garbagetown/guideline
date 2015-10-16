@@ -524,7 +524,7 @@ log4jdbcのオプションの設定
     * - | (1)
       - SQL分の折り返し文字数を指定する。0を指定すると、折り返しはされない。
     * - | (2)
-      - オプションの詳細については、\ `log4jdbc project page <https://code.google.com/p/log4jdbc/#Options>`_\ を参照されたい。
+      - オプションの詳細については、\ `log4jdbc project page -Options- <https://code.google.com/p/log4jdbc/#Options>`_\ を参照されたい。
 
 |
 

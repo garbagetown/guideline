@@ -520,7 +520,7 @@ Default operations of log4jdbc can be customized by placing properties file \ :f
     * - | (1)
       - Specify word-wrap setting for SQL statement. If '0' is specified, SQL statement is not wrapped.
     * - | (2)
-      - For option details, refer to \ `log4jdbc project page <https://code.google.com/p/log4jdbc/#Options>`_\ .
+      - For option details, refer to \ `log4jdbc project page -Options- <https://code.google.com/p/log4jdbc/#Options>`_\ .
 
 |
 

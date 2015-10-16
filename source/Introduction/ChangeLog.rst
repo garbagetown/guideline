@@ -496,7 +496,7 @@
       - 全般
       - ガイドラインのバグ(タイプミスや記述ミスなど)を修正
 
-        更新内容の詳細は、\ `1.0.1のIssue一覧 <https://github.com/terasolunaorg/guideline/issues?labels=bug&milestone=1&state=closed>`_\ を参照されたい。
+        更新内容の詳細は、\ `1.0.1のIssue一覧(bug & clerical error) <https://github.com/terasolunaorg/guideline/issues?labels=bug&milestone=1&state=closed>`_\ を参照されたい。
     * - 
       - 日本語版
       - 以下の日本語版を追加

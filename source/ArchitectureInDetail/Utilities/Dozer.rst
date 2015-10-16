@@ -1048,7 +1048,7 @@ Dozerは、以下のCollectionタイプの双方向自動マッピングをサ�
 .. tip::
 
    Dozerでは、Genericsを使用しないリスト間でもマッピングできる。このとき、変換元と変換先に含まれているオブジェクトのデータ型をHINTとして指定できる。
-   詳細は、 `マニュアル <http://dozer.sourceforge.net/documentation/collectionandarraymapping.html>`_ を参照されたい。(Using Hints for Collection Mapping)
+   詳細は、 `Dozerの公式マニュアル -Collection and Array Mapping(Using Hints for Collection Mapping)- <http://dozer.sourceforge.net/documentation/collectionandarraymapping.html#Using_Hints_for_Collection_Mapping>`_ を参照されたい。
 
 .. todo::
 
@@ -1233,7 +1233,7 @@ dozer-configration-mapping.xml
     assertThat(source.getId(), is(1));
     assertThat(source.getDate(),is("2012-08-10 23:12:12"));
 
-カスタムコンバーターに関する詳細は、 `マニュアル <http://dozer.sourceforge.net/documentation/customconverter.html>`_ を参照されたい。
+カスタムコンバーターに関する詳細は、 `Dozerの公式マニュアル -Custom Converters- <http://dozer.sourceforge.net/documentation/customconverter.html>`_ を参照されたい。
 
 
 .. note::
@@ -1245,7 +1245,7 @@ Appendix
 
 マッピング定義XMLファイルで指定できるオプションを説明する。
 
-すべてのオプションは、 `Dozerのマニュアル <http://dozer.sourceforge.net/documentation/mappings.html>`_ で確認できる。
+すべてのオプションは、 `Dozerの公式マニュアル -Custom Mappings Via Dozer XML Files- <http://dozer.sourceforge.net/documentation/mappings.html>`_ で確認できる。
 
 .. _fieldexclude:
 
@@ -1430,7 +1430,7 @@ map-idを指定しない場合はこの設定は適用されず、全フィー�
 .. tip::
 
    map-idの指定は、mapping項目だけでなく、フィールドの定義でも行える。
-   詳細は、 `マニュアル <http://dozer.sourceforge.net/documentation/contextmapping.html>`_ を参照されたい。
+   詳細は、 `Dozerの公式マニュアル -Context Based Mapping- <http://dozer.sourceforge.net/documentation/contextmapping.html>`_ を参照されたい。
 
 |
 
@@ -1644,7 +1644,7 @@ map-idを指定しない場合はこの設定は適用されず、全フィー�
 | ファイル名には制限はないが、src/main/resources/META-INF/dozer/dozer-configration-mapping.xmlを推奨する。
 | dozer-configration-mapping.xml内の設定の範囲は、この設定ファイル内でアプリケーション全体に影響を与える、Global Configurationを行えばよい。
 
-設定可能な項目の詳細について、 `マニュアル <http://dozer.sourceforge.net/documentation/globalConfiguration.html>`_ を参照されたい。
+設定可能な項目の詳細について、 `Dozerの公式マニュアル -Global Configuration- <http://dozer.sourceforge.net/documentation/globalConfiguration.html>`_ を参照されたい。
 
 
 マッピングのエラー

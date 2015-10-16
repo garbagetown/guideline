@@ -205,7 +205,7 @@ spring-security.xml
    * - | (7)
      - | Specify the handler class to be called in case of a successful authentication, in \ ``authentication-success-handler-ref``\  attribute.
 
-For attributes other than those mentioned above, refer to \ `Spring Security manual <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#nsa-form-login>`_\ .
+For attributes other than those mentioned above, refer to \ `Spring Security Reference -The Security Namespace(<form-login>)- <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#nsa-form-login>`_\ .
 
 .. warning:: **Why it is not recommended to use Spring Security default values "/spring_security_login, /j_spring_security_check".**
 
@@ -442,7 +442,7 @@ In order to use \ ``JdbcDaoImpl``\ , it is advisable to perform following Bean d
     <property name="dataSource" ref="dataSource"/>
   </bean>
 
-| It is assumed that \ ``JdbcDaoImpl``\  defines the default SQL for fetching authenticated user information and authorization information and provides tables corresponding to these. For definitions of assumed tables, refer to \ `Spring Security manual <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#appendix-schema>`_\ .
+| It is assumed that \ ``JdbcDaoImpl``\  defines the default SQL for fetching authenticated user information and authorization information and provides tables corresponding to these. For definitions of assumed tables, refer to \ `Spring Security Reference -Security Database Schema- <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#appendix-schema>`_\ .
 | To fetch user information and authorization information from existing tables, the SQL to be executed should be modified according to existing tables.
 | Following 3 SQLs are used.
 
@@ -1203,7 +1203,7 @@ spring-security.xml
      - | Specify the validity of the cookie for Remember Me functionality in seconds, in \ ``token-validity-seconds``\  attribute. In this example it is set as 30 days.
        | When not specified, it is valid for 14 days by default.
 
-For attributes other than the above, refer to \ `Spring Security manual <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#nsa-remember-me>`_\ .
+For attributes other than the above, refer to \ `Spring Security Reference -The Security Namespace(<remember-me>)- <http://docs.spring.io/spring-security/site/docs/3.2.7.RELEASE/reference/htmlsingle/#nsa-remember-me>`_\ .
 
 Following flag that enables "Remember Me" functionality needs to be provided in login form.
 

@@ -198,7 +198,7 @@ The following are required to output the log in SLF4J + Logback.
 Settings of Logback
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 | Logback settings are described in logback.xml under the class path. An example of configuration is shown below.
-| Refer to \ `Official Manual <http://logback.qos.ch/manual/configuration.html>`_\  for the detailed configuration of logback.xml.
+| Refer to \ `Logback Official Manual -Logback Configuration- <http://logback.qos.ch/manual/configuration.html>`_\  for the detailed configuration of logback.xml.
 
 .. note::
 
@@ -420,7 +420,7 @@ The main appenders that are provided are shown below.
    * - `AsyncAppender <http://logback.qos.ch/manual/appenders.html#AsyncAppender>`_
      - Asynchronous output. It is used for logging in processes with high performance requirement. (It is necessary to set the output destination in other Appender.)
 
-Refer to \ `Official Manual <http://logback.qos.ch/manual/appenders.html>`_\  for detailed Appender types.
+Refer to \ `Logback Official Manual -Appenders- <http://logback.qos.ch/manual/appenders.html>`_\  for detailed Appender types.
 
 |
 

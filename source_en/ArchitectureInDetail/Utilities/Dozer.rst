@@ -1048,7 +1048,7 @@ The behavior explained so far is given in the figure.
 .. tip::
 
    In Dozer, the mapping can be performed even between the lists which do not use Generics. At this time, data type of the object included in conversion source and conversion destination can be specified as HINT.
-   Refer to `Manual <http://dozer.sourceforge.net/documentation/collectionandarraymapping.html>`_ for details. (Using Hints for Collection Mapping)
+   Refer to `Dozer Official Manual -Collection and Array Mapping(Using Hints for Collection Mapping)- <http://dozer.sourceforge.net/documentation/collectionandarraymapping.html>`_ for details.
 
 .. todo::
 
@@ -1233,7 +1233,7 @@ Mapping (two-way)
     assertThat(source.getId(), is(1));
     assertThat(source.getDate(),is("2012-08-10 23:12:12"));
 
-Refer to `Manual <http://dozer.sourceforge.net/documentation/customconverter.html>`_ for the details of custom converter.
+Refer to `Dozer Official Manual -Custom Converters- <http://dozer.sourceforge.net/documentation/customconverter.html>`_ for the details of custom converter.
 
 
 .. note::
@@ -1245,7 +1245,7 @@ Appendix
 
 The options that can be specified in the mapping definition XML file are explained.
 
-All options can be confirmed in `Dozer Manual <http://dozer.sourceforge.net/documentation/mappings.html>`_.
+All options can be confirmed in `Dozer Official Manual -Custom Mappings Via Dozer XML Files- <http://dozer.sourceforge.net/documentation/mappings.html>`_.
 
 .. _fieldexclude:
 
@@ -1430,7 +1430,7 @@ The output of the above code is as given below.
 .. tip::
 
    map-id can be specified not only by mapping items but also by defining the field.
-   Refer to `Manual <http://dozer.sourceforge.net/documentation/contextmapping.html>`_ for details.
+   Refer to `Dozer Official Manual -Context Based Mapping- <http://dozer.sourceforge.net/documentation/contextmapping.html>`_ for details.
 
 |
 
@@ -1644,7 +1644,7 @@ Mapping
 | There are no restrictions for the file name however, src/main/resources/META-INF/dozer/dozer-configration-mapping.xml is recommended.
 | Global Configuration that impacts the entire application in this configuration file can be used within the scope of settings for dozer-configration-mapping.xml.
 
-Refer to the `Manual <http://dozer.sourceforge.net/documentation/globalConfiguration.html>`_ for the details of items that can be configured.
+Refer to the `Dozer Official Manual -Global Configuration- <http://dozer.sourceforge.net/documentation/globalConfiguration.html>`_ for the details of items that can be configured.
 
 
 Mapping error

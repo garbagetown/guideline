@@ -198,7 +198,7 @@ SLF4J + Logbackでログを出力するには、
 Logbackの設定
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 | Logbackの設定は、クラスパス直下のlogback.xmlに記述する。以下に、設定例を示す。
-| logback.xmlの詳細な設定方法については、\ `公式マニュアル <http://logback.qos.ch/manual/configuration.html>`_\ を参照されたい。
+| logback.xmlの詳細な設定方法については、\ `Logbackの公式マニュアル -Logback configuration- <http://logback.qos.ch/manual/configuration.html>`_\ を参照されたい。
 
 .. note::
 
@@ -420,7 +420,7 @@ appenderを定義しただけではログ出力の際に使用されず、
    * - `AsyncAppender <http://logback.qos.ch/manual/appenders.html#AsyncAppender>`_
      - 非同期出力。性能を求められる処理中のロギングに使用する。（出力先は、他のAppenderで設定する必要がある。）
 
-Appenderの詳細な種類は、\ `公式マニュアル <http://logback.qos.ch/manual/appenders.html>`_\ を参照されたい。
+Appenderの詳細な種類は、\ `Logbackの公式マニュアル -Appenders- <http://logback.qos.ch/manual/appenders.html>`_\ を参照されたい。
 
 |
 

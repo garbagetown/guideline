@@ -212,7 +212,7 @@ Controllerクラスの作成方法
 HTTPメソッドでマッピング
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 下記の定義の場合、 ``"sample/hello"`` というURLにPOSTメソッドでアクセスすると、helloメソッドが実行される。
-サポートしているHTTPメソッドの一覧は `Spring FrameworkのJavadoc <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/web/bind/annotation/RequestMethod.html>`_ を参照されたい。
+サポートしているHTTPメソッドの一覧は `RequestMethodのJavadoc <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/web/bind/annotation/RequestMethod.html>`_ を参照されたい。
 指定しない場合、サポートしている全てのHTTPメソッドがマッピング対象となる。
 
  .. code-block:: java
@@ -1064,7 +1064,7 @@ Backボタン押下時の動作については、 :ref:`controller-mapping-polic
 処理メソッドの引数について
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-処理メソッドの引数は `様々な値をとることができる <http://docs.spring.io/spring/docs/4.1.7.RELEASE/spring-framework-reference/html/mvc.html#mvc-ann-arguments>`_ が、
+`処理メソッドの引数は様々な値をとることができる <http://docs.spring.io/spring/docs/4.1.7.RELEASE/spring-framework-reference/html/mvc.html#mvc-ann-arguments>`_ が、
 基本的には次に挙げるものは原則として使用しないこと。
 
 * ServletRequest
@@ -1717,7 +1717,7 @@ Cookieに値を書き込む
 
 処理メソッドの返り値について
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-処理メソッドの返り値についても `様々な値をとることができる <http://docs.spring.io/spring/docs/4.1.7.RELEASE/spring-framework-reference/html/mvc.html#mvc-ann-return-types>`_ が、
+`処理メソッドの返り値についても様々な値をとることができる <http://docs.spring.io/spring/docs/4.1.7.RELEASE/spring-framework-reference/html/mvc.html#mvc-ann-return-types>`_ が、
 基本的には次に挙げるもののみを使用すること。
 
 - String(View論理名)
@@ -2306,10 +2306,10 @@ Spring Frameworkでは、HTML formから送信されたリクエストパラメ�
      - 説明
    * - 1.
      - style
-     - 数値のスタイル（NUMBER,CURRENCY,PERCENT）を指定する。詳細は、`Spring FrameworkのJavadoc <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/format/annotation/NumberFormat.Style.html>`_\ を参照されたい。
+     - 数値のスタイル（NUMBER,CURRENCY,PERCENT）を指定する。詳細は、`NumberFormat.StyleのJavadoc <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/format/annotation/NumberFormat.Style.html>`_\ を参照されたい。
    * - 2.
      - pattern
-     - Javaの数値形式を指定する。詳細は、`JAVASEのJavadoc <http://docs.oracle.com/javase/8/docs/api/java/text/DecimalFormat.html>`_\ を参照されたい。
+     - Javaの数値形式を指定する。詳細は、`DecimalFormatのJavadoc <http://docs.oracle.com/javase/8/docs/api/java/text/DecimalFormat.html>`_\ を参照されたい。
 
 |
 
@@ -2351,10 +2351,10 @@ Spring Frameworkでは、HTML formから送信されたリクエストパラメ�
      - 説明
    * - 1.
      - iso
-     - ISOの日時形式を指定する。詳細は、`Spring FrameworkのJavadoc <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/format/annotation/DateTimeFormat.ISO.html>`_\ を参照。
+     - ISOの日時形式を指定する。詳細は、`DateTimeFormat.ISOのJavadoc <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/format/annotation/DateTimeFormat.ISO.html>`_\ を参照。
    * - 2.
      - pattern
-     - Javaの日時形式を指定する。詳細は、`JAVASEのJavadoc <http://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html>`_\ を参照されたい。
+     - Javaの日時形式を指定する。詳細は、`SimpleDateFormatのJavadoc <http://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html>`_\ を参照されたい。
    * - 3.
      - style
      - | 日付と時刻のスタイルを2桁の文字列として指定する。

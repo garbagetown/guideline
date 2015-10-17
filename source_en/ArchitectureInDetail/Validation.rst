@@ -2082,7 +2082,7 @@ Method to change error messages of input validation is explained.
 Error messages of Bean Validation in Spring MVC are resolved in the following order.
 
 #. | If there is any message which matches with the rule, among the messages defined in \ ``org.springframework.context.MessageSource``\ , then it is to be used as error message (Spring rule).
-   | For default rules of Spring, refer to "`JavaDoc <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/validation/DefaultMessageCodesResolver.html>`_ of DefaultMessageCodesResolver".
+   | For default rules of Spring, refer to "`JavaDoc of DefaultMessageCodesResolver <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/validation/DefaultMessageCodesResolver.html>`_ of DefaultMessageCodesResolver".
 #. If message cannot be found as mentioned in step 1, then error message is acquired from the \ ``message``\  attribute of the annotation. (Bean Validation rule)
 
   #. When the value of \ ``message``\  attribute is not in "{message key}" format, use that text as error message.
@@ -2905,7 +2905,7 @@ Set constraint of assigning "confirm" as the prefix of confirmation field.
        - | Create an independent \ ``ConstraintViolation``\  object.
          | Define message to be output in \ ``ConstraintValidatorContext.buildConstraintViolationWithTemplate``\ .
          | Specify field name to output error message in \ ``ConstraintViolationBuilder.addPropertyNode``\ .
-         | Refer to \ `JavaDoc <http://docs.oracle.com/javaee/7/api/javax/validation/ConstraintValidatorContext.html>`_\  for details.
+         | Refer to \ `JavaDoc of ConstraintValidatorContext <http://docs.oracle.com/javaee/7/api/javax/validation/ConstraintValidatorContext.html>`_\  for details.
 
  .. tip::
 
@@ -3416,7 +3416,7 @@ Error message gets changed as shown below.
 
 .. tip::
 
-  Refer to \ `Javadoc <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/validation/DefaultMessageCodesResolver.html>`_\  for the details of message key rules.
+  Refer to \ `Javadoc of DefaultMessageCodesResolver <http://docs.spring.io/spring/docs/4.1.7.RELEASE/javadoc-api/org/springframework/validation/DefaultMessageCodesResolver.html>`_\  for the details of message key rules.
 
 .. _Validation_string_trimmer_editor:
 

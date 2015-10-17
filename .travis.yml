@@ -6,7 +6,16 @@ python:
 install:
   - pip install --upgrade pip
   - pip install -r requirements.txt
+  - mkdir -p $HOME/tmp/sphinx
+
+before_script:
+  - ERROR_LOG_FILE=$HOME/tmp/sphinx/build-error.log
 
 script:
-  - sh ./build-html.sh
-  - sh ./build-html_en.sh
+  - sh ./build-html.sh 2> $ERROR_LOG_FILE
+  - sh ./build-html_en.sh 2>> $ERROR_LOG_FILE
+
+after_script:
+  - cat $ERROR_LOG_FILE
+  - WARNING_COUNT=`grep WARNING $ERROR_LOG_FILE | wc -l`
+  - if [[ $WARNING_COUNT -ne 0 ]]; then echo "Build is failed. Please fix warnings."; exit 1; fi

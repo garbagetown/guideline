@@ -1250,7 +1250,7 @@ How to implement following processes for the basic CRUD operation is explained.
     Default behavior of local cache provided by MyBatis3 is as given below.
 
     * Local cache is managed in a transaction unit.
-    * Entity is cached for each "statement ID + pattern of built SQL + parameter value bound to the built SQ L + page position (fetch range)".
+    * Entity is cached for each "statement ID + pattern of built SQL + parameter value bound to the built SQL + page position (fetch range)".
 
     In other words, when all the search APIs provided by MyBatis3 are called by the same parameter in a process within the same transaction,
     the instance of cached Entity is returned without executing the SQL from 2nd time onwards.

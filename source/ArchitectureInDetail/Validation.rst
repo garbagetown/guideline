@@ -398,7 +398,7 @@ Bean ValidationのAPI仕様クラス(\ ``javax.validation``\ パッケージの�
 .. figure:: ./images_Validation/validations-first-sample2.png
   :width: 60%
 
-NameとEmailが空文字であることに対するエラーメッセージと、Agが\ ``null``\ であることに対するエラーメッセージが表示されている。
+NameとEmailが空文字であることに対するエラーメッセージと、Ageが\ ``null``\ であることに対するエラーメッセージが表示されている。
 
 .. note::
 

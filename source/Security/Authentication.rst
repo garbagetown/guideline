@@ -226,7 +226,7 @@ spring-security.xml
       <form:form action="${pageContext.request.contextPath}/authentication" method="post"><!-- (1) -->
           <!-- omitted -->
           <input type="text" id="username" name="j_username"><!-- (2) -->
-          <input type="password" id="password" name="j_password"><!-- (5) -->
+          <input type="password" id="password" name="j_password"><!-- (3) -->
           <input type="submit" value="Login">
       </form:form>
 
@@ -242,10 +242,10 @@ spring-security.xml
          | 遷移先のパスはlogin-processing-url属性で指定した、/authentication を指定すること。
          | ${pageContext.request.contextPath}/authenticationにアクセスすることで認証処理が実行される。
          | HTTPメソッドは、「POST」を指定すること。
-     * - | (4)
+     * - | (2)
        - | 認証処理において、「ユーザID」として扱われる要素。
          | name属性には、Spring Securityのデフォルト値である「j_username」を指定すること。
-     * - | (5)
+     * - | (3)
        - | 認証処理において、「パスワード」として扱われる要素。
          | name属性には、Spring Securityのデフォルト値である「j_password」を指定すること。
 

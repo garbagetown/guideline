@@ -226,7 +226,7 @@ Creating login form
       <form:form action="${pageContext.request.contextPath}/authentication" method="post"><!-- (1) -->
           <!-- omitted -->
           <input type="text" id="username" name="j_username"><!-- (2) -->
-          <input type="password" id="password" name="j_password"><!-- (5) -->
+          <input type="password" id="password" name="j_password"><!-- (3) -->
           <input type="submit" value="Login">
       </form:form>
 
@@ -242,10 +242,10 @@ Creating login form
          | /authentication specified in the login-processing-url, should be specified as the destination path.
          | Authentication process is executed by accessing ${pageContext.request.contextPath}/authentication.
          | "POST" should be specified as the HTTP method.
-     * - | (4)
+     * - | (2)
        - | Element handled as "User ID" in authentication process.
          | Spring Security default value namely, "j_username", should be specified in the name attribute.
-     * - | (5)
+     * - | (3)
        - | Element handled as "Password" in authentication process.
          | Spring Security default value namely, "j_password", should be specified in the name attribute.
 

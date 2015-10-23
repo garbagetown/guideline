@@ -93,7 +93,7 @@ Please commit a modification.
 
 > **Note: Commit comment format**
 >
-> "#{commit number}: {modification overview}"
+> "{modification overview} #{issue number}"
 
 > **Note: Supported language**
 >
@@ -102,7 +102,7 @@ Please commit a modification.
 e.g.)
 
 ```
-git commit -a -m "#999: Fixes typos in REST.rst"
+git commit -a -m "Fixes typos in REST.rst #999"
 ```
 
 
@@ -134,5 +134,5 @@ e.g.)
 
 | Area | Content |
 | ----- | --------- |
-| Title | #999: Fixes typos in REST.rst |
+| Title | Fixes typos in REST.rst #999 |
 | Comment | Please review #999 . |

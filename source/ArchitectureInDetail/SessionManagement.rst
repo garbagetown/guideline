@@ -1083,7 +1083,7 @@ sessionスコープのBeanの利用
 
  .. note:: **View(JSP)からsessionスコープのBeanを参照する方法**
 
-     spEL式を用いることでControllerでModelオブジェクトにBeanを追加しなくても、JSPからsessionスコープのBeanを参照することができる。
+     SpEL(Spring Expression Language)式を用いることでControllerで\ ``Model``\ オブジェクトにBeanを追加しなくても、JSPからsessionスコープのBeanを参照することができる。
 
  .. code-block:: jsp
 
@@ -2337,7 +2337,7 @@ sessionスコープのBeanを使った複数のControllerを跨いだ画面遷�
     * - 項番
       - 説明
     * - | (16)
-      - | spEL式を用いてsessionスコープのBeanを参照する。
+      - | SpEL式を用いてsessionスコープのBeanを参照する。
     * - | (17)
       - | 数量を更新するためのボタン。
     * - | (18)

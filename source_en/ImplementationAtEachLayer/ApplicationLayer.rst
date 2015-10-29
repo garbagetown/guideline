@@ -1792,7 +1792,7 @@ Example of definition when \ ``<bean>``\  element is to be used
      - Define \ ``InternalViewResolver``\  for JSP using \ ``<mvc:jsp>``\  element added from Spring Framework 4.1.
 
        * In \ ``prefix``\  attribute, specify base directory (prefix of file path) where JSP file is stored.
-       * It need  not be explicitly specified in \ ``prefix``\  attribute as \ ``".jsp"``\  is used as default value.
+       * It need  not be explicitly specified in \ ``suffix``\  attribute as \ ``".jsp"``\  is used as default value.
 
        .. note::
 

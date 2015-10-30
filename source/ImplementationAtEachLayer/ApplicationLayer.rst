@@ -1997,7 +1997,7 @@ Controllerで実装すべき処理を以下に4つ示す。
     SampleService sampleService; // (1)
 
     @RequestMapping("hello")
-    public void hello(Model model){
+    public String hello(Model model){
         String message = sampleService.hello(); // (2)
         model.addAttribute("message", message);
         return "sample/hello";
@@ -2028,7 +2028,7 @@ Controllerで実装すべき処理を以下に4つ示す。
     :emphasize-lines: 4,11-12
 
     @RequestMapping("hello")
-    public void hello(@Validated SampleForm form, BindingResult result, Model model){
+    public String hello(@Validated SampleForm form, BindingResult result, Model model){
         // ommited
         Sample sample = new Sample(); // (1)
         sample.setField1(form.getField1());
@@ -2068,7 +2068,7 @@ Controllerで実装すべき処理を以下に4つ示す。
     SampleHelper sampleHelper; // (1)
 
     @RequestMapping("hello")
-    public void hello(@Validated SampleForm form, BindingResult result){
+    public String hello(@Validated SampleForm form, BindingResult result){
         // ommited
         String message = sampleHelper.hello(form); // (2)
         model.addAttribute("message", message);
@@ -2085,7 +2085,7 @@ Controllerで実装すべき処理を以下に4つ示す。
         @Inject
         SampleService sampleService;
 
-        public void hello(SampleForm form){ // (3)
+        public String hello(SampleForm form){ // (3)
             Sample sample = new Sample();
             sample.setField1(form.getField1());
             sample.setField2(form.getField2());
@@ -2131,7 +2131,7 @@ Controllerで実装すべき処理を以下に4つ示す。
     :emphasize-lines: 4,5,11
 
     @RequestMapping("hello")
-    public void hello(SampleForm form, BindingResult result, Model model){
+    public String hello(SampleForm form, BindingResult result, Model model){
         // ommited
         Sample sample = sampleService.getSample(form.getId()); // (1)
         form.setField1(sample.getField1()); // (2)
@@ -2170,7 +2170,7 @@ Controllerで実装すべき処理を以下に4つ示す。
     :emphasize-lines: 5
 
     @RequestMapping("hello")
-    public void hello(@Validated SampleForm form, BindingResult result){
+    public String hello(@Validated SampleForm form, BindingResult result){
         // ommited
         Sample sample = sampleService.getSample(form.getId());
         sampleHelper.applyToForm(sample, form); // (1)

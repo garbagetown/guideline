@@ -1993,7 +1993,7 @@ Execute business logic by injecting the Service in which business logic is imple
     SampleService sampleService; // (1)
 
     @RequestMapping("hello")
-    public void hello(Model model){
+    public String hello(Model model){
         String message = sampleService.hello(); // (2)
         model.addAttribute("message", message);
         return "sample/hello";
@@ -2024,7 +2024,7 @@ Reflecting values to domain object
     :emphasize-lines: 4,11-12
 
     @RequestMapping("hello")
-    public void hello(@Validated SampleForm form, BindingResult result, Model model){
+    public String hello(@Validated SampleForm form, BindingResult result, Model model){
         // omitted
         Sample sample = new Sample(); // (1)
         sample.setField1(form.getField1());
@@ -2065,7 +2065,7 @@ Reflecting values to domain object
     SampleHelper sampleHelper; // (1)
 
     @RequestMapping("hello")
-    public void hello(@Validated SampleForm form, BindingResult result){
+    public String hello(@Validated SampleForm form, BindingResult result){
         // omitted
         String message = sampleHelper.hello(form); // (2)
         model.addAttribute("message", message);
@@ -2082,7 +2082,7 @@ Reflecting values to domain object
         @Inject
         SampleService sampleService;
         
-        public void hello(SampleForm form){ // (3)
+        public String hello(SampleForm form){ // (3)
             Sample sample = new Sample();
             sample.setField1(form.getField1());
             sample.setField2(form.getField2());
@@ -2128,7 +2128,7 @@ Reflecting values to form object
     :emphasize-lines: 4,5,11
 
     @RequestMapping("hello")
-    public void hello(SampleForm form, BindingResult result, Model model){
+    public String hello(SampleForm form, BindingResult result, Model model){
         // omitted
         Sample sample = sampleService.getSample(form.getId()); // (1)
         form.setField1(sample.getField1()); // (2)
@@ -2167,7 +2167,7 @@ However considering the readability of processing method in case of large amount
     :emphasize-lines: 5
 
     @RequestMapping("hello")
-    public void hello(@Validated SampleForm form, BindingResult result){
+    public String hello(@Validated SampleForm form, BindingResult result){
         // omitted
         Sample sample = sampleService.getSample(form.getId());
         sampleHelper.applyToForm(sample, form); // (1)

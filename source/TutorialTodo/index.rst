@@ -3800,7 +3800,7 @@ JPA用のブランクプロジェクトを作成した場合、以下のよう�
             <!-- (6) -->
             <property name="jpaPropertyMap">
                 <util:map>
-                    <entry key="hibernate.hbm2ddl.auto" value="none" />
+                    <entry key="hibernate.hbm2ddl.auto" value="" />
                     <entry key="hibernate.ejb.naming_strategy"
                         value="org.hibernate.cfg.ImprovedNamingStrategy" />
                     <entry key="hibernate.connection.charSet" value="UTF-8" />

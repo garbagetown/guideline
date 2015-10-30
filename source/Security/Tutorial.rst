@@ -263,7 +263,7 @@ AccountSharedServiceの作成
 
 .. note::
 
-    本ガイドラインでは、Serviceから別のServiceを呼び出し事を推奨していない。
+    本ガイドラインでは、Serviceから別のServiceを呼び出す事を推奨していない。
 
     ドメイン層の処理(Service)を共通化したい場合は、\ ``XxxService``\ という名前ではなく、
     Serviceの処理を共通化するためのServiceであることを示すために、

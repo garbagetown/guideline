@@ -3577,7 +3577,7 @@ Appendix
 
 Hibernate Validatorが用意する入力チェックルール
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-| Hibernate ValidatorはBean Validationで定義されたアノテーションに加え、検証できるアノテーションを追加している。
+| Hibernate ValidatorはBean Validationで定義されたアノテーションに加え、独自の検証用アノテーションを提供している。
 | 検証に使用することができるアノテーションのリストは、\ `こちら <http://docs.jboss.org/hibernate/validator/5.1/reference/en-US/html/chapter-bean-constraints.html#section-builtin-constraints>`_\ を参照されたい。
 
 .. _Validation_jsr303_doc:
@@ -3585,17 +3585,18 @@ Hibernate Validatorが用意する入力チェックルール
 Bean Validationのチェックルール
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-Bean Validationの標準アノテーションを、以下に示す。
+Bean Validationの標準アノテーション(\ ``javax.validation.*``\ )を以下に示す。
 
 詳細は、\ `Bean Validation specification <http://download.oracle.com/otn-pub/jcp/bean_validation-1_1-fr-eval-spec/bean-validation-specification.pdf>`_\ の7章を参照されたい。
 
-.. tabularcolumns:: |p{0.25\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|
+.. tabularcolumns:: |p{0.15\linewidth}|p{0.30\linewidth}|p{0.30\linewidth}|p{0.25\linewidth}|
 .. list-table::
    :header-rows: 1
+   :widths: 15 30 30 25
 
-   * - アノテーション(javax.validation.*)
+   * - アノテーション
      - 対象の型
-     - 用途
+     - 説明
      - 使用例
    * - \ ``@NotNull``\
      - 任意
@@ -3611,7 +3612,7 @@ Bean Validationの標準アノテーションを、以下に示す。
        | (例：グループ検証での使用)
      - .. code-block:: java
 
-            @Nulll(groups={Update.class})
+            @Null(groups={Update.class})
             private String id;
             
    * - \ ``@Pattern``\
@@ -3733,17 +3734,18 @@ Bean Validationの標準アノテーションを、以下に示す。
 Hibernate Validatorのチェックルール
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-Hibernate Validatorの代表的なアノテーションを、以下に示す。
+Hibernate Validatorの代表的なアノテーション(\ ``org.hibernate.validator.constraints.*``\ )を以下に示す。
 
 詳細は、\ `Hibernate Validator仕様 <http://docs.jboss.org/hibernate/validator/5.1/reference/en-US/html/chapter-bean-constraints.html#validator-defineconstraints-hv-constraints>`_\ を参照されたい。
 
-.. tabularcolumns:: |p{0.25\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|p{0.25\linewidth}|
+.. tabularcolumns:: |p{0.15\linewidth}|p{0.30\linewidth}|p{0.30\linewidth}|p{0.25\linewidth}|
 .. list-table::
    :header-rows: 1
+   :widths: 15 30 30 25
 
-   * - アノテーション(org.hibernate.validator.constraints.*)
+   * - アノテーション
      - 対象の型
-     - 用途
+     - 説明
      - 使用例
    * - \ ``@CreditCardNumber``\
      - 任意のCharSequence継承クラスに適用可能
@@ -3857,246 +3859,273 @@ hibernate-validator-<version>.jar内のorg/hibernate/validatorに、ValidationMe
 
 共通ライブラリが用意する入力チェックルール
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-| 共通ライブラリでは、検証できるアノテーションを追加している。
+
+共通ライブラリでは、独自の検証用アノテーションを提供している。
+ここでは、共通ライブラリで提供しているアノテーションを使用した入力チェックルールの指定方法について説明する。
 
 .. _Validation_terasoluna_gfw_list:
 
-共通ライブラリのチェックルール
+terasoluna-gfw-commonのチェックルール
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-共通ライブラリが提供するアノテーションを、以下に示す。
+\ `terasoluna-gfw-common <https://github.com/terasolunaorg/terasoluna-gfw/tree/master/terasoluna-gfw-common>`_\ が提供するアノテーション(\ ``org.terasoluna.gfw.common.codelist.*``\ )を以下に示す。
 
-* \ `terasoluna-gfw-common <https://github.com/terasolunaorg/terasoluna-gfw/tree/master/terasoluna-gfw-common>`_\ で提供されるチェックルール
+.. tabularcolumns:: |p{0.15\linewidth}|p{0.30\linewidth}|p{0.30\linewidth}|p{0.25\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 15 30 30 25
 
-  .. tabularcolumns:: |p{0.20\linewidth}|p{0.20\linewidth}|p{0.20\linewidth}|p{0.20\linewidth}|p{0.20\linewidth}|
-  .. list-table::
-     :header-rows: 1
-
-     * - アノテーション(org.terasoluna.gfw.common.codelist.*)
-       - 対象の型
-       - 用途
-       - 使用例
-     * - \ ``@ExistInCodeList``\
-       - | Character, String
-       - 値がコードリストに含まれているかどうかを検証する。
-       - \ :ref:`@ExistInCodeList <codelist-validate>`\  参照
+    * - アノテーション
+      - 対象の型
+      - 説明
+      - 使用例
+    * - \ ``@ExistInCodeList``\
+      - | \ ``Character``\ , \ ``String``\
+      - 値がコードリストに含まれているかどうかを検証する。
+      - \ :ref:`@ExistInCodeList <codelist-validate>`\ 参照
 
 
-* \ `terasoluna-gfw-validator <https://github.com/terasolunaorg/terasoluna-gfw/tree/master/terasoluna-gfw-validator>`_\ で提供されるチェックルール
+terasoluna-gfw-validatorのチェックルール
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-  .. tabularcolumns:: |p{0.20\linewidth}|p{0.20\linewidth}|p{0.20\linewidth}|p{0.20\linewidth}|p{0.20\linewidth}|
-  .. list-table::
-     :header-rows: 1
+\ `terasoluna-gfw-validator <https://github.com/terasolunaorg/terasoluna-gfw/tree/master/terasoluna-gfw-validator>`_\ が提供するアノテーション(\ ``org.terasoluna.gfw.common.validator.constraints.*``\ )を以下に示す。
 
-     * - アノテーション(org.terasoluna.gfw.common.validator.constraints.*)
-       - 対象の型
-       - 用途
-       - 設定値
-       - 使用例
-     * - \ ``@ByteMin``\
-       - | String
-       - 値のバイト長が、最小値以上であるかどうかを検証する。
-       - | \ ``Long value``\  - 値のバイト長が許容される最小値を設定する。
-         | \ ``String charset``\  - 値をバイトシーケンスに符号化するために使用する文字セットを設定する。デフォルト値は\ ``UTF-8``\ 。
-       - @ByteMax参照
-     * - \ ``@ByteMax``\
-       - | String
-       - 値のバイト長が、最大値以下であるかどうかを検証する。
-       - | \ ``Long value``\  - 値のバイト長が許容される最大値を設定する。
-         | \ ``String charset``\  - 値をバイトシーケンスに符号化するために使用する文字セットを設定する。デフォルト値は\ ``UTF-8``\ 。
-       - .. code-block:: java
+.. tabularcolumns:: |p{0.15\linewidth}|p{0.30\linewidth}|p{0.30\linewidth}|p{0.25\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 15 30 30 25
 
-              @ByteMin(1)
-              @ByteMax(value = 100,
-                      charset = "Shift_JIS")
-              private String id;
+    * - アノテーション
+      - 対象の型
+      - 説明
+      - 使用例
+    * - \ ``@ByteMin``\
+      - | \ ``String``\
+      - | 値のバイト長が、最小値以上であるかどうかを検証する。
+        |
+        | **[アノテーションの属性]**
+        | \ ``Long value``\  - 値のバイト長が許容される最小値を設定する。
+        | \ ``String charset``\  - 値をバイトシーケンスに符号化するために使用する文字セットを設定する。デフォルト値は\ ``UTF-8``\ 。
+      - \ ``@ByteMax``\ 参照
+    * - \ ``@ByteMax``\
+      - | \ ``String``\
+      - | 値のバイト長が、最大値以下であるかどうかを検証する。
+        |
+        | **[アノテーションの属性]**
+        | \ ``Long value``\  - 値のバイト長が許容される最大値を設定する。
+        | \ ``String charset``\  - 値をバイトシーケンスに符号化するために使用する文字セットを設定する。デフォルト値は\ ``UTF-8``\ 。
+      - .. code-block:: java
+
+             @ByteMin(1)
+             @ByteMax(value = 100,
+                     charset = "Shift_JIS")
+             private String id;
               
-     * - \ ``@After``\
-       - @Before参照
-       - 指定日付・時間より後であるかを検証する。（指定日付・時間は許可されない。）
-       - | \ ``String value``\  - 値がこれより後であるべき指定日付・時間を文字列で設定する。
-         | \ ``String format``\  - 指定日付・時間に任意の書式を指定したい場合に書式文字列を設定する。デフォルト値は対象の型ごとに異なるため、下記別表を参照されたい。
-       - @Before参照
-     * - \ ``@Before``\
-       - | Date, Calendar
-         | \ `Date and Time API (java.time.*) <https://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html>`_\ 
-         | \ `Joda-Time (org.joda.time.*) <http://www.joda.org/joda-time/index.html>`_\ 
-         | 対応クラスの一覧は、下記別表を参照されたい。
-       - 指定日付・時間より前であるかを検証する。（指定日付・時間は許可されない。）
-       - | \ ``String value``\  - 値がこれより前であるべき指定日付・時間を文字列で設定する。
-         | \ ``String format``\  - 指定日付・時間に任意の書式を指定したい場合に書式文字列を設定する。デフォルト値は対象の型ごとに異なるため、下記別表を参照されたい。
-       - .. code-block:: java
+    * - \ ``@After``\
+      - \ ``@Before``\ 参照
+      - | 指定日付・時間より後であるかを検証する。
+        | （指定日付・時間と同じ値は許可されない）
+        |
+        | **[アノテーションの属性]**
+        | \ ``String value``\  - 値がこれより後であるべき指定日付・時間を文字列で設定する。
+        | \ ``String format``\  - 指定日付・時間に任意の書式を指定したい場合に書式文字列を設定する。デフォルト値は対象の型ごとに異なるため、下記別表を参照されたい。
+      - \ ``@Before``\ 参照
+    * - \ ``@Before``\
+      - | \ ``Date``\
+        | \ ``Calendar``\
+        | \ `Date and Time API <https://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html>`_\
+        | \ `Joda-Time <http://www.joda.org/joda-time/index.html>`_\
+        |
+        | 対応クラスの一覧は、下記別表を参照されたい。
+      - | 指定日付・時間より前であるかを検証する。
+        | （指定日付・時間と同じ値は許可されない）
+        |
+        | **[アノテーションの属性]**
+        | \ ``String value``\  - 値がこれより前であるべき指定日付・時間を文字列で設定する。
+        | \ ``String format``\  - 指定日付・時間に任意の書式を指定したい場合に書式文字列を設定する。デフォルト値は対象の型ごとに異なるため、下記別表を参照されたい。
+        |
+        | **[format属性の注意点]**
+        | Date and Time APIの対応クラスでは、フォーマットは厳密モード（\ ``java.time.ResolverStyle.STRICT``\で解析される。Date and Time APIにおいて、書式文字\ ``"u"``\ が年（year）を、\ ``"y"``\ が暦に対する年（year-of-era）を意味しており、厳密モードで暦を指定しない場合には書式文字\ ``"u"``\ を指定しなければならないことに注意されたい。
+      - \ ``format``\ 属性を指定しない場合は、下記別表のフォーマットに沿った指定日付・時間を設定する。
 
-              @After("2014-12-31")
-              @Before("2016-01-01")
-              private Date eventDate;
+        .. code-block:: java
 
-         \ ``format``\ 属性を指定しない場合は、下記別表のフォーマットに沿った指定日付・時間を設定する。
-         
-         .. code-block:: java
+             @After("2014-12-31")
+             @Before("2016-01-01")
+             private Date eventDate;
 
-              @After(value = "2014/12/31",)
-                      format = "yyyy/MM/dd")
-              @Before(value = "2016/01/01",
-                      format = "yyyy/MM/dd")
-              private Date eventDate;
+        |
 
-              @After(value = "2014/12/31",
-                      format = "uuuu/MM/dd")
-              @Before(value = "2016/01/01",
-                      format = "uuuu/MM/dd")
-              private java.time.LocalDate joinDate;
+        \ ``format``\ 属性を指定する場合は、指定したフォーマットに沿った指定日付・時間の文字列を設定する。
 
-         \ ``format``\ 属性を指定する場合は、指定したフォーマットに沿った指定日付・時間の文字列を設定する。
-         
-         Date and Time APIの対応クラスでは、フォーマットは厳密モード（\ ``java.time.ResolverStyle.STRICT``\）で解析される。Date and Time APIにおいて、書式文字\ ``"u"``\ が年（year）を、\ ``"y"``\ が暦に対する年（year-of-era）を意味しており、厳密モードで暦を指定しない場合には書式文字\ ``"u"``\ を指定しなければならないことに注意されたい。
-         
-     * - \ ``@Compare``\
-       - | 任意のCompareble継承クラスのプロパティをもつObjectに適用可能
-       - オブジェクトの指定したプロパティ同士の大小を比較し、期待値通りであるかどうかを検証する。
-       - | \ ``String source``\  - オブジェクト内の比較元としたいプロパティ名を文字列で設定する。検証エラーとなった場合は、このプロパティにメッセージを表示する。
-         | \ ``String destination``\  - オブジェクト内の比較先としたいプロパティ名を文字列で設定する。
-         | \ ``org.terasoluna.gfw.common.validator.constraints.Compare.Operator operator``\  - 期待する比較結果を列挙型Operatorで定義された以下の値から選択する。
-         |    * \ ``EQUAL``\  : \ ``source = destination``\ である
-         |    * \ ``GRATER_THAN``\  : \ ``source > destination``\ である
-         |    * \ ``GRATER_THAN_OR_EQUAL``\  : \ ``source >= destination``\ である
-         |    * \ ``LESS_THAN``\  : \ ``source < destination``\ である
-         |    * \ ``LESS_THAN_OR_EQUAL``\  : \ ``source <= destination``\ である
-       - .. code-block:: java
+        .. code-block:: java
 
-              @Compare(source = "email",
-                      destination = "confirmEmail",
-                      operator = Compare.Operator.EQUAL)
-              public class User {
-                  private String email;
-                  private String confirmEmail;
-              }
+             @After(value = "2014/12/31",)
+                     format = "yyyy/MM/dd")
+             @Before(value = "2016/01/01",
+                     format = "yyyy/MM/dd")
+             private Date eventDate;
 
-         メールアドレスと確認用に入力したメールアドレスが正しいことをチェックする場合、上記のように実装する。
+             @After(value = "2014/12/31",
+                     format = "uuuu/MM/dd")
+             @Before(value = "2016/01/01",
+                     format = "uuuu/MM/dd")
+             private java.time.LocalDate joinDate;
 
-         .. code-block:: java
+    * - \ ``@Compare``\
+      - | \ ``Comparable``\ インタフェースの実装クラスをプロパティにもつ任意のJavaBeanに適用可能
+      - | オブジェクトの指定したプロパティ同士の大小を比較し、期待値通りであるかどうかを検証する。
+        |
+        | **[アノテーションの属性]**
+        | \ ``String source``\  - オブジェクト内の比較元としたいプロパティ名を文字列で設定する。検証エラーとなった場合は、このプロパティにメッセージを表示する。
+        | \ ``String destination``\  - オブジェクト内の比較先としたいプロパティ名を文字列で設定する。
+        | \ ``org.terasoluna.gfw.common.validator.constraints.Compare.Operator operator``\  - 期待する比較結果を列挙型\ ``Operator``\ で定義された以下の値から選択する。
 
-              @Compare(source = "form",
-                      destination = "to",
-                      operator = Compare.Operator.LESS_THAN_OR_EQUAL)
-              public class Period {
-                  private Date from;
-                  private Date to;
-              }
+        * \ ``EQUAL``\  : \ ``source = destination``\ である
+        * \ ``GRATER_THAN``\  : \ ``source > destination``\ である
+        * \ ``GRATER_THAN_OR_EQUAL``\  : \ ``source >= destination``\ である
+        * \ ``LESS_THAN``\  : \ ``source < destination``\ である
+        * \ ``LESS_THAN_OR_EQUAL``\  : \ ``source <= destination``\ である
+      - メールアドレスと確認用に入力したメールアドレスが一致することをチェックする場合、以下のように実装する。
 
-         期間の開始日が終了日以前であることをチェックする場合、上記のように実装する。
-         
-  \ ``@After``\  と \ ``@Before``\ アノテーションが対応するクラスと、\ ``format``\ 属性のデフォルト値の一覧を、以下に示す。
+        .. code-block:: java
 
-  .. tabularcolumns:: |p{0.20\linewidth}|p{0.20\linewidth}|p{0.20\linewidth}|p{0.20\linewidth}|p{0.20\linewidth}|
-  .. list-table::
-      :header-rows: 1
+             @Compare(source = "email",
+                     destination = "confirmEmail",
+                     operator = Compare.Operator.EQUAL)
+             public class UserRegisterForm {
+                 private String email;
+                 private String confirmEmail;
+             }
 
-      * - 型
-        - \ ``format``\ 属性のデフォルト値
-        - 設定例
-      * - | \ ``java.util.Date``\
-        - | \ ``"yyyy-MM-dd"``\
-        - .. code-block:: java
+        |
 
-              @Before("2016-01-01")
-              private Date eventDate;
+        期間の開始日が終了日以前であることをチェックする場合、以下のように実装する。
+
+        .. code-block:: java
+
+             @Compare(source = "form",
+                     destination = "to",
+                     operator = Compare.Operator.LESS_THAN_OR_EQUAL)
+             public class Period {
+                 private Date from;
+                 private Date to;
+             }
+
+|
+
+\ ``@After``\ と\ ``@Before``\ アノテーションがサポートしているクラスと、\ ``format``\ 属性のデフォルト値の一覧を以下に示す。
+
+.. tabularcolumns:: |p{0.30\linewidth}|p{0.30\linewidth}|p{0.40\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 30 35 35
+
+    * - 型
+      - \ ``format``\ 属性のデフォルト値
+      - 設定例
+    * - | \ ``java.util.Date``\
+      - | \ ``"yyyy-MM-dd"``\
+      - .. code-block:: java
+
+            @Before("2016-01-01")
+            private Date eventDate;
               
-      * - | \ ``java.util.Calendar``\
-        - | \ ``"yyyy-MM-dd"``\
-        - .. code-block:: java
+    * - | \ ``java.util.Calendar``\
+      - | \ ``"yyyy-MM-dd"``\
+      - .. code-block:: java
 
-              @Before("2016-01-01")
-              private Calendar eventDate;
+            @Before("2016-01-01")
+            private Calendar eventDate;
               
-      * - | \ ``java.time.chrono.ChronoLocalDate``\ 実装クラス
-          | (HijrahDate, JapaneseDate, LocalDate, MinguoDate, ThaiBuddhistDate)
-        - | \ ``DateTimeFormatter.ISO_LOCAL_DATE``\
-        - .. code-block:: java
+    * - | \ ``java.time.chrono.ChronoLocalDate``\ 実装クラス
+        | (\ ``HijrahDate``\ , \ ``JapaneseDate``\ , \ ``LocalDate``\ , \ ``MinguoDate``\ , \ ``ThaiBuddhistDate``\ )
+      - | \ ``DateTimeFormatter.ISO_LOCAL_DATE``\
+      - .. code-block:: java
 
-              @Before("2016-01-01")
-              private LocalDate eventDate;
+            @Before("2016-01-01")
+            private LocalDate eventDate;
               
-      * - | \ ``java.time.chrono.ChronoLocalDateTime``\ 実装クラス
-          | (LocalDateTime)
-        - | \ ``DateTimeFormatter.ISO_LOCAL_DATE_TIME``\
-        - .. code-block:: java
+    * - | \ ``java.time.chrono.ChronoLocalDateTime``\ 実装クラス
+        | (\ ``LocalDateTime``\ )
+      - | \ ``DateTimeFormatter.ISO_LOCAL_DATE_TIME``\
+      - .. code-block:: java
 
-              @Before("2016-01-01T00:00:00")
-              private LocalDateTime eventDate;
+            @Before("2016-01-01T00:00:00")
+            private LocalDateTime eventDate;
               
-      * - | java.time.chrono.ChronoZonedDateTime``\ 実装クラス
-          | (ZonedDateTime)
-        - | \ ``DateTimeFormatter.ISO_ZONED_DATE_TIME``\
-        - .. code-block:: java
+    * - | \ ``java.time.chrono.ChronoZonedDateTime``\ 実装クラス
+        | (\ ``ZonedDateTime``\ )
+      - | \ ``DateTimeFormatter.ISO_ZONED_DATE_TIME``\
+      - .. code-block:: java
 
-              @Before("2016-01-01T00:00:00+09:00[Asia/Tokyo]")
-              private ZonedDateTime eventDate;
+            @Before("2016-01-01T00:00:00+09:00[Asia/Tokyo]")
+            private ZonedDateTime eventDate;
               
-      * - | \ ``java.time.LocalTime``\
-        - | \ ``DateTimeFormatter.ISO_LOCAL_TIME``\
-        - .. code-block:: java
+    * - | \ ``java.time.LocalTime``\
+      - | \ ``DateTimeFormatter.ISO_LOCAL_TIME``\
+      - .. code-block:: java
 
-              @Before("12:00:00")
-              private LocalTime eventTime;
+            @Before("12:00:00")
+            private LocalTime eventTime;
               
-      * - | \ ``java.time.OffsetDateTime``\
-        - | \ ``DateTimeFormatter.ISO_OFFSET_DATE_TIME``\
-        - .. code-block:: java
+    * - | \ ``java.time.OffsetDateTime``\
+      - | \ ``DateTimeFormatter.ISO_OFFSET_DATE_TIME``\
+      - .. code-block:: java
 
-              @Before("2016-01-01T00:00:00+09:00")
-              private OffsetDateTime eventDate;
+            @Before("2016-01-01T00:00:00+09:00")
+            private OffsetDateTime eventDate;
               
-      * - | \ ``java.time.OffsetTime``\
-        - | \ ``DateTimeFormatter.ISO_OFFSET_TIME``\
-        - .. code-block:: java
+    * - | \ ``java.time.OffsetTime``\
+      - | \ ``DateTimeFormatter.ISO_OFFSET_TIME``\
+      - .. code-block:: java
 
-              @Before("12:00:00+09:00")
-              private OffsetTime eventTime;
+            @Before("12:00:00+09:00")
+            private OffsetTime eventTime;
               
-      * - | \ ``java.time.Year``\
-        - | \ ``"uuuu"``\
-        - .. code-block:: java
+    * - | \ ``java.time.Year``\
+      - | \ ``"uuuu"``\
+      - .. code-block:: java
 
-              @Before("2016")
-              private Year eventYear;
+            @Before("2016")
+            private Year eventYear;
               
-      * - | java.time.YearMonth``\
-        - | \ ``"uuuu-MM"``\
-        - .. code-block:: java
+    * - | \ ``java.time.YearMonth``\
+      - | \ ``"uuuu-MM"``\
+      - .. code-block:: java
 
-              @Before("2016-01")
-              private YearMonth eventYearMonth;
+            @Before("2016-01")
+            private YearMonth eventYearMonth;
               
-      * - | \ ``org.joda.time.ReadableInstant``\ 実装クラス
-          | (DateTime, MutableDateTime, DateMidnight, Instant)
-        - | \ ``org.joda.time.DateTime#parse()``\ 可能な文字列
-        - .. code-block:: java
+    * - | \ ``org.joda.time.ReadableInstant``\ 実装クラス
+        | (\ ``DateTime``\ , \ ``MutableDateTime``\ , \ ``DateMidnight``\ , \ ``Instant``\ )
+      - | \ ``org.joda.time.DateTime#parse()``\ で解析可能な文字列
+      - .. code-block:: java
 
-              @Before("2016-01-01T00:00:00")
-              private DateTime eventDate;
+            @Before("2016-01-01T00:00:00")
+            private DateTime eventDate;
               
-      * - | \ ``org.joda.time.ReadablePartial``\ 実装クラス
-          | (LocalDate, LocalDateTime, LocalTime, YearMonth, MonthDay, Partial)
-        - | \ ``org.joda.time.DateTime#parse()``\ 可能な文字列
-        - .. code-block:: java
+    * - | \ ``org.joda.time.ReadablePartial``\ 実装クラス
+        | (\ ``LocalDate``\ , \ ``LocalDateTime``\ , \ ``LocalTime``\ , \ ``YearMonth``\ , \ ``MonthDay``\ , \ ``Partial``\ )
+      - | \ ``org.joda.time.DateTime#parse()``\ で解析可能な文字列
+      - .. code-block:: java
 
-              @Before("2016-01-01")
-              private LocalDate eventDate;
+            @Before("2016-01-01")
+            private LocalDate eventDate;
               
-              @Before("12:00:00")
-              private LocalTime eventTime;
+            @Before("12:00:00")
+            private LocalTime eventTime;
               
-              @Before("2016-01")
-              private YearMonth eventYearMonth;
+            @Before("2016-01")
+            private YearMonth eventYearMonth;
               
 
-  .. note::
+.. note::
 
-       \ ``@After``\  と \ ``@Before``\ アノテーションが対応するクラスのうち、実行環境に依存するものについて
+    \ ``@After``\ と\ ``@Before``\ アノテーションが対応するクラスのうち、実行環境に依存するものについて
      
-       * Java8でアプリケーションを実行している場合のみ、Date and Time APIの対応クラスに対するチェックが有効となる。(Date and Time APIはJava8から導入されたため)
-       * クラスパスにJoda-Timeライブラリが含まれる場合のみ、Joda-Timeの対応クラスに対するチェックが有効となる。
+    * Java8でアプリケーションを実行している場合のみ、Date and Time APIの対応クラスに対するチェックが有効となる。(Date and Time APIはJava8から導入されたため)
+    * クラスパスにJoda-Timeライブラリが含まれる場合のみ、Joda-Timeの対応クラスに対するチェックが有効となる。
 
 
 .. _Validation_terasoluna_gfw_how_to_use:
@@ -4106,7 +4135,7 @@ hibernate-validator-<version>.jar内のorg/hibernate/validatorに、ValidationMe
 
 以下の手順で、共通ライブラリのチェックルールを適用する。
 
-依存ライブラリを追加する。バージョン5.1.0.RELEASE以上が対応している点に注意されたい。
+依存ライブラリを追加する。 \ ``terasoluna-gfw-validator``\ はバージョン5.1.0.RELEASE以上で利用することができる。
 
 .. code-block:: xml
 
@@ -4140,13 +4169,13 @@ hibernate-validator-<version>.jar内のorg/hibernate/validatorに、ValidationMe
     * - 項番
       - 説明
     * - | (1)
-      - アノテーションごとにメッセージ定義を追加する。アノテーションの設定値をメッセージキー（\ ``{}``\ で囲われた部分）としてメッセージに埋め込むことができる。
+      - アノテーションごとにメッセージ定義を追加する。アノテーションの属性値は、プレースフォルダー（\ ``{属性名}``\ の形式）を使用してメッセージの中に埋め込むことができる。
 
-最後に、\ :ref:`Validation_basic_validation`\ で説明したように、アノテーションを付与する。
+最後に、\ :ref:`Validation_basic_validation`\ で説明したように、JavaBeanのプロパティにアノテーションを付与する。
 
 .. note::
 
-    Bean Validationでは、アノテーション設定値の不正により検証が実行できない場合、\ ``javax.validation.ValidationException``\ がスローされる。スタックトレースに出力される原因を参照し、設定値を適切な形に修正すること。
+    Bean Validationでは、アノテーションの属性値の不正により検証が実行できない場合、\ ``javax.validation.ValidationException``\ がスローされる。スタックトレースに出力される原因を参照し、属性値を適切な形に修正すること。
     
     詳細は、\ `Bean Validation specification <http://download.oracle.com/otn-pub/jcp/bean_validation-1_1-fr-eval-spec/bean-validation-specification.pdf>`_\ の9章を参照されたい。
 
@@ -4158,12 +4187,12 @@ hibernate-validator-<version>.jar内のorg/hibernate/validatorに、ValidationMe
 
 共通ライブラリで提供しているチェックルールを利用して、任意のルールを作成することができる。
 
-以下では、\ :ref:`Validation_correlation_item_check`\ で独自に実装した\ ``@Confirm``\ アノテーションの代わりに、共通ライブラリで提供しているチェックルールを利用する例を挙げる。
+以下では、\ :ref:`Validation_correlation_item_check`\ で独自に実装した\ ``@Confirm``\ アノテーションを、共通ライブラリで提供しているチェックルールを利用して作成する例を紹介する。
 
 \ :ref:`Validation_convine_existing_constraint`\ で説明したように、\ ``@Conpare``\ をラップした\ ``@Confirm``\ アノテーションを作成する。
 
 .. code-block:: java
-    :emphasize-lines: 21, 23-24, 27, 33, 35
+    :emphasize-lines: 20, 22-23, 26, 32, 35
 
     package com.example.sample.domain.validation;
 
@@ -4230,7 +4259,7 @@ hibernate-validator-<version>.jar内のorg/hibernate/validatorに、ValidationMe
     * - | (6)
       - | 同様に\ ``destination``\ 属性をオーバーライドし、属性名を\ ``confirmField``\ に変更している。
 
-\ :ref:`Validation_correlation_item_check`\ で実装したアノテーションの代わりに、上記で作成したアノテーションを使用すると、以下のようになる。
+\ :ref:`Validation_correlation_item_check`\ で実装したアノテーションの代わりに、上記で作成したアノテーションを使用する。
 
 .. code-block:: java
     :emphasize-lines: 10, 14, 18
@@ -4244,7 +4273,7 @@ hibernate-validator-<version>.jar内のorg/hibernate/validatorに、ValidationMe
 
     import com.example.common.validation.Confirm;
 
-    @Confirm(field = "password", confirmfield = "confirmPassword") // (1)
+    @Confirm(field = "password", confirmField = "confirmPassword") // (1)
     public class PasswordResetForm implements Serializable {
         private static final long serialVersionUID = 1L;
 
@@ -4268,7 +4297,7 @@ hibernate-validator-<version>.jar内のorg/hibernate/validatorに、ValidationMe
     * - | (1)
       - | クラスレベルに\ ``@Confirm``\ アノテーションを付与する。
     * - | (2)
-      - | \ ``password``\ フィールドが\ ``null``\ の場合は検証をパスするため、\ ``@NotNull``\ アノテーションを付与する。
+      - | \ ``password``\ フィールドが\ ``null``\ の場合は\ ``@Confirm``\ の検証はパスするため、\ ``null``\ チェックは\ ``@NotNull``\ アノテーションを付与して行う。
     * - | (3)
       - | 同様に\ ``confirmPassword``\ フィールドにも、\ ``@NotNull``\ アノテーションを付与する。
 

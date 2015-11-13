@@ -3584,7 +3584,7 @@ Refer to Chapter 7 \ `Bean Validation specification <http://download.oracle.com/
      - Usage example
    * - \ ``@NotNull``\
      - Arbitrary
-     - Validates that the target field is not null.
+     - Validates that the target field is not \ ``null``\ .
      - .. code-block:: java
 
             @NotNull
@@ -3592,7 +3592,7 @@ Refer to Chapter 7 \ `Bean Validation specification <http://download.oracle.com/
 
    * - \ ``@Null``\
      - Arbitrary
-     - | Validates that the target field is null.
+     - | Validates that the target field is \ ``null``\ .
        | (Example: usage in group validation)
      - .. code-block:: java
 
@@ -3600,22 +3600,22 @@ Refer to Chapter 7 \ `Bean Validation specification <http://download.oracle.com/
             private String id;
 
    * - \ ``@Pattern``\
-     - String
+     - \ ``String``\
      - | Whether the target field matches with the regular expression
-       | (In case of Hibernate Validator implementation, it is also possible to use it with arbitrary CharSequence inherited class)
+       | (In case of Hibernate Validator implementation, it is also possible to use it with arbitrary implementation class of \ ``CharSequence``\  interface)
      - .. code-block:: java
 
             @Pattern(regexp = "[0-9]+")
             private String tel;
 
    * - \ ``@Min``\
-     - | BigDecimal, BigInteger, byte, short, int, long and wrapper
-       | (In case of Hibernate Validator implementation, it is also possible to use it with arbitrary CharSequence, Number inherited class. However, only in cases where string can be converted to a number.)
+     - | \ ``BigDecimal``\ , \ ``BigInteger``\ , \ ``byte``\ , \ ``short``\ , \ ``int``\ , \ ``long``\  and wrapper
+       | (In case of Hibernate Validator implementation, it is also possible to use it with arbitrary implementation class of \ ``CharSequence``\  interface, \ ``Number``\  inherited class. However, only in cases where string can be converted to a number.)
      - Validate whether the value is greater than the minimum value.
-     - Refer @Max
+     - Refer \ ``@Max``\
    * - \ ``@Max``\
-     - | BigDecimal, BigInteger, byte, short, int, long and wrapper
-       | (In case of Hibernate Validator implementation, it is also possible to use it with arbitrary CharSequence, Number inherited class. However, only in cases where string can be converted to a number.)
+     - | \ ``BigDecimal``\ , \ ``BigInteger``\ , \ ``byte``\ , \ ``short``\ , \ ``int``\ , \ ``long``\  and wrapper
+       | (In case of Hibernate Validator implementation, it is also possible to use it with arbitrary implementation class of \ ``CharSequence``\  interface, \ ``Number``\  inherited class. However, only in cases where string can be converted to a number.)
      - Validate whether the value is less than the maximum value.
      - .. code-block:: java
 
@@ -3624,14 +3624,14 @@ Refer to Chapter 7 \ `Bean Validation specification <http://download.oracle.com/
             private int quantity;
 
    * - \ ``@DecimalMin``\
-     - BigDecimal, BigInteger, String, byte, short, int, long and wrapper
-       (In case of Hibernate Validator implementation, it is also possible to use it with arbitrary CharSequence, Number inherited class.)
+     - \ ``BigDecimal``\ , \ ``BigInteger``\ , \ ``String``\ , \ ``byte``\ , \ ``short``\ , \ ``int``\ , \ ``long``\  and wrapper
+       (In case of Hibernate Validator implementation, it is also possible to use it with arbitrary implementation class of \ ``CharSequence``\  interface, \ ``Number``\  inherited class.)
      - | Validate whether the Decimal value is greater than or equal to minimum value.
        | By specifying \ ``inclusive = false``\ , it is possible to change to an operation so as to validate whether the value is greater than the minimum value.
-     - Refer @DecimalMax
+     - Refer \ ``@DecimalMax``\
    * - \ ``@DecimalMax``\
-     - BigDecimal, BigInteger, String, byte, short, int, long and wrapper
-       (In case of Hibernate Validator implementation, it is also possible to use it with arbitrary CharSequence, Number inherited class.)
+     - \ ``BigDecimal``\ , \ ``BigInteger``\ , \ ``String``\ , \ ``byte``\ , \ ``short``\ , \ ``int``\ , \ ``long``\  and wrapper
+       (In case of Hibernate Validator implementation, it is also possible to use it with arbitrary implementation class of \ ``CharSequence``\  interface, \ ``Number``\  inherited class.)
      - | Validate whether the decimal value is less than or equal to the maximum value.
        | By specifying \ ``inclusive = false``\ , it is possible to change to an operation so as to validate whether the value is less than the maximum value.
      - .. code-block:: java
@@ -3641,42 +3641,42 @@ Refer to Chapter 7 \ `Bean Validation specification <http://download.oracle.com/
             private BigDecimal price;
 
    * - \ ``@Size``\
-     - String(length), Collection(size), Map(size), Array(length)
-       (In case of Hibernate Validator implementation, it is also possible to use it with arbitrary CharSequence inherited class.)
-     - | Validate whether the size is between min and max length.
-       | It is possible to omit min and max. In that case, min=0 and max=Integer.MAX_VALUE by default.
+     - \ ``String``\ (string length), \ ``Collection``\ (elements size), \ ``Map``\ (elements size), Array(array length)
+       (In case of Hibernate Validator implementation, it is also possible to use it with arbitrary implementation class of \ ``CharSequence``\  interface.)
+     - | Validate whether elements length or size is between \ ``min``\  and \ ``max``\ .
+       | It is possible to omit \ ``min``\  and \ ``max``\ . In that case, \ ``min=0``\  and \ ``max=Integer.MAX_VALUE``\  by default.
      - .. code-block:: java
 
             @Size(min=4, max=64)
             private String password;
 
    * - \ ``@Digits``\
-     - BigDecimal, BigInteger, String, byte, short, int, long and wrapper
+     - \ ``BigDecimal``\ , \ ``BigInteger``\ , \ ``String``\ , \ ``byte``\ , \ ``short``\ , \ ``int``\ , \ ``long``\  and wrapper
      - | Check whether the value is a numerical value within the specified range.
-       | Specify the maximum number of integer digits permitted in the 'integer' and the maximum value of decimal digits permitted in 'fraction'.
+       | Specify the maximum number of integer digits permitted in the \ ``integer``\  and the maximum value of decimal digits permitted in \ ``fraction``\ .
      - .. code-block:: java
 
             @Digits(integer=6, fraction=2)
             private BigDecimal price;
 
    * - \ ``@AssertTrue``\
-     - boolean,Boolean
-     - Validate that the target field is 'true'(Example: Whether it agrees to the terms）
+     - \ ``boolean``\ ,\ ``Boolean``\
+     - Validate that the target field is \ ``true``\ (Example: Whether it agrees to the terms）
      - .. code-block:: java
 
             @AssertTrue
             private boolean checked;
 
    * - \ ``@AssertFalse``\
-     - boolean,Boolean
-     - Validate whether the target field is 'false'
+     - \ ``boolean``\ ,\ ``Boolean``\
+     - Validate whether the target field is \ ``false``\
      - .. code-block:: java
 
             @AssertFalse
             private boolean checked;
 
    * - \ ``@Future``\
-     - Date, Calendar
+     - \ ``Date``\ , \ ``Calendar``\
        (In case of Hibernate Validator implementation, it is also applicable to Joda-Time class)
      - Validate whether it is a future date.
      - .. code-block:: java
@@ -3685,7 +3685,7 @@ Refer to Chapter 7 \ `Bean Validation specification <http://download.oracle.com/
             private Date eventDate;
 
    * - \ ``@Past``\
-     - Date, Calendar
+     - \ ``Date``\ , \ ``Calendar``\
        (In case of Hibernate Validator implementation, it is also applicable to Joda-Time class)
      - Validate whether it is a past date.
      - .. code-block:: java
@@ -3732,7 +3732,7 @@ Refer to \ `Hibernate Validator specifications <http://docs.jboss.org/hibernate/
      - Application
      - Usage example
    * - \ ``@CreditCardNumber``\
-     - It is applicable to any CharSequence inherited class
+     - It is applicable to any implementation class of \ ``CharSequence``\  interface
      - | Validate whether the credit card number is valid as per Luhn algorithm. It does not necessarily check whether the credit card number is available.
        | By specifying \ ``ignoreNonDigitCharacters = true``\ , it is possible to validate by ignoring non-numeric characters.
      - .. code-block:: java
@@ -3741,7 +3741,7 @@ Refer to \ `Hibernate Validator specifications <http://docs.jboss.org/hibernate/
             private String cardNumber;
 
    * - \ ``@Email``\
-     - It is applicable to any CharSequence inherited class
+     - It is applicable to any implementation class of \ ``CharSequence``\  interface
      - Validate whether the Email address is complaint with RFC2822.
      - .. code-block:: java
 
@@ -3749,7 +3749,7 @@ Refer to \ `Hibernate Validator specifications <http://docs.jboss.org/hibernate/
             private String email;
 
    * - \ ``@URL``\
-     - It is applicable to any CharSequence inherited class
+     - It is applicable to any implementation class of \ ``CharSequence``\  interface
      - Validate whether it is compliant with RFC2396.
      - .. code-block:: java
 
@@ -3757,17 +3757,17 @@ Refer to \ `Hibernate Validator specifications <http://docs.jboss.org/hibernate/
             private String url;
 
    * - \ ``@NotBlank``\
-     - It is applicable to any CharSequence inherited class
-     - Validate that it is not Null, empty string ("") and space only.
+     - It is applicable to any implementation class of \ ``CharSequence``\  interface
+     - Validate that it is not \ ``null``\ , empty string (\ ``""``\ ) and space only.
      - .. code-block:: java
 
             @NotBlank
             private String userId;
 
    * - \ ``@NotEmpty``\
-     - It is applicable to Collection, Map, arrays, and any CharSequence inherited class
-     - | Validate that it is not Null or empty.
-       | @NotEmpty should be used when check is to be done in @NotNull + @Min(1) combination.
+     - It is applicable to \ ``Collection``\ , \ ``Map``\ , Array, and any implementation class of \ ``CharSequence``\  interface
+     - | Validate that it is not \ ``null``\  or empty.
+       | \ ``@NotEmpty``\  should be used when check is to be done in \ ``@NotNull``\  + \ ``@Min(1)``\  combination.
      - .. code-block:: java
 
             @NotEmpty

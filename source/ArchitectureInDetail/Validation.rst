@@ -3600,7 +3600,7 @@ Bean Validationの標準アノテーション(\ ``javax.validation.*``\ )を以�
      - 使用例
    * - \ ``@NotNull``\
      - 任意
-     - 対象のフィールドが、nullでないことを検証する。
+     - 対象のフィールドが、\ ``null``\ でないことを検証する。
      - .. code-block:: java
 
             @NotNull
@@ -3608,7 +3608,7 @@ Bean Validationの標準アノテーション(\ ``javax.validation.*``\ )を以�
             
    * - \ ``@Null``\
      - 任意
-     - | 対象のフィールドが、nullであることを検証する。
+     - | 対象のフィールドが、\ ``null``\ であることを検証する。
        | (例：グループ検証での使用)
      - .. code-block:: java
 
@@ -3616,22 +3616,22 @@ Bean Validationの標準アノテーション(\ ``javax.validation.*``\ )を以�
             private String id;
             
    * - \ ``@Pattern``\
-     - String
+     - \ ``String``\
      - | 対象のフィールドが正規表現にマッチするかどうか
-       | (Hibernate Validator実装では、任意のCharSequence継承クラスにも適用可能)
+       | (Hibernate Validator実装では、任意の\ ``CharSequence``\ インタフェースの実装クラスにも適用可能)
      - .. code-block:: java
 
             @Pattern(regexp = "[0-9]+")
             private String tel;
             
    * - \ ``@Min``\
-     - | BigDecimal, BigInteger, byte, short, int, longおよびラッパー
-       | (Hibernate Validator実装では、任意のNumber,CharSequence継承クラスにも適用可能。ただし、文字列が数値表現の場合に限る。)
+     - | \ ``BigDecimal``\ , \ ``BigInteger``\ , \ ``byte``\ , \ ``short``\ , \ ``int``\ , \ ``long``\ およびラッパー
+       | (Hibernate Validator実装では、任意の\ ``Number``\ の継承クラス,\ ``CharSequence``\ インタフェースの実装クラスにも適用可能。ただし、文字列が数値表現の場合に限る。)
      - 値が、最小値以上であるかどうかを検証する。
      - @Max参照
    * - \ ``@Max``\
-     - | BigDecimal, BigInteger, byte, short, int, longおよびラッパー
-       | (Hibernate Validator実装では任意のNumber,CharSequence継承クラスにも適用可能。ただし、文字列が数値表現の場合に限る。)
+     - | \ ``BigDecimal``\ , \ ``BigInteger``\ , \ ``byte``\ , \ ``short``\ , \ ``int``\ , \ ``long``\ およびラッパー
+       | (Hibernate Validator実装では任意の\ ``Number``\ の継承クラス,\ ``CharSequence``\ インタフェースの実装クラスにも適用可能。ただし、文字列が数値表現の場合に限る。)
      - 値が、最大値以下であるかどうかを検証する。
      - .. code-block:: java
 
@@ -3640,15 +3640,15 @@ Bean Validationの標準アノテーション(\ ``javax.validation.*``\ )を以�
             private int quantity;
             
    * - \ ``@DecimalMin``\
-     - BigDecimal, BigInteger, String, byte, short, int, longおよびラッパー
-       (Hibernate Validator実装では任意のNumber,CharSequence継承クラスにも適用可能)
-     - | Decimal型の値が、最小値以上であるかどうかを検証する。
+     - \ ``BigDecimal``\ , \ ``BigInteger``\ , \ ``String``\ , \ ``byte``\ , \ ``short``\ , \ ``int``\ , \ ``long``\ およびラッパー
+       (Hibernate Validator実装では任意の\ ``Number``\ の継承クラス,\ ``CharSequence``\ インタフェースの実装クラスにも適用可能)
+     - | \ ``Decimal``\ 型の値が、最小値以上であるかどうかを検証する。
        | \ ``inclusive = false``\ を指定する事で、最小値より大きいかどうかを検証するように動作を変更する事ができる。
-     - @DecimalMax参照
+     - \ ``@DecimalMax``\ 参照
    * - \ ``@DecimalMax``\
-     - BigDecimal, BigInteger, String, byte, short, int, longおよびラッパー
-       (Hibernate Validator実装では任意のNumber,CharSequence継承クラスにも適用可能)
-     - | Decimal型の値が、最大値以下であるかどうかを検証する。
+     - \ ``BigDecimal``\ , \ ``BigInteger``\ , \ ``String``\ , \ ``byte``\ , \ ``short``\ , \ ``int``\ , \ ``long``\ およびラッパー
+       (Hibernate Validator実装では任意の\ ``Number``\ の継承クラス,\ ``CharSequence``\ インタフェースの実装クラスにも適用可能)
+     - | \ ``Decimal``\ 型の値が、最大値以下であるかどうかを検証する。
        | \ ``inclusive = false``\ を指定する事で、最大値より小さいかどうかを検証するように動作を変更する事ができる。
      - .. code-block:: java
 
@@ -3657,42 +3657,42 @@ Bean Validationの標準アノテーション(\ ``javax.validation.*``\ )を以�
             private BigDecimal price;
             
    * - \ ``@Size``\
-     - String(length), Collection(size), Map(size), Array(length)
-       (Hibernate Validator実装では、任意のCharSequence継承クラスにも適用可能)
-     - | lengthがminとmaxの間のサイズか検証する。
-       | minとmaxは省略可能であるが、デフォルトはmin=0,max= Integer.MAX_VALUEとなる。
+     - \ ``String``\ (文字列の長さ), \ ``Collection``\ (要素のサイズ), \ ``Map``\ (要素のサイズ), Array(配列の長さ)
+       (Hibernate Validator実装では、任意の\ ``CharSequence``\ インタフェースの実装クラスにも適用可能)
+     - | 要素の長さ(要素のサイズ)が\ ``min``\ と\ ``max``\ の間のサイズか検証する。
+       | \ ``min``\ と\ ``max``\ は省略可能であるが、デフォルトは\ ``min=0``\ ,\ ``max= Integer.MAX_VALUE``\ となる。
      - .. code-block:: java
 
             @Size(min=4, max=64)
             private String password;
             
    * - \ ``@Digits``\
-     - BigDecimal, BigInteger, String, byte, short, int, longおよびラッパー
+     - \ ``BigDecimal``\ , \ ``BigInteger``\ , \ ``String``\ , \ ``byte``\ , \ ``short``\ , \ ``int``\ , \ ``long``\ およびラッパー
      - | 値が指定された範囲内の数値であるかチェックする。
-       | integerに最大整数の桁を指定し、fractionに最大小数桁を指定する。
+       | \ ``integer``\ に最大整数の桁を指定し、\ ``fraction``\ に最大小数桁を指定する。
      - .. code-block:: java
 
             @Digits(integer=6, fraction=2)
             private BigDecimal price;
             
    * - \ ``@AssertTrue``\
-     - boolean,Boolean
-     - 対象のフィールドがtrueであることを検証する(例：規約に同意したかどうか）
+     - \ ``boolean``\ ,\ ``Boolean``\
+     - 対象のフィールドが\ ``true``\ であることを検証する(例：規約に同意したかどうか）
      - .. code-block:: java
 
             @AssertTrue
             private boolean checked;
             
    * - \ ``@AssertFalse``\
-     - boolean,Boolean
-     - 対象のフィールドがfalseであることを検証する
+     - \ ``boolean``\ ,\ ``Boolean``\
+     - 対象のフィールドが\ ``false``\ であることを検証する
      - .. code-block:: java
 
             @AssertFalse
             private boolean checked;
             
    * - \ ``@Future``\
-     - Date, Calender
+     - \ ``Date``\ , \ ``Calendar``\
        (Hibernate Validator実装ではJoda-Timeのクラスにも適用可能)
      - 未来日付であるか検証する。
      - .. code-block:: java
@@ -3701,7 +3701,7 @@ Bean Validationの標準アノテーション(\ ``javax.validation.*``\ )を以�
             private Date eventDate;
             
    * - \ ``@Past``\
-     - Date, Calender
+     - \ ``Date``\ , \ ``Calendar``\
        (Hibernate Validator実装ではJoda-Timeのクラスにも適用可能)
      - 過去日付であるか検証する。
      - .. code-block:: java
@@ -3748,7 +3748,7 @@ Hibernate Validatorの代表的なアノテーション(\ ``org.hibernate.valida
      - 説明
      - 使用例
    * - \ ``@CreditCardNumber``\
-     - 任意のCharSequence継承クラスに適用可能
+     - 任意の\ ``CharSequence``\ インタフェースの実装クラスに適用可能
      - | Luhnアルゴリズムでクレジットカード番号が妥当かどうかを検証する。使用可能な番号かどうかをチェックするわけではない。
        | \ ``ignoreNonDigitCharacters = true``\ を指定する事で、数字以外の文字を無視して検証する事ができる。
      - .. code-block:: java
@@ -3757,7 +3757,7 @@ Hibernate Validatorの代表的なアノテーション(\ ``org.hibernate.valida
             private String cardNumber;
             
    * - \ ``@Email``\
-     - 任意のCharSequence継承クラスに適用可能
+     - 任意の\ ``CharSequence``\ インタフェースの実装クラスに適用可能
      - RFC2822に準拠したEmailアドレスかどうか検証する。
      - .. code-block:: java
 
@@ -3765,7 +3765,7 @@ Hibernate Validatorの代表的なアノテーション(\ ``org.hibernate.valida
             private String email;
             
    * - \ ``@URL``\
-     - 任意のCharSequence継承クラスに適用可能
+     - 任意の\ ``CharSequence``\ インタフェースの実装クラスに適用可能
      - RFC2396に準拠しているかどうか検証する。
      - .. code-block:: java
 
@@ -3773,17 +3773,17 @@ Hibernate Validatorの代表的なアノテーション(\ ``org.hibernate.valida
             private String url;
             
    * - \ ``@NotBlank``\
-     - 任意のCharSequence継承クラスに適用可能
-     - Null、空文字("")、空白のみでないことを検証する。
+     - 任意の\ ``CharSequence``\ インタフェースの実装クラスに適用可能
+     - \ ``null``\ 、空文字(\ ``""``\ )、空白のみでないことを検証する。
      - .. code-block:: java
 
             @NotBlank
             private String userId;
             
    * - \ ``@NotEmpty``\
-     - Collection、Map、arrays、任意のCharSequence継承クラスに適用可能
-     - | Null、または空でないことを検証する。
-       | @NotNull + @Min(1)の組み合わせでチェックする場合は、@NotEmptyを使用すること。
+     - \ ``Collection``\ 、\ ``Map``\ 、Array、任意の\ ``CharSequence``\ インタフェースの実装クラスに適用可能
+     - | \ ``null``\ 、または空でないことを検証する。
+       | \ ``@NotNull``\  + \ ``@Min(1)``\ の組み合わせでチェックする場合は、\ ``@NotEmpty``\ を使用すること。
      - .. code-block:: java
 
             @NotEmpty

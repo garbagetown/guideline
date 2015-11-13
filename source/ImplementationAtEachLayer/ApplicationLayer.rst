@@ -76,7 +76,7 @@ Controllerの実装について、以下4つの点に着目して説明する。
 Controllerクラスの作成方法
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 | **Controllerは、POJOクラスに @Controller アノテーションを付加したクラス (Annotation-based Controller)として作成する。**
-| Spring MVCのControllerとしては、``org.springframework.web.servlet.mvc.Controller``\ インタフェースを実装する方法 (Interfece-based Controller)もあるが、Spring3以降はDeprecatedになっているため、原則使用しない。
+| Spring MVCのControllerとしては、``org.springframework.web.servlet.mvc.Controller``\ インタフェースを実装する方法 (Interface-based Controller)もあるが、Spring3以降はDeprecatedになっているため、原則使用しない。
 
  .. code-block:: java
 
@@ -173,7 +173,7 @@ Controllerクラスの作成方法
    * - 項番
      - 説明
    * - | (1)
-     - ``@Controller``\ アノテーションを付加することでAnnotaion-basedなコントローラークラスとして認識され、component scanの対象となる。
+     - ``@Controller``\ アノテーションを付加することでAnnotation-basedなコントローラークラスとして認識され、component scanの対象となる。
    * - | (2)
      - クラスレベルで\ ``@RequestMapping("sample")``\ アノテーションを付けることでこのクラス内の処理メソッドがsample配下のURLにマッピングされる。
 
@@ -584,7 +584,7 @@ Acceptヘッダでマッピング
 
     @RequestMapping(value = "create", params = "form") // (1)
     public String createForm(AbcForm form, Model model) {
-        // ommited
+        // omitted
         return "abc/createForm"; // (2)
     }
 
@@ -629,7 +629,7 @@ Acceptヘッダでマッピング
       @Max(10)
       private Integer input2;
 
-      // ommited setter&getter
+      // omitted setter&getter
   }
 
 フォームオブジェクトを生成する。
@@ -669,7 +669,7 @@ Acceptヘッダでマッピング
    * - 項番
      - 説明
    * - | (1)
-     - 確認画面へ遷移するためにのsubmitボタンには\ ``name="confirm"``\ というパラメータを指定しておく。
+     - 確認画面へ遷移するためにsubmitボタンには\ ``name="confirm"``\ というパラメータを指定しておく。
 
 |
 
@@ -699,7 +699,7 @@ Acceptヘッダでマッピング
         if (result.hasErrors()) {
             return createRedo(form, model); // return "abc/createForm"; (2)
         }
-        // ommited
+        // omitted
         return "abc/createConfirm"; // (3)
     }
 
@@ -773,7 +773,7 @@ Acceptヘッダでマッピング
 
 以下に、入力内容確認の動作について説明する。
 
-| 入力内容確認表示表示処理を呼び出す。
+| 入力内容確認表示処理を呼び出す。
 | フォーム画面でInput1に ``"aa"`` を、Input2に ``"5"`` を入力し、Confirmボタンを押下する。
 | Confirmボタンを押下すると、 ``"abc/create?confirm"`` というURIにPOSTメソッドでアクセスする。
 | ``confirm`` というHTTPパラメータがあるため、ControllerのcreateConfirmメソッドが呼び出され、入力内容確認画面が表示される。
@@ -799,7 +799,7 @@ Confirmボタンを押下するとPOSTメソッドでHTTPパラメータが送�
 
     @RequestMapping(value = "create", method = RequestMethod.POST, params = "redo") // (1)
     public String createRedo(AbcForm form, Model model) {
-        // ommited
+        // omitted
         return "abc/createForm"; // (2)
     }
 
@@ -864,7 +864,7 @@ Backボタンを押下するとPOSTメソッドでHTTPパラメータが送信�
         if (result.hasErrors()) {
             return createRedo(form, model); // return "abc/createForm";
         }
-        // ommited
+        // omitted
         return "redirect:/abc/create?complete"; // (2)
     }
 
@@ -916,7 +916,7 @@ Backボタンを押下するとPOSTメソッドでHTTPパラメータが送信�
 
     @RequestMapping(value = "create", params = "complete") // (1)
     public String createComplete() {
-        // ommited
+        // omitted
         return "abc/createComplete"; // (2)
     }
 
@@ -1015,7 +1015,7 @@ Backボタン押下時の動作については、 :ref:`controller-mapping-polic
         // Handling request of "/abc/create?form"
         @RequestMapping(value = "create", params = "form")
         public String createForm(AbcForm form, Model model) {
-            // ommited
+            // omitted
             return "abc/createForm";
         }
 
@@ -1026,14 +1026,14 @@ Backボタン押下時の動作については、 :ref:`controller-mapping-polic
             if (result.hasErrors()) {
                 return createRedo(form, model);
             }
-            // ommited
+            // omitted
             return "abc/createConfirm";
         }
 
         // Handling request of "POST /abc/create?redo"
         @RequestMapping(value = "create", method = RequestMethod.POST, params = "redo")
         public String createRedo(AbcForm form, Model model) {
-            // ommited
+            // omitted
             return "abc/createForm";
         }
 
@@ -1043,14 +1043,14 @@ Backボタン押下時の動作については、 :ref:`controller-mapping-polic
             if (result.hasErrors()) {
                 return createRedo(form, model);
             }
-            // ommited
+            // omitted
             return "redirect:/abc/create?complete";
         }
 
         // Handling request of "/abc/create?complete"
         @RequestMapping(value = "create", params = "complete")
         public String createComplete() {
-            // ommited
+            // omitted
             return "abc/createComplete";
         }
 
@@ -1768,7 +1768,7 @@ HTMLを応答する
 
     @RequestMapping("hello")
     public String hello() {
-        // ommited
+        // omitted
         return "sample/hello"; // (6)
     }
 
@@ -1859,7 +1859,7 @@ HTMLを応答する
 
     @RequestMapping("report")
     public String report() {
-        // ommited
+        // omitted
         return "sample/report"; // (4)
     }
 
@@ -2029,7 +2029,7 @@ Controllerで実装すべき処理を以下に4つ示す。
 
     @RequestMapping("hello")
     public String hello(@Validated SampleForm form, BindingResult result, Model model){
-        // ommited
+        // omitted
         Sample sample = new Sample(); // (1)
         sample.setField1(form.getField1());
         sample.setField2(form.getField2());
@@ -2069,7 +2069,7 @@ Controllerで実装すべき処理を以下に4つ示す。
 
     @RequestMapping("hello")
     public String hello(@Validated SampleForm form, BindingResult result){
-        // ommited
+        // omitted
         String message = sampleHelper.hello(form); // (2)
         model.addAttribute("message", message);
         return "sample/hello";
@@ -2132,7 +2132,7 @@ Controllerで実装すべき処理を以下に4つ示す。
 
     @RequestMapping("hello")
     public String hello(SampleForm form, BindingResult result, Model model){
-        // ommited
+        // omitted
         Sample sample = sampleService.getSample(form.getId()); // (1)
         form.setField1(sample.getField1()); // (2)
         form.setField2(sample.getField2());
@@ -2171,7 +2171,7 @@ Controllerで実装すべき処理を以下に4つ示す。
 
     @RequestMapping("hello")
     public String hello(@Validated SampleForm form, BindingResult result){
-        // ommited
+        // omitted
         Sample sample = sampleService.getSample(form.getId());
         sampleHelper.applyToForm(sample, form); // (1)
         model.addAttribute(sample);
@@ -3383,7 +3383,7 @@ Spring Securityから提供されている ``<sec:authorize>`` を使用して�
 
 JavaScriptの実装
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-画面描画後に画面項目の制御(表示/非表示、活性/非活性などの制御)を行う必要ががある場合は、JavaScriptを使用して、項目の制御を行う。
+画面描画後に画面項目の制御(表示/非表示、活性/非活性などの制御)を行う必要がある場合は、JavaScriptを使用して、項目の制御を行う。
 
 .. todo::
 

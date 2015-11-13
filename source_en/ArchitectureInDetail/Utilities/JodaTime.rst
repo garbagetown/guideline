@@ -682,7 +682,7 @@ The ``CalendarOutput`` class mentioned below is JavaBean having the consolidated
 
         private int monthOfPrevMonth;
 
-        // ommited getter/setter
+        // omitted getter/setter
     }
 
 |

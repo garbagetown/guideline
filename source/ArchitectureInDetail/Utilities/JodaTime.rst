@@ -706,7 +706,7 @@ Spring MVCを使って、月単位のカレンダーを表示するサンプル�
 
         private int monthOfPrevMonth;
 
-        // ommited getter/setter
+        // omitted getter/setter
     }
 
 |

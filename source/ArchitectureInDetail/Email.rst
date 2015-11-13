@@ -370,7 +370,7 @@ SimpleMailMessageによるメール送信方法
     SimpleMailMessage templateMessage; // (2)
 
     public void register(User user) {
-        // ommited
+        // omitted
         
         // (3)
         SimpleMailMessage message = new SimpleMailMessage(templateMessage);
@@ -382,7 +382,7 @@ SimpleMailMessageによるメール送信方法
         message.setText(text);
         mailSender.send(message);
         
-        // ommited
+        // omitted
     }
 
 .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
@@ -474,7 +474,7 @@ MimeMessageによるメール送信方法
     JavaMailSender mailSender; // (1)
 
     public void register(User user) {
-        // ommited
+        // omitted
         
         // (2)
         mailSender.send(new MimeMessagePreparator() {
@@ -494,7 +494,7 @@ MimeMessageによるメール送信方法
             }
         });
         
-        // ommited
+        // omitted
     }
 
 .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
@@ -547,7 +547,7 @@ HTMLメールの送信
     JavaMailSender mailSender; // (1)
 
     public void register(User user) {
-        // ommited
+        // omitted
         
         // (2)
         mailSender.send(new MimeMessagePreparator() {
@@ -567,7 +567,7 @@ HTMLメールの送信
             }
         });
         
-        // ommited
+        // omitted
     }
 
 .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
@@ -615,7 +615,7 @@ HTMLメールの送信
     JavaMailSender mailSender; // (1)
 
     public void register(User user) {
-        // ommited
+        // omitted
         
         // (2)
         mailSender.send(new MimeMessagePreparator() {
@@ -638,7 +638,7 @@ HTMLメールの送信
             }
         });
         
-        // ommited
+        // omitted
     }
 
 .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
@@ -685,7 +685,7 @@ HTMLメールの送信
     JavaMailSender mailSender; // (1)
 
     public void register(User user) {
-        // ommited
+        // omitted
         
         // (2)
         mailSender.send(new MimeMessagePreparator() {
@@ -710,7 +710,7 @@ HTMLメールの送信
             }
         });
         
-        // ommited
+        // omitted
     }
 
 .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
@@ -910,7 +910,7 @@ FreeMarkerを使用したメール本文の作成
     	Configuration freemarkerConfiguration; // (1)
     	
         public void register(User user) {
-            // ommited
+            // omitted
             
             mailSender.send(new MimeMessagePreparator() {
 
@@ -929,7 +929,7 @@ FreeMarkerを使用したメール本文の作成
                 }
             });
             
-            // ommited
+            // omitted
         }
 
     .. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|

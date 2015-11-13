@@ -130,7 +130,7 @@ Bean間のフィールド名、型が同じ場合のマッピング
     public class Source {
         private int id;
         private String name;
-        // ommited setter/getter
+        // omitted setter/getter
     }
 
 
@@ -141,7 +141,7 @@ Bean間のフィールド名、型が同じ場合のマッピング
     public class Destination {
         private int id;
         private String name;
-        // ommited setter/getter
+        // omitted setter/getter
     }
 
 
@@ -219,7 +219,7 @@ Bean間のフィールド名、型が同じ場合のマッピング
             public class Source {
                 private int id;
                 private String name;
-                // ommited setter/getter
+                // omitted setter/getter
             }
     
     
@@ -231,7 +231,7 @@ Bean間のフィールド名、型が同じ場合のマッピング
                 private int id;
                 private String name;
                 private String title;
-                // ommited setter/getter
+                // omitted setter/getter
             }
     
     マッピング例
@@ -278,7 +278,7 @@ Bean間のフィールド名は同じ、型が異なる場合のマッピング
 
     public class Source {
         private String amount;
-        // ommited setter/getter
+        // omitted setter/getter
     }
 
 
@@ -288,7 +288,7 @@ Bean間のフィールド名は同じ、型が異なる場合のマッピング
 
     public class Destination {
         private BigDecimal amount;
-        // ommited setter/getter
+        // omitted setter/getter
     }
 
 
@@ -326,7 +326,7 @@ Beanマッピングするフィールドを定義することで変換できる�
     public class Source {
         private int id;
         private String name;
-        // ommited setter/getter
+        // omitted setter/getter
     }
 
 
@@ -337,7 +337,7 @@ Beanマッピングするフィールドを定義することで変換できる�
     public class Destination {
         private int destinationId;
         private String destinationName;
-        // ommited setter/getter
+        // omitted setter/getter
     }
 
 
@@ -464,7 +464,7 @@ src/main/resources/META-INF/dozerフォルダ内に、(任意の値)-mapping.xml
     public class Source {
         private int id;
         private String name;
-        // ommited setter/getter
+        // omitted setter/getter
     }
 
 
@@ -475,7 +475,7 @@ src/main/resources/META-INF/dozerフォルダ内に、(任意の値)-mapping.xml
     public class Destination {
         private int destinationId;
         private String destinationName;
-        // ommited setter/getter
+        // omitted setter/getter
     }
 
 マッピング例
@@ -1196,7 +1196,7 @@ dozer-configration-mapping.xml
     public class Source {
         private int id;
         private String date;
-        // ommited setter/getter
+        // omitted setter/getter
     }
 
 
@@ -1207,7 +1207,7 @@ dozer-configration-mapping.xml
     public class Destination {
         private int id;
         private DateTime date;
-        // ommited setter/getter
+        // omitted setter/getter
     }
 
 
@@ -1264,7 +1264,7 @@ Beanを変換する際に、コピーしてほしくないフィールドを除�
         private int id;
         private String name;
         private String title;
-        // ommited setter/getter
+        // omitted setter/getter
     }
 
 
@@ -1276,7 +1276,7 @@ Beanを変換する際に、コピーしてほしくないフィールドを除�
         private int id;
         private String name;
         private String title;
-        // ommited setter/getter
+        // omitted setter/getter
     }
 
 
@@ -1487,7 +1487,7 @@ map-idを指定しない場合はこの設定は適用されず、全フィー�
         private int id;
         private String name;
         private String title;
-        // ommited setter/getter
+        // omitted setter/getter
     }
 
 
@@ -1499,7 +1499,7 @@ map-idを指定しない場合はこの設定は適用されず、全フィー�
         private int id;
         private String name;
         private String title;
-        // ommited setter/getter
+        // omitted setter/getter
     }
 
 
@@ -1599,7 +1599,7 @@ map-idを指定しない場合はこの設定は適用されず、全フィー�
 
     public class Source {
         private String date;
-        // ommited setter/getter
+        // omitted setter/getter
     }
 
 
@@ -1609,7 +1609,7 @@ map-idを指定しない場合はこの設定は適用されず、全フィー�
 
     public class Destination {
         private Date date;
-        // ommited setter/getter
+        // omitted setter/getter
     }
 
 マッピング

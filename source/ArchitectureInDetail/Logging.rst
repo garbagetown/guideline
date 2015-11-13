@@ -519,15 +519,15 @@ SLF4Jのロガー(\ ``org.slf4j.Logger``\ )の各ログレベルに応じたメ�
 .. code-block:: java
 
     public String home(Model model) {
-        // ommited
+        // omitted
 
         try {
             throwException();
         } catch (Exception e) {
             logger.error("Exception happend!", e);
-            // ommited
+            // omitted
         }
-        // ommited
+        // omitted
     }
 
     public void throwException() throws Exception {
@@ -569,7 +569,7 @@ SLF4Jのロガー(\ ``org.slf4j.Logger``\ )の各ログレベルに応じたメ�
            } catch (Exception e) {
                // NG => logger.error("Exception happend! [a={} , b={}]", e, a, b);
                logger.error("Exception happend! [a=" + a + " , b=" + b + "]", e);
-               // ommited
+               // omitted
            }
 
 

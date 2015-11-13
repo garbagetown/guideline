@@ -1284,7 +1284,7 @@ Spring MVCの、デフォルトの例外ハンドリング機能によって行�
     date:2013-09-17 22:25:55	thread:tomcat-http--8	X-Track:6cfb0b378c124b918e40ac0c32a1fac7	level:WARN 	logger:o.t.gfw.common.exception.ExceptionLogger        	message:[e.xx.fw.8001] ResultMessages [type=error, list=[ResultMessage [code=e.ad.od.5001, args=[5], text=null]]]
     org.terasoluna.gfw.common.exception.BusinessException: ResultMessages [type=error, list=[ResultMessage [code=e.ad.od.5001, args=[5], text=null]]]
 
-    // stackTarace ommited
+    // stackTarace omitted
     ...
 
     date:2013-09-17 22:25:55	thread:tomcat-http--8	X-Track:6cfb0b378c124b918e40ac0c32a1fac7	level:DEBUG	logger:o.t.gfw.web.exception.SystemExceptionResolver   	message:Resolving exception from handler [public java.lang.String org.terasoluna.exception.app.example.ExampleExceptionController.home(java.util.Locale,org.springframework.ui.Model)]: org.terasoluna.gfw.common.exception.BusinessException: ResultMessages [type=error, list=[ResultMessage [code=e.ad.od.5001, args=[5], text=null]]]
@@ -1370,7 +1370,7 @@ Spring MVCの、デフォルトの例外ハンドリング機能によって行�
   org.terasoluna.gfw.common.exception.SystemException: not found item entity. item code [10-123456].
   	at org.terasoluna.exception.domain.service.ExampleExceptionServiceImpl.throwSystemException(ExampleExceptionServiceImpl.java:14) ~[ExampleExceptionServiceImpl.class:na]
   ...
-  // stackTarace ommited
+  // stackTarace omitted
 
 表示される画面
 
@@ -1468,7 +1468,7 @@ Spring MVCの、デフォルトの例外ハンドリング機能によって行�
   date:2013-09-19 21:31:47	thread:tomcat-http--3	X-Track:df5271ece2304b12a2c59ff494806397	level:ERROR	logger:o.t.gfw.common.exception.ExceptionLogger        	message:[e.xx.fw.9001] Test example exception
   org.springframework.web.client.RestClientException: Test example exception
   ...
-  // stackTarace ommited
+  // stackTarace omitted
 
  .. warning::
 

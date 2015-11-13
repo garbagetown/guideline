@@ -2440,6 +2440,8 @@ Bean Validationは標準で用意されているチェックルール以外に�
 
 
 
+.. _Validation_convine_existing_constraint:
+
 既存ルールを組み合わせたBean Validationアノテーションの作成
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -2662,6 +2664,8 @@ Bean Validationは標準で用意されているチェックルール以外に�
     Hibernate Validatorでは、OR条件を実現するための\ ``@ConstraintComposition``\ アノテーションが用意されている。
     詳細は、\ `Hibernate Validatorのドキュメント <http://docs.jboss.org/hibernate/validator/5.1/reference/en-US/html/validator-specifics.html#section-boolean-constraint-composition>`_\ を参照されたい。
 
+.. _Validation_implement_new_constraint:
+
 新規ルールを実装したBean Validationアノテーションの作成
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -2672,6 +2676,8 @@ Bean Validationは標準で用意されているチェックルール以外に�
 * 既存のルールの組み合わせでは表現できないルール
 * 相関項目チェックルール
 * 業務ロジックチェック
+
+.. _Validation_cannot_expressed_existing:
 
 既存のルールの組み合わせでは表現できないルール
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -2795,6 +2801,8 @@ Bean Validationは標準で用意されているチェックルール以外に�
 .. tip::
 
   :ref:`fileupload_validator`\ の例も、ここに分類される。また共通ライブラリでは、この実装として\ :ref:`@ExistInCodeList <codelist-validate>`\ を用意している。
+
+.. _Validation_correlation_item_check:
 
 相関項目チェックルール
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -3016,6 +3024,8 @@ Bean Validationは標準で用意されているチェックルール以外に�
             return "password/resetComplete";
         }
     }
+
+.. _Validation_business_logic_check:
 
 業務ロジックチェック
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -3590,20 +3600,29 @@ Bean Validationの標準アノテーションを、以下に示す。
    * - \ ``@NotNull``\
      - 任意
      - 対象のフィールドが、nullでないことを検証する。
-     - | @NotNull
-       | private String id;
+     - .. code-block:: java
+
+            @NotNull
+            private String id;
+            
    * - \ ``@Null``\
      - 任意
      - | 対象のフィールドが、nullであることを検証する。
        | (例：グループ検証での使用)
-     - | @Nulll(groups={Update.class})
-       | private String id;
+     - .. code-block:: java
+
+            @Nulll(groups={Update.class})
+            private String id;
+            
    * - \ ``@Pattern``\
      - String
      - | 対象のフィールドが正規表現にマッチするかどうか
        | (Hibernate Validator実装では、任意のCharSequence継承クラスにも適用可能)
-     - | @Pattern(regexp = "[0-9]+")
-       | private String tel;
+     - .. code-block:: java
+
+            @Pattern(regexp = "[0-9]+")
+            private String tel;
+            
    * - \ ``@Min``\
      - | BigDecimal, BigInteger, byte, short, int, longおよびラッパー
        | (Hibernate Validator実装では、任意のNumber,CharSequence継承クラスにも適用可能。ただし、文字列が数値表現の場合に限る。)
@@ -3613,9 +3632,12 @@ Bean Validationの標準アノテーションを、以下に示す。
      - | BigDecimal, BigInteger, byte, short, int, longおよびラッパー
        | (Hibernate Validator実装では任意のNumber,CharSequence継承クラスにも適用可能。ただし、文字列が数値表現の場合に限る。)
      - 値が、最大値以下であるかどうかを検証する。
-     - | @Min(1)
-       | @Max(100)
-       | private int quantity;
+     - .. code-block:: java
+
+            @Min(1)
+            @Max(100)
+            private int quantity;
+            
    * - \ ``@DecimalMin``\
      - BigDecimal, BigInteger, String, byte, short, int, longおよびラッパー
        (Hibernate Validator実装では任意のNumber,CharSequence継承クラスにも適用可能)
@@ -3627,52 +3649,76 @@ Bean Validationの標準アノテーションを、以下に示す。
        (Hibernate Validator実装では任意のNumber,CharSequence継承クラスにも適用可能)
      - | Decimal型の値が、最大値以下であるかどうかを検証する。
        | \ ``inclusive = false``\ を指定する事で、最大値より小さいかどうかを検証するように動作を変更する事ができる。
-     - | @DecimalMin("0.0")
-       | @DecimalMax("99999.99")
-       | private BigDecimal price;
+     - .. code-block:: java
+
+            @DecimalMin("0.0")
+            @DecimalMax("99999.99")
+            private BigDecimal price;
+            
    * - \ ``@Size``\
      - String(length), Collection(size), Map(size), Array(length)
        (Hibernate Validator実装では、任意のCharSequence継承クラスにも適用可能)
      - | lengthがminとmaxの間のサイズか検証する。
        | minとmaxは省略可能であるが、デフォルトはmin=0,max= Integer.MAX_VALUEとなる。
-     - | @Size(min=4, max=64)
-       | private String password;
+     - .. code-block:: java
+
+            @Size(min=4, max=64)
+            private String password;
+            
    * - \ ``@Digits``\
      - BigDecimal, BigInteger, String, byte, short, int, longおよびラッパー
      - | 値が指定された範囲内の数値であるかチェックする。
        | integerに最大整数の桁を指定し、fractionに最大小数桁を指定する。
-     - | @Digits(integer=6, fraction=2)
-       | private BigDecimal price;
+     - .. code-block:: java
+
+            @Digits(integer=6, fraction=2)
+            private BigDecimal price;
+            
    * - \ ``@AssertTrue``\
      - boolean,Boolean
      - 対象のフィールドがtrueであることを検証する(例：規約に同意したかどうか）
-     - | @AssertTrue
-       | private boolean checked;
+     - .. code-block:: java
+
+            @AssertTrue
+            private boolean checked;
+            
    * - \ ``@AssertFalse``\
      - boolean,Boolean
      - 対象のフィールドがfalseであることを検証する
-     - | @AssertFalse
-       | private boolean checked;
+     - .. code-block:: java
+
+            @AssertFalse
+            private boolean checked;
+            
    * - \ ``@Future``\
      - Date, Calender
        (Hibernate Validator実装ではJoda-Timeのクラスにも適用可能)
      - 未来日付であるか検証する。
-     - | @Future
-       | private Date eventDate;
+     - .. code-block:: java
+
+            @Future
+            private Date eventDate;
+            
    * - \ ``@Past``\
      - Date, Calender
        (Hibernate Validator実装ではJoda-Timeのクラスにも適用可能)
      - 過去日付であるか検証する。
-     - | @Past
-       | private Date eventDate;
+     - .. code-block:: java
+
+            @Past
+            private Date eventDate;
+            
    * - \ ``@Valid``\
      - 任意の非プリミティブ型
      - 関連付けられているオブジェクトについて、再帰的に検証を行う。
-     - | @Valid
-       | private List<Employer> employers;
-       |
-       | @Valid
-       | private Dept dept;
+     - .. code-block:: java
+
+            @Valid
+            private List<Employer> employers;
+            
+            @Valid
+            private Dept dept;
+
 
 .. tip::
 
@@ -3703,29 +3749,43 @@ Hibernate Validatorの代表的なアノテーションを、以下に示す。
      - 任意のCharSequence継承クラスに適用可能
      - | Luhnアルゴリズムでクレジットカード番号が妥当かどうかを検証する。使用可能な番号かどうかをチェックするわけではない。
        | \ ``ignoreNonDigitCharacters = true``\ を指定する事で、数字以外の文字を無視して検証する事ができる。
-     - | @CreditCardNumber
-       | private String cardNumber;
+     - .. code-block:: java
+
+            @CreditCardNumber
+            private String cardNumber;
+            
    * - \ ``@Email``\
      - 任意のCharSequence継承クラスに適用可能
      - RFC2822に準拠したEmailアドレスかどうか検証する。
-     - | @Email
-       | private String email;
+     - .. code-block:: java
+
+            @Email
+            private String email;
+            
    * - \ ``@URL``\
      - 任意のCharSequence継承クラスに適用可能
      - RFC2396に準拠しているかどうか検証する。
-     - | @URL
-       | private String url;
+     - .. code-block:: java
+
+            @URL
+            private String url;
+            
    * - \ ``@NotBlank``\
      - 任意のCharSequence継承クラスに適用可能
      - Null、空文字("")、空白のみでないことを検証する。
-     - | @NotBlank
-       | private String userId;
+     - .. code-block:: java
+
+            @NotBlank
+            private String userId;
+            
    * - \ ``@NotEmpty``\
      - Collection、Map、arrays、任意のCharSequence継承クラスに適用可能
      - | Null、または空でないことを検証する。
        | @NotNull + @Min(1)の組み合わせでチェックする場合は、@NotEmptyを使用すること。
-     - | @NotEmpty
-       | private String password;
+     - .. code-block:: java
+
+            @NotEmpty
+            private String password;
 
 
 .. warning::
@@ -3791,6 +3851,426 @@ hibernate-validator-<version>.jar内のorg/hibernate/validatorに、ValidationMe
   org.hibernate.validator.constraints.br.CNPJ.message                 = invalid Brazilian corporate taxpayer registry number (CNPJ)
   org.hibernate.validator.constraints.br.CPF.message                  = invalid Brazilian individual taxpayer registry number (CPF)
   org.hibernate.validator.constraints.br.TituloEleitoral.message      = invalid Brazilian Voter ID card number
+
+
+.. _Validation_terasoluna_gfw:
+
+共通ライブラリが用意する入力チェックルール
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+| 共通ライブラリでは、検証できるアノテーションを追加している。
+
+.. _Validation_terasoluna_gfw_list:
+
+共通ライブラリのチェックルール
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+共通ライブラリが提供するアノテーションを、以下に示す。
+
+* \ `terasoluna-gfw-common <https://github.com/terasolunaorg/terasoluna-gfw/tree/master/terasoluna-gfw-common>`_\ で提供されるチェックルール
+
+  .. tabularcolumns:: |p{0.20\linewidth}|p{0.20\linewidth}|p{0.20\linewidth}|p{0.20\linewidth}|p{0.20\linewidth}|
+  .. list-table::
+     :header-rows: 1
+
+     * - アノテーション(org.terasoluna.gfw.common.codelist.*)
+       - 対象の型
+       - 用途
+       - 使用例
+     * - \ ``@ExistInCodeList``\
+       - | Character, String
+       - 値がコードリストに含まれているかどうかを検証する。
+       - \ :ref:`@ExistInCodeList <codelist-validate>`\  参照
+
+
+* \ `terasoluna-gfw-validator <https://github.com/terasolunaorg/terasoluna-gfw/tree/master/terasoluna-gfw-validator>`_\ で提供されるチェックルール
+
+  .. tabularcolumns:: |p{0.20\linewidth}|p{0.20\linewidth}|p{0.20\linewidth}|p{0.20\linewidth}|p{0.20\linewidth}|
+  .. list-table::
+     :header-rows: 1
+
+     * - アノテーション(org.terasoluna.gfw.common.validator.constraints.*)
+       - 対象の型
+       - 用途
+       - 設定値
+       - 使用例
+     * - \ ``@ByteMin``\
+       - | String
+       - 値のバイト長が、最小値以上であるかどうかを検証する。
+       - | \ ``Long value``\  - 値のバイト長が許容される最小値を設定する。
+         | \ ``String charset``\  - 値をバイトシーケンスに符号化するために使用する文字セットを設定する。デフォルト値は\ ``UTF-8``\ 。
+       - @ByteMax参照
+     * - \ ``@ByteMax``\
+       - | String
+       - 値のバイト長が、最大値以下であるかどうかを検証する。
+       - | \ ``Long value``\  - 値のバイト長が許容される最大値を設定する。
+         | \ ``String charset``\  - 値をバイトシーケンスに符号化するために使用する文字セットを設定する。デフォルト値は\ ``UTF-8``\ 。
+       - .. code-block:: java
+
+              @ByteMin(1)
+              @ByteMax(value = 100,
+                      charset = "Shift_JIS")
+              private String id;
+              
+     * - \ ``@After``\
+       - @Before参照
+       - 指定日付・時間より後であるかを検証する。（指定日付・時間は許可されない。）
+       - | \ ``String value``\  - 値がこれより後であるべき指定日付・時間を文字列で設定する。
+         | \ ``String format``\  - 指定日付・時間に任意の書式を指定したい場合に書式文字列を設定する。デフォルト値は対象の型ごとに異なるため、下記別表を参照されたい。
+       - @Before参照
+     * - \ ``@Before``\
+       - | Date, Calendar
+         | \ `Date and Time API (java.time.*) <https://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html>`_\ 
+         | \ `Joda-Time (org.joda.time.*) <http://www.joda.org/joda-time/index.html>`_\ 
+         | 対応クラスの一覧は、下記別表を参照されたい。
+       - 指定日付・時間より前であるかを検証する。（指定日付・時間は許可されない。）
+       - | \ ``String value``\  - 値がこれより前であるべき指定日付・時間を文字列で設定する。
+         | \ ``String format``\  - 指定日付・時間に任意の書式を指定したい場合に書式文字列を設定する。デフォルト値は対象の型ごとに異なるため、下記別表を参照されたい。
+       - .. code-block:: java
+
+              @After("2014-12-31")
+              @Before("2016-01-01")
+              private Date eventDate;
+
+         \ ``format``\ 属性を指定しない場合は、下記別表のフォーマットに沿った指定日付・時間を設定する。
+         
+         .. code-block:: java
+
+              @After(value = "2014/12/31",)
+                      format = "yyyy/MM/dd")
+              @Before(value = "2016/01/01",
+                      format = "yyyy/MM/dd")
+              private Date eventDate;
+
+              @After(value = "2014/12/31",
+                      format = "uuuu/MM/dd")
+              @Before(value = "2016/01/01",
+                      format = "uuuu/MM/dd")
+              private java.time.LocalDate joinDate;
+
+         \ ``format``\ 属性を指定する場合は、指定したフォーマットに沿った指定日付・時間の文字列を設定する。
+         
+         Date and Time APIの対応クラスでは、フォーマットは厳密モード（\ ``java.time.ResolverStyle.STRICT``\）で解析される。Date and Time APIにおいて、書式文字\ ``"u"``\ が年（year）を、\ ``"y"``\ が暦に対する年（year-of-era）を意味しており、厳密モードで暦を指定しない場合には書式文字\ ``"u"``\ を指定しなければならないことに注意されたい。
+         
+     * - \ ``@Compare``\
+       - | 任意のCompareble継承クラスのプロパティをもつObjectに適用可能
+       - オブジェクトの指定したプロパティ同士の大小を比較し、期待値通りであるかどうかを検証する。
+       - | \ ``String source``\  - オブジェクト内の比較元としたいプロパティ名を文字列で設定する。検証エラーとなった場合は、このプロパティにメッセージを表示する。
+         | \ ``String destination``\  - オブジェクト内の比較先としたいプロパティ名を文字列で設定する。
+         | \ ``org.terasoluna.gfw.common.validator.constraints.Compare.Operator operator``\  - 期待する比較結果を列挙型Operatorで定義された以下の値から選択する。
+         |    * \ ``EQUAL``\  : \ ``source = destination``\ である
+         |    * \ ``GRATER_THAN``\  : \ ``source > destination``\ である
+         |    * \ ``GRATER_THAN_OR_EQUAL``\  : \ ``source >= destination``\ である
+         |    * \ ``LESS_THAN``\  : \ ``source < destination``\ である
+         |    * \ ``LESS_THAN_OR_EQUAL``\  : \ ``source <= destination``\ である
+       - .. code-block:: java
+
+              @Compare(source = "email",
+                      destination = "confirmEmail",
+                      operator = Compare.Operator.EQUAL)
+              public class User {
+                  private String email;
+                  private String confirmEmail;
+              }
+
+         メールアドレスと確認用に入力したメールアドレスが正しいことをチェックする場合、上記のように実装する。
+
+         .. code-block:: java
+
+              @Compare(source = "form",
+                      destination = "to",
+                      operator = Compare.Operator.LESS_THAN_OR_EQUAL)
+              public class Period {
+                  private Date from;
+                  private Date to;
+              }
+
+         期間の開始日が終了日以前であることをチェックする場合、上記のように実装する。
+         
+  \ ``@After``\  と \ ``@Before``\ アノテーションが対応するクラスと、\ ``format``\ 属性のデフォルト値の一覧を、以下に示す。
+
+  .. tabularcolumns:: |p{0.20\linewidth}|p{0.20\linewidth}|p{0.20\linewidth}|p{0.20\linewidth}|p{0.20\linewidth}|
+  .. list-table::
+      :header-rows: 1
+
+      * - 型
+        - \ ``format``\ 属性のデフォルト値
+        - 設定例
+      * - | \ ``java.util.Date``\
+        - | \ ``"yyyy-MM-dd"``\
+        - .. code-block:: java
+
+              @Before("2016-01-01")
+              private Date eventDate;
+              
+      * - | \ ``java.util.Calendar``\
+        - | \ ``"yyyy-MM-dd"``\
+        - .. code-block:: java
+
+              @Before("2016-01-01")
+              private Calendar eventDate;
+              
+      * - | \ ``java.time.chrono.ChronoLocalDate``\ 実装クラス
+          | (HijrahDate, JapaneseDate, LocalDate, MinguoDate, ThaiBuddhistDate)
+        - | \ ``DateTimeFormatter.ISO_LOCAL_DATE``\
+        - .. code-block:: java
+
+              @Before("2016-01-01")
+              private LocalDate eventDate;
+              
+      * - | \ ``java.time.chrono.ChronoLocalDateTime``\ 実装クラス
+          | (LocalDateTime)
+        - | \ ``DateTimeFormatter.ISO_LOCAL_DATE_TIME``\
+        - .. code-block:: java
+
+              @Before("2016-01-01T00:00:00")
+              private LocalDateTime eventDate;
+              
+      * - | java.time.chrono.ChronoZonedDateTime``\ 実装クラス
+          | (ZonedDateTime)
+        - | \ ``DateTimeFormatter.ISO_ZONED_DATE_TIME``\
+        - .. code-block:: java
+
+              @Before("2016-01-01T00:00:00+09:00[Asia/Tokyo]")
+              private ZonedDateTime eventDate;
+              
+      * - | \ ``java.time.LocalTime``\
+        - | \ ``DateTimeFormatter.ISO_LOCAL_TIME``\
+        - .. code-block:: java
+
+              @Before("12:00:00")
+              private LocalTime eventTime;
+              
+      * - | \ ``java.time.OffsetDateTime``\
+        - | \ ``DateTimeFormatter.ISO_OFFSET_DATE_TIME``\
+        - .. code-block:: java
+
+              @Before("2016-01-01T00:00:00+09:00")
+              private OffsetDateTime eventDate;
+              
+      * - | \ ``java.time.OffsetTime``\
+        - | \ ``DateTimeFormatter.ISO_OFFSET_TIME``\
+        - .. code-block:: java
+
+              @Before("12:00:00+09:00")
+              private OffsetTime eventTime;
+              
+      * - | \ ``java.time.Year``\
+        - | \ ``"uuuu"``\
+        - .. code-block:: java
+
+              @Before("2016")
+              private Year eventYear;
+              
+      * - | java.time.YearMonth``\
+        - | \ ``"uuuu-MM"``\
+        - .. code-block:: java
+
+              @Before("2016-01")
+              private YearMonth eventYearMonth;
+              
+      * - | \ ``org.joda.time.ReadableInstant``\ 実装クラス
+          | (DateTime, MutableDateTime, DateMidnight, Instant)
+        - | \ ``org.joda.time.DateTime#parse()``\ 可能な文字列
+        - .. code-block:: java
+
+              @Before("2016-01-01T00:00:00")
+              private DateTime eventDate;
+              
+      * - | \ ``org.joda.time.ReadablePartial``\ 実装クラス
+          | (LocalDate, LocalDateTime, LocalTime, YearMonth, MonthDay, Partial)
+        - | \ ``org.joda.time.DateTime#parse()``\ 可能な文字列
+        - .. code-block:: java
+
+              @Before("2016-01-01")
+              private LocalDate eventDate;
+              
+              @Before("12:00:00")
+              private LocalTime eventTime;
+              
+              @Before("2016-01")
+              private YearMonth eventYearMonth;
+              
+
+  .. note::
+
+       \ ``@After``\  と \ ``@Before``\ アノテーションが対応するクラスのうち、実行環境に依存するものについて
+     
+       * Java8でアプリケーションを実行している場合のみ、Date and Time APIの対応クラスに対するチェックが有効となる。(Date and Time APIはJava8から導入されたため)
+       * クラスパスにJoda-Timeライブラリが含まれる場合のみ、Joda-Timeの対応クラスに対するチェックが有効となる。
+
+
+.. _Validation_terasoluna_gfw_how_to_use:
+
+共通ライブラリのチェックルールの適用方法
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+以下の手順で、共通ライブラリのチェックルールを適用する。
+
+依存ライブラリを追加する。バージョン5.1.0.RELEASE以上が対応している点に注意されたい。
+
+.. code-block:: xml
+
+    <dependencies>
+        <dependency>
+            <groupId>org.terasoluna.gfw</groupId>
+            <artifactId>terasoluna-gfw-validator</artifactId>
+        </dependency>
+    </dependencies>
+
+.. note::
+
+    \ ``@ExistInCodeList``\ を利用する場合は、\ ``terasoluna-gfw-common``\ を追加する。
+
+次に、\ :ref:`Validation_message_in_validationmessages`\ で説明したように :file:`ValidationMessages.properties` に、アノテーションに対応する任意のメッセージ定義を追加する。
+
+.. code-block:: properties
+
+  # (1)
+  org.terasoluna.gfw.common.validator.constraints.After.message = must be after {value}
+  org.terasoluna.gfw.common.validator.constraints.Before.message = must be before {value}
+  org.terasoluna.gfw.common.validator.constraints.ByteMin.message = must be over {value} Bytes
+  org.terasoluna.gfw.common.validator.constraints.ByteMax.message = must be under {value} Bytes
+  org.terasoluna.gfw.common.validator.constraints.Compare.message = not match '{source}' and '{destination}'
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - 項番
+      - 説明
+    * - | (1)
+      - アノテーションごとにメッセージ定義を追加する。アノテーションの設定値をメッセージキー（\ ``{}``\ で囲われた部分）としてメッセージに埋め込むことができる。
+
+最後に、\ :ref:`Validation_basic_validation`\ で説明したように、アノテーションを付与する。
+
+.. note::
+
+    Bean Validationでは、アノテーション設定値の不正により検証が実行できない場合、\ ``javax.validation.ValidationException``\ がスローされる。スタックトレースに出力される原因を参照し、設定値を適切な形に修正すること。
+    
+    詳細は、\ `Bean Validation specification <http://download.oracle.com/otn-pub/jcp/bean_validation-1_1-fr-eval-spec/bean-validation-specification.pdf>`_\ の9章を参照されたい。
+
+
+.. _Validation_terasoluna_gfw_how_to_extend:
+
+共通ライブラリのチェックルールの拡張方法
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+共通ライブラリで提供しているチェックルールを利用して、任意のルールを作成することができる。
+
+以下では、\ :ref:`Validation_correlation_item_check`\ で独自に実装した\ ``@Confirm``\ アノテーションの代わりに、共通ライブラリで提供しているチェックルールを利用する例を挙げる。
+
+\ :ref:`Validation_convine_existing_constraint`\ で説明したように、\ ``@Conpare``\ をラップした\ ``@Confirm``\ アノテーションを作成する。
+
+.. code-block:: java
+    :emphasize-lines: 21, 23-24, 27, 33, 35
+
+    package com.example.sample.domain.validation;
+
+    import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+    import static java.lang.annotation.ElementType.TYPE;
+    import static java.lang.annotation.RetentionPolicy.RUNTIME;
+    
+    import java.lang.annotation.Documented;
+    import java.lang.annotation.Retention;
+    import java.lang.annotation.Target;
+    
+    import javax.validation.Constraint;
+    import javax.validation.OverridesAttribute;
+    import javax.validation.Payload;
+    import javax.validation.ReportAsSingleViolation;
+    
+    import org.terasoluna.gfw.common.validator.constraints.Compare;
+    
+    @Documented
+    @Constraint(validatedBy = {})
+    @Target({ TYPE, ANNOTATION_TYPE }) // (1)
+    @Retention(RUNTIME)
+    @ReportAsSingleViolation // (2)
+    @Compare(source = "", destination = "", operator = Compare.Operator.EQUAL) // (3)
+    public @interface Confirm {
+    
+        String message() default "{com.example.sample.domain.validation.Confirm.message}"; // (4)
+    
+        Class<?>[] groups() default {};
+    
+        Class<? extends Payload>[] payload() default {};
+    
+        @OverridesAttribute(constraint = Compare.class, name = "source") // (5)
+        String field();
+    
+        @OverridesAttribute(constraint = Compare.class, name = "destination") // (6)
+        String confirmField();
+    
+        @Documented
+        @Target({ TYPE, ANNOTATION_TYPE })
+        @Retention(RUNTIME)
+        public @interface List {
+            Confirm[] value();
+        }
+    }
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - 項番
+      - 説明
+    * - | (1)
+      - | このアノテーションが、クラスまたはアノテーションにのみ付加できるように、対象を絞る。
+    * - | (2)
+      - | エラー時はこのアノテーションによるメッセージだけを変えるようにする。
+    * - | (3)
+      - | \ ``@Compare``\ アノテーションの\ ``operator``\ 属性\ ``Compare.Operator.EQUAL``\ (同値であること)を使用して、チェックを行う。
+    * - | (4)
+      - | エラーメッセージのデフォルト値を定義する。
+    * - | (5)
+      - | \ ``@Compare``\ アノテーションの\ ``source``\ 属性をオーバーライドし、属性名を\ ``field``\ に変更している。
+    * - | (6)
+      - | 同様に\ ``destination``\ 属性をオーバーライドし、属性名を\ ``confirmField``\ に変更している。
+
+\ :ref:`Validation_correlation_item_check`\ で実装したアノテーションの代わりに、上記で作成したアノテーションを使用すると、以下のようになる。
+
+.. code-block:: java
+    :emphasize-lines: 10, 14, 18
+
+    package com.example.sample.app.validation;
+
+    import java.io.Serializable;
+
+    import javax.validation.constraints.NotNull;
+    import javax.validation.constraints.Size;
+
+    import com.example.common.validation.Confirm;
+
+    @Confirm(field = "password", confirmfield = "confirmPassword") // (1)
+    public class PasswordResetForm implements Serializable {
+        private static final long serialVersionUID = 1L;
+
+        @NotNull // (2)
+        @Size(min = 8)
+        private String password;
+
+        @NotNull // (3)
+        private String confirmPassword;
+
+        // omitted geter/setter
+    }
+
+.. tabularcolumns:: |p{0.10\linewidth}|p{0.90\linewidth}|
+.. list-table::
+    :header-rows: 1
+    :widths: 10 90
+
+    * - 項番
+      - 説明
+    * - | (1)
+      - | クラスレベルに\ ``@Confirm``\ アノテーションを付与する。
+    * - | (2)
+      - | \ ``password``\ フィールドが\ ``null``\ の場合は検証をパスするため、\ ``@NotNull``\ アノテーションを付与する。
+    * - | (3)
+      - | 同様に\ ``confirmPassword``\ フィールドにも、\ ``@NotNull``\ アノテーションを付与する。
 
 
 型のミスマッチ

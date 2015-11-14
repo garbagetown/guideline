@@ -3580,7 +3580,7 @@ Refer to Chapter 7 \ `Bean Validation specification <http://download.oracle.com/
 
    * - Annotation
      - Target type
-     - Application
+     - Description
      - Usage example
    * - \ ``@NotNull``\
      - Arbitrary
@@ -3729,7 +3729,7 @@ Refer to \ `Hibernate Validator specifications <http://docs.jboss.org/hibernate/
 
    * - Annotation
      - Target type
-     - Application
+     - Description
      - Usage example
    * - \ ``@CreditCardNumber``\
      - It is applicable to any implementation class of \ ``CharSequence``\  interface

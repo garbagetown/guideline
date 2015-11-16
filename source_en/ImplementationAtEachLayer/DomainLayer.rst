@@ -1580,7 +1580,7 @@ Information required for "Declarative transaction management"
       - propagation
       - | Specify transaction propagation method.
         |
-        | **[REQUIRE]**
+        | **[REQUIRED]**
         | Starts transaction if not started. (default when omitted)
         | **[REQUIRES_NEW]**
         | Always starts a new transaction.

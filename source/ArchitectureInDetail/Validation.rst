@@ -3900,20 +3900,22 @@ terasoluna-gfw-validatorのチェックルール
       - 説明
       - 使用例
     * - \ ``@ByteMin``\
-      - | \ ``String``\
-      - | 値のバイト長が、最小値以上であるかどうかを検証する。
+      - | \ ``CharSequence``\ の実装クラス
+        | (\ ``String``\, \ ``StringBuilder``\ など)
+      - | 値のバイト長が最小値以上であることを検証する。
         |
         | **[アノテーションの属性]**
-        | \ ``Long value``\  - 値のバイト長が許容される最小値を設定する。
-        | \ ``String charset``\  - 値をバイトシーケンスに符号化するために使用する文字セットを設定する。デフォルト値は\ ``UTF-8``\ 。
+        | \ ``long value``\  - バイト長の最小値を指定する。
+        | \ ``String charset``\  - 値をバイトシーケンスに符号化する際に使用する文字セットを指定する。デフォルト値は\ ``UTF-8``\ 。
       - \ ``@ByteMax``\ 参照
     * - \ ``@ByteMax``\
-      - | \ ``String``\
-      - | 値のバイト長が、最大値以下であるかどうかを検証する。
+      - | \ ``CharSequence``\ の実装クラス
+        | (\ ``String``\, \ ``StringBuilder``\ など)
+      - | 値のバイト長が最大値以下であることを検証する。
         |
         | **[アノテーションの属性]**
-        | \ ``Long value``\  - 値のバイト長が許容される最大値を設定する。
-        | \ ``String charset``\  - 値をバイトシーケンスに符号化するために使用する文字セットを設定する。デフォルト値は\ ``UTF-8``\ 。
+        | \ ``long value``\  - バイト長の最大値を指定する。
+        | \ ``String charset``\  - 値をバイトシーケンスに符号化する際に使用する文字セットを指定する。デフォルト値は\ ``UTF-8``\ 。
       - .. code-block:: java
 
              @ByteMin(1)
@@ -3923,12 +3925,12 @@ terasoluna-gfw-validatorのチェックルール
               
     * - \ ``@After``\
       - \ ``@Before``\ 参照
-      - | 指定日付・時間より後であるかを検証する。
-        | （指定日付・時間と同じ値は許可されない）
+      - | 値が指定した日付・時間より後であることを検証する。
+        | （指定した日付・時間と同じ値は許可されない）
         |
         | **[アノテーションの属性]**
-        | \ ``String value``\  - 値がこれより後であるべき指定日付・時間を文字列で設定する。
-        | \ ``String format``\  - 指定日付・時間に任意の書式を指定したい場合に書式文字列を設定する。デフォルト値は対象の型ごとに異なるため、下記別表を参照されたい。
+        | \ ``String value``\  - 検証基準となる日付・時間を指定する。
+        | \ ``String format``\  - 検証基準となる指定日付・時間の書式文字列を指定する。デフォルト値は対象の型ごとに異なるため、下記別表を参照されたい。
       - \ ``@Before``\ 参照
     * - \ ``@Before``\
       - | \ ``Date``\
@@ -3937,16 +3939,16 @@ terasoluna-gfw-validatorのチェックルール
         | \ `Joda-Time <http://www.joda.org/joda-time/index.html>`_\
         |
         | 対応クラスの一覧は、下記別表を参照されたい。
-      - | 指定日付・時間より前であるかを検証する。
+      - | 値が指定した日付・時間より前であることを検証する。
         | （指定日付・時間と同じ値は許可されない）
         |
         | **[アノテーションの属性]**
-        | \ ``String value``\  - 値がこれより前であるべき指定日付・時間を文字列で設定する。
-        | \ ``String format``\  - 指定日付・時間に任意の書式を指定したい場合に書式文字列を設定する。デフォルト値は対象の型ごとに異なるため、下記別表を参照されたい。
+        | \ ``String value``\  - 検証基準となる日付・時間を指定する。
+        | \ ``String format``\  - 検証基準となる指定日付・時間の書式文字列を指定する。デフォルト値は対象の型ごとに異なるため、下記別表を参照されたい。
         |
         | **[format属性の注意点]**
-        | Date and Time APIの対応クラスでは、フォーマットは厳密モード（\ ``java.time.ResolverStyle.STRICT``\で解析される。Date and Time APIにおいて、書式文字\ ``"u"``\ が年（year）を、\ ``"y"``\ が暦に対する年（year-of-era）を意味しており、厳密モードで暦を指定しない場合には書式文字\ ``"u"``\ を指定しなければならないことに注意されたい。
-      - \ ``format``\ 属性を指定しない場合は、下記別表のフォーマットに沿った指定日付・時間を設定する。
+        | Date and Time APIの対応クラスでは、フォーマットは厳密モード（\ ``java.time.ResolverStyle.STRICT``\ )で解析される。Date and Time APIにおいて、書式文字\ ``"u"``\ が年（year）を、\ ``"y"``\ が暦に対する年（year-of-era）を意味しており、厳密モードで暦を指定しない場合は書式文字\ ``"u"``\ を使用する必要がある。
+      - \ ``format``\ 属性を指定しない場合は、下記別表に記載しているデフォルトの書式文字列に沿った日付・時間の文字列を指定する。
 
         .. code-block:: java
 
@@ -3956,7 +3958,7 @@ terasoluna-gfw-validatorのチェックルール
 
         |
 
-        \ ``format``\ 属性を指定する場合は、指定したフォーマットに沿った指定日付・時間の文字列を設定する。
+        \ ``format``\ 属性を指定する場合は、指定した書式文字列に沿った日付・時間の文字列を指定する。
 
         .. code-block:: java
 
@@ -3974,12 +3976,12 @@ terasoluna-gfw-validatorのチェックルール
 
     * - \ ``@Compare``\
       - | \ ``Comparable``\ インタフェースの実装クラスをプロパティにもつ任意のJavaBeanに適用可能
-      - | オブジェクトの指定したプロパティ同士の大小を比較し、期待値通りであるかどうかを検証する。
+      - | 指定したプロパティの値の大小関係が正しいことを検証する。
         |
         | **[アノテーションの属性]**
-        | \ ``String source``\  - オブジェクト内の比較元としたいプロパティ名を文字列で設定する。検証エラーとなった場合は、このプロパティにメッセージを表示する。
-        | \ ``String destination``\  - オブジェクト内の比較先としたいプロパティ名を文字列で設定する。
-        | \ ``org.terasoluna.gfw.common.validator.constraints.Compare.Operator operator``\  - 期待する比較結果を列挙型\ ``Operator``\ で定義された以下の値から選択する。
+        | \ ``String source``\  - オブジェクト内の比較元としたいプロパティ名を指定する。検証エラーとなった場合は、このプロパティにメッセージを表示される。
+        | \ ``String destination``\  - オブジェクト内の比較先としたいプロパティ名を指定する。
+        | \ ``org.terasoluna.gfw.common.validator.constraints.Compare.Operator operator``\  - 期待する大小関係を示す列挙型\ ``Operator``\ の値を指定する。指定可能な値は以下の通り。
 
         * \ ``EQUAL``\  : \ ``source = destination``\ である
         * \ ``GRATER_THAN``\  : \ ``source > destination``\ である
@@ -4014,7 +4016,7 @@ terasoluna-gfw-validatorのチェックルール
 
 |
 
-\ ``@After``\ と\ ``@Before``\ アノテーションがサポートしているクラスと、\ ``format``\ 属性のデフォルト値の一覧を以下に示す。
+\ ``@After``\ と\ ``@Before``\ アノテーションがサポートしているクラスと、\ ``format``\ 属性のデフォルト値を以下に示す。
 
 .. tabularcolumns:: |p{0.30\linewidth}|p{0.30\linewidth}|p{0.40\linewidth}|
 .. list-table::
@@ -4120,9 +4122,9 @@ terasoluna-gfw-validatorのチェックルール
             private YearMonth eventYearMonth;
               
 
-.. note::
+.. note:: **実行環境に依存するサポートクラスについて**
 
-    \ ``@After``\ と\ ``@Before``\ アノテーションが対応するクラスのうち、実行環境に依存するものについて
+    \ ``@After``\ と\ ``@Before``\ アノテーションがサポートしているクラスの中には、実行環境に依存するものがある。
      
     * Java8でアプリケーションを実行している場合のみ、Date and Time APIの対応クラスに対するチェックが有効となる。(Date and Time APIはJava8から導入されたため)
     * クラスパスにJoda-Timeライブラリが含まれる場合のみ、Joda-Timeの対応クラスに対するチェックが有効となる。
@@ -4148,7 +4150,7 @@ terasoluna-gfw-validatorのチェックルール
 
 .. note::
 
-    \ ``@ExistInCodeList``\ を利用する場合は、\ ``terasoluna-gfw-common``\ を追加する。
+    \ ``@ExistInCodeList``\ を利用する場合は、依存ライブラリとして\ ``terasoluna-gfw-common``\ を追加する。
 
 次に、\ :ref:`Validation_message_in_validationmessages`\ で説明したように :file:`ValidationMessages.properties` に、アノテーションに対応する任意のメッセージ定義を追加する。
 
@@ -4175,7 +4177,7 @@ terasoluna-gfw-validatorのチェックルール
 
 .. note::
 
-    Bean Validationでは、アノテーションの属性値の不正により検証が実行できない場合、\ ``javax.validation.ValidationException``\ がスローされる。スタックトレースに出力される原因を参照し、属性値を適切な形に修正すること。
+    Bean Validationでは、アノテーションの属性値の不正により検証が実行できない場合、\ ``javax.validation.ValidationException``\ がスローされる。スタックトレースに出力される原因を参照し、属性値を適切な値に修正すること。
     
     詳細は、\ `Bean Validation specification <http://download.oracle.com/otn-pub/jcp/bean_validation-1_1-fr-eval-spec/bean-validation-specification.pdf>`_\ の9章を参照されたい。
 
@@ -4189,10 +4191,9 @@ terasoluna-gfw-validatorのチェックルール
 
 以下では、\ :ref:`Validation_correlation_item_check`\ で独自に実装した\ ``@Confirm``\ アノテーションを、共通ライブラリで提供しているチェックルールを利用して作成する例を紹介する。
 
-\ :ref:`Validation_convine_existing_constraint`\ で説明したように、\ ``@Conpare``\ をラップした\ ``@Confirm``\ アノテーションを作成する。
+\ :ref:`Validation_convine_existing_constraint`\ で説明したように、\ ``@Compare``\ を利用して\ ``@Confirm``\ アノテーションを作成する。
 
 .. code-block:: java
-    :emphasize-lines: 20, 22-23, 26, 32, 35
 
     package com.example.sample.domain.validation;
 
@@ -4247,22 +4248,21 @@ terasoluna-gfw-validatorのチェックルール
     * - 項番
       - 説明
     * - | (1)
-      - | このアノテーションが、クラスまたはアノテーションにのみ付加できるように、対象を絞る。
+      - | このアノテーションを付与できる場所を、クラスまたはアノテーションに限定する。
     * - | (2)
-      - | エラー時はこのアノテーションによるメッセージだけを変えるようにする。
+      - | エラー時にこのアノテーションの\ ``message``\ 属性に指定したメッセージが使用されるようにする。
     * - | (3)
-      - | \ ``@Compare``\ アノテーションの\ ``operator``\ 属性\ ``Compare.Operator.EQUAL``\ (同値であること)を使用して、チェックを行う。
+      - | \ ``@Compare``\ アノテーションの\ ``operator``\ 属性に\ ``Compare.Operator.EQUAL``\ (同値であること)を指定する。
     * - | (4)
       - | エラーメッセージのデフォルト値を定義する。
     * - | (5)
-      - | \ ``@Compare``\ アノテーションの\ ``source``\ 属性をオーバーライドし、属性名を\ ``field``\ に変更している。
+      - | \ ``@Compare``\ アノテーションの\ ``source``\ 属性をオーバーライドし、属性名を\ ``field``\ に変更する。
     * - | (6)
-      - | 同様に\ ``destination``\ 属性をオーバーライドし、属性名を\ ``confirmField``\ に変更している。
+      - | 同様に\ ``destination``\ 属性をオーバーライドし、属性名を\ ``confirmField``\ に変更する。
 
 \ :ref:`Validation_correlation_item_check`\ で実装したアノテーションの代わりに、上記で作成したアノテーションを使用する。
 
 .. code-block:: java
-    :emphasize-lines: 10, 14, 18
 
     package com.example.sample.app.validation;
 

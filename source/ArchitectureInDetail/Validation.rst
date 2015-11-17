@@ -3900,7 +3900,8 @@ terasoluna-gfw-validatorのチェックルール
       - 説明
       - 使用例
     * - \ ``@ByteMin``\
-      - | \ ``String``\
+      - | \ ``CharSequence``\ の実装クラス
+        | (\ ``String``\, \ ``StringBuilder``\ など)
       - | 値のバイト長が最小値以上であることを検証する。
         |
         | **[アノテーションの属性]**
@@ -3908,7 +3909,8 @@ terasoluna-gfw-validatorのチェックルール
         | \ ``String charset``\  - 値をバイトシーケンスに符号化する際に使用する文字セットを指定する。デフォルト値は\ ``UTF-8``\ 。
       - \ ``@ByteMax``\ 参照
     * - \ ``@ByteMax``\
-      - | \ ``String``\
+      - | \ ``CharSequence``\ の実装クラス
+        | (\ ``String``\, \ ``StringBuilder``\ など)
       - | 値のバイト長が最大値以下であることを検証する。
         |
         | **[アノテーションの属性]**

@@ -1095,7 +1095,11 @@ MS932で入力された文字列に対し、エンコードにISO-2022-JPをは�
 また、エンコードにISO-2022-JPを設定する場合、以下のような範囲外となる拡張文字が文字化けする。
 
 .. figure:: ./images_Email/EmailOutofEscapeCharacter.png
+    :alt: Out of EscapeCharacter
     :width: 100%
+    :align: center
+    
+    **図-範囲外となる拡張文字の例**
 
 これらの文字は本来使用すべきではない。
 もし、これらの文字を使用する必要がある場合、JVMの起動オプションとして以下のように設定することで
